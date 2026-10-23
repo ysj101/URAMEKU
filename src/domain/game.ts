@@ -2,7 +2,13 @@
  * 事件進行の状態遷移をひとつの reducer にまとめる。
  * 個別のルールは budget / evidence / link / calculation / article / publish に分離。
  */
-import { addFragment, removeFragmentAt } from './article';
+import {
+  addFragment,
+  clearArticle,
+  moveFragment,
+  removeFragmentAt,
+  replaceFragmentAt,
+} from './article';
 import { openDocument } from './budget';
 import { setCalculation } from './calculation';
 import { togglePin } from './evidence';
@@ -29,6 +35,9 @@ export type GameAction =
   | { type: 'set-calculation'; taskId: string; value: string }
   | { type: 'add-fragment'; fragmentId: string }
   | { type: 'remove-fragment'; index: number }
+  | { type: 'replace-fragment'; index: number; fragmentId: string }
+  | { type: 'move-fragment'; from: number; to: number }
+  | { type: 'clear-article' }
   | { type: 'submit' }
   | { type: 'withdraw' }
   | { type: 'reveal' }
@@ -52,6 +61,12 @@ export function reduceProgress(
       return addFragment(progress, action.fragmentId);
     case 'remove-fragment':
       return removeFragmentAt(progress, action.index);
+    case 'replace-fragment':
+      return replaceFragmentAt(progress, action.index, action.fragmentId);
+    case 'move-fragment':
+      return moveFragment(progress, action.from, action.to);
+    case 'clear-article':
+      return clearArticle(progress);
     case 'submit':
       return submitArticle(progress);
     case 'withdraw':
