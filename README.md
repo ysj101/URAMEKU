@@ -71,7 +71,11 @@ scripts/check_base_path.sh            # /URAMEKU/ で検証
 scripts/check_base_path.sh /          # ルート配信で検証
 ```
 
-GitHub Pages への実際のデプロイ（ワークフロー）は MVP-045 で扱います。
+GitHub Pages への実際のデプロイ（ワークフロー）は次の「公開」節を参照してください。
+
+## 公開
+
+`main` への push（または Actions の手動実行）で `.github/workflows/deploy-pages.yml` が `VITE_BASE_PATH=/URAMEKU/` でビルドし、`npm run smoke:dist`（`dist/` を素の HTTP サーバーで配信して index / manifest / JS / CSS / 5 事件分の資料画像を検証）を通したうえで GitHub Pages（`https://<owner>.github.io/URAMEKU/`）へ配信します。Pages の有効化（Settings → Pages → Source: GitHub Actions）、デプロイ後の確認コマンド、ロールバック手順は [`docs/DEPLOY.md`](docs/DEPLOY.md)、受入チェックリストは [`docs/qa/mvp-acceptance.md`](docs/qa/mvp-acceptance.md) にあります。デプロイが成功しても、冒頭の注記どおり**本番公開可能な完成アプリではありません**。
 
 ## フォルダ概要
 
