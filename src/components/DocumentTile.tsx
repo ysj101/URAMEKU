@@ -1,3 +1,5 @@
+import { DocumentLabel } from './DocumentLabel';
+import '../app/screens/document-label.css';
 import { documentThumbnail, uiState, type UiStateName } from '../data/assets';
 import { documentCost, type OpenDocumentOutcome } from '../domain/budget';
 import type { CaseDocument } from '../domain/types';
@@ -30,6 +32,8 @@ function tileState(opened: boolean, pinned: boolean, outcome: OpenDocumentOutcom
 
 interface Props {
   caseId: string;
+  /** 事件内の資料番号（0 始まり） */
+  index: number;
   document: CaseDocument;
   opened: boolean;
   pinned: boolean;
@@ -42,6 +46,7 @@ interface Props {
 
 export function DocumentTile({
   caseId,
+  index,
   document: doc,
   opened,
   pinned,
@@ -65,6 +70,14 @@ export function DocumentTile({
       onClick={() => (blocked ? onBlocked(doc, outcome) : onOpen(doc.id))}
     >
       <img className="doc-tile__thumb" src={documentThumbnail(caseId, doc.id)} alt="" />
+      <DocumentLabel
+        caseId={caseId}
+        index={index}
+        documentId={doc.id}
+        visual={doc.visual}
+        cost={cost}
+        className="doc-tile__label"
+      />
       <strong className="doc-tile__title">{doc.title}</strong>
       <span className="doc-tile__status">
         <img

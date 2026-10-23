@@ -5,6 +5,9 @@ import { HomeScreen } from '../screens/HomeScreen';
 import { PlayScreen } from '../screens/PlayScreen';
 import { TutorialScreen } from '../screens/TutorialScreen';
 import { useGame } from '../state/useGame';
+import { SettingsScreen } from '../screens/SettingsScreen';
+import { AudioControl } from '../components/AudioControl';
+import { MotionToggle } from '../components/MotionToggle';
 import { findCase } from '../data/cases';
 import { SaveStatusBanner } from '../components/SaveStatusBanner';
 import { OfflineBanner } from '../components/StatusView';
@@ -28,12 +31,6 @@ export function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [route.screen, route.caseId]);
 
-  const handleResetAll = () => {
-    if (!window.confirm('この端末に保存された全ケースの進捗を削除しますか？')) return;
-    game.resetAll();
-    nav.navigate({ screen: 'home' });
-  };
-
   let content;
   switch (route.screen) {
     case 'cases':
@@ -49,7 +46,6 @@ export function App() {
       content = <EncyclopediaScreen game={game} nav={nav} />;
       break;
     case 'settings':
-      // 本実装は MVP-031（進捗削除）と MVP-037（音量）で差し替える
       content = (
         <section className="settings" aria-labelledby="settings-title">
           <div className="screen-head">
@@ -62,9 +58,16 @@ export function App() {
             </button>
             <h1 id="settings-title">設定</h1>
           </div>
-          <button type="button" className="link-button" onClick={handleResetAll}>
-            この端末の記録を削除
-          </button>
+          <AudioControl className="settings-audio" />
+          <MotionToggle />
+          <SettingsScreen
+            caseTitle={game.current.title}
+            onResetCase={() => game.dispatch({ type: 'reset' })}
+            onResetAll={() => {
+              game.resetAll();
+              nav.navigate({ screen: 'home' });
+            }}
+          />
         </section>
       );
       break;
