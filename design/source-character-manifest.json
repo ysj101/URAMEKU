@@ -1,0 +1,130 @@
+{
+  "package": "C2 Character Assets — recovered deliverables",
+  "version": "0.3.0-recovered",
+  "status": "partial",
+  "notACompleteCharacterSet": true,
+  "characters": [
+    {
+      "id": "shinobu",
+      "name": "シノブ",
+      "availablePoses": [
+        "idle",
+        "point",
+        "inspect",
+        "explain"
+      ],
+      "editableRigIncluded": true,
+      "expressionsIncluded": false,
+      "notes": "既存v2の4ポーズと編集データ。新規制作ではない。"
+    },
+    {
+      "id": "mega",
+      "name": "メガ",
+      "availablePoses": [
+        "idle"
+      ],
+      "editableRigIncluded": false,
+      "expressionsIncluded": false,
+      "notes": "回収できた独立PNGは通常立ち絵のみ。差分は未収録。"
+    },
+    {
+      "id": "kuro",
+      "name": "クロ",
+      "availablePoses": [
+        "idle"
+      ],
+      "editableRigIncluded": false,
+      "expressionsIncluded": false,
+      "notes": "回収できた独立PNGは通常立ち絵のみ。差分は未収録。"
+    },
+    {
+      "id": "harada",
+      "name": "ハラダ部長",
+      "availablePoses": [
+        "idle"
+      ],
+      "editableRigIncluded": false,
+      "expressionsIncluded": false,
+      "notes": "回収できた独立PNGは通常立ち絵のみ。差分は未収録。"
+    }
+  ],
+  "assets": [
+    {
+      "id": "shinobu.idle",
+      "character": "shinobu",
+      "pose": "idle",
+      "file": "public/assets/characters/shinobu/poses/idle.png",
+      "url": "assets/characters/shinobu/poses/idle.png",
+      "width": 1086,
+      "height": 1448,
+      "hasTransparency": true,
+      "sha256": "1e67c59d1a70c15025485142d56d8bbd6e3ec7f1b30627dc65b610e2ec69354b"
+    },
+    {
+      "id": "shinobu.point",
+      "character": "shinobu",
+      "pose": "point",
+      "file": "public/assets/characters/shinobu/poses/point.png",
+      "url": "assets/characters/shinobu/poses/point.png",
+      "width": 1086,
+      "height": 1448,
+      "hasTransparency": true,
+      "sha256": "e9eef68627bd4c6afabaee491d55c2738c636489e0066aabcc4a5922b656be73"
+    },
+    {
+      "id": "shinobu.inspect",
+      "character": "shinobu",
+      "pose": "inspect",
+      "file": "public/assets/characters/shinobu/poses/inspect.png",
+      "url": "assets/characters/shinobu/poses/inspect.png",
+      "width": 1086,
+      "height": 1448,
+      "hasTransparency": true,
+      "sha256": "315e384cb3bdcbcb6095cf9717674cfcf2330196498c18942aacb462623488fb"
+    },
+    {
+      "id": "shinobu.explain",
+      "character": "shinobu",
+      "pose": "explain",
+      "file": "public/assets/characters/shinobu/poses/explain.png",
+      "url": "assets/characters/shinobu/poses/explain.png",
+      "width": 1086,
+      "height": 1448,
+      "hasTransparency": true,
+      "sha256": "1c7b9a019dc2c1956eecf02f18efae30c2e125b8978e9af43180e10553aad83f"
+    },
+    {
+      "id": "mega.idle",
+      "character": "mega",
+      "pose": "idle",
+      "file": "public/assets/characters/mega/poses/idle.png",
+      "url": "assets/characters/mega/poses/idle.png",
+      "width": 1536,
+      "height": 2048,
+      "hasTransparency": true,
+      "sha256": "e5bb2778cf270d20a05cd9b143ee64f5253b9eaa5c88d3e0fc3a45841148b352"
+    },
+    {
+      "id": "kuro.idle",
+      "character": "kuro",
+      "pose": "idle",
+      "file": "public/assets/characters/kuro/poses/idle.png",
+      "url": "assets/characters/kuro/poses/idle.png",
+      "width": 1536,
+      "height": 2048,
+      "hasTransparency": true,
+      "sha256": "80e053d02d86f928156873447abfb76478998c949e25f3f8f7275d9a5afe5e53"
+    },
+    {
+      "id": "harada.idle",
+      "character": "harada",
+      "pose": "idle",
+      "file": "public/assets/characters/harada/poses/idle.png",
+      "url": "assets/characters/harada/poses/idle.png",
+      "width": 1536,
+      "height": 2048,
+      "hasTransparency": true,
+      "sha256": "91f50587dfecd51268e6f4c07dbf426d8c44343a8883678132460e1dec3c9577"
+    }
+  ]
+}

@@ -1,0 +1,122 @@
+{
+  "id": "case-02",
+  "title": "半額セールの値札",
+  "bias": "アンカリングと参照価格",
+  "difficulty": "HARD",
+  "estimated_time": "5〜10分",
+  "intro": "靴店の「8,000円から半額！」という広告。値下げの大きさを数字で裏付けてほしい。",
+  "budget": 4,
+  "documents": [
+    {
+      "id": "poster",
+      "title": "店舗のポスター",
+      "content": "新作スニーカー 8,000円 → 4,000円。「今だけ50%OFF」とある。",
+      "cost": 0,
+      "visual": "advert"
+    },
+    {
+      "id": "launch",
+      "title": "発売時の価格台帳",
+      "content": "発売初日に8,000円で販売された記録はある。ただし発売直後に価格が変更された。",
+      "cost": 1,
+      "visual": "ledger"
+    },
+    {
+      "id": "history",
+      "title": "30日間の価格履歴",
+      "content": "直近30日間の大半は4,200円で販売。セール当日4,000円。4,200円との差は200円（約4.8%）。",
+      "cost": 1,
+      "visual": "report"
+    },
+    {
+      "id": "stock",
+      "title": "在庫と販売記録",
+      "content": "直近30日間に4,200円で実際の販売があった。8,000円は発売時の短期間の価格。",
+      "cost": 1,
+      "visual": "receipt"
+    },
+    {
+      "id": "interview",
+      "title": "広告担当の取材記録",
+      "content": "「半額」は発売時の8,000円を基準にした表現だと説明。直前価格との比較ではない。",
+      "cost": 1,
+      "visual": "clipping"
+    },
+    {
+      "id": "competitor",
+      "title": "競合店の価格",
+      "content": "競合の類似シューズは4,500〜7,000円。対象商品の正しい割引率の直接証拠にはならない。",
+      "cost": 1,
+      "visual": "news"
+    }
+  ],
+  "required_evidence": [
+    "launch",
+    "history",
+    "stock"
+  ],
+  "required_link": [
+    "poster",
+    "history"
+  ],
+  "headline_fragments": [
+    {
+      "id": "f0",
+      "text": "半額表示の基準は発売時価格"
+    },
+    {
+      "id": "f1",
+      "text": "直近の主な販売価格との差は約5%"
+    },
+    {
+      "id": "f2",
+      "text": "現在の販売価格は4,000円"
+    },
+    {
+      "id": "f3",
+      "text": "常に8,000円で販売されていた"
+    },
+    {
+      "id": "f4",
+      "text": "絶対に不当表示である"
+    },
+    {
+      "id": "f5",
+      "text": "競合より必ず最安値"
+    },
+    {
+      "id": "f6",
+      "text": "直近30日の価格は不明"
+    },
+    {
+      "id": "f7",
+      "text": "購入者は全員損をした"
+    }
+  ],
+  "correct_fragments": [
+    "f0",
+    "f1",
+    "f2"
+  ],
+  "debrief": {
+    "explanation": "8,000円という先に示された数字が比較基準になり、4,000円を大幅に安く感じさせる。一方、実際に多く販売されていた4,200円との差は200円。",
+    "takeaway": "相対的な値引き表現と価格履歴を分けて考える。法的評価は追加事実と法域の確認が必要。"
+  },
+  "disclaimer": "登場人物・企業・統計・広告はすべて架空です。",
+  "analysis_tasks": [
+    {
+      "id": "diff",
+      "prompt": "直近30日の主な価格と現在価格の差額",
+      "unit": "円",
+      "expected": 200,
+      "tolerance": 0
+    },
+    {
+      "id": "relative",
+      "prompt": "直近の主な価格からの実際の値引率（小数1桁）",
+      "unit": "%",
+      "expected": 4.8,
+      "tolerance": 0.1
+    }
+  ]
+}

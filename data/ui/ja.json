@@ -1,0 +1,35 @@
+{
+  "home": {
+    "title": "ウラメク",
+    "subtitle": "見えているのは、ほんの一部。",
+    "start": "調査をはじめる",
+    "continue": "前回の続き",
+    "cases": "事件一覧",
+    "encyclopedia": "図鑑",
+    "settings": "設定"
+  },
+  "case": {
+    "documents": "調査資料",
+    "board": "証拠ボード",
+    "calculator": "数値検証メモ",
+    "article": "記事を組み立てる",
+    "submit": "記事を提出する",
+    "budget": "調査予算",
+    "retry": "もう一度調べる",
+    "hint": "ヒントを見る"
+  },
+  "states": {
+    "unread": "未調査",
+    "read": "調査済み",
+    "pinned": "採用済み",
+    "correct": "根拠が整いました",
+    "incorrect": "証拠を再確認しましょう",
+    "offline": "オフラインです",
+    "loading": "読み込み中…"
+  },
+  "notices": {
+    "fiction": "この事件に登場する企業・人物・データは架空です。",
+    "notDiagnosis": "少数の選択から心理特性を診断するものではありません。",
+    "save": "端末内に進行状況を保存します。"
+  }
+}

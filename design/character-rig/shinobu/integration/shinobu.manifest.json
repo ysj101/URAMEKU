@@ -1,0 +1,52 @@
+{
+  "character": "shinobu",
+  "design_source": "C-2 isolated master",
+  "version": "2.0.0",
+  "nativeSize": {
+    "width": 1086,
+    "height": 1448
+  },
+  "base": "source/master_shinobu.png",
+  "layers": {
+    "head": "rig/layers/head_original.png",
+    "body": "rig/layers/body_original.png",
+    "bodyWithoutOriginalRightArm": "rig/layers/body_without_pen_arm.png",
+    "folderForeground": "rig/layers/folder_red_paper.png",
+    "folderEdgeRepair": "rig/layers/folder_edge_repair.png",
+    "pointArm": "rig/layers/right_arm_point.png",
+    "inspectArm": "rig/layers/right_arm_inspect.png",
+    "explainArm": "rig/layers/right_arm_explain.png",
+    "pointEffect": "rig/layers/effect_point.png",
+    "inspectEffect": "rig/layers/effect_inspect.png",
+    "explainEffect": "rig/layers/effect_explain.png"
+  },
+  "poses": {
+    "idle": "poses/shinobu_idle.png",
+    "point": "poses/shinobu_point.png",
+    "inspect": "poses/shinobu_inspect.png",
+    "explain": "poses/shinobu_explain.png"
+  },
+  "pivot": {
+    "head": [
+      490,
+      453
+    ],
+    "rightShoulder": [
+      696,
+      554
+    ],
+    "feetBottom": [
+      550,
+      1390
+    ]
+  },
+  "recommendedCSSHeight": [
+    180,
+    420
+  ],
+  "limits": [
+    "Base and character face are exact original pixels; hand/arm are newly drawn paper-cut vector composites.",
+    "Additional poses are renderings with an independently drawn right arm, not hand-drawn full-body keyframes.",
+    "Head and body can be independently animated by small transforms; large rotations expose missing underpainting."
+  ]
+}

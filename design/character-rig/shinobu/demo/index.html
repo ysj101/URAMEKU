@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C-2 シノブ — ゲーム内ポーズ確認</title>
+<style>
+  :root{font-family:"Noto Sans JP",system-ui,sans-serif;color:#292725;background:#e8e0d2}
+  *{box-sizing:border-box}body{margin:0;padding:24px}
+  .app{max-width:940px;margin:auto;background:#f8f1e6;padding:22px;border:2px solid #373537;box-shadow:9px 9px 0 #bbb0a1}
+  .header{display:flex;align-items:center;gap:14px;border-bottom:2px solid #282727;padding-bottom:12px}
+  .flag{color:#f8f1e6;background:#2e2a2c;padding:9px 16px;font-weight:800;transform:rotate(-3deg)}
+  .header h1{font-size:24px;margin:0}.header p{font-size:12px;color:#625c55;margin:3px 0 0}
+  .scene{position:relative;height:clamp(320px,63vh,560px);display:flex;align-items:end;justify-content:center;overflow:hidden;background:repeating-linear-gradient(0deg, #f1eadf 0,#f1eadf 21px,#e4dbcc 22px)}
+  .scene img{height:90%;max-width:97%;width:auto;object-fit:contain;transition:height .12s}
+  .bubble{position:absolute;top:18px;left:18px;padding:12px 17px;max-width:50%;background:#fffaf1;border:2px solid #252324;box-shadow:3px 3px 0 #d2c6b7;font-size:14px;font-weight:600}
+  .controls{display:flex;gap:8px;flex-wrap:wrap;padding-top:15px}
+  button{border:2px solid #2b2827;background:#f9f4e9;color:#282625;cursor:pointer;padding:11px 15px;font-weight:700;font-size:14px;border-radius:1px}
+  button[aria-pressed=true]{color:white;background:#c44740}
+  button:focus-visible{outline:3px solid #357a91;outline-offset:2px}
+  .scaler{margin:15px 0 4px;display:flex;gap:12px;align-items:center}
+  input{width:180px;accent-color:#c44740}
+  small{display:block;color:#6a6056;line-height:1.6;margin-top:8px}
+</style></head><body>
+<main class="app"><div class="header"><div class="flag">C-2</div><div><h1>シノブ｜状態切り替え検証</h1><p>紙面コラージュ × 行動経済学推理ゲーム</p></div></div>
+<section class="scene" aria-label="ポーズプレビュー"><p class="bubble" id="line">取材に行ってみましょう！</p><img id="actor" src="../poses/shinobu_idle.png" alt="シノブの通常立ち絵"></section>
+<nav class="controls" aria-label="ポーズ選択"><button data-pose="idle" aria-pressed="true">通常</button><button data-pose="point" aria-pressed="false">指さし</button><button data-pose="inspect" aria-pressed="false">資料調査</button><button data-pose="explain" aria-pressed="false">説明</button></nav>
+<div class="scaler"><label for="scale">キャラ表示サイズ</label><input id="scale" type="range" min="40" max="98" value="90"><output id="value">90%</output></div>
+<small>頭部・体形は元の単体立ち絵を維持。右腕だけをペーパーカットパーツとして差し替えています。ポーズ差分は歩行アニメーションではありません。</small>
+</main>
+<script>
+const poses = {idle:['通常','取材に行ってみましょう！'],point:['指さし','ここに矛盾がありそう！'],inspect:['調査','この書類を調べましょう。'],explain:['説明','数字の基準が違っています。']};
+const img=document.getElementById('actor'),line=document.getElementById('line');
+document.querySelectorAll('[data-pose]').forEach(button=>button.addEventListener('click',()=>{
+  const pose=button.dataset.pose;
+  img.src='../poses/shinobu_'+pose+'.png';img.alt='シノブ：'+poses[pose][0];line.textContent=poses[pose][1];
+  document.querySelectorAll('[data-pose]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
+}));
+const slider=document.getElementById('scale'),out=document.getElementById('value');
+slider.addEventListener('input',()=>{img.style.height=slider.value+'%';out.textContent=slider.value+'%';});
+</script></body></html>

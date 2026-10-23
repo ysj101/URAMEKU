@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F5F0E5">
+  <meta name="description" content="ウラメク — 証拠を集めて記事を組み立てる行動経済学推理ゲーム">
+  <title>ウラメク | 調査編集ゲーム</title>
+  <link rel="manifest" href="../public/manifest.webmanifest"><link rel="icon" href="../public/assets/brand/favicon-32.png" sizes="32x32"><link rel="apple-touch-icon" href="../public/assets/brand/apple-touch-icon.png"><meta property="og:title" content="ウラメク — 見えているのは、ほんの一部。"><meta property="og:image" content="../public/assets/brand/ogp-1200x630.png"><link rel="stylesheet" href="styles.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <a href="#workbench" class="skip-link">ゲーム本編へ</a>
+  <header class="masthead">
+    <div class="brand"><span class="edition">ウラメク調査編集局 / ARCHIVE 001</span><h1>ウラ<span>メク</span></h1><p>見えているのは、ほんの一部。</p></div>
+    <img src="../public/assets/characters/shinobu/poses/idle.png" alt="新聞社の調査記者シノブ" class="logo-char">
+  </header>
+  <div class="page">
+    <aside class="sidebar" aria-label="事件選択">
+      <div class="small-heading">事件ファイル</div>
+      <div id="case-list" class="case-list"><p>資料を読み込み中…</p></div>
+      <div class="info-panel"><strong>遊び方</strong><p>資料を調査し、重要な証拠をピン留め。2枚の資料を結び、見出しの断片を3つ組み合わせて記事を提出します。</p><p class="fine">企業・統計・人物は架空。判断傾向の心理診断は行いません。</p></div>
+      <button id="reset-progress" class="link-button" type="button">この端末の記録を削除</button>
+    </aside>
+    <main id="workbench" class="workbench" tabindex="-1">
+      <div id="case-header"></div>
+      <div id="game"></div>
+      <div class="footnote">このMVPは静的サイトとして動作します。調査内容はこのブラウザのみに保存され、サーバーへ送信しません。</div>
+    </main>
+  </div>
+  <dialog id="doc-dialog" aria-labelledby="dialog-title">
+    <article class="document-popup">
+      <div class="popup-head"><span>機密解除 / EDITORIAL ARCHIVE</span><button id="dialog-close" type="button" aria-label="閉じる">×</button></div>
+      <h2 id="dialog-title"></h2>
+      <div id="dialog-content"></div>
+      <div class="popup-foot"><button id="pin-document" class="btn primary" type="button">証拠ボードに貼る</button><button id="dialog-close-alt" class="btn ghost" type="button">戻る</button></div>
+    </article>
+  </dialog>
+</body>
+</html>

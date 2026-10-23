@@ -1,0 +1,197 @@
+{
+  "passed": true,
+  "poses": [
+    "idle",
+    "point",
+    "inspect",
+    "explain"
+  ],
+  "assetCountPNG": 18,
+  "checked": {
+    "allPosesNativeResolution": true,
+    "allPosesTransparentRGBA": true,
+    "manifestPathsExist": true,
+    "headBodyPixelLayersAvailable": true
+  },
+  "files": {
+    "poses/shinobu_explain.png": {
+      "width": 1086,
+      "height": 1448,
+      "mode": "RGBA",
+      "sha256": "1c7b9a019dc2c1956eecf02f18efae30c2e125b8978e9af43180e10553aad83f",
+      "alphaMinMax": [
+        0,
+        255
+      ]
+    },
+    "poses/shinobu_idle.png": {
+      "width": 1086,
+      "height": 1448,
+      "mode": "RGBA",
+      "sha256": "1e67c59d1a70c15025485142d56d8bbd6e3ec7f1b30627dc65b610e2ec69354b",
+      "alphaMinMax": [
+        0,
+        255
+      ]
+    },
+    "poses/shinobu_inspect.png": {
+      "width": 1086,
+      "height": 1448,
+      "mode": "RGBA",
+      "sha256": "315e384cb3bdcbcb6095cf9717674cfcf2330196498c18942aacb462623488fb",
+      "alphaMinMax": [
+        0,
+        255
+      ]
+    },
+    "poses/shinobu_point.png": {
+      "width": 1086,
+      "height": 1448,
+      "mode": "RGBA",
+      "sha256": "e9eef68627bd4c6afabaee491d55c2738c636489e0066aabcc4a5922b656be73",
+      "alphaMinMax": [
+        0,
+        255
+      ]
+    },
+    "preview/poses_comparison.png": {
+      "width": 2288,
+      "height": 850,
+      "mode": "RGB",
+      "sha256": "8e50459a084f86600c1dd8905d2cd95e09744d454ba814a642cb144299106cb8",
+      "alphaMinMax": null
+    },
+    "preview/rig_layers.png": {
+      "width": 1050,
+      "height": 1020,
+      "mode": "RGB",
+      "sha256": "17a0d7bbdb7972b56900bab4cf4395d074d6e3c0a886f2605e92544b65bdd858",
+      "alphaMinMax": null
+    },
+    "rig/layers/body_original.png": {
+      "width": 1086,
+      "height": 1448,
+      "mode": "RGBA",
+      "sha256": "109af326865e7d86a6d5e3f6f80a05b9a16fb4fde79d4e8a012ff4d8b848922b",
+      "alphaMinMax": [
+        0,
+        255
+      ]
+    },
+    "rig/layers/body_without_pen_arm.png": {
+      "width": 1086,
+      "height": 1448,
+      "mode": "RGBA",
+      "sha256": "d323652ca878466efc7b1ecb177e9f03088222805bbe4aaa2700514c2dc54211",
+      "alphaMinMax": [
+        0,
+        255
+      ]
+    },
+    "rig/layers/effect_explain.png": {
+      "width": 1086,
+      "height": 1448,
+      "mode": "RGBA",
+      "sha256": "ca2242fbefcf4b4621445def703ea14167af95db78d174c84baeb32419651fd1",
+      "alphaMinMax": [
+        0,
+        255
+      ]
+    },
+    "rig/layers/effect_inspect.png": {
+      "width": 1086,
+      "height": 1448,
+      "mode": "RGBA",
+      "sha256": "6ab11e9681a63a2e8123978041083d2002a696853abdbc7dfbd4a4b079e8907b",
+      "alphaMinMax": [
+        0,
+        255
+      ]
+    },
+    "rig/layers/effect_point.png": {
+      "width": 1086,
+      "height": 1448,
+      "mode": "RGBA",
+      "sha256": "bb8bf49a2212bd7a5434ffd7be51704b1a3d07d7b4c1871af7312a00a2ed2796",
+      "alphaMinMax": [
+        0,
+        255
+      ]
+    },
+    "rig/layers/folder_edge_repair.png": {
+      "width": 1086,
+      "height": 1448,
+      "mode": "RGBA",
+      "sha256": "e896d80ab9be1b3b2b7e88afdb473d88a752d9a2a9d7bc631bf618bec85c0a87",
+      "alphaMinMax": [
+        0,
+        255
+      ]
+    },
+    "rig/layers/folder_red_paper.png": {
+      "width": 1086,
+      "height": 1448,
+      "mode": "RGBA",
+      "sha256": "7c31fe3a5aae72a6aa1c62fff4ae9c94150962450cad20eeaf551810f3c6a830",
+      "alphaMinMax": [
+        0,
+        255
+      ]
+    },
+    "rig/layers/head_original.png": {
+      "width": 1086,
+      "height": 1448,
+      "mode": "RGBA",
+      "sha256": "b2c052bcf55c6d2f20de8f9cb7a3d3aeddc33b43ac61af07a19c2db550bf1ba4",
+      "alphaMinMax": [
+        0,
+        255
+      ]
+    },
+    "rig/layers/right_arm_explain.png": {
+      "width": 1086,
+      "height": 1448,
+      "mode": "RGBA",
+      "sha256": "7aa4719da6a7370e828381e0706ac313a2885e4f2515963083d05a0f28d1589a",
+      "alphaMinMax": [
+        0,
+        255
+      ]
+    },
+    "rig/layers/right_arm_inspect.png": {
+      "width": 1086,
+      "height": 1448,
+      "mode": "RGBA",
+      "sha256": "acafda7246d29418b5f86291fecc7597542f7a5b4dbcdd73d6abe7cb9a110224",
+      "alphaMinMax": [
+        0,
+        255
+      ]
+    },
+    "rig/layers/right_arm_point.png": {
+      "width": 1086,
+      "height": 1448,
+      "mode": "RGBA",
+      "sha256": "ace85a39a6edf91d7606d4fe3f539dcde0e7d97942904cc087e9fd05af56fa1a",
+      "alphaMinMax": [
+        0,
+        255
+      ]
+    },
+    "source/master_shinobu.png": {
+      "width": 1086,
+      "height": 1448,
+      "mode": "RGBA",
+      "sha256": "1e67c59d1a70c15025485142d56d8bbd6e3ec7f1b30627dc65b610e2ec69354b",
+      "alphaMinMax": [
+        0,
+        255
+      ]
+    }
+  },
+  "notChecked": [
+    "manual professional illustration polish",
+    "browser UI rendering",
+    "high-range articulated animation"
+  ]
+}

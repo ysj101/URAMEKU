@@ -1,0 +1,72 @@
+{
+  "product": "ウラメク",
+  "type": "production-readiness-inventory",
+  "items": [
+    {
+      "scope": "MVP",
+      "requirement": "案件数5件",
+      "file_present_or_complete": true,
+      "reference": "data/cases/"
+    },
+    {
+      "scope": "MVP",
+      "requirement": "資料数30件",
+      "file_present_or_complete": true,
+      "reference": "data/cases/"
+    },
+    {
+      "scope": "MVP",
+      "requirement": "基本4人の立ち絵",
+      "file_present_or_complete": true,
+      "reference": "public/assets/characters/"
+    },
+    {
+      "scope": "MVP",
+      "requirement": "リアクション全20組",
+      "file_present_or_complete": true,
+      "reference": "public/assets/characters/*/reactions/"
+    },
+    {
+      "scope": "MVP",
+      "requirement": "UI・事件サムネイル・図鑑・各画面背景",
+      "file_present_or_complete": true,
+      "reference": "public/assets/"
+    },
+    {
+      "scope": "MVP",
+      "requirement": "合成効果音11点",
+      "file_present_or_complete": true,
+      "reference": "public/assets/audio/"
+    },
+    {
+      "scope": "本番",
+      "requirement": "全員の高解像度独立ポーズと表情の正式原画",
+      "file_present_or_complete": false,
+      "reference": "docs/PRODUCTION_RELEASE_TASKS.md"
+    },
+    {
+      "scope": "本番",
+      "requirement": "正式な権利/商標の承認",
+      "file_present_or_complete": false,
+      "reference": "docs/PRODUCTION_RELEASE_TASKS.md"
+    },
+    {
+      "scope": "本番",
+      "requirement": "ストア提出用の実機スクリーンショット",
+      "file_present_or_complete": false,
+      "reference": "docs/PRODUCTION_RELEASE_TASKS.md"
+    },
+    {
+      "scope": "本番",
+      "requirement": "ゲームの実機アクセシビリティ/負荷/β検証",
+      "file_present_or_complete": false,
+      "reference": "docs/PRODUCTION_RELEASE_TASKS.md"
+    },
+    {
+      "scope": "本番",
+      "requirement": "商用SFXの品質承認",
+      "file_present_or_complete": false,
+      "reference": "docs/PRODUCTION_RELEASE_TASKS.md"
+    }
+  ]
+}

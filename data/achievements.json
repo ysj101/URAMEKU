@@ -1,0 +1,32 @@
+[
+  {
+    "id": "first-evidence",
+    "title": "最初の証拠",
+    "rule": "最初の資料を証拠ボードにピン留めする",
+    "icon": "assets/achievements/first-evidence.png"
+  },
+  {
+    "id": "first-link",
+    "title": "ひらめきの糸",
+    "rule": "証拠資料2件を正しく照合する",
+    "icon": "assets/achievements/first-link.png"
+  },
+  {
+    "id": "number-check",
+    "title": "数字の裏側",
+    "rule": "数値検証2問を正しく回答する",
+    "icon": "assets/achievements/number-check.png"
+  },
+  {
+    "id": "five-cases",
+    "title": "調査完了",
+    "rule": "収録5件を解決する",
+    "icon": "assets/achievements/five-cases.png"
+  },
+  {
+    "id": "no-hint",
+    "title": "ひとりで解決",
+    "rule": "ヒント無しで事件をクリアする",
+    "icon": "assets/achievements/no-hint.png"
+  }
+]

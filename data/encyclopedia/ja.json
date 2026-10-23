@@ -1,0 +1,42 @@
+[
+  {
+    "id": "framing",
+    "title": "フレーミング効果",
+    "summary": "表現形式の違いが選択や評価に影響することがある。",
+    "unlockCase": "case-01",
+    "art": "assets/encyclopedia/framing.png",
+    "disclaimer": "状況内の判断を説明する概念であり、個人の心理特性を断定するものではありません。"
+  },
+  {
+    "id": "anchoring",
+    "title": "アンカリング効果",
+    "summary": "最初に提示された数値が、その後の判断の基準として働くことがある。",
+    "unlockCase": "case-02",
+    "art": "assets/encyclopedia/anchoring.png",
+    "disclaimer": "状況内の判断を説明する概念であり、個人の心理特性を断定するものではありません。"
+  },
+  {
+    "id": "social-proof",
+    "title": "社会的証明",
+    "summary": "他者の行動や評価が自分の判断の手がかりになりうる。",
+    "unlockCase": "case-03",
+    "art": "assets/encyclopedia/social-proof.png",
+    "disclaimer": "状況内の判断を説明する概念であり、個人の心理特性を断定するものではありません。"
+  },
+  {
+    "id": "sunk-cost",
+    "title": "サンクコスト効果",
+    "summary": "回収不能な過去の費用が、将来の判断に影響することがある。",
+    "unlockCase": "case-04",
+    "art": "assets/encyclopedia/sunk-cost.png",
+    "disclaimer": "状況内の判断を説明する概念であり、個人の心理特性を断定するものではありません。"
+  },
+  {
+    "id": "graph-scale",
+    "title": "グラフの尺度と見え方",
+    "summary": "目盛りと基準線の設定により、変化の印象が異なる場合がある。",
+    "unlockCase": "case-05",
+    "art": "assets/encyclopedia/graph-scale.png",
+    "disclaimer": "状況内の判断を説明する概念であり、個人の心理特性を断定するものではありません。"
+  }
+]
