@@ -1,0 +1,63 @@
+/*
+ * 調査資料の識別ラベル（MVP-036, src/components/DocumentLabel.tsx）。
+ * 色・余白・文字サイズは tokens.css のトークンのみを使う。
+ * 文字倍率 200% でも折り返して読めるよう、固定幅・固定高さにしない。
+ */
+.document-label {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-aged);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-xs);
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+  max-width: 100%;
+}
+
+.document-label__icon {
+  width: 1.6em;
+  height: 1.6em;
+  object-fit: contain;
+  flex: 0 0 auto;
+}
+
+.document-label__case {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  color: var(--color-accent);
+  white-space: nowrap;
+}
+
+.document-label__number {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.document-label__id {
+  font-weight: 400;
+  color: var(--color-quiet);
+}
+
+.document-label__kind {
+  padding: 0 var(--space-1);
+  border: 1px solid var(--color-ink);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  white-space: nowrap;
+}
+
+.document-label__cost {
+  color: var(--color-info);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.document-label__sep {
+  color: var(--color-border-dashed);
+}
