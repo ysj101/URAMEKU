@@ -45,7 +45,7 @@ export function reduceProgress(
     case 'toggle-pin':
       return togglePin(caseData, progress, action.documentId);
     case 'toggle-link':
-      return toggleLinkSelection(progress, action.documentId);
+      return toggleLinkSelection(caseData, progress, action.documentId);
     case 'set-calculation':
       return setCalculation(progress, action.taskId, action.value);
     case 'add-fragment':
