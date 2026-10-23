@@ -116,9 +116,9 @@ export function EvidenceBoard({ caseData, progress, onToggleLink, onUnpin }: Pro
 
   return (
     <section className="evidence-board" role="group" aria-label="証拠ボード">
-      <h3 className="section-title">
+      <h2 className="section-title">
         証拠ボード <small>カードを 2 枚押して照合（ドラッグ不要）</small>
-      </h3>
+      </h2>
       <div
         ref={surfaceRef}
         className="evidence-board__surface"

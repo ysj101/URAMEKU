@@ -6,7 +6,7 @@ export function CaseHeader({ caseData }: { caseData: CaseData }) {
     <div className="case-header">
       <div>
         <span className="case-tag">{caseData.id.toUpperCase()} / FICTION</span>
-        <h2>{caseData.title}</h2>
+        <h1 id="case-title">{caseData.title}</h1>
         <p>{caseData.intro}</p>
       </div>
       <CharImage character="shinobu" pose="idle" className="case-mascot" loading="eager" />

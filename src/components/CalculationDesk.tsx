@@ -33,12 +33,12 @@ export function CalculationDesk({ caseData, progress, onChange }: Props) {
 
   return (
     <section className="calc-desk" aria-labelledby={`${panelId}-title`}>
-      <h3 className="section-title" id={`${panelId}-title`}>
+      <h2 className="section-title" id={`${panelId}-title`}>
         検証メモ{' '}
         <small>
           {filled} / {tasks.length} 件入力済み
         </small>
-      </h3>
+      </h2>
       <p className="calc-desk__lead">
         数字は資料から自分で計算して書きます。全角やカンマ、単位付きでも読み取れます。
       </p>

@@ -1,0 +1,67 @@
+/*
+ * アクセシビリティ共通スタイル（MVP-039）。
+ * - フォーカス可視化を 1 か所に統一（global.css の既存ルールは触らず、ここで上書き）
+ * - 読み上げ専用テキスト `.visually-hidden`
+ * - 画面遷移時にプログラムでフォーカスする見出し（tabindex=-1）は、操作対象ではないので
+ *   リングを出さない。Tab で次の要素に移ればリングが出る。
+ * 色は tokens.css のトークンのみ使う。
+ */
+
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* マウス操作時は通常の :focus リングを出さない（:focus-visible に一本化） */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* 遷移先の見出し・main（tabindex=-1 の非操作要素）はリングを出さない */
+h1[tabindex='-1']:focus,
+h2[tabindex='-1']:focus,
+main[tabindex='-1']:focus,
+[data-focus-target][tabindex='-1']:focus {
+  outline: none;
+}
+
+/* 強制カラーモード（Windows ハイコントラスト等）では outline を透明にせずシステム色に任せる */
+@media (forced-colors: active) {
+  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 3px solid Highlight;
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/*
+ * 見出し階層の是正（MVP-039）。プレイ画面の事件名を h2 → h1、節見出しを h3 → h2 に変えたが、
+ * global.css / result.css（他 Issue が編集中）は触らず、以前の要素セレクタ由来の見た目を
+ * ここで同じ値で再現する。見た目は変えない。
+ */
+.case-header h1 {
+  font-family: inherit;
+  font-size: clamp(1.4rem, 2.3vw, 2.1rem);
+  line-height: inherit;
+  letter-spacing: inherit;
+  margin: 5px 0 8px;
+}
+.result h2 {
+  font-size: var(--font-size-xl);
+  margin-bottom: 10px;
+}
+.result-head h2 {
+  margin: 0;
+  flex: 1 1 240px;
+}

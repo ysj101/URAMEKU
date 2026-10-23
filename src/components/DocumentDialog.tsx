@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useRef, type MouseEvent, type SyntheticEvent } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  type KeyboardEvent,
+  type MouseEvent,
+  type SyntheticEvent,
+} from 'react';
 import {
   canPinDocument,
   canUnpinDocument,
@@ -130,6 +137,14 @@ export function DocumentDialog({ caseData, progress, documentId, onTogglePin, on
     if (e.target === e.currentTarget) requestClose();
   };
 
+  // showModal が使えない環境（`open` 属性フォールバック）では cancel イベントが来ないため、
+  // Esc をここで受ける。preventDefault でブラウザ側の cancel とは二重にならない。
+  const handleKeyDown = (e: KeyboardEvent<HTMLDialogElement>) => {
+    if (e.key !== 'Escape' || !doc) return;
+    e.preventDefault();
+    requestClose();
+  };
+
   return (
     <dialog
       ref={ref}
@@ -138,6 +153,7 @@ export function DocumentDialog({ caseData, progress, documentId, onTogglePin, on
       onCancel={handleCancel}
       onClose={handleNativeClose}
       onClick={handleBackdrop}
+      onKeyDown={handleKeyDown}
     >
       <article className="document-popup">
         <div className="popup-head">
@@ -167,7 +183,7 @@ export function DocumentDialog({ caseData, progress, documentId, onTogglePin, on
               {pinned ? 'ボードから外す' : '証拠ボードに貼る'}
             </button>
             {check && !check.ok && (
-              <span id="dialog-pin-reason" className="disabled-copy" role="status">
+              <span id="dialog-pin-reason" className="disabled-copy">
                 {PIN_REASON[check.reason]}
               </span>
             )}

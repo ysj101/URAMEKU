@@ -1,4 +1,6 @@
-import { useNavigation } from './navigation';
+import { toHash, useNavigation } from './navigation';
+import { useFocusOnRouteChange } from './useFocusOnRouteChange';
+import './a11y.css';
 import { CaseSelectScreen } from '../screens/CaseSelectScreen';
 import { EncyclopediaScreen } from '../screens/EncyclopediaScreen';
 import { HomeScreen } from '../screens/HomeScreen';
@@ -17,6 +19,10 @@ export function App() {
   const game = useGame();
   const nav = useNavigation();
   const { route } = nav;
+  // 画面遷移（ハッシュ）と、プレイ内の段階切替（調査→記事→結果）でフォーカスと告知を更新する
+  const announcement = useFocusOnRouteChange(
+    `${toHash(route)}|${game.stage}|${game.progress.published ? 'published' : 'editing'}`,
+  );
 
   // URL で事件を直接指定された場合は保存中の事件を切り替える
   useEffect(() => {
@@ -77,9 +83,20 @@ export function App() {
 
   return (
     <>
-      <a href="#workbench" className="skip-link">
+      <a
+        href="#workbench"
+        className="skip-link"
+        onClick={(e) => {
+          // ハッシュルーティングと衝突しないよう、URL は変えずに main へフォーカスだけ移す
+          e.preventDefault();
+          document.getElementById('workbench')?.focus();
+        }}
+      >
         本編へ
       </a>
+      <div className="visually-hidden" aria-live="polite" aria-atomic="true">
+        {announcement}
+      </div>
       <main id="workbench" className="app-main" tabIndex={-1}>
         <OfflineBanner />
         <SaveStatusBanner status={game.saveStatus} />
