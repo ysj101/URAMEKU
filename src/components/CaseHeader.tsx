@@ -1,5 +1,5 @@
-import { assetUrl } from '../data/assets';
 import type { CaseData } from '../domain/types';
+import { CharImage } from './CharImage';
 
 export function CaseHeader({ caseData }: { caseData: CaseData }) {
   return (
@@ -9,11 +9,7 @@ export function CaseHeader({ caseData }: { caseData: CaseData }) {
         <h2>{caseData.title}</h2>
         <p>{caseData.intro}</p>
       </div>
-      <img
-        className="case-mascot"
-        src={assetUrl('characters/shinobu/poses/idle.png')}
-        alt="調査記者シノブ"
-      />
+      <CharImage character="shinobu" pose="idle" className="case-mascot" loading="eager" />
     </div>
   );
 }

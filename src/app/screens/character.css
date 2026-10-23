@@ -1,0 +1,78 @@
+/*
+ * キャラクター表示（MVP-035）
+ *
+ * CharImage / CharacterReaction の見た目。原画は差し替えず、演出記号を重ねるだけ。
+ * 色は tokens.css のトークンのみ。動かすのは transform / opacity だけ（docs/MOTION.md）。
+ * global.css の既存ルール（.case-mascot など）はここでは変更しない。
+ * 基本クラスは寸法を決めない（呼び出し側の CSS を尊重する）。寸法は size 修飾子か
+ * `--char-image-width` で指定する。
+ */
+.char-image {
+  display: block;
+  max-width: 100%;
+  object-fit: contain;
+  user-select: none;
+}
+.char-image--sm,
+.char-image--md,
+.char-image--lg {
+  width: var(--char-image-width);
+  height: auto;
+}
+.char-image--sm {
+  --char-image-width: 96px;
+}
+.char-image--md {
+  --char-image-width: 160px;
+}
+.char-image--lg {
+  --char-image-width: 240px;
+}
+
+/* 原画の上に記号を重ねる枠。記号の位置と大きさは変数で調整する。 */
+.char-reaction {
+  position: relative;
+  display: inline-block;
+  margin: 0;
+  max-width: 100%;
+  /* 記号が原画の枠からはみ出す分の余白（transform で動かすので layout は動かない） */
+  --char-effect-width: 34%;
+  --char-effect-offset: -6%;
+}
+.char-reaction__effect {
+  position: absolute;
+  top: var(--char-effect-offset);
+  width: var(--char-effect-width);
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+  transform-origin: center bottom;
+}
+.char-reaction--top-right .char-reaction__effect {
+  right: var(--char-effect-offset);
+}
+.char-reaction--top-left .char-reaction__effect {
+  left: var(--char-effect-offset);
+}
+
+/* 記号が「ぽん」と現れる。reduced motion では motion.css が animation を止める。 */
+@keyframes motion-effect-pop {
+  0% {
+    opacity: 0;
+    transform: translateY(var(--motion-lift)) scale(0.6);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(0) scale(1.08);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+.motion-effect-pop {
+  animation: motion-effect-pop var(--motion-slow) var(--motion-ease-settle) both;
+}
+.motion-effect-pop.is-animating {
+  will-change: transform, opacity;
+}
