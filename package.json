@@ -23,7 +23,8 @@
     "check": "npm run lint && npm run typecheck && npm run format:check && npm run test",
     "analyze:dead-ends": "node scripts/analyze_dead_ends.mjs",
     "lint:content": "node scripts/lint_content.mjs",
-    "walkthrough": "node scripts/generate_walkthrough.mjs"
+    "walkthrough": "node scripts/generate_walkthrough.mjs",
+    "summarize:user-tests": "node scripts/summarize_user_tests.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",

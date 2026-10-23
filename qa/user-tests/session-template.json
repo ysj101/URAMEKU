@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "participant": "P00",
+  "date": "YYYY-MM-DD",
+  "observer": "OBS-A",
+  "build": { "commit": "", "url": "" },
+  "consent": { "verbal": false, "time": "" },
+  "device": {
+    "type": "smartphone",
+    "os": "",
+    "browser": "",
+    "viewport_width": null,
+    "input": "touch"
+  },
+  "session": { "total_minutes": 0, "ended_reason": "finished" },
+  "ran_without_verbal_help": true,
+  "cases": [
+    {
+      "case_id": "tutorial",
+      "started_at": "00:00",
+      "ended_at": "00:00",
+      "minutes": 0,
+      "completed": "yes",
+      "failed_publishes": 0,
+      "reset_count": 0,
+      "documents_opened": null,
+      "help_given": []
+    },
+    {
+      "case_id": "case-01",
+      "started_at": "00:00",
+      "ended_at": "00:00",
+      "minutes": 0,
+      "completed": "no",
+      "failed_publishes": 0,
+      "reset_count": 0,
+      "documents_opened": null,
+      "help_given": []
+    }
+  ],
+  "stuck_points": [
+    {
+      "time": "00:00",
+      "case_id": "case-01",
+      "screen": "board",
+      "action": "link_select",
+      "observation": "",
+      "kind": "ui_unclear",
+      "severity": "unpleasant",
+      "resolved_by": "self"
+    }
+  ],
+  "fun": 3,
+  "fun_comment": "",
+  "understanding": { "explained_in_own_words": "partial", "quote": "" },
+  "after_mistake": { "had_next_idea": "not_applicable", "note": "" },
+  "readability": { "paper_decoration_issue": false, "note": "" },
+  "interview": {
+    "q1": "",
+    "q2": "",
+    "q3": "",
+    "q4": "",
+    "q5": "",
+    "q6": "",
+    "q7": "",
+    "q8": ""
+  },
+  "free_text": "",
+  "observer_notes": ""
+}

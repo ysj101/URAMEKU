@@ -1,0 +1,127 @@
+{
+  "_note": "架空のサンプル。実際のセッション記録ではない。フォーマットと集計スクリプトの動作確認用。",
+  "schema_version": 1,
+  "participant": "P00",
+  "date": "2026-01-01",
+  "observer": "OBS-A",
+  "build": { "commit": "0000000", "url": "http://localhost:4173/" },
+  "consent": { "verbal": true, "time": "10:02" },
+  "device": {
+    "type": "smartphone",
+    "os": "iOS 18",
+    "browser": "Safari",
+    "viewport_width": 390,
+    "input": "touch"
+  },
+  "session": { "total_minutes": 58, "ended_reason": "finished" },
+  "ran_without_verbal_help": false,
+  "cases": [
+    {
+      "case_id": "tutorial",
+      "started_at": "05:10",
+      "ended_at": "12:40",
+      "minutes": 7.5,
+      "completed": "yes",
+      "failed_publishes": 0,
+      "reset_count": 0,
+      "documents_opened": null,
+      "help_given": []
+    },
+    {
+      "case_id": "case-01",
+      "started_at": "13:00",
+      "ended_at": "38:30",
+      "minutes": 25.5,
+      "completed": "yes",
+      "failed_publishes": 2,
+      "reset_count": 1,
+      "documents_opened": 5,
+      "help_given": [
+        {
+          "time": "24:10",
+          "condition": "dead_end_2min",
+          "said": "画面のどこかに、この事件をやり直す操作があります。"
+        }
+      ]
+    },
+    {
+      "case_id": "case-02",
+      "started_at": "39:00",
+      "ended_at": "48:00",
+      "minutes": 9,
+      "completed": "no",
+      "failed_publishes": 1,
+      "reset_count": 0,
+      "documents_opened": 4,
+      "help_given": []
+    }
+  ],
+  "stuck_points": [
+    {
+      "time": "16:20",
+      "case_id": "case-01",
+      "screen": "board",
+      "action": "link_select",
+      "observation": "資料を2枚タップした後「照合」ボタンを探して画面を上下に3回スクロール。「どこで決定するの」と発言。",
+      "kind": "ui_unclear",
+      "severity": "unpleasant",
+      "resolved_by": "self"
+    },
+    {
+      "time": "22:00",
+      "case_id": "case-01",
+      "screen": "desk",
+      "action": "open_document",
+      "observation": "予算0のまま未閲覧の資料をタップし続け、「開けない」と発言。リセットの操作に気付かず2分経過。",
+      "kind": "rule_unclear",
+      "severity": "blocks_completion",
+      "resolved_by": "observer"
+    },
+    {
+      "time": "30:45",
+      "case_id": "case-01",
+      "screen": "calc",
+      "action": "calc_input",
+      "observation": "分母に無料登録者数を使うべきところを有料契約者数で計算。資料を読み直して自分で修正。",
+      "kind": "reasoning_hard",
+      "severity": "preference",
+      "resolved_by": "self"
+    },
+    {
+      "time": "43:00",
+      "case_id": "case-02",
+      "screen": "document",
+      "action": "read",
+      "observation": "値札の切り抜きの小さい数字を2回拡大。「下の行が紙のしわで読みにくい」と発言。",
+      "kind": "content_unclear",
+      "severity": "unpleasant",
+      "resolved_by": "self"
+    }
+  ],
+  "fun": 4,
+  "fun_comment": "「2つの数字の元が違うと気付いた瞬間が一番面白かった」「最初の予算切れは少しいらいらした」",
+  "understanding": {
+    "explained_in_own_words": "yes",
+    "quote": "「45%と90%は分母が違う。全員のうちの続けた人と、お金を払った人のうちの続けた人」"
+  },
+  "after_mistake": {
+    "had_next_idea": "yes",
+    "note": "「照合する2枚を変えてみる。数字が出てる方」"
+  },
+  "readability": {
+    "paper_decoration_issue": true,
+    "note": "case-02 の値札資料で、しわのテクスチャと重なった行の数字が読みにくいとの発言。"
+  },
+  "interview": {
+    "q1": "「45%と90%は分母が違う。全員のうちの続けた人と、お金を払った人のうちの続けた人」",
+    "q2": "「2つの数字の元が違うと気付いた瞬間」「予算が切れたとき」4",
+    "q3": "「予算が切れた後どうすればいいかは画面が分かりにくかった。計算は難しかったけど自分のせい…というか問題として難しかった」",
+    "q4": "「納得できた。見出しの罠は意地悪だけどフェア」",
+    "q5": "「不掲載の画面に何が足りないか出たので、見当はついた」",
+    "q6": "「値札の下の行」",
+    "q7": "「予算が0になったら何ができるか」",
+    "q8": "「2件目は1件目と同じ型だと気付いた」"
+  },
+  "free_text": "「紙をめくる感じは好き。音は切った」",
+  "observer_notes": "予算切れ後のリセット導線は desk 画面上で目立たない可能性。CASE 02 は時間切れで中断（ended_reason は finished のまま。セッション自体は完了）。"
+}
