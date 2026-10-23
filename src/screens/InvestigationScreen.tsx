@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useSound } from '../audio/useSound';
 import { CalculationDesk } from '../components/CalculationDesk';
 import { DocumentDialog } from '../components/DocumentDialog';
 import { DocumentGrid } from '../components/DocumentGrid';
@@ -6,16 +7,26 @@ import { EvidenceBoard } from '../components/EvidenceBoard';
 import { remainingBudget } from '../domain/budget';
 import { isDeadEnd } from '../domain/deadEnd';
 import type { GameApi } from '../state/useGame';
+import '../app/screens/desk.css';
 
 export function InvestigationScreen({ game }: { game: GameApi }) {
   const { current, progress, dispatch } = game;
+  const play = useSound();
   const [openId, setOpenId] = useState<string | null>(null);
-  const openDoc = openId ? (current.documents.find((d) => d.id === openId) ?? null) : null;
   const deadEnd = isDeadEnd(current, progress);
 
   const handleOpen = (documentId: string) => {
     dispatch({ type: 'open-document', documentId });
+    // 再開用に最後に開いた資料を記録（MVP-030。スタブでは無い場合がある）
+    game.setLastDocument?.(documentId);
+    play('paper-flip');
     setOpenId(documentId);
+  };
+
+  const handleTogglePin = (documentId: string) => {
+    if (!progress.pinned.includes(documentId)) play('evidence-pin');
+    dispatch({ type: 'toggle-pin', documentId });
+    setOpenId(null);
   };
 
   const handleRestart = () => {
@@ -69,13 +80,10 @@ export function InvestigationScreen({ game }: { game: GameApi }) {
         </button>
       </div>
       <DocumentDialog
-        document={openDoc}
-        pinned={openId ? progress.pinned.includes(openId) : false}
-        onTogglePin={() => {
-          if (!openId) return;
-          dispatch({ type: 'toggle-pin', documentId: openId });
-          setOpenId(null);
-        }}
+        caseData={current}
+        progress={progress}
+        documentId={openId}
+        onTogglePin={handleTogglePin}
         onClose={() => setOpenId(null)}
       />
     </>

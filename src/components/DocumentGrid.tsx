@@ -1,6 +1,7 @@
-import { documentThumbnail } from '../data/assets';
-import { canOpenDocument } from '../domain/budget';
-import type { CaseData, CaseProgress } from '../domain/types';
+import { useState } from 'react';
+import { documentCost, remainingBudget, tryOpenDocument } from '../domain/budget';
+import type { CaseData, CaseDocument, CaseProgress } from '../domain/types';
+import { DocumentTile } from './DocumentTile';
 
 interface Props {
   caseData: CaseData;
@@ -8,30 +9,38 @@ interface Props {
   onOpen: (documentId: string) => void;
 }
 
+/** 開けなかった理由の文言（`role="status"` で読み上げる） */
+function blockedMessage(caseData: CaseData, progress: CaseProgress, doc: CaseDocument) {
+  return `「${doc.title}」は予算不足のため開けません（必要 ${documentCost(doc)}、残り ${remainingBudget(caseData, progress)}）。`;
+}
+
 export function DocumentGrid({ caseData, progress, onOpen }: Props) {
+  const [blocked, setBlocked] = useState<string | null>(null);
+
   return (
-    <div className="document-grid">
-      {caseData.documents.map((d) => {
-        const opened = progress.opened.includes(d.id);
-        const pinned = progress.pinned.includes(d.id);
-        const openable = canOpenDocument(caseData, progress, d.id);
-        const status = opened ? '調査済み' : d.cost === 0 ? '無料で確認' : `調査コスト ${d.cost}`;
-        return (
-          <button
+    <>
+      <div className="document-grid desk-grid">
+        {caseData.documents.map((d) => (
+          <DocumentTile
             key={d.id}
-            type="button"
-            className="doc-tile"
-            disabled={!openable}
-            aria-label={`${d.title}、${opened ? '調査済み' : '未調査'}`}
-            onClick={() => onOpen(d.id)}
-          >
-            <img src={documentThumbnail(caseData.id, d.id)} alt="" />
-            <strong>{d.title}</strong>
-            <span>{status}</span>
-            {pinned && <span className="pin">● ボードに貼付済み</span>}
-          </button>
-        );
-      })}
-    </div>
+            caseId={caseData.id}
+            document={d}
+            opened={progress.opened.includes(d.id)}
+            pinned={progress.pinned.includes(d.id)}
+            outcome={tryOpenDocument(caseData, progress, d.id).outcome}
+            onOpen={(id) => {
+              setBlocked(null);
+              onOpen(id);
+            }}
+            onBlocked={(doc) => setBlocked(blockedMessage(caseData, progress, doc))}
+          />
+        ))}
+      </div>
+      {blocked && (
+        <p className="desk-status" role="status">
+          {blocked}
+        </p>
+      )}
+    </>
   );
 }
