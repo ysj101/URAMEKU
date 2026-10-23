@@ -43,7 +43,7 @@ export function reduceProgress(
     case 'open-document':
       return openDocument(caseData, progress, action.documentId);
     case 'toggle-pin':
-      return togglePin(progress, action.documentId);
+      return togglePin(caseData, progress, action.documentId);
     case 'toggle-link':
       return toggleLinkSelection(progress, action.documentId);
     case 'set-calculation':
