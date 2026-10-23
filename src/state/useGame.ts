@@ -1,11 +1,31 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { CASES, findCase, nextCaseId } from '../data/cases';
 import { createProgress, reduceProgress, type GameAction } from '../domain/game';
 import { evaluateCase } from '../domain/scoring';
 import type { CaseData, CaseProgress } from '../domain/types';
-import { clearSaveData, loadSaveData, persistSaveData, type SaveData } from './persistence';
+import { createSession, type Stage } from './migrations';
+import {
+  clearSaveData,
+  createSaveData,
+  defaultStorage,
+  loadSaveDataDetailed,
+  parseStoredSaveData,
+  persistSaveData,
+  STORAGE_KEY,
+  type SaveData,
+  type StorageLike,
+} from './persistence';
+import { nextRevision, resolveConflict } from './saveCoordinator';
 
-export type Stage = 'investigate' | 'article';
+export type { Stage };
+
+/**
+ * 直近の保存結果。
+ * - saved: 最後の書き込みが成功（または書くものが無い）
+ * - failed: 書き込みが失敗した（容量超過など）。進行は画面上では続くが端末には残らない
+ * - unavailable: この環境では保存先（localStorage）が使えない
+ */
+export type SaveStatus = 'saved' | 'failed' | 'unavailable';
 
 export interface GameApi {
   cases: CaseData[];
@@ -18,44 +38,204 @@ export interface GameApi {
   setStage: (stage: Stage) => void;
   goToNextCase: () => void;
   resetAll: () => void;
+  /**
+   * 以下は MVP-030 で追加。`useGame` は常に返すが、既存の画面テストが `GameApi` のスタブを
+   * 手書きしているため optional にしてある（表示は MVP-028 が担当）。
+   */
+  saveStatus?: SaveStatus;
+  /** 選択中の事件で最後に開いた資料 ID。`open-document` の成功時に自動で記録される */
+  lastDocumentId?: string | null;
+  setLastDocument?: (documentId: string | null) => void;
 }
+
+export interface UseGameOptions {
+  /** 保存先。省略時は localStorage。null なら保存しない（saveStatus: 'unavailable'） */
+  storage?: StorageLike | null;
+  /** 連続入力をまとめる待ち時間（ms） */
+  debounceMs?: number;
+}
+
+export const SAVE_DEBOUNCE_MS = 150;
 
 const FIRST_CASE = CASES[0]?.id ?? 'case-01';
 
-export function useGame(): GameApi {
-  const [save, setSave] = useState<SaveData>(() => {
-    const loaded = loadSaveData(FIRST_CASE);
-    if (!findCase(loaded.active)) loaded.active = FIRST_CASE;
-    return loaded;
-  });
-  const [stage, setStage] = useState<Stage>('investigate');
+/** 読み込んだ保存内容を、存在する事件・資料に合わせて整える（revision は保つ）。 */
+function sanitize(loaded: SaveData): SaveData {
+  const caseData = findCase(loaded.active);
+  if (!caseData) return { ...loaded, active: FIRST_CASE, session: createSession() };
+  const last = loaded.session.lastDocumentId;
+  if (last !== null && !caseData.documents.some((d) => d.id === last)) {
+    return { ...loaded, session: { ...loaded.session, lastDocumentId: null } };
+  }
+  return loaded;
+}
 
+export function useGame(options: UseGameOptions = {}): GameApi {
+  const [storage] = useState<StorageLike | null>(() =>
+    options.storage === undefined ? defaultStorage() : options.storage,
+  );
+  const debounceMs = options.debounceMs ?? SAVE_DEBOUNCE_MS;
+
+  const [initial] = useState(() => loadSaveDataDetailed(FIRST_CASE, storage));
+  const [save, setSave] = useState<SaveData>(() => sanitize(initial.data));
+  const [saveStatus, setSaveStatus] = useState<SaveStatus>(storage ? 'saved' : 'unavailable');
+
+  /** 最後に書き込んだ（または storage から取り込んだ）revision と時刻。これと同じなら書かない */
+  const persistedRef = useRef<{ revision: number; savedAt: string | null }>({
+    revision: initial.data.revision,
+    savedAt: initial.savedAt,
+  });
+  const latestRef = useRef<SaveData>(save);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const cancelTimer = useCallback(() => {
+    if (timerRef.current !== null) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+  }, []);
+
+  /** 未保存の変更があれば即時に書き込む。 */
+  const flush = useCallback(() => {
+    cancelTimer();
+    const data = latestRef.current;
+    if (data.revision === persistedRef.current.revision) return;
+    if (!storage) {
+      setSaveStatus('unavailable');
+      return;
+    }
+    const savedAt = new Date().toISOString();
+    const ok = persistSaveData(data, storage, () => savedAt);
+    if (ok) persistedRef.current = { revision: data.revision, savedAt };
+    setSaveStatus(ok ? 'saved' : 'failed');
+  }, [cancelTimer, storage]);
+
+  // 変更をデバウンスして書き込む。連続入力（set-calculation 等）で毎回 setItem しない。
   useEffect(() => {
-    persistSaveData(save);
-  }, [save]);
+    latestRef.current = save;
+    if (save.revision === persistedRef.current.revision) return;
+    timerRef.current = setTimeout(flush, debounceMs);
+    return cancelTimer;
+  }, [save, flush, cancelTimer, debounceMs]);
+
+  // アンマウント時・ページ離脱時は待たずに書く。
+  useEffect(() => flush, [flush]);
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const onLeave = () => flush();
+    window.addEventListener('pagehide', onLeave);
+    window.addEventListener('beforeunload', onLeave);
+    return () => {
+      window.removeEventListener('pagehide', onLeave);
+      window.removeEventListener('beforeunload', onLeave);
+    };
+  }, [flush]);
+
+  // 他タブの保存を取り込む（競合ポリシーは saveCoordinator.ts）。
+  useEffect(() => {
+    if (!storage || typeof window === 'undefined') return;
+    const onStorage = (e: StorageEvent) => {
+      if (e.key !== null && e.key !== STORAGE_KEY) return;
+      if (e.newValue === null) {
+        // 他タブが記録を削除した（resetAll / clear）。自タブも初期状態に合わせる。
+        cancelTimer();
+        persistedRef.current = { revision: 0, savedAt: null };
+        setSave(createSaveData(FIRST_CASE));
+        return;
+      }
+      const remote = parseStoredSaveData(e.newValue, FIRST_CASE);
+      if (!remote) return;
+      const local = { revision: latestRef.current.revision, savedAt: persistedRef.current.savedAt };
+      if (resolveConflict(local, remote) !== 'take-remote') return;
+      const { savedAt, ...data } = remote;
+      cancelTimer();
+      persistedRef.current = { revision: data.revision, savedAt };
+      setSave(sanitize(data));
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, [storage, cancelTimer]);
+
+  /** 変更があれば revision を進めて state を更新する。 */
+  const update = useCallback((fn: (prev: SaveData) => SaveData) => {
+    setSave((prev) => {
+      const next = fn(prev);
+      if (next === prev) return prev;
+      return { ...next, revision: nextRevision(prev.revision) };
+    });
+  }, []);
 
   const current = useMemo(() => findCase(save.active) ?? CASES[0]!, [save.active]);
   const progress = save.progress[current.id] ?? createProgress();
 
-  const dispatch = useCallback((action: GameAction) => {
-    setSave((prev) => {
-      const caseData = findCase(prev.active);
-      if (!caseData) return prev;
-      const before = prev.progress[caseData.id] ?? createProgress();
-      const after = reduceProgress(caseData, before, action);
-      if (after === before) return prev;
-      const finished = { ...prev.finished };
-      if (after.published && evaluateCase(caseData, after).cleared) finished[caseData.id] = true;
-      return { ...prev, progress: { ...prev.progress, [caseData.id]: after }, finished };
-    });
-    if (action.type === 'reset') setStage('investigate');
-  }, []);
+  const dispatch = useCallback(
+    (action: GameAction) => {
+      update((prev) => {
+        const caseData = findCase(prev.active);
+        if (!caseData) return prev;
+        const before = prev.progress[caseData.id] ?? createProgress();
+        const after = reduceProgress(caseData, before, action);
+        let session = prev.session;
+        if (action.type === 'reset') {
+          session = createSession();
+        } else if (
+          action.type === 'open-document' &&
+          after.opened.includes(action.documentId) &&
+          session.lastDocumentId !== action.documentId
+        ) {
+          session = { ...session, lastDocumentId: action.documentId };
+        }
+        if (after === before && session === prev.session) return prev;
+        const finished = { ...prev.finished };
+        if (after.published && evaluateCase(caseData, after).cleared) finished[caseData.id] = true;
+        return {
+          ...prev,
+          progress: { ...prev.progress, [caseData.id]: after },
+          finished,
+          session,
+        };
+      });
+    },
+    [update],
+  );
 
-  const selectCase = useCallback((id: string) => {
-    if (!findCase(id)) return;
-    setSave((prev) => (prev.active === id ? prev : { ...prev, active: id }));
-    setStage('investigate');
-  }, []);
+  const selectCase = useCallback(
+    (id: string) => {
+      if (!findCase(id)) return;
+      update((prev) => {
+        const fresh = createSession();
+        if (
+          prev.active === id &&
+          prev.session.stage === fresh.stage &&
+          prev.session.lastDocumentId === fresh.lastDocumentId
+        ) {
+          return prev;
+        }
+        return { ...prev, active: id, session: fresh };
+      });
+    },
+    [update],
+  );
+
+  const setStage = useCallback(
+    (stage: Stage) => {
+      update((prev) =>
+        prev.session.stage === stage ? prev : { ...prev, session: { ...prev.session, stage } },
+      );
+    },
+    [update],
+  );
+
+  const setLastDocument = useCallback(
+    (documentId: string | null) => {
+      update((prev) =>
+        prev.session.lastDocumentId === documentId
+          ? prev
+          : { ...prev, session: { ...prev.session, lastDocumentId: documentId } },
+      );
+    },
+    [update],
+  );
 
   const goToNextCase = useCallback(() => {
     const next = nextCaseId(current.id);
@@ -63,21 +243,26 @@ export function useGame(): GameApi {
   }, [current.id, selectCase]);
 
   const resetAll = useCallback(() => {
-    clearSaveData();
-    setSave({ active: FIRST_CASE, progress: {}, finished: {} });
-    setStage('investigate');
-  }, []);
+    cancelTimer();
+    clearSaveData(storage);
+    persistedRef.current = { revision: 0, savedAt: null };
+    setSave(createSaveData(FIRST_CASE));
+    setSaveStatus(storage ? 'saved' : 'unavailable');
+  }, [cancelTimer, storage]);
 
   return {
     cases: CASES,
     current,
     progress,
-    stage,
+    stage: save.session.stage,
     finished: save.finished,
     dispatch,
     selectCase,
     setStage,
     goToNextCase,
     resetAll,
+    saveStatus,
+    lastDocumentId: save.session.lastDocumentId,
+    setLastDocument,
   };
 }
