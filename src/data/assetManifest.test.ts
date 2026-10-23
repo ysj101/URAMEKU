@@ -42,9 +42,10 @@ describe('assetManifest', () => {
   });
 
   it('public/assets 配下の全ファイルがマニフェストに載っている（正本との乖離なし）', () => {
-    const files = walk(resolve(ROOT, 'public/assets')).map((f) =>
-      relative(resolve(ROOT, 'public/assets'), f),
-    );
+    const files = walk(resolve(ROOT, 'public/assets'))
+      .map((f) => relative(resolve(ROOT, 'public/assets'), f))
+      // OS が作る隠しファイル（.DS_Store 等）は git 管理外なので対象にしない
+      .filter((f) => !f.split('/').some((seg) => seg.startsWith('.')));
     const unknown = files.filter((f) => !isKnownAsset(f));
     expect(unknown).toEqual([]);
   });

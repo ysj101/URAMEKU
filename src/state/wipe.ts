@@ -125,5 +125,5 @@ export function resetCaseProgress(save: SaveData, caseId: string): SaveData {
   delete progress[caseId];
   const finished = { ...save.finished };
   delete finished[caseId];
-  return { active: save.active, progress, finished };
+  return { ...save, progress, finished };
 }
