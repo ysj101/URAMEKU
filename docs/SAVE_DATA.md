@@ -43,3 +43,39 @@ v0 と v1 は中身だけでは区別できないため、読み出し元のキ�
 2. `migrations.ts` の `migrations` 配列末尾に `{ from: N, to: N+1, up }` を追加し、`CURRENT_SAVE_VERSION` を N+1 にする。`up` は入力を信用せず、出力を to 形式として整形して返す。
 3. `migrations.test.ts` に「vN → 最新」のケースを追加する。
 4. この表に行を足す。
+
+## 削除（MVP-031）
+
+実装は `src/state/wipe.ts`。UI は `src/components/ResetProgressPanel.tsx`（2 段階確認）と `src/screens/SettingsScreen.tsx`。
+
+### 対象
+
+Web Storage（`localStorage` と `sessionStorage`）の次のキーをすべて消す。
+
+| 対象 | 例 |
+| --- | --- |
+| 現行キー `STORAGE_KEY` | `urameku-mvp-v1` |
+| 旧キー `LEGACY_KEYS`（読み取り専用だったもの） | `paper-backside-mvp-v1` |
+| 接頭辞 `STORAGE_KEY_PREFIX`（`urameku-`）で始まるキー | 将来の設定キーなど |
+
+アプリが新しくキーを作るときは必ず `urameku-` で始める。そうすれば `wipe.ts` を変えずに削除対象に含まれる。他アプリのキー（接頭辞が異なるもの）には触れない。
+
+**対象外**: IndexedDB / Cache Storage は MVP では使っていない。PWA の Service Worker キャッシュは MVP-045 以降で扱う。
+
+### API
+
+| 関数 | 役割 |
+| --- | --- |
+| `wipeAllLocalData({ local?, session? })` | 両 storage からアプリのキーを削除し `{ removed, remaining }` を返す。引数省略時は実際の `localStorage` / `sessionStorage` |
+| `wipeStorage(storage)` | 1 つの storage から削除。削除したキーを返す |
+| `verifyWiped(storage)` | 削除後に残っているアプリのキーを返す。空配列なら完全に消えている |
+| `listAppKeys(storage)` / `isAppKey(key)` | 列挙・判定。`key()` を持たない storage では既知のキーだけ見る |
+| `resetCaseProgress(save, caseId)` | 純粋関数。指定した事件の `progress` と `finished` だけを消し、他の事件と `active` は変えない |
+
+`persistence.ts` の `clearSaveData` は `wipeStorage` に委譲しており、現行キーだけでなく旧キーも消える。
+
+### UI の流れ
+
+1. 「この事件をやり直す」または「この端末の記録をすべて削除」を押す。
+2. 確認文（`role="alertdialog"`）と「削除する」/「やめる」が出る。`window.confirm` は使わない。
+3. 「削除する」で実行し、完了を `role="status"` で表示する。「やめる」なら何もしない。
