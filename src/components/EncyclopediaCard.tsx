@@ -48,7 +48,7 @@ export function EncyclopediaCard({ entry, unlocked, caseNumber }: EncyclopediaCa
     <li className="encyclopedia-card" data-entry-state="unlocked">
       <img className="encyclopedia-card-art" src={entryArtUrl(entry)} alt="" />
       <div className="encyclopedia-card-body">
-        <h3 className="encyclopedia-card-title">{entry.title}</h3>
+        <h2 className="encyclopedia-card-title">{entry.title}</h2>
         <p className="encyclopedia-card-summary">{entry.summary}</p>
         <p className="encyclopedia-card-disclaimer">{entry.disclaimer}</p>
       </div>

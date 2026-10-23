@@ -29,7 +29,9 @@ export function ArticleScreen({ game }: { game: GameApi }) {
   return (
     <>
       <div className="meter">
-        <span>STEP 02 / 記事を組み立てる</span>
+        <span data-focus-target tabIndex={-1}>
+          STEP 02 / 記事を組み立てる
+        </span>
         <span>
           採用証拠 {progress.pinned.length} 件 / 検証メモ {filledCalcs} 件
         </span>
@@ -67,7 +69,7 @@ export function ArticleScreen({ game }: { game: GameApi }) {
           </button>
         </div>
         {reason && (
-          <p id="article-submit-reason" className="article-submit-reason" role="status">
+          <p id="article-submit-reason" className="article-submit-reason">
             {reason}
           </p>
         )}

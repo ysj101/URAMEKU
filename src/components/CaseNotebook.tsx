@@ -36,7 +36,7 @@ export function CaseNotebook({ cases, progressByCase, finished }: CaseNotebookPr
                 </div>
                 <div>
                   <dt>{UI.case.budget}</dt>
-                  <dd aria-label={`${UI.case.budget} ${spent} / ${c.budget}`}>
+                  <dd>
                     {spent} / {c.budget}
                   </dd>
                 </div>

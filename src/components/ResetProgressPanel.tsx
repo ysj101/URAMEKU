@@ -40,7 +40,7 @@ export function ResetProgressPanel({
 
   return (
     <section className="reset-progress-panel" aria-labelledby="reset-progress-heading">
-      <h3 id="reset-progress-heading">記録の削除</h3>
+      <h2 id="reset-progress-heading">記録の削除</h2>
       <p className="disabled-copy">
         削除した記録は元に戻せません。削除の対象はこの端末（このブラウザ）に保存された記録だけです。
       </p>
