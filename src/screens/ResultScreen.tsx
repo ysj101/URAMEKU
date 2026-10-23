@@ -1,9 +1,12 @@
-import { evaluateCase } from '../domain/scoring';
+import { FailureReasons } from '../components/FailureReasons';
+import { ScoreBreakdown } from '../components/ScoreBreakdown';
+import { evaluateCase, failureReasons } from '../domain/scoring';
 import type { GameApi } from '../state/useGame';
 
 export function ResultScreen({ game }: { game: GameApi }) {
   const { current, progress, dispatch } = game;
   const r = evaluateCase(current, progress);
+  const reasons = r.cleared ? [] : failureReasons(current, progress);
   const docTitle = (id: string) => current.documents.find((d) => d.id === id)?.title ?? id;
   const fragText = (id: string) => current.headline_fragments.find((f) => f.id === id)?.text ?? id;
 
@@ -31,17 +34,7 @@ export function ResultScreen({ game }: { game: GameApi }) {
         <p>
           評価点：<strong>{r.points} / 100</strong>（資料の妥当性・照合・見出し・調査効率）
         </p>
-        <ul>
-          <li>
-            必要な裏付け資料：{r.requiredFound.length} / {r.requiredTotal} 件
-          </li>
-          <li>関係する2資料の照合：{r.linkCorrect ? '成立' : '未成立'}</li>
-          <li>
-            数値検証メモ：{r.calculationsCorrect} / {r.calculationsTotal} 件
-          </li>
-          <li>見出しの論理的な断片：{r.fragmentsInPlace} / 3</li>
-          <li>未使用の調査予算：{r.remainingBudget}</li>
-        </ul>
+        <ScoreBreakdown rows={r.breakdown} />
         {r.cleared ? (
           <div className="explain">
             <h3>編集後記：{current.bias}</h3>
@@ -53,8 +46,9 @@ export function ResultScreen({ game }: { game: GameApi }) {
           </div>
         ) : (
           <>
+            <FailureReasons reasons={reasons} />
             <div className="notice">
-              すべての必要証拠を採用し、正しい2資料を結び、数値検証メモを完成させ、3つの断片を正しい順序に並べる必要があります。調査予算が不足した場合は最初からやり直せます。
+              不足している系統を補ってから再提出してください。調査予算が不足した場合は最初からやり直せます。
             </div>
             {progress.revealed ? (
               <div className="explain">
