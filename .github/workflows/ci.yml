@@ -1,0 +1,85 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    name: CI
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Format check
+        run: npm run format:check
+
+      - name: Test
+        run: npm run test
+
+      - name: Build
+        run: npm run build
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Pillow
+        run: python3 -m pip install pillow
+
+      - name: Validate assets
+        id: validate_assets
+        continue-on-error: true
+        run: python3 scripts/validate_assets.py
+
+      - name: Upload asset validation report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: asset-validation
+          path: qa/validation.json
+          if-no-files-found: warn
+
+      - name: Report asset validation result
+        if: always()
+        run: |
+          echo "validate_assets outcome: ${{ steps.validate_assets.outcome }}"
+          if [ -f qa/validation.json ]; then
+            {
+              echo '### Asset validation'
+              echo
+              echo '```json'
+              cat qa/validation.json
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ "${{ steps.validate_assets.outcome }}" != "success" ]; then
+            echo "::warning::scripts/validate_assets.py did not pass. See the asset-validation artifact (qa/validation.json)."
+          fi
