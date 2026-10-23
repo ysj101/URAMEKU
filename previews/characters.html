@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ウラメク C-2 キャラクター照合シート</title>
+<style>
+  body{margin:0;font-family:system-ui,sans-serif;background:#f5f0e6;color:#242322}
+  header{background:#242322;color:#fff;padding:24px 28px}
+  header h1{margin:0;font-size:1.6rem}
+  header p{margin:8px 0 0;font-size:.9rem;color:#e4d8c2}
+  header a{color:#ffd7d4}
+  main{max-width:1400px;margin:auto;padding:16px 24px 48px}
+  section{margin:28px 0;padding-top:8px}
+  h2{border-bottom:5px double #242322;padding-bottom:4px}
+  h3{margin:18px 0 8px;font-size:1rem;color:#86817a}
+  .row{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start}
+  .tile{border:2px solid #242322;background:#fff9ef;padding:10px;min-width:0}
+  .tile.ref{border-color:#d44843}
+  .tile label{display:block;font-size:.7rem;word-break:break-all;margin-top:6px;max-width:220px}
+  .tile .tag{display:inline-block;font-size:.65rem;padding:1px 6px;border:1px solid #242322;border-radius:3px;margin-bottom:6px}
+  .tile.ref .tag{background:#d44843;color:#fff;border-color:#d44843}
+  .checker{background:repeating-conic-gradient(#e9e2d6 0 25%,#fffaf0 0 50%) 50%/24px 24px}
+  .tile img{display:block;height:260px;width:auto;max-width:300px;object-fit:contain}
+  .tile img.icon{height:auto}
+  .board-crop{height:260px;background-repeat:no-repeat;background-image:url('../design/reference/c2-canonical-board.png')}
+  .notes{background:#fff9ef;border-left:5px solid #437a92;padding:10px 14px;font-size:.85rem}
+  .notes code{background:#e4d8c2;padding:0 4px}
+  .legend{font-size:.8rem;color:#86817a}
+</style>
+</head>
+<body>
+<header>
+  <h1>ウラメク / C-2 キャラクター照合シート（MVP-034）</h1>
+  <p>左の赤枠が正本（<code>design/reference/c2-canonical-board.png</code> の該当領域と切り出し）、右が <code>public/assets/characters/</code> の収録画像。画像は一切加工していない（表示倍率のみ）。承認状態は <a href="../qa/art-review.json">qa/art-review.json</a>、判定表は <a href="../docs/reviews/c2-art-review.md">docs/reviews/c2-art-review.md</a>。</p>
+</header>
+<main id="root">
+  <div class="notes">
+    <p><strong>見方</strong>: 1) 正本と収録画像のシルエット（髪・眼鏡・耳・帽子）が一致するか。2) reactions / icons は「基準の顔を再作画せず記号を重ねた補助状態」なので、idle との違いが右上のバッジだけか。3) icons は reactions の純粋な縮小（64px でもシルエットが読めるか）。</p>
+    <p class="legend">このページは <code>file://</code> で直接開ける静的ファイルで、スクリプトはタイル生成のみ。JSON は読み込まない。</p>
+  </div>
+</main>
+<script>
+const CHARACTERS = [
+  { id: 'shinobu', name: 'シノブ', poses: ['idle', 'point', 'inspect', 'explain'], board: [539, 60, 707, 251] },
+  { id: 'mega', name: 'メガ', poses: ['idle'], board: [720, 69, 876, 255] },
+  { id: 'kuro', name: 'クロ', poses: ['idle'], board: [884, 91, 1040, 250] },
+  { id: 'harada', name: 'ハラダ部長', poses: ['idle'], board: [1041, 70, 1197, 252] },
+];
+const REACTIONS = ['idle', 'happy', 'surprised', 'thinking', 'worried'];
+const BOARD_W = 1536;
+const root = document.getElementById('root');
+
+function tile(src, caption, opts = {}) {
+  const t = document.createElement('div');
+  t.className = 'tile' + (opts.ref ? ' ref' : '');
+  if (opts.tag) { const s = document.createElement('span'); s.className = 'tag'; s.textContent = opts.tag; t.append(s); }
+  const wrap = document.createElement('div'); wrap.className = 'checker';
+  const img = new Image(); img.src = src; img.alt = caption; img.loading = 'lazy';
+  if (opts.icon) { img.className = 'icon'; img.width = opts.icon; img.height = opts.icon; }
+  wrap.append(img); t.append(wrap);
+  const l = document.createElement('label'); l.textContent = caption; t.append(l);
+  return t;
+}
+
+function boardCrop(box) {
+  const [x0, y0, x1, y1] = box;
+  const h = 260, scale = h / (y1 - y0);
+  const t = document.createElement('div'); t.className = 'tile ref';
+  const s = document.createElement('span'); s.className = 'tag'; s.textContent = '正本ボード領域'; t.append(s);
+  const d = document.createElement('div'); d.className = 'board-crop';
+  d.style.width = Math.round((x1 - x0) * scale) + 'px';
+  d.style.backgroundSize = Math.round(BOARD_W * scale) + 'px auto';
+  d.style.backgroundPosition = `-${Math.round(x0 * scale)}px -${Math.round(y0 * scale)}px`;
+  t.append(d);
+  const l = document.createElement('label'); l.textContent = `c2-canonical-board.png [${box.join(', ')}]`; t.append(l);
+  return t;
+}
+
+function row(title, nodes) {
+  const h = document.createElement('h3'); h.textContent = title;
+  const r = document.createElement('div'); r.className = 'row'; r.append(...nodes);
+  return [h, r];
+}
+
+for (const c of CHARACTERS) {
+  const sec = document.createElement('section');
+  const h2 = document.createElement('h2'); h2.textContent = `${c.name} (${c.id})`; sec.append(h2);
+  const ref = `../design/reference/${c.id}.png`;
+  sec.append(...row('ポーズ（正本 → poses/）', [
+    boardCrop(c.board),
+    tile(ref, `design/reference/${c.id}.png`, { ref: true, tag: '正本 切り出し' }),
+    ...c.poses.map((p) => tile(`../public/assets/characters/${c.id}/poses/${p}.png`, `${c.id}/poses/${p}.png`, { tag: 'pose' })),
+  ]));
+  sec.append(...row('リアクション（idle との違いは右上バッジのみのはず）', [
+    tile(ref, `design/reference/${c.id}.png`, { ref: true, tag: '正本 切り出し' }),
+    ...REACTIONS.map((r) => tile(`../public/assets/characters/${c.id}/reactions/${r}.png`, `${c.id}/reactions/${r}.png`, { tag: 'reaction' })),
+  ]));
+  sec.append(...row('アイコン 256px / 64px（reactions の縮小）', [
+    ...REACTIONS.map((r) => tile(`../public/assets/characters/${c.id}/icons/${r}-256.png`, `${c.id}/icons/${r}-256.png`, { tag: 'icon 256', icon: 128 })),
+    ...REACTIONS.map((r) => tile(`../public/assets/characters/${c.id}/icons/${r}-64.png`, `${c.id}/icons/${r}-64.png`, { tag: 'icon 64', icon: 64 })),
+  ]));
+  root.append(sec);
+}
+
+const sec = document.createElement('section');
+const h2 = document.createElement('h2'); h2.textContent = '正本ボード全体'; sec.append(h2);
+const img = new Image(); img.src = '../design/reference/c2-canonical-board.png'; img.alt = 'C-2 canonical board'; img.style.maxWidth = '100%';
+sec.append(img); root.append(sec);
+</script>
+</body>
+</html>
