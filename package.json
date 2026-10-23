@@ -25,7 +25,8 @@
     "lint:content": "node scripts/lint_content.mjs",
     "walkthrough": "node scripts/generate_walkthrough.mjs",
     "smoke:dist": "node scripts/smoke_dist.mjs",
-    "summarize:user-tests": "node scripts/summarize_user_tests.mjs"
+    "summarize:user-tests": "node scripts/summarize_user_tests.mjs",
+    "audit:assets": "node scripts/audit_assets_size.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",
