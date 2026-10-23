@@ -1,0 +1,213 @@
+/* MVP-026: 結果・解説・再挑戦画面（ResultScreen / Debrief / AnswerReveal）
+ * 色は tokens.css のトークンのみ。global.css の .result / .explain 等は変更せず、ここで上書き・追加する。 */
+
+.result-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-4);
+}
+.result-head h3 {
+  margin: 0;
+  flex: 1 1 240px;
+}
+.result-stamp {
+  --stamp-width: 150px;
+  flex: 0 0 auto;
+}
+
+/* 判子が押されるまでは本文を薄くし、押されたら表示する（reduced 時は即時） */
+.result-body {
+  opacity: 0;
+  transition: opacity var(--motion-base, 200ms) ease-out;
+}
+.result[data-settled='true'] .result-body {
+  opacity: 1;
+}
+
+.result-score {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin: var(--space-2) 0;
+}
+.result-rank {
+  font-family: var(--font-serif);
+  font-size: var(--font-size-display);
+  font-weight: 900;
+  line-height: var(--line-height-tight);
+  color: var(--color-accent);
+}
+.result-rank-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-quiet);
+  display: block;
+}
+.result-scope {
+  font-size: var(--font-size-sm);
+  color: var(--color-quiet);
+}
+
+/* 編集後記 */
+.debrief {
+  background: var(--color-surface-explain);
+  padding: var(--space-4);
+  margin: var(--space-4) 0;
+  border-left: 5px solid var(--color-info);
+}
+.debrief-title {
+  font-size: var(--font-size-lg);
+  margin: 0 0 var(--space-2);
+}
+.debrief-kicker {
+  display: block;
+  font-size: var(--font-size-xs);
+  color: var(--color-quiet);
+  letter-spacing: 0.1em;
+}
+.debrief-scope,
+.debrief-disclaimer {
+  font-size: var(--font-size-sm);
+  color: var(--color-quiet);
+}
+.debrief-disclaimer {
+  border-top: var(--border-width-thin) solid var(--color-border);
+  padding-top: var(--space-2);
+}
+
+/* 答え合わせ */
+.answer-reveal {
+  background: var(--color-surface-note);
+  border: var(--border-width-thin) dashed var(--color-border-dashed);
+  padding: var(--space-4);
+  margin: var(--space-4) 0;
+}
+.answer-title {
+  font-size: var(--font-size-lg);
+  margin: 0 0 var(--space-2);
+}
+.answer-subtitle {
+  font-size: var(--font-size-base);
+  margin: var(--space-4) 0 var(--space-2);
+}
+.answer-list {
+  margin: 0;
+}
+.answer-row {
+  display: grid;
+  grid-template-columns: minmax(96px, 8em) 1fr;
+  gap: var(--space-2) var(--space-3);
+  padding: var(--space-1) 0;
+  border-bottom: var(--border-width-thin) solid var(--color-border);
+}
+.answer-row dt {
+  font-size: var(--font-size-sm);
+  color: var(--color-quiet);
+}
+.answer-row dd {
+  margin: 0;
+}
+.answer-tasks {
+  margin: 0;
+  padding-left: var(--space-4);
+}
+.answer-headline {
+  font-weight: 700;
+}
+
+.fragment-feedback {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: var(--space-2);
+}
+.fragment-feedback-item {
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-ink);
+  border-left-width: 6px;
+  padding: var(--space-2) var(--space-3);
+}
+.fragment-feedback-item[data-status='correct'] {
+  border-left-color: var(--color-success);
+}
+.fragment-feedback-item[data-status='wrong-position'] {
+  border-left-color: var(--color-info);
+}
+.fragment-feedback-item[data-status='incorrect'] {
+  border-left-color: var(--color-accent);
+}
+.fragment-feedback-item[data-status='empty'] {
+  border-left-color: var(--color-disabled);
+}
+.fragment-feedback-head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+.fragment-feedback-slot {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  color: var(--color-quiet);
+}
+.fragment-feedback-text {
+  flex: 1 1 160px;
+  font-weight: 700;
+}
+.fragment-feedback-status {
+  font-size: var(--font-size-xs);
+  border: var(--border-width-thin) solid currentColor;
+  padding: 0 var(--space-2);
+}
+.fragment-feedback-kind {
+  font-size: var(--font-size-xs);
+  color: var(--color-quiet);
+  margin: var(--space-1) 0 0;
+}
+.fragment-feedback-reason,
+.fragment-feedback-evidence {
+  font-size: var(--font-size-sm);
+  margin: var(--space-1) 0 0;
+}
+.fragment-feedback-evidence {
+  color: var(--color-quiet);
+}
+
+/* 操作列 */
+.result-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+.result-actions .btn {
+  min-height: var(--tap-target-min);
+}
+.result-reset {
+  margin-top: var(--space-4);
+  padding-top: var(--space-3);
+  border-top: var(--border-width-thin) solid var(--color-border);
+}
+.result-reset-confirm {
+  background: var(--color-surface-note);
+  border-left: 5px solid var(--color-accent);
+  padding: var(--space-3);
+  margin-top: var(--space-2);
+}
+.result-reset-confirm p {
+  margin: 0 0 var(--space-2);
+}
+
+@media (max-width: 560px) {
+  .answer-row {
+    grid-template-columns: 1fr;
+    gap: var(--space-1);
+  }
+  .result-actions .btn {
+    flex: 1 1 100%;
+  }
+}
