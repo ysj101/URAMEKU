@@ -4,6 +4,7 @@ import {
   migrate,
   migrations,
   toSaveDataV2,
+  toSaveDataV3,
 } from './migrations';
 
 const NOW = '2026-10-24T00:00:00.000Z';
@@ -55,7 +56,7 @@ describe('detectVersion', () => {
 });
 
 describe('migrate', () => {
-  it('v0 → v2（旧キー形式、calculations は文字列）', () => {
+  it('v0 → v3（旧キー形式、calculations は文字列）', () => {
     const r = migrate(v0, 'case-01', { assumeVersion: 0, now });
     expect(r.reset).toBe(false);
     expect(r.migratedFrom).toBe(0);
@@ -72,26 +73,70 @@ describe('migrate', () => {
       revealed: false,
     });
     expect(r.data.finished).toEqual({ 'case-01': true });
+    expect(r.data.session).toEqual({ stage: 'investigate', lastDocumentId: null });
+    expect(r.data.revision).toBe(0);
   });
-  it('v1 → v2（現行キー、version 無し）', () => {
+  it('v1 → v3（現行キー、version 無し）', () => {
     const r = migrate(v1, 'case-01', { now });
     expect(r.reset).toBe(false);
     expect(r.migratedFrom).toBe(1);
     expect(r.data.active).toBe('case-02');
     expect(r.data.progress['case-01']?.opened).toEqual(['d1', 'd2']);
   });
-  it('v2 はそのまま（migratedFrom null）', () => {
+  it('v2 → v3（session は調査画面、revision 0）', () => {
     const r = migrate({ ...v1, version: 2, savedAt: NOW }, 'case-01', { now });
     expect(r.reset).toBe(false);
-    expect(r.migratedFrom).toBeNull();
+    expect(r.migratedFrom).toBe(2);
     expect(r.data.active).toBe('case-02');
+    expect(r.data.session).toEqual({ stage: 'investigate', lastDocumentId: null });
+    expect(r.data.revision).toBe(0);
+  });
+  it('v3 はそのまま（migratedFrom null）', () => {
+    const r = migrate(
+      {
+        ...v1,
+        version: 3,
+        savedAt: NOW,
+        session: { stage: 'article', lastDocumentId: 'd2' },
+        revision: 12,
+      },
+      'case-01',
+      { now },
+    );
+    expect(r.reset).toBe(false);
+    expect(r.migratedFrom).toBeNull();
+    expect(r.data.session).toEqual({ stage: 'article', lastDocumentId: 'd2' });
+    expect(r.data.revision).toBe(12);
+  });
+  it('session / revision の不正値は既定値に整える', () => {
+    const cases: [unknown, unknown][] = [
+      [{ stage: 'result', lastDocumentId: 42 }, -1],
+      ['x', '3'],
+      [null, 1.5],
+      [{ stage: 'article', lastDocumentId: '' }, null],
+    ];
+    for (const [session, revision] of cases) {
+      const r = migrate({ ...v1, version: 3, savedAt: NOW, session, revision }, 'case-01', { now });
+      expect(r.data.session.lastDocumentId).toBeNull();
+      expect(r.data.revision).toBe(0);
+    }
+    expect(
+      migrate({ ...v1, version: 3, session: { stage: 'article' } }, 'case-01', { now }).data.session
+        .stage,
+    ).toBe('article');
   });
   it('解釈不能（配列・null・文字列・version 不正）は初期化', () => {
     for (const raw of [[], null, undefined, 'x', 42, { version: 'two' }, { version: -3 }]) {
       const r = migrate(raw, 'case-01', { now });
       expect(r.reset).toBe(true);
       expect(r.migratedFrom).toBeNull();
-      expect(r.data).toEqual({ active: 'case-01', progress: {}, finished: {} });
+      expect(r.data).toEqual({
+        active: 'case-01',
+        progress: {},
+        finished: {},
+        session: { stage: 'investigate', lastDocumentId: null },
+        revision: 0,
+      });
     }
   });
   it('未来バージョン（99）は初期化せず読めるフィールドだけ読む', () => {
@@ -164,9 +209,18 @@ describe('migrate', () => {
   });
 });
 
-describe('toSaveDataV2', () => {
+describe('toSaveDataV3', () => {
   it('version と savedAt が付く', () => {
-    const out = toSaveDataV2({ active: 'x', progress: {}, finished: {} }, now);
-    expect(out).toEqual({ version: 2, savedAt: NOW, active: 'x', progress: {}, finished: {} });
+    const data = {
+      active: 'x',
+      progress: {},
+      finished: {},
+      session: { stage: 'article' as const, lastDocumentId: 'd1' },
+      revision: 4,
+    };
+    const out = toSaveDataV3(data, now);
+    expect(out).toEqual({ version: 3, savedAt: NOW, ...data });
+    // 互換用の別名も最新形式で包む
+    expect(toSaveDataV2(data, now)).toEqual(out);
   });
 });
