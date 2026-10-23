@@ -10,6 +10,7 @@ import {
   validateCase,
 } from './validateCase';
 import { makeCase } from '../test/fixtures';
+import { FRAGMENT_KINDS } from '../domain/types';
 
 /** JSON を介して深いコピーを作り、任意に壊せるようにする */
 function raw(overrides: Record<string, unknown> = {}): Record<string, unknown> {
@@ -165,6 +166,113 @@ describe('validateCase: 不正データを拒否する', () => {
     );
     expect(errorsOf(raw({ headline_fragments: (raw().headline_fragments as unknown[]).slice(0, 7) })))
       .toContainEqual(expect.stringMatching(/headline_fragments: 8 件以上/));
+  });
+});
+
+describe('validateCase: 断片の kind / reason / evidence', () => {
+  type Frag = Record<string, unknown>;
+  function withFragments(mutate: (frags: Frag[]) => void): Record<string, unknown> {
+    const data = raw();
+    const frags = data.headline_fragments as Frag[];
+    // フィクスチャは f0-f2 が正解。全断片に整合した kind を付けてから mutate する
+    frags.forEach((f, i) => {
+      f.kind = i < 3 ? 'correct' : 'other';
+      f.reason = `断片${i}の理由です。`;
+      f.evidence = ['a'];
+    });
+    mutate(frags);
+    return data;
+  }
+  function errorsOf(data: unknown): string[] {
+    const r = validateCase(data);
+    expect(r.ok).toBe(false);
+    return r.errors;
+  }
+
+  it('スキーマの kind 列挙と FRAGMENT_KINDS が一致する', () => {
+    expect(schema.$defs.fragmentKind.enum).toEqual([...FRAGMENT_KINDS]);
+    expect(Object.keys(schema.$defs.headlineFragment.properties)).toEqual([
+      'id',
+      'text',
+      'kind',
+      'reason',
+      'evidence',
+    ]);
+  });
+
+  it('任意フィールドが無くても、整合していれば通る', () => {
+    expect(validateCase(raw()).ok).toBe(true);
+    expect(validateCase(withFragments(() => {}))).toEqual({ ok: true, errors: [] });
+    // 一部の断片にだけ付いていてもよい
+    const partial = withFragments((frags) => {
+      delete frags[7]!.kind;
+      delete frags[7]!.reason;
+      delete frags[7]!.evidence;
+    });
+    expect(validateCase(partial).ok).toBe(true);
+  });
+
+  it('kind の列挙違反・reason の型/長さ・evidence の型', () => {
+    const errors = errorsOf(
+      withFragments((frags) => {
+        frags[3]!.kind = 'typo';
+        frags[4]!.reason = 42;
+        frags[5]!.reason = '短い';
+        frags[6]!.evidence = 'a';
+        frags[7]!.evidence = [];
+      }),
+    );
+    expect(errors).toContainEqual(expect.stringMatching(/headline_fragments\[3\]\.kind: correct \| /));
+    expect(errors).toContainEqual(expect.stringMatching(/headline_fragments\[4\]\.reason: 文字列/));
+    expect(errors).toContainEqual(expect.stringMatching(/headline_fragments\[5\]\.reason: 5 文字以上/));
+    expect(errors).toContainEqual(expect.stringMatching(/headline_fragments\[6\]\.evidence: 配列/));
+    expect(errors).toContainEqual(expect.stringMatching(/headline_fragments\[7\]\.evidence: 1 件以上/));
+  });
+
+  it('evidence が存在しない資料・重複を指す', () => {
+    const errors = errorsOf(
+      withFragments((frags) => {
+        frags[3]!.evidence = ['a', 'ghost'];
+        frags[4]!.evidence = ['b', 'b'];
+      }),
+    );
+    expect(errors).toContainEqual(
+      expect.stringMatching(/headline_fragments\[3\]\.evidence\[1\]: 資料 ID "ghost" は documents に存在しません/),
+    );
+    expect(errors).toContainEqual(expect.stringMatching(/headline_fragments\[4\]\.evidence\[1\]: 重複/));
+  });
+
+  it('correct_fragments に含まれる断片の kind が correct でない', () => {
+    const errors = errorsOf(
+      withFragments((frags) => {
+        frags[1]!.kind = 'misread-statistic';
+      }),
+    );
+    expect(errors).toEqual([
+      expect.stringMatching(/headline_fragments\(f1\)\.kind: correct_fragments に含まれる断片は kind: "correct"/),
+    ]);
+  });
+
+  it('correct_fragments に含まれない断片に kind: correct が付いている', () => {
+    const errors = errorsOf(
+      withFragments((frags) => {
+        frags[5]!.kind = 'correct';
+      }),
+    );
+    expect(errors).toEqual([
+      expect.stringMatching(/headline_fragments\(f5\)\.kind: correct_fragments に含まれない断片に kind: "correct"/),
+    ]);
+  });
+
+  it('答えを kind の付け替えで変えても correct_fragments が優先され、不整合として拒否される', () => {
+    // f0-f2 → f3-f5 に kind だけ移した状態
+    const errors = errorsOf(
+      withFragments((frags) => {
+        for (let i = 0; i < 3; i++) frags[i]!.kind = 'other';
+        for (let i = 3; i < 6; i++) frags[i]!.kind = 'correct';
+      }),
+    );
+    expect(errors).toHaveLength(6);
   });
 });
 

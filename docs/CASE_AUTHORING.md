@@ -26,7 +26,10 @@
   "required_evidence": ["a","b","c"],
   "required_link": ["a","c"],
   "analysis_tasks": [{"id":"calculation","prompt":"割合を求める","unit":"%","expected":45,"tolerance":0.1}],
-  "headline_fragments": [{"id":"f0","text":"断片の文章"}],
+  "headline_fragments": [
+    {"id":"f0","text":"断片の文章","kind":"correct","reason":"正しい理由を1文で","evidence":["a"]},
+    {"id":"f3","text":"誤った断片","kind":"overgeneralization","reason":"誤りの理由を1文で","evidence":["a","c"]}
+  ],
   "correct_fragments": ["f0","f1","f2"],
   "debrief": {"explanation":"今回の種明かし", "takeaway":"今後の見方"},
   "disclaimer": "架空のケースです"
@@ -34,6 +37,22 @@
 ```
 
 （上のJSONは構造説明の抜粋です。実際のMVPは検証メモ2件と見出し断片8件が必要です。）
+
+### 断片の `kind` / `reason` / `evidence`（任意、推奨）
+
+各 `headline_fragments[]` には、誤誘導の理由を説明するための任意フィールドを付けられる。結果画面での理由表示に使う。
+
+| フィールド | 型 | 内容 |
+| --- | --- | --- |
+| `kind` | 列挙 | 断片の種別。`correct`（正解）、`overgeneralization`（理由なく全体に一般化）、`misread-statistic`（統計の誤読: 分母・指標の取り違え、相対変化の誇張など）、`causal-claim`（原因・結論の断定）、`ignored-counter-evidence`（反対資料の無視）、`unverifiable`（資料からは検証できない主張）、`other` |
+| `reason` | 文字列（5〜120 文字） | その断片が誤り（または正しい）である理由を **1 文** で。資料の数値や記述に基づいて書き、プレイヤーの人格や能力には触れない |
+| `evidence` | 資料 ID の配列（1〜6 件、重複なし） | `reason` の根拠となる資料。`documents[].id` に実在すること |
+
+規則（`npm run validate:cases` と読込時の `validateCase` が検査する）:
+
+- 3 つのフィールドはそれぞれ任意だが、付けるなら型・列挙・参照整合を満たすこと。
+- `correct_fragments` に含まれる断片の `kind` は必ず `correct`、含まれない断片の `kind` は `correct` 以外（両方向）。採点は `correct_fragments` だけで決まり、`kind` は表示用の付加情報。**`kind` を付け替えて答えを変えない。**
+- 誤りの `reason` は「どの資料のどの記述で否定できるか」を書く。意地悪ではなく「ありそうな誤読」の説明にする。
 
 詳しくは `data/schema/case.schema.json`。現行試作は `required_evidence` を3件に固定した配点なので、4件以上に拡張する時は採点を再設計する。
 
