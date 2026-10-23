@@ -22,7 +22,7 @@ test('CASE 01 をホームから正解手順でクリアできる', async ({ pag
 
   await page.getByRole('button', { name: new RegExp(`^CASE 01 ${CASE01.title}`) }).click();
   await expect(page).toHaveURL(/#\/play\/case-01$/);
-  await expect(page.getByRole('heading', { level: 2, name: CASE01.title })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1, name: CASE01.title })).toBeVisible();
 
   // T01: 6 資料・残予算 4
   await expect(page.getByText('0 / 6 件確認済み')).toBeVisible();
@@ -54,7 +54,7 @@ test('CASE 01 をホームから正解手順でクリアできる', async ({ pag
   // T08: 掲載承認
   await submitArticle(page);
   await expect(
-    page.getByRole('heading', { level: 3, name: '掲載可能な記事になりました！' }),
+    page.getByRole('heading', { level: 2, name: '掲載可能な記事になりました！' }),
   ).toBeVisible();
   await expect(page.getByText('96 / 100', { exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { level: 3, name: /編集後記/ })).toBeVisible();
@@ -65,6 +65,6 @@ test('CASE 01 をホームから正解手順でクリアできる', async ({ pag
   // 次の事件へ
   await page.getByRole('button', { name: '次の事件へ' }).click();
   await expect(page).toHaveURL(/#\/play\/case-02$/);
-  await expect(page.getByRole('heading', { level: 2, name: CASE02_TITLE })).toBeVisible();
-  await expect(page.getByText('STEP 01 / 資料を調べる')).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1, name: CASE02_TITLE })).toBeVisible();
+  await expect(page.getByText('STEP 01 / 資料を調べる', { exact: true })).toBeVisible();
 });

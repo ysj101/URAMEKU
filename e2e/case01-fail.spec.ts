@@ -12,7 +12,7 @@ test('見出しだけ正答しても差し戻され、正解は明示操作ま�
   await submitArticle(page);
 
   const result = page.locator('.result');
-  await expect(page.getByRole('heading', { level: 3, name: '記事を差し戻しました' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 2, name: '記事を差し戻しました' })).toBeVisible();
   // 見出し 24 点 + 調査予算（上限 6 点）= 30 点（資料・照合・計算は 0）
   await expect(page.getByText('30 / 100', { exact: true })).toBeVisible();
 
@@ -48,7 +48,7 @@ test('見出しだけ正答しても差し戻され、正解は明示操作ま�
 
   // 記事を修正する → 断片は残っている
   await page.getByRole('button', { name: '記事を修正する' }).click();
-  await expect(page.getByText('STEP 02 / 記事を組み立てる')).toBeVisible();
+  await expect(page.getByText('STEP 02 / 記事を組み立てる', { exact: true })).toBeVisible();
   for (const [i, text] of CASE01.correctFragments.entries()) {
     await expect(
       page.getByRole('button', { name: `断片 ${i + 1}: ${text}（タップで差し替え）` }),
