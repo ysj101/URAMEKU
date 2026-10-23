@@ -31,16 +31,6 @@ button:focus-visible,
 .skip-link:focus {
   left: 12px;
 }
-.masthead {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  max-width: 1280px;
-  margin: 0 auto;
-  border-bottom: 7px double var(--color-ink);
-  padding: 18px 26px 14px;
-  background: var(--color-bg);
-}
 h1,
 h2,
 h3,
@@ -58,94 +48,15 @@ h1 span {
   color: var(--color-ink-inverse);
   padding: 0 0.12em;
 }
-.brand p {
-  font-size: var(--font-size-sm);
-  margin-top: 9px;
-  letter-spacing: 0.12em;
-}
 .edition {
   font-weight: 900;
   font-size: 0.69rem;
   letter-spacing: 0.3em;
 }
-.logo-char {
-  width: 86px;
-  height: 86px;
-  object-fit: contain;
-}
-.page {
-  max-width: 1280px;
-  margin: auto;
-  display: grid;
-  grid-template-columns: 265px minmax(0, 1fr);
-  gap: 24px;
-  padding: 20px 26px 70px;
-}
-.sidebar {
-  border-right: 2px solid var(--color-ink);
-  padding-right: 18px;
-}
-.small-heading {
-  background: var(--color-ink);
-  color: var(--color-ink-inverse);
-  padding: 8px 12px;
-  font-weight: 900;
-  letter-spacing: 0.08em;
-}
-.case-list {
-  display: grid;
-  gap: 10px;
-  margin-top: 12px;
-}
-.case-option {
-  display: grid;
-  gap: 5px;
-  text-align: left;
-  border: 2px solid var(--color-ink);
-  padding: 12px;
-  background: var(--color-surface);
-  box-shadow: var(--shadow-paper-sm);
-}
-.case-option.active {
-  border-left: 9px solid var(--color-accent);
-}
-.case-option .num {
-  color: var(--color-accent);
-  font-size: var(--font-size-xs);
-  font-weight: 900;
-  letter-spacing: 0.12em;
-}
-.case-option .case-name {
-  font-size: 0.95rem;
-  font-weight: 800;
-}
-.case-option .meta {
-  font-size: var(--font-size-xs);
-  color: var(--color-quiet);
-}
-.info-panel {
-  margin-top: 20px;
-  padding: 15px;
-  background: var(--color-surface-aged);
-  border-left: 4px solid var(--color-ink);
-  font-size: 0.81rem;
-  line-height: 1.75;
-}
-.info-panel p {
-  margin: 8px 0;
-}
 .fine,
 .footnote {
   font-size: 0.72rem;
   line-height: 1.8;
-  color: var(--color-quiet);
-}
-.link-button {
-  background: none;
-  border: 0;
-  text-decoration: underline;
-  font-size: 0.73rem;
-  margin-top: 17px;
   color: var(--color-quiet);
 }
 .workbench {
@@ -178,8 +89,11 @@ h1 span {
   padding: 4px 8px;
 }
 .case-mascot {
+  /* 原画は 3:4。固定の高さで潰さない（MVP-034 の指摘） */
   width: 91px;
-  height: 98px;
+  height: auto;
+  aspect-ratio: 3 / 4;
+  object-fit: contain;
   flex-shrink: 0;
 }
 .meter {
@@ -250,7 +164,7 @@ h1 span {
 .doc-tile:hover:not(:disabled) {
   transform: translateY(-2px);
 }
-.doc-tile img {
+.doc-tile > img {
   width: 65px;
   height: 78px;
   object-fit: contain;
@@ -270,8 +184,10 @@ h1 span {
 .section-title {
   font-family: var(--font-serif);
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
+  gap: var(--space-1) var(--space-3);
   border-bottom: 4px double var(--color-ink);
   padding-bottom: 8px;
   margin: 23px 0 12px;
@@ -286,42 +202,6 @@ h1 span {
   padding: 16px;
   background: var(--color-surface-desk) url('/assets/backgrounds/desk.svg') center/cover;
   border: 3px solid var(--color-ink);
-}
-.pins {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  min-height: 75px;
-}
-.pin-card {
-  background: var(--color-surface);
-  padding: 10px;
-  max-width: 250px;
-  text-align: left;
-  border: 2px solid var(--color-ink);
-  transform: rotate(-1.3deg);
-  font-weight: 750;
-  font-size: 0.83rem;
-}
-.pin-card:nth-child(even) {
-  transform: rotate(1.3deg);
-}
-.pin-card.selected {
-  outline: 5px solid var(--color-accent);
-}
-.pin-card.disabled {
-  opacity: var(--opacity-muted);
-}
-.pin-card b {
-  color: var(--color-accent);
-}
-.link-slot {
-  padding: 11px 15px;
-  background: var(--color-surface-note);
-  margin-top: 12px;
-  font-size: 0.84rem;
-  border-left: 5px solid var(--color-accent);
-  line-height: 1.7;
 }
 .article-top {
   font-size: 0.82rem;
@@ -373,14 +253,6 @@ h1 span {
 .result h3 {
   font-size: var(--font-size-xl);
   margin-bottom: 10px;
-}
-.result .grade {
-  font-family: var(--font-serif);
-  font-size: var(--font-size-display);
-  font-weight: 900;
-  color: var(--color-accent);
-  float: right;
-  line-height: 1;
 }
 .result ul {
   padding-left: 24px;
@@ -471,40 +343,11 @@ dialog::backdrop {
   clip: rect(0, 0, 0, 0);
 }
 @media (max-width: 820px) {
-  .page {
-    grid-template-columns: 1fr;
-    padding: 14px 12px 50px;
-    gap: 12px;
-  }
-  .sidebar {
-    border: 0;
-    padding: 0;
-  }
-  .case-list {
-    display: flex;
-    overflow-x: auto;
-    gap: 8px;
-    padding-bottom: 7px;
-  }
-  .case-option {
-    min-width: 185px;
-  }
-  .info-panel {
-    display: none;
-  }
-  .logo-char {
-    width: 60px;
-    height: 60px;
-  }
-  .masthead {
-    padding: 15px;
-  }
   .case-header {
     padding: 14px;
   }
   .case-mascot {
     width: 64px;
-    height: 70px;
   }
   .document-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -513,12 +356,6 @@ dialog::backdrop {
     min-height: 150px;
     padding: 10px;
   }
-  .pins {
-    align-items: flex-start;
-  }
-  .pin-card {
-    max-width: calc(50% - 5px);
-  }
   .headline-preview {
     padding: 13px;
   }
@@ -526,40 +363,27 @@ dialog::backdrop {
     flex-wrap: wrap;
   }
 }
-
-.calculation-desk {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-  background: var(--color-surface-note);
-  border: var(--border-width) dashed var(--color-border-dashed);
-  padding: 15px;
-}
-.calc-field {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  font-size: var(--font-size-md);
-}
-.calc-field span {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.calc-field input {
-  width: min(140px, 78%);
-  border: 2px solid var(--color-ink);
-  padding: 10px;
-  background: var(--color-surface);
-  font: inherit;
-  font-size: var(--font-size-base);
-}
-.calc-field input:focus-visible {
-  outline: var(--focus-ring-width) solid var(--focus-ring-color);
-}
-@media (max-width: 560px) {
-  .calculation-desk {
-    grid-template-columns: 1fr;
+@media (max-width: 430px) {
+  /* スマホ幅: 余白を詰めて本文幅を確保する（MVP-040） */
+  .case-header {
+    gap: var(--space-3);
+    padding: var(--space-3);
+  }
+  .case-mascot {
+    width: 56px;
+  }
+  .result {
+    padding: var(--space-4);
+  }
+  .result .explain {
+    padding: var(--space-3);
+  }
+  .document-popup {
+    padding: var(--space-4) var(--space-3);
+  }
+  .score-breakdown th,
+  .score-breakdown td {
+    padding: 6px var(--space-2);
   }
 }
 /* MVP-013: 配点表と差し戻し理由（ResultScreen） */

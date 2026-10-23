@@ -159,6 +159,7 @@
   padding: var(--space-1) var(--space-2);
   font-size: var(--font-size-xs);
   font-weight: 700;
+  white-space: nowrap;
   color: var(--color-ink);
   background: var(--color-surface-aged);
   border: var(--border-width-thin) solid var(--color-ink);

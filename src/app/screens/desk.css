@@ -64,6 +64,20 @@
   padding: 0 var(--space-1);
 }
 
+/* 識別ラベル（DocumentLabel）はタイル内では中央寄せで折り返す。
+   スマホ幅では区切り記号（aria-hidden の装飾）を出さず 2〜3 行に収める（MVP-040） */
+.desk-grid .doc-tile__label {
+  justify-content: center;
+}
+@media (max-width: 430px) {
+  .desk-grid .doc-tile__label .document-label__sep {
+    display: none;
+  }
+  .desk-grid .doc-tile__label {
+    gap: var(--space-1);
+  }
+}
+
 /* 状態は文字とアイコンで示し、色は補助（MVP_SPEC 12 章） */
 .desk-grid .doc-tile--pinned {
   background: var(--color-surface-note);
