@@ -10,7 +10,7 @@
   {
     "id": "anchoring",
     "title": "アンカリング効果",
-    "summary": "最初に提示された数値が、その後の判断の基準として働くことがある。",
+    "summary": "最初に提示された数値や情報が、その後の判断の基準として働くことがある。",
     "unlockCase": "case-02",
     "art": "assets/encyclopedia/anchoring.png",
     "disclaimer": "状況内の判断を説明する概念であり、個人の心理特性を断定するものではありません。"
