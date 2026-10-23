@@ -34,8 +34,14 @@ npm ci               # 依存の再現インストール
 npm run lint         # ESLint
 npm run typecheck    # TypeScript 型検査
 npm run format:check # Prettier 整形チェック（npm run format で修正）
+npm run test         # Vitest（単体テスト）
 npm run check        # 上記をまとめて実行
+npm run dev          # Vite 開発サーバー（http://localhost:5173）
+npm run build        # production ビルド（dist/）
+npm run preview      # dist/ をローカル配信して確認
 ```
+
+`public/` 配下のアセットと `manifest.webmanifest` はビルド時にそのまま `dist/` へコピーされます。
 
 ## フォルダ概要
 
