@@ -2,6 +2,7 @@ import { countFragmentsInPlace, isArticleCorrect } from './article';
 import { remainingBudget } from './budget';
 import { countCorrectCalculations } from './calculation';
 import { isLinkCorrect } from './link';
+import { publishVerdict } from './publish';
 import type { CaseData, CaseProgress } from './types';
 
 /** docs/GAME_RULES.md 7 章の配点 */
@@ -46,11 +47,8 @@ export function evaluateCase(caseData: CaseData, progress: CaseProgress): Evalua
     Math.min(SCORE_WEIGHTS.fragmentMax, fragmentsInPlace * SCORE_WEIGHTS.fragmentPerItem) +
     Math.min(SCORE_WEIGHTS.budgetMax, Math.max(0, remaining) * SCORE_WEIGHTS.budgetPerPoint);
 
-  const cleared =
-    requiredFound.length === caseData.required_evidence.length &&
-    linkCorrect &&
-    calculationsCorrect === caseData.analysis_tasks.length &&
-    articleCorrect;
+  // 合否は publish.ts の一元判定に委譲する（点数計算とは独立）
+  const cleared = publishVerdict(caseData, progress).approved;
 
   return {
     requiredFound,

@@ -4,12 +4,14 @@ import { DocumentDialog } from '../components/DocumentDialog';
 import { DocumentGrid } from '../components/DocumentGrid';
 import { EvidenceBoard } from '../components/EvidenceBoard';
 import { remainingBudget } from '../domain/budget';
+import { isDeadEnd } from '../domain/deadEnd';
 import type { GameApi } from '../state/useGame';
 
 export function InvestigationScreen({ game }: { game: GameApi }) {
   const { current, progress, dispatch } = game;
   const [openId, setOpenId] = useState<string | null>(null);
   const openDoc = openId ? (current.documents.find((d) => d.id === openId) ?? null) : null;
+  const deadEnd = isDeadEnd(current, progress);
 
   const handleOpen = (documentId: string) => {
     dispatch({ type: 'open-document', documentId });
@@ -32,6 +34,14 @@ export function InvestigationScreen({ game }: { game: GameApi }) {
       <div className="notice">
         最初に何を調べるかは自由です。重要な資料を見落とすと予算が足りなくなります。資料を開いて終わりではなく、ボードに証拠として採用してください。
       </div>
+      {deadEnd && (
+        <div className="notice" role="status">
+          必要な資料を開く調査予算が残っていません。この事件を最初からやり直してください。{' '}
+          <button type="button" className="btn ghost" onClick={handleRestart}>
+            この事件を最初からやり直す
+          </button>
+        </div>
+      )}
       <h3 className="section-title">
         調査資料{' '}
         <small>
