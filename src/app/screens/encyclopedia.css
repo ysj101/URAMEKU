@@ -1,0 +1,234 @@
+/* 図鑑画面（図鑑 / 事件手帳 / 実績）。色・余白はトークンのみ使用。 */
+.encyclopedia-tabs {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  border-bottom: var(--border-width) solid var(--color-ink);
+  margin-bottom: var(--space-4);
+}
+
+.encyclopedia-tab {
+  min-height: var(--tap-target-min);
+  min-width: var(--tap-target-min);
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-surface-aged);
+  border: var(--border-width) solid var(--color-ink);
+  border-bottom: 0;
+  font-family: var(--font-serif);
+  font-size: var(--font-size-base);
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+.encyclopedia-tab[aria-selected='true'] {
+  background: var(--color-surface);
+  font-weight: 700;
+  box-shadow: var(--shadow-paper-sm);
+}
+
+.encyclopedia-tab:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.encyclopedia-panel:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.encyclopedia-count {
+  margin: 0 0 var(--space-3);
+  font-size: var(--font-size-sm);
+  color: var(--color-quiet);
+}
+
+/* 図鑑 */
+.encyclopedia-list,
+.case-notebook-list,
+.achievement-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-3);
+}
+
+.encyclopedia-card {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: var(--space-3);
+  align-items: start;
+  padding: var(--space-3);
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-ink);
+  box-shadow: var(--shadow-paper);
+}
+
+.encyclopedia-card.locked {
+  background: var(--color-surface-aged);
+  border-style: dashed;
+  border-color: var(--color-border-dashed);
+  box-shadow: none;
+  align-items: center;
+}
+
+.encyclopedia-card-art {
+  width: 96px;
+  height: 96px;
+  object-fit: contain;
+}
+
+.encyclopedia-card.locked .encyclopedia-card-art {
+  opacity: var(--opacity-muted);
+}
+
+.encyclopedia-card-title {
+  margin: 0 0 var(--space-1);
+  font-family: var(--font-serif);
+  font-size: var(--font-size-lg);
+}
+
+.encyclopedia-card-summary {
+  margin: 0 0 var(--space-2);
+  line-height: var(--line-height-normal);
+}
+
+.encyclopedia-card-disclaimer {
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-surface-explain);
+  border-left: var(--border-width-thick) solid var(--color-info);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  color: var(--color-quiet);
+}
+
+.encyclopedia-card-locked {
+  margin: 0;
+  font-size: var(--font-size-md);
+  color: var(--color-quiet);
+}
+
+/* 事件手帳 */
+.case-notebook-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    'num title'
+    'facts facts';
+  gap: var(--space-1) var(--space-3);
+  padding: var(--space-3);
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-ink);
+  box-shadow: var(--shadow-paper-sm);
+}
+
+.case-notebook-num {
+  grid-area: num;
+  font-size: var(--font-size-xs);
+  font-weight: 900;
+  letter-spacing: 0.3em;
+}
+
+.case-notebook-title {
+  grid-area: title;
+  font-family: var(--font-serif);
+  font-weight: 700;
+}
+
+.case-notebook-facts {
+  grid-area: facts;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-6);
+  margin: var(--space-1) 0 0;
+}
+
+.case-notebook-facts div {
+  display: flex;
+  gap: var(--space-2);
+  align-items: baseline;
+}
+
+.case-notebook-facts dt {
+  font-size: var(--font-size-xs);
+  color: var(--color-quiet);
+}
+
+.case-notebook-facts dd {
+  margin: 0;
+  font-weight: 700;
+}
+
+.case-notebook-status.status-solved {
+  color: var(--color-success);
+}
+
+.case-notebook-notice {
+  margin-top: var(--space-4);
+}
+
+/* 実績 */
+.achievement-row {
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  gap: var(--space-3);
+  align-items: center;
+  padding: var(--space-3);
+  background: var(--color-surface-aged);
+  border: var(--border-width) dashed var(--color-border-dashed);
+}
+
+.achievement-row.earned {
+  background: var(--color-surface);
+  border-style: solid;
+  border-color: var(--color-ink);
+  box-shadow: var(--shadow-paper-sm);
+}
+
+.achievement-icon {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+}
+
+.achievement-row:not(.earned) .achievement-icon {
+  opacity: var(--opacity-muted);
+  filter: grayscale(1);
+}
+
+.achievement-body {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.achievement-title {
+  font-family: var(--font-serif);
+  font-weight: 700;
+}
+
+.achievement-rule {
+  font-size: var(--font-size-sm);
+  color: var(--color-quiet);
+}
+
+.achievement-state {
+  font-size: var(--font-size-xs);
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  color: var(--color-quiet);
+}
+
+.achievement-state.earned {
+  color: var(--color-success);
+}
+
+@media (max-width: 480px) {
+  .encyclopedia-card {
+    grid-template-columns: 64px 1fr;
+  }
+  .encyclopedia-card-art {
+    width: 64px;
+    height: 64px;
+  }
+}

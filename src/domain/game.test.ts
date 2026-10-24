@@ -67,3 +67,42 @@ describe('game reducer: toggle-link', () => {
     expect(p.chosenLink).toEqual([]);
   });
 });
+
+describe('game reducer: 記事編集・復元（MVP-025）', () => {
+  const withArticle = { ...createProgress(), article: ['f0', 'f1', 'f2'] };
+
+  it('replace-fragment / move-fragment / clear-article が対応する関数に委譲される', () => {
+    expect(
+      reduceProgress(c, withArticle, { type: 'replace-fragment', index: 1, fragmentId: 'f4' })
+        .article,
+    ).toEqual(['f0', 'f4', 'f2']);
+    expect(
+      reduceProgress(c, withArticle, { type: 'move-fragment', from: 0, to: 2 }).article,
+    ).toEqual(['f1', 'f2', 'f0']);
+    expect(reduceProgress(c, withArticle, { type: 'clear-article' }).article).toEqual([]);
+  });
+  it('重複や 3 つ超えは reducer 経由でも拒否される', () => {
+    expect(
+      reduceProgress(c, withArticle, { type: 'replace-fragment', index: 0, fragmentId: 'f2' }),
+    ).toBe(withArticle);
+    expect(reduceProgress(c, withArticle, { type: 'add-fragment', fragmentId: 'f5' })).toBe(
+      withArticle,
+    );
+  });
+  it('提出して差し戻されても（withdraw）直前の 3 断片が残り、再提出できる', () => {
+    let p = reduceProgress(c, withArticle, { type: 'submit' });
+    expect(p.published).toBe(true);
+    p = reduceProgress(c, p, { type: 'withdraw' });
+    expect(p.published).toBe(false);
+    expect(p.article).toEqual(['f0', 'f1', 'f2']);
+    // 2 回目の試行: 1 つ差し替えて再提出
+    p = reduceProgress(c, p, { type: 'replace-fragment', index: 2, fragmentId: 'f6' });
+    p = reduceProgress(c, p, { type: 'submit' });
+    expect(p).toMatchObject({ published: true, article: ['f0', 'f1', 'f6'] });
+    // 3 回目: クリアして組み直す
+    p = reduceProgress(c, p, { type: 'withdraw' });
+    p = reduceProgress(c, p, { type: 'clear-article' });
+    expect(p.article).toEqual([]);
+    expect(reduceProgress(c, p, { type: 'submit' }).published).toBe(false);
+  });
+});
