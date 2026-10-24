@@ -24,6 +24,10 @@
      manifest やスクリプトを無理に直して PASS させない（`AGENTS.md` 参照）。
    - 2026-10-24 時点のローカル実行結果: `PASS`（assetsChecked 530 / caseCount 5）。
 
+## action のバージョン固定
+
+`uses:` はすべてコミット SHA で固定し、末尾のコメントで対応するリリースタグを示す（例: `actions/checkout@3d3c42e… # v7.0.1`）。タグは移動されうるが SHA は不変なので、サプライチェーン攻撃や意図しない更新を防げる。更新は `.github/dependabot.yml`（`github-actions`、週次）が PR を出す。手動で更新する場合は、リリースタグが指すコミット SHA を `gh api repos/<owner>/<repo>/git/ref/tags/<tag>` で確認してから書き換える。
+
 ## 失敗時マージ不可（ブランチ保護）
 
 `main` に対して Required status checks = `CI` を設定済み（2026-10-24、`gh api` で適用）。

@@ -1,0 +1,10 @@
+# GitHub Actions はコミット SHA で固定しているため、更新は Dependabot に任せる
+# （SHA と末尾の `# vX.Y.Z` コメントをまとめて更新する）。
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    labels:
+      - dependencies
