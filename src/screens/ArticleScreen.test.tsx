@@ -32,7 +32,9 @@ beforeEach(() => play.mockClear());
 describe('ArticleScreen', () => {
   it('提出前の確認に照合の問い（link_prompt）を表示する', () => {
     render(<ArticleScreen game={makeGame(makeProgress())} />);
-    expect(screen.getByText(caseData.link_prompt)).toBeInTheDocument();
+    expect(screen.getByText(/この事件の照合/).closest('.notice')).toHaveTextContent(
+      caseData.link_prompt,
+    );
   });
 
   it('メーターと調査へ戻る導線を維持する', () => {
