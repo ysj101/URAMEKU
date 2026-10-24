@@ -11,13 +11,13 @@ async function enterCase01ViaList(page: Page) {
   await expect(page.getByRole('heading', { level: 1, name: '事件一覧' })).toBeVisible();
   await page.getByRole('button', { name: new RegExp(`^CASE 01 ${CASE01.title}`) }).click();
   await expect(page).toHaveURL(/#\/play\/case-01$/);
-  await expect(page.getByText('STEP 01 / 資料を調べる')).toBeVisible();
+  await expect(page.getByText('STEP 01 / 資料を調べる', { exact: true })).toBeVisible();
 }
 
 async function expectClosedAndBackToList(page: Page) {
   await expect(page.getByRole('dialog')).toBeHidden();
   await expect(page).toHaveURL(/#\/play\/case-01$/);
-  await expect(page.getByText('STEP 01 / 資料を調べる')).toBeVisible();
+  await expect(page.getByText('STEP 01 / 資料を調べる', { exact: true })).toBeVisible();
   // 余分な履歴が無ければ 1 回の戻るで事件一覧
   await page.goBack();
   await expect(page).toHaveURL(/#\/cases$/);

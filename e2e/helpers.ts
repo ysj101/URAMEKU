@@ -55,8 +55,8 @@ export async function expectBudget(page: Page, remaining: number, total = CASE01
 /** CASE 01 の調査画面を直接開く（保存は空の前提） */
 export async function gotoCase01(page: Page) {
   await page.goto(`/#/play/${CASE01.id}`);
-  await expect(page.getByRole('heading', { level: 2, name: CASE01.title })).toBeVisible();
-  await expect(page.getByText('STEP 01 / 資料を調べる')).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1, name: CASE01.title })).toBeVisible();
+  await expect(page.getByText('STEP 01 / 資料を調べる', { exact: true })).toBeVisible();
 }
 
 /** 資料を開いてダイアログが出るまで待つ */
@@ -86,7 +86,7 @@ export async function fillCalc(page: Page, prompt: string, value: string) {
 /** 記事画面へ進む */
 export async function goToArticle(page: Page) {
   await page.getByRole('button', { name: '記事を組み立てる →' }).click();
-  await expect(page.getByText('STEP 02 / 記事を組み立てる')).toBeVisible();
+  await expect(page.getByText('STEP 02 / 記事を組み立てる', { exact: true })).toBeVisible();
 }
 
 /** 断片を順に選ぶ（未使用の断片ボタンは本文そのものが名前） */
@@ -101,7 +101,7 @@ export async function pickFragments(page: Page, texts: readonly string[]) {
 
 export async function submitArticle(page: Page) {
   await page.getByRole('button', { name: '記事を提出して評価を見る' }).click();
-  await expect(page.getByText('STEP 03 / 編集部の評価')).toBeVisible();
+  await expect(page.getByText('STEP 03 / 編集部の評価', { exact: true })).toBeVisible();
 }
 
 /** CASE 01 を正解手順でクリア直前（提出済み）まで進める */

@@ -4,7 +4,7 @@ import { expect, test } from '@playwright/test';
 test('#/play/case-05 で CASE 05 の調査画面が開く', async ({ page }) => {
   await page.goto('/#/play/case-05');
   await expect(page.getByText('CASE-05 / FICTION')).toBeVisible();
-  await expect(page.getByText('STEP 01 / 資料を調べる')).toBeVisible();
+  await expect(page.getByText('STEP 01 / 資料を調べる', { exact: true })).toBeVisible();
   await expect(page).toHaveURL(/#\/play\/case-05$/);
 });
 

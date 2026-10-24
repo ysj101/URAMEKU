@@ -31,8 +31,8 @@ test('リロードで事件・進行・段階が復元され、すべて削除�
 
   // T10: 事件・段階（記事画面）・進行が復元される
   await expect(page).toHaveURL(/#\/play\/case-01$/);
-  await expect(page.getByRole('heading', { level: 2, name: CASE01.title })).toBeVisible();
-  await expect(page.getByText('STEP 02 / 記事を組み立てる')).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1, name: CASE01.title })).toBeVisible();
+  await expect(page.getByText('STEP 02 / 記事を組み立てる', { exact: true })).toBeVisible();
   await expect(
     page.getByRole('button', {
       name: `断片 1: ${CASE01.correctFragments[0]}（タップで差し替え）`,
