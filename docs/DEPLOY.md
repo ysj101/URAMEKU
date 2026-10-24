@@ -27,7 +27,7 @@ Environment protection rules で `main` 以外からのデプロイを拒否し�
 
 ジョブ構成:
 
-1. `build`: Node 22（`.nvmrc`）→ `npm ci` → `VITE_BASE_PATH=/URAMEKU/ npm run build` → `npm run smoke:dist` → `actions/upload-pages-artifact`
+1. `build`: Node 26（`.nvmrc`）→ `npm ci` → `VITE_BASE_PATH=/URAMEKU/ npm run build` → `npm run smoke:dist` → `actions/upload-pages-artifact`
 2. `deploy`: `actions/deploy-pages`（環境 `github-pages`。デプロイ URL が run の画面に出る）
 
 権限は `contents: read` / `pages: write` / `id-token: write` のみ。`concurrency: pages` で同時デプロイを防ぐ（進行中の run はキャンセルしない）。

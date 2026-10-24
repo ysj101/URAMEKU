@@ -27,7 +27,7 @@ python3 -m http.server 8000
 
 ## 開発環境
 
-Node.js 22（`.nvmrc`）と npm を使用します。
+Node.js 26（`.nvmrc`）と npm を使用します。
 
 ```bash
 npm ci               # 依存の再現インストール
