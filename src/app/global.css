@@ -562,3 +562,53 @@ dialog::backdrop {
     grid-template-columns: 1fr;
   }
 }
+/* MVP-013: 配点表と差し戻し理由（ResultScreen） */
+.score-breakdown {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0 16px;
+  font-size: var(--font-size-sm);
+}
+.score-breakdown caption {
+  text-align: left;
+  font-weight: 700;
+  padding-bottom: 6px;
+}
+.score-breakdown th,
+.score-breakdown td {
+  padding: 6px 10px;
+  border-bottom: var(--border-width-thin) solid var(--color-border);
+  text-align: left;
+}
+.score-breakdown thead th {
+  border-bottom: var(--border-width-thin) solid var(--color-ink);
+  color: var(--color-quiet);
+  font-weight: 700;
+}
+.score-breakdown th[scope='row'] {
+  font-weight: 400;
+}
+.score-breakdown td {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.score-breakdown thead th:not(:first-child) {
+  text-align: right;
+}
+.score-breakdown tfoot th,
+.score-breakdown tfoot td {
+  border-bottom: none;
+  border-top: var(--border-width-thin) solid var(--color-ink);
+  font-weight: 700;
+}
+.failure-reasons {
+  padding: 12px;
+  margin: 12px 0;
+  background: var(--color-surface-note);
+  border-left: 5px solid var(--color-accent);
+}
+.failure-reasons ul {
+  padding-left: 24px;
+  margin: 6px 0 0;
+}

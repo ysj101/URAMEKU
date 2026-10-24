@@ -14,6 +14,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "validate:cases": "node scripts/validate_cases.mjs",
+    "check:assets": "node scripts/check_asset_refs.mjs",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",

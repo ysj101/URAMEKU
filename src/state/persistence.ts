@@ -5,6 +5,7 @@ import {
   type MigrateResult,
   type SaveData,
 } from './migrations';
+import { wipeStorage } from './wipe';
 
 export type {
   SaveData,
@@ -150,11 +151,7 @@ export function persistSaveData(
   }
 }
 
+/** 端末内保存の削除。実体は wipe.ts（現行キー・旧キー・`urameku-` 接頭辞キーをすべて消す）。 */
 export function clearSaveData(storage: StorageLike | null = defaultStorage()): void {
-  if (!storage) return;
-  try {
-    storage.removeItem(STORAGE_KEY);
-  } catch {
-    /* ignore */
-  }
+  wipeStorage(storage);
 }

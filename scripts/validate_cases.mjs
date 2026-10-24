@@ -188,6 +188,7 @@ function validateIntegrity(c, errors) {
     taskIds.add(t.id);
   }
   const fragmentIds = new Set();
+  const fragmentKinds = new Map();
   for (const [i, f] of (Array.isArray(c.headline_fragments)
     ? c.headline_fragments
     : []
@@ -196,6 +197,10 @@ function validateIntegrity(c, errors) {
     if (fragmentIds.has(f.id))
       errors.push(`headline_fragments[${i}].id: 断片 ID "${f.id}" が重複しています`);
     fragmentIds.add(f.id);
+    if (typeof f.kind === 'string') fragmentKinds.set(f.id, f.kind);
+    if (Array.isArray(f.evidence)) {
+      f.evidence.forEach((id, j) => refDoc(`headline_fragments[${i}].evidence[${j}]`, id));
+    }
   }
   if (Array.isArray(c.correct_fragments) && fragmentIds.size > 0) {
     c.correct_fragments.forEach((id, i) => {
@@ -205,6 +210,19 @@ function validateIntegrity(c, errors) {
         );
       }
     });
+    // kind と correct_fragments の両方向整合
+    const correct = new Set(c.correct_fragments);
+    for (const [fid, kind] of fragmentKinds) {
+      if (correct.has(fid) && kind !== 'correct') {
+        errors.push(
+          `headline_fragments(${fid}).kind: correct_fragments に含まれる断片は kind: "correct" でなければなりません（"${kind}"）`,
+        );
+      } else if (!correct.has(fid) && kind === 'correct') {
+        errors.push(
+          `headline_fragments(${fid}).kind: correct_fragments に含まれない断片に kind: "correct" は付けられません`,
+        );
+      }
+    }
   }
 }
 

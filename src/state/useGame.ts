@@ -33,6 +33,8 @@ export interface GameApi {
   progress: CaseProgress;
   stage: Stage;
   finished: Record<string, boolean>;
+  /** 事件 ID ごとの進行（一覧表示用。未着手の事件は含まれない） */
+  progressByCase?: Record<string, CaseProgress>;
   dispatch: (action: GameAction) => void;
   selectCase: (id: string) => void;
   setStage: (stage: Stage) => void;
@@ -256,6 +258,7 @@ export function useGame(options: UseGameOptions = {}): GameApi {
     progress,
     stage: save.session.stage,
     finished: save.finished,
+    progressByCase: save.progress,
     dispatch,
     selectCase,
     setStage,
