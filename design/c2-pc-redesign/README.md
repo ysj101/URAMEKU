@@ -28,8 +28,13 @@ PCレイアウトを維持したまま、新聞・雑誌コラージュの世界
 | `assets/backgrounds/collage-clip-*.png` | 余白埋め用の透過コラージュ | 同上（白地を除去） |
 | `assets/characters/c-*.png` | 網点・インク摩耗・白フチを焼き込んだキャラ | `public/assets/characters/*/poses/*.png`（顔・シルエットは再作画せず加工のみ） |
 
+## 元画像（sources/）
+
+- `sources/collage-template-sheet-v1.png`: 4区画のコラージュ素材シート（1672x941）
+- `sources/edge-paper-vertical-source.png`: 縦長ページ用の左右コラージュ背景（1064x1478）。`public/assets/c2-highres/backgrounds/edge-paper-vertical-tile.webp` の元
+
 ## 未解決
 
 - コラージュ画像に実在の建物に見えるドームがある。正式採用前に差し替えか除去。
-- 縦長ページ用の背景（左右の端だけコラージュ、縦に繰り返せるもの）は未作成。
-- `prototype/` への反映は未実施。
+- 縦長背景は低解像度（1064px幅）を上下クロスフェードでタイル化して2倍拡大したもの。つなぎ目にわずかな二重写りがある。
+- アプリ本体（React）にはタイトル背景・事件一覧ヘッダー・汎用紙面・証拠ボードを適用済み（`src/app/screens/c2-highres.css`）。キャラ加工・質感・UI の紙表現は未適用。

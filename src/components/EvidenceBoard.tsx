@@ -1,6 +1,6 @@
 import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { PinCard, type PinSlot } from './PinCard';
-import { backgroundUrl, uiIcon } from '../data/assets';
+import { c2HighresUrl, uiIcon } from '../data/assets';
 import { useSound } from '../audio/useSound';
 import { canUnpinDocument, type UnpinRejectReason } from '../domain/evidence';
 import {
@@ -127,7 +127,7 @@ export function EvidenceBoard({ caseData, progress, onToggleLink, onUnpin }: Pro
       <div
         ref={surfaceRef}
         className="evidence-board__surface"
-        style={{ backgroundImage: `url(${backgroundUrl('scene-caseboard')})` }}
+        style={{ backgroundImage: `url(${c2HighresUrl('board')})` }}
       >
         {thread && (
           <svg className="evidence-board__thread" aria-hidden="true" data-testid="link-thread">

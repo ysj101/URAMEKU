@@ -23,6 +23,9 @@ import {
   achievementIcon,
   assetUrl,
   backgroundUrl,
+  C2_HIGHRES,
+  c2HighresUrl,
+  type C2HighresName,
   caseCover,
   characterIcon,
   characterPose,
@@ -199,6 +202,15 @@ describe('用途別ヘルパー（マニフェスト照合）', () => {
     expect(manifestNames('textures', 'svg')).toEqual([...TEXTURE_NAMES].sort());
     expect(backgroundUrl('scene-office')).toBe('/URAMEKU/assets/backgrounds/scene-office.svg');
     expect(textureUrl('kraft', 'png')).toBe('/URAMEKU/assets/textures/kraft.png');
+  });
+
+  it('C-2 高解像度素材（A 案のみ・マニフェストと一致）', () => {
+    const names = Object.keys(C2_HIGHRES) as C2HighresName[];
+    verifyAll(names.map((n) => c2HighresUrl(n)));
+    // 収録ファイルとヘルパーの列挙が一致する（比較用の B/C/D 案を混在させない）
+    const listed = [...manifestPaths()].filter((p) => p.startsWith('c2-highres/')).sort();
+    expect(listed).toEqual(names.map((n) => `c2-highres/${C2_HIGHRES[n]}`).sort());
+    expect(c2HighresUrl('title')).toBe('/URAMEKU/assets/c2-highres/title/variant-A-3840x2160.webp');
   });
 
   it('UI 部品（スタンプ・状態・フレーム・グレード・イラスト・アイコン・テープ）', () => {

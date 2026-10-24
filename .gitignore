@@ -26,3 +26,6 @@ npm-debug.log*
 
 # MVP-040: 画面幅検査のスクリーンショット（scripts/check_viewports.mjs の出力）
 qa/screenshots/
+
+# 外部から受け取った素材の一時置き場（PNG原寸を含むため git 管理外。採用分は public/assets へコピーしてマニフェストに登録する）
+design/incoming/

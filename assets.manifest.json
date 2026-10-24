@@ -7,7 +7,7 @@
     "documents": 30,
     "analysis_tasks": 10
   },
-  "asset_count": 530,
+  "asset_count": 534,
   "assets": [
     {
       "path": "public/assets/achievements/first-evidence.png",
@@ -977,6 +977,67 @@
       "exists": true,
       "sha256": "7c0b0d3545bd24b2827787961fe28d873f65af906abc043293aac5f7071b2f5c",
       "source": "locally-created-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/c2-highres/backgrounds/edge-paper-vertical-tile.webp",
+      "category": "c2-highres",
+      "bytes": 561216,
+      "format": "webp",
+      "exists": true,
+      "sha256": "4ca5af30f9b754a2ddd2ed578697eb8b0af34976b484479c367485757ebe9006",
+      "size": [
+        2128,
+        2636
+      ],
+      "alpha": false,
+      "source": "外部生成の縦長背景（design/c2-pc-redesign/sources/edge-paper-vertical-source.png、1064x1478）を上下クロスフェードで縦タイル化し2倍拡大",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/c2-highres/board/cork-board-3840x2160.webp",
+      "category": "c2-highres",
+      "bytes": 921054,
+      "format": "webp",
+      "exists": true,
+      "sha256": "3789c3442a0f15909446736cff18fc3e77be1c48a6b28d3368e2981259ce0729",
+      "size": [
+        3840,
+        2160
+      ],
+      "alpha": false,
+      "source": "design/incoming/URAMEKU_Other_Assets_4K_Continuation（外部生成・Lanczos拡大。ネイティブ4Kではない）",
+      "art_review": "REQUIRED",
+      "note": "上端・左端の白地と下端の引き伸ばし跡をトリミングして再拡大"
+    },
+    {
+      "path": "public/assets/c2-highres/header/header-from-A-3840x960.webp",
+      "category": "c2-highres",
+      "bytes": 610444,
+      "format": "webp",
+      "exists": true,
+      "sha256": "a71cc34307e28c393f12a4530de97a91de9ee4eaca1795e780f5c3ba64d9eb1a",
+      "size": [
+        3840,
+        960
+      ],
+      "alpha": false,
+      "source": "design/incoming/URAMEKU_Other_Assets_4K_Continuation（外部生成・Lanczos拡大。ネイティブ4Kではない）",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/c2-highres/title/variant-A-3840x2160.webp",
+      "category": "c2-highres",
+      "bytes": 2182732,
+      "format": "webp",
+      "exists": true,
+      "sha256": "947dae8f5c130f6a7621b2831f47326289baa48b7be0a61925fdd93dcc1a25bf",
+      "size": [
+        3840,
+        2160
+      ],
+      "alpha": false,
+      "source": "design/incoming/URAMEKU_Other_Assets_4K_Continuation（外部生成・Lanczos拡大。ネイティブ4Kではない）",
       "art_review": "REQUIRED"
     },
     {
