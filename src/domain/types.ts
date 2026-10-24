@@ -81,6 +81,8 @@ export interface CaseData {
   documents: CaseDocument[];
   required_evidence: string[];
   required_link: [string, string] | string[];
+  /** 何を突き合わせる照合か（資料名は書かない。証拠ボードと記事画面に表示） */
+  link_prompt: string;
   analysis_tasks: AnalysisTask[];
   headline_fragments: HeadlineFragment[];
   correct_fragments: string[];

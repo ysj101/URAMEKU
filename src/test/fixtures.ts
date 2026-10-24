@@ -20,6 +20,7 @@ export function makeCase(overrides: Partial<CaseData> = {}): CaseData {
     ],
     required_evidence: ['a', 'b', 'c'],
     required_link: ['a', 'c'],
+    link_prompt: '主張の数字と、その元になった数字を突き合わせる 2 枚を結びます。',
     analysis_tasks: [
       { id: 't1', prompt: '問1', unit: '%', expected: 45, tolerance: 0.1 },
       { id: 't2', prompt: '問2', unit: '円', expected: 200, tolerance: 0 },

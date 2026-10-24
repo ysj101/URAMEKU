@@ -15,6 +15,7 @@
     "documents",
     "required_evidence",
     "required_link",
+    "link_prompt",
     "analysis_tasks",
     "headline_fragments",
     "correct_fragments",
@@ -28,6 +29,7 @@
     "difficulty": { "type": "string", "enum": ["NORMAL", "HARD", "EXPERT"] },
     "estimated_time": { "type": "string", "minLength": 1, "maxLength": 20 },
     "intro": { "type": "string", "minLength": 10 },
+    "link_prompt": { "type": "string", "minLength": 10, "maxLength": 120 },
     "budget": { "type": "integer", "minimum": 1, "maximum": 99 },
     "documents": {
       "type": "array",

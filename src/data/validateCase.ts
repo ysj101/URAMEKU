@@ -37,6 +37,7 @@ const CASE_KEYS = [
   'documents',
   'required_evidence',
   'required_link',
+  'link_prompt',
   'analysis_tasks',
   'headline_fragments',
   'correct_fragments',
@@ -252,6 +253,20 @@ function checkFragments(c: Checker, raw: unknown, docIds: Set<string>): Fragment
   return info;
 }
 
+/**
+ * 照合の問い。資料名をそのまま含むと正解のネタバレになるので禁止する。
+ */
+function checkLinkPrompt(c: Checker, raw: unknown, documents: unknown): void {
+  if (!c.string('link_prompt', raw, { minLength: 10, maxLength: 120 })) return;
+  const prompt = raw as string;
+  if (!Array.isArray(documents)) return;
+  for (const d of documents) {
+    if (isObject(d) && typeof d.title === 'string' && d.title.length > 0 && prompt.includes(d.title)) {
+      c.fail('link_prompt', `資料タイトル「${d.title}」を含んでいます（正解の名指しになります）`);
+    }
+  }
+}
+
 function checkDebrief(c: Checker, raw: unknown): void {
   if (!isObject(raw)) {
     c.fail('debrief', 'オブジェクトではありません');
@@ -283,6 +298,7 @@ export function validateCase(raw: unknown): ValidationResult {
   c.string('disclaimer', raw.disclaimer, { minLength: 5 });
 
   const costs = checkDocuments(c, raw.documents);
+  checkLinkPrompt(c, raw.link_prompt, raw.documents);
   const docIds = new Set(costs.keys());
   checkTasks(c, raw.analysis_tasks);
   const fragments = checkFragments(c, raw.headline_fragments, docIds);

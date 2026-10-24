@@ -59,6 +59,7 @@
     "count",
     "invite"
   ],
+  "link_prompt": "「8 割が支持」という結果と、誰に聞いたのか。この 2 つを突き合わせる 2 枚を結びます。",
   "headline_fragments": [
     {
       "id": "f0",

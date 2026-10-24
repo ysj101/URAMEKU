@@ -59,6 +59,7 @@
     "spent",
     "finish"
   ],
+  "link_prompt": "すでに払ってしまった額と、これから払う額。この 2 つを並べて比べる 2 枚を結びます。",
   "headline_fragments": [
     {
       "id": "f0",

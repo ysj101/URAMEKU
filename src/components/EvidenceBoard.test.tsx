@@ -52,6 +52,11 @@ describe('EvidenceBoard: タップ照合', () => {
     expect(card('資料A')).toHaveAccessibleName('資料A、未選択');
   });
 
+  it('この事件の照合の問い（link_prompt）を常に表示する', () => {
+    render(<Harness initial={makeProgress()} />);
+    expect(screen.getByTestId('link-prompt')).toHaveTextContent(caseData.link_prompt);
+  });
+
   it('未採用なら案内文だけを出す', () => {
     render(<Harness initial={makeProgress()} />);
     expect(screen.getByText(/「証拠ボードに貼る」を押すとここに追加されます/)).toBeInTheDocument();

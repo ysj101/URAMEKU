@@ -52,6 +52,9 @@ export function ArticleScreen({ game }: { game: GameApi }) {
       />
       <div className="notice">
         資料を調査しただけでは根拠になりません。証拠ボードに貼り、照合する組み合わせを指定したか確認してください。
+        <br />
+        <strong>この事件の照合：</strong>
+        {current.link_prompt}
       </div>
       <div className="stage-switch article-submit">
         <div className="article-submit-row">

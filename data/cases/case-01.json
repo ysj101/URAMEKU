@@ -59,6 +59,7 @@
     "trial",
     "retained"
   ],
+  "link_prompt": "広告の「90%」と、別の母数で計算した数字。その母数がどこから来たかを示す 2 枚を結びます。",
   "headline_fragments": [
     {
       "id": "f0",

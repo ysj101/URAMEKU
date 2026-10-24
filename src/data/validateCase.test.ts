@@ -95,6 +95,18 @@ describe('validateCase: 不正データを拒否する', () => {
     );
   });
 
+  it('link_prompt の欠落・短すぎ・資料タイトルの名指し', () => {
+    const missing = raw({});
+    delete missing.link_prompt;
+    expect(errorsOf(missing)).toContainEqual(expect.stringMatching(/link_prompt/));
+    expect(errorsOf(raw({ link_prompt: '短い' }))).toContainEqual(
+      expect.stringMatching(/link_prompt: .*10/),
+    );
+    expect(errorsOf(raw({ link_prompt: '資料A と資料C を結んでください。' }))).toContainEqual(
+      expect.stringMatching(/link_prompt: 資料タイトル「資料A」/),
+    );
+  });
+
   it('required_link の自己参照・存在しない ID', () => {
     expect(errorsOf(raw({ required_link: ['a', 'a'] }))).toContainEqual(
       expect.stringMatching(/required_link: 同じ資料 "a" 同士/),
