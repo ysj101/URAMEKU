@@ -53,6 +53,7 @@ export function InvestigationScreen({ game }: { game: GameApi }) {
         caseData={current}
         progress={progress}
         onToggleLink={(documentId) => dispatch({ type: 'toggle-link', documentId })}
+        onUnpin={(documentId) => dispatch({ type: 'toggle-pin', documentId })}
       />
       <CalculationDesk
         caseData={current}

@@ -46,7 +46,7 @@ export function App() {
       content = <TutorialScreen nav={nav} />;
       break;
     case 'encyclopedia':
-      content = <EncyclopediaScreen nav={nav} />;
+      content = <EncyclopediaScreen game={game} nav={nav} />;
       break;
     case 'settings':
       // 本実装は MVP-031（進捗削除）と MVP-037（音量）で差し替える
