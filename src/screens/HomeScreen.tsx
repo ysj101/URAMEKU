@@ -1,4 +1,4 @@
-import { assetUrl } from '../data/assets';
+import { characterPose, propUrl } from '../data/assets';
 import { UI } from '../data/ui';
 import { continueCaseId } from '../domain/caseStatus';
 import type { Navigation } from '../app/navigation';
@@ -17,18 +17,65 @@ export function HomeScreen({ game, nav }: { game: GameApi; nav: Navigation }) {
   return (
     <section className="home" aria-labelledby="home-title">
       <div className="home-hero">
-        <p className="edition">ウラメク調査編集局 / ARCHIVE 001</p>
+        <div className="home-masthead">
+          <p className="edition">ウラメク調査編集局</p>
+          <span>調査と推理の体験紙 / 全5事件</span>
+        </div>
         <h1 id="home-title" className="home-title">
-          ウラ<span>メク</span>
+          ウラメク
         </h1>
         <p className="home-tagline">{UI.home.subtitle}</p>
-        <img
-          className="home-mascot"
-          src={assetUrl('characters/shinobu/poses/point.png')}
-          alt="調査記者シノブ"
-        />
+        <div className="home-frontpage">
+          <div className="home-lead">
+            <span className="home-scoop">本日の特集</span>
+            <h2>
+              その情報、
+              <br />
+              ウラがある。
+            </h2>
+            <p>
+              広告、数字、みんなの声。
+              <br />
+              資料をめくり、証拠をつなぎ、
+              <br />
+              見出しの向こうの事実を探せ。
+            </p>
+          </div>
+          <div
+            className="home-ensemble"
+            role="img"
+            aria-label="調査編集局のシノブ、メガ、クロ、ハラダ部長"
+          >
+            <img className="home-clipping" src={propUrl('news')} alt="" />
+            <img
+              className="home-character home-character--mega"
+              src={characterPose('mega')}
+              alt=""
+            />
+            <img
+              className="home-character home-character--harada"
+              src={characterPose('harada')}
+              alt=""
+            />
+            <img
+              className="home-character home-character--shinobu"
+              src={characterPose('shinobu', 'point')}
+              alt=""
+            />
+            <img
+              className="home-character home-character--kuro"
+              src={characterPose('kuro')}
+              alt=""
+            />
+            <span className="home-caption" aria-hidden="true">
+              見えているものだけで、判断しない。
+            </span>
+          </div>
+        </div>
       </div>
       <div className="home-actions">
+        <h2 className="home-actions-title">編集局へようこそ</h2>
+        <p className="home-actions-copy">一枚の資料から、調査をはじめよう。</p>
         {hasProgress && continueId ? (
           <button
             type="button"

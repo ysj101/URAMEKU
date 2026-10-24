@@ -69,7 +69,8 @@
    * タイポグラフィ
    * ------------------------------------------------------------------ */
   --font-sans: system-ui, -apple-system, 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
-  --font-serif: Georgia, serif; /* 見出し・成績 */
+  --font-serif:
+    'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'Noto Sans JP', sans-serif; /* 見出し・成績 */
 
   --font-size-xs: 0.7rem; /* ラベル・番号 */
   --font-size-sm: 0.8rem; /* 注記・通知 */

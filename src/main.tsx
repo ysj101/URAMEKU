@@ -6,6 +6,7 @@ import './app/tokens.css';
 import './app/global.css';
 import './app/motion.css';
 import './app/layout.css';
+import './app/screens/collage.css';
 
 import { initMotionPreference } from './app/motionSettings';
 import { getSoundManager, installAutoUnlock } from './audio/soundManager';
