@@ -1,0 +1,326 @@
+[
+  {
+    "width": 320,
+    "hash": "/",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 320,
+    "hash": "/cases",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 320,
+    "hash": "/play/case-01",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 320,
+    "hash": "/play/case-02",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 320,
+    "hash": "/play/case-03",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 320,
+    "hash": "/play/case-04",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 320,
+    "hash": "/play/case-05",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 320,
+    "hash": "dialog-keyboard",
+    "overflow": false,
+    "dialogFocused": true,
+    "animation": "none"
+  },
+  {
+    "width": 320,
+    "hash": "return-focus",
+    "restored": true
+  },
+  {
+    "width": 375,
+    "hash": "/",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 375,
+    "hash": "/cases",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 375,
+    "hash": "/play/case-01",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 375,
+    "hash": "/play/case-02",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 375,
+    "hash": "/play/case-03",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 375,
+    "hash": "/play/case-04",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 375,
+    "hash": "/play/case-05",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 375,
+    "hash": "dialog-keyboard",
+    "overflow": false,
+    "dialogFocused": true,
+    "animation": "none"
+  },
+  {
+    "width": 375,
+    "hash": "return-focus",
+    "restored": true
+  },
+  {
+    "width": 390,
+    "hash": "/",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 390,
+    "hash": "/cases",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 390,
+    "hash": "/play/case-01",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 390,
+    "hash": "/play/case-02",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 390,
+    "hash": "/play/case-03",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 390,
+    "hash": "/play/case-04",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 390,
+    "hash": "/play/case-05",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 390,
+    "hash": "dialog-keyboard",
+    "overflow": false,
+    "dialogFocused": true,
+    "animation": "none"
+  },
+  {
+    "width": 390,
+    "hash": "return-focus",
+    "restored": true
+  },
+  {
+    "width": 430,
+    "hash": "/",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 430,
+    "hash": "/cases",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 430,
+    "hash": "/play/case-01",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 430,
+    "hash": "/play/case-02",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 430,
+    "hash": "/play/case-03",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 430,
+    "hash": "/play/case-04",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 430,
+    "hash": "/play/case-05",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 430,
+    "hash": "dialog-keyboard",
+    "overflow": false,
+    "dialogFocused": true,
+    "animation": "none"
+  },
+  {
+    "width": 430,
+    "hash": "return-focus",
+    "restored": true
+  },
+  {
+    "width": 768,
+    "hash": "/",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 768,
+    "hash": "/cases",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 768,
+    "hash": "/play/case-01",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 768,
+    "hash": "/play/case-02",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 768,
+    "hash": "/play/case-03",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 768,
+    "hash": "/play/case-04",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 768,
+    "hash": "/play/case-05",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 768,
+    "hash": "dialog-keyboard",
+    "overflow": false,
+    "dialogFocused": true,
+    "animation": "none"
+  },
+  {
+    "width": 768,
+    "hash": "return-focus",
+    "restored": true
+  },
+  {
+    "width": 1440,
+    "hash": "/",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 1440,
+    "hash": "/cases",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 1440,
+    "hash": "/play/case-01",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 1440,
+    "hash": "/play/case-02",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 1440,
+    "hash": "/play/case-03",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 1440,
+    "hash": "/play/case-04",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 1440,
+    "hash": "/play/case-05",
+    "overflow": false,
+    "smallTargets": []
+  },
+  {
+    "width": 1440,
+    "hash": "dialog-keyboard",
+    "overflow": false,
+    "dialogFocused": true,
+    "animation": "none"
+  },
+  {
+    "width": 1440,
+    "hash": "return-focus",
+    "restored": true
+  }
+]

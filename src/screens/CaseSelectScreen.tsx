@@ -1,4 +1,4 @@
-import { assetUrl } from '../data/assets';
+import { assetUrl, caseCover, propUrl, type PropName } from '../data/assets';
 import { UI } from '../data/ui';
 import {
   CASE_STATUS_LABEL,
@@ -8,6 +8,8 @@ import {
 } from '../domain/caseStatus';
 import type { Navigation } from '../app/navigation';
 import type { GameApi } from '../state/useGame';
+
+const CASE_MOTIFS: PropName[] = ['ledger', 'advert', 'news', 'photo', 'report'];
 
 export function CaseSelectScreen({ game, nav }: { game: GameApi; nav: Navigation }) {
   return (
@@ -22,6 +24,9 @@ export function CaseSelectScreen({ game, nav }: { game: GameApi; nav: Navigation
         </button>
         <h1 id="cases-title">{UI.home.cases}</h1>
       </div>
+      <p className="case-select-intro">
+        編集局に届いた、5つの調査ファイル。気になる事件から、資料をめくろう。
+      </p>
       <ul className="case-cards">
         {game.cases.map((c, i) => {
           const status = caseStatus(c.id, (game.progressByCase ?? {})[c.id], game.finished);
@@ -37,6 +42,14 @@ export function CaseSelectScreen({ game, nav }: { game: GameApi; nav: Navigation
                   nav.navigate({ screen: 'play', caseId: c.id });
                 }}
               >
+                <span className="case-card-art" aria-hidden="true">
+                  <img className="case-card-cover" src={caseCover(c.id)} alt="" />
+                  <img
+                    className="case-card-prop"
+                    src={propUrl(CASE_MOTIFS[i] ?? 'clipping')}
+                    alt=""
+                  />
+                </span>
                 <img
                   className="case-card-state"
                   src={assetUrl(
@@ -52,6 +65,10 @@ export function CaseSelectScreen({ game, nav }: { game: GameApi; nav: Navigation
                     {'○'.repeat(3 - level)}
                   </span>{' '}
                   {DIFFICULTY_LABEL[c.difficulty]} / {c.estimated_time}
+                </span>
+                <span className="case-card-progress">
+                  資料確認 {(game.progressByCase?.[c.id]?.opened ?? []).length} /{' '}
+                  {c.documents.length}
                 </span>
                 <span className={`case-card-status status-${status}`}>
                   {CASE_STATUS_LABEL[status]}

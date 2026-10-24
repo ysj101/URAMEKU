@@ -1,3 +1,4 @@
+import { VISUAL_LABEL } from './documentVisuals';
 import { DocumentLabel } from './DocumentLabel';
 import '../app/screens/document-label.css';
 import { documentThumbnail, uiState, type UiStateName } from '../data/assets';
@@ -65,10 +66,14 @@ export function DocumentTile({
       type="button"
       className={`doc-tile doc-tile--${state}`}
       data-state={state}
+      data-visual={doc.visual}
       aria-disabled={blocked || undefined}
       aria-label={label}
       onClick={() => (blocked ? onBlocked(doc, outcome) : onOpen(doc.id))}
     >
+      <span className="doc-tile__kind" aria-hidden="true">
+        {VISUAL_LABEL[doc.visual]}
+      </span>
       <img className="doc-tile__thumb" src={documentThumbnail(caseId, doc.id)} alt="" />
       <DocumentLabel
         caseId={caseId}

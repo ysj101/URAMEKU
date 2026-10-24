@@ -123,6 +123,7 @@ export function EvidenceBoard({ caseData, progress, onToggleLink, onUnpin }: Pro
         <strong>この事件の照合：</strong>
         {caseData.link_prompt}
       </p>
+      <p className="board-caption">採用した資料を並べ、2枚のつながりを赤い糸で確認。</p>
       <div
         ref={surfaceRef}
         className="evidence-board__surface"

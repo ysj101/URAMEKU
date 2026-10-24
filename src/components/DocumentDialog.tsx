@@ -1,3 +1,4 @@
+import { DocumentLabel } from './DocumentLabel';
 import {
   useCallback,
   useEffect,
@@ -149,19 +150,29 @@ export function DocumentDialog({ caseData, progress, documentId, onTogglePin, on
     <dialog
       ref={ref}
       className="document-dialog"
+      data-visual={doc?.visual}
       aria-labelledby="dialog-title"
       onCancel={handleCancel}
       onClose={handleNativeClose}
       onClick={handleBackdrop}
       onKeyDown={handleKeyDown}
     >
-      <article className="document-popup">
+      <article className="document-popup motion-page-turn">
         <div className="popup-head">
           <span>機密解除 / EDITORIAL ARCHIVE</span>
           <button type="button" className="popup-close" aria-label="閉じる" onClick={requestClose}>
             ×
           </button>
         </div>
+        {doc && (
+          <DocumentLabel
+            caseId={caseData.id}
+            index={caseData.documents.indexOf(doc)}
+            documentId={doc.id}
+            visual={doc.visual}
+            cost={doc.cost}
+          />
+        )}
         <h2 id="dialog-title" ref={headingRef} tabIndex={-1}>
           {doc?.title}
         </h2>

@@ -61,7 +61,10 @@ export function InvestigationScreen({ game }: { game: GameApi }) {
           {progress.opened.length} / {current.documents.length} 件確認済み
         </small>
       </h2>
-      <DocumentGrid caseData={current} progress={progress} onOpen={handleOpen} />
+      <div className="investigation-papers">
+        <p className="desk-caption">資料をひらく → 事実を読む → 証拠ボードに貼る</p>
+        <DocumentGrid caseData={current} progress={progress} onOpen={handleOpen} />
+      </div>
       <EvidenceBoard
         caseData={current}
         progress={progress}
