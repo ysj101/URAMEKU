@@ -37,3 +37,33 @@ describe('game reducer', () => {
     });
   });
 });
+
+describe('game reducer: toggle-link', () => {
+  it('ボード未採用の資料は toggle-link で選べない', () => {
+    const p = reduceProgress(
+      c,
+      { ...createProgress(), opened: ['a'] },
+      { type: 'toggle-link', documentId: 'a' },
+    );
+    expect(p.chosenLink).toEqual([]);
+  });
+  it('提出済みでは toggle-link が無視される', () => {
+    const base = {
+      ...createProgress(),
+      opened: ['a', 'b', 'c'],
+      pinned: ['a', 'b', 'c'],
+      chosenLink: ['a'],
+      article: ['f0', 'f1', 'f2'],
+      published: true,
+    };
+    expect(reduceProgress(c, base, { type: 'toggle-link', documentId: 'c' })).toBe(base);
+    expect(reduceProgress(c, base, { type: 'toggle-link', documentId: 'a' })).toBe(base);
+  });
+  it('同じ資料を2回 toggle-link すると解除される', () => {
+    let p = { ...createProgress(), opened: ['a'], pinned: ['a'] };
+    p = reduceProgress(c, p, { type: 'toggle-link', documentId: 'a' });
+    expect(p.chosenLink).toEqual(['a']);
+    p = reduceProgress(c, p, { type: 'toggle-link', documentId: 'a' });
+    expect(p.chosenLink).toEqual([]);
+  });
+});

@@ -13,12 +13,14 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
+    "validate:cases": "node scripts/validate_cases.mjs",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.node.json --noEmit",
     "check": "npm run lint && npm run typecheck && npm run format:check && npm run test",
+    "analyze:dead-ends": "node scripts/analyze_dead_ends.mjs",
     "lint:content": "node scripts/lint_content.mjs"
   },
   "devDependencies": {
