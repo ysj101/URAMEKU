@@ -1,0 +1,72 @@
+# GitHub Pages デプロイ（MVP-045）
+#
+# `main` への push と手動実行（workflow_dispatch）で production ビルドを作り、
+# GitHub Pages（Source: GitHub Actions）へ配信する。
+# Pages の有効化はリポジトリ設定で行う（docs/DEPLOY.md 参照）。有効化前に実行すると
+# deploy ジョブが失敗するが、リポジトリの内容は変更されない。
+#
+# 404.html は作らない: 画面遷移はハッシュルート（#/cases 等）なので、
+# Pages が返すパスは常に /URAMEKU/ 直下の index.html で済む。
+name: Deploy Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 同時に複数のデプロイを走らせない。進行中のものはキャンセルせず完了を待つ。
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  # GitHub Pages プロジェクトサイト https://<owner>.github.io/URAMEKU/ 向け（MVP-004）
+  VITE_BASE_PATH: /URAMEKU/
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build (VITE_BASE_PATH=${{ env.VITE_BASE_PATH }})
+        run: npm run build
+
+      - name: Smoke test dist
+        run: npm run smoke:dist
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

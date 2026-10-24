@@ -24,6 +24,7 @@
     "analyze:dead-ends": "node scripts/analyze_dead_ends.mjs",
     "lint:content": "node scripts/lint_content.mjs",
     "walkthrough": "node scripts/generate_walkthrough.mjs",
+    "smoke:dist": "node scripts/smoke_dist.mjs",
     "summarize:user-tests": "node scripts/summarize_user_tests.mjs"
   },
   "devDependencies": {

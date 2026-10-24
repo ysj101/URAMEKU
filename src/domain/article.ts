@@ -82,3 +82,42 @@ export function fragmentFeedback(caseData: CaseData, progress: CaseProgress): Fr
     return feedback;
   });
 }
+
+/* ------------------------------------------------------------------
+ * 編集操作（MVP-025）。既存の addFragment / removeFragmentAt は変更しない。
+ * ------------------------------------------------------------------ */
+
+/**
+ * スロット index の断片を fragmentId に差し替える。
+ * - index が既存スロットの直後（= article.length）なら追加として扱う
+ * - 範囲外、または同じ断片がすでに別のスロットにある場合は変更しない
+ */
+export function replaceFragmentAt(
+  progress: CaseProgress,
+  index: number,
+  fragmentId: string,
+): CaseProgress {
+  if (!Number.isInteger(index) || index < 0 || index >= ARTICLE_LENGTH) return progress;
+  if (index >= progress.article.length) return addFragment(progress, fragmentId);
+  if (progress.article[index] === fragmentId) return progress;
+  if (progress.article.includes(fragmentId)) return progress;
+  const article = progress.article.map((id, i) => (i === index ? fragmentId : id));
+  return { ...progress, article };
+}
+
+/** スロット from の断片を to の位置へ移す（間の断片は詰める）。範囲外なら変更しない */
+export function moveFragment(progress: CaseProgress, from: number, to: number): CaseProgress {
+  const len = progress.article.length;
+  const inRange = (i: number) => Number.isInteger(i) && i >= 0 && i < len;
+  if (!inRange(from) || !inRange(to) || from === to) return progress;
+  const article = [...progress.article];
+  const [moved] = article.splice(from, 1);
+  article.splice(to, 0, moved as string);
+  return { ...progress, article };
+}
+
+/** 見出しの 3 スロットをすべて空にする */
+export function clearArticle(progress: CaseProgress): CaseProgress {
+  if (progress.article.length === 0) return progress;
+  return { ...progress, article: [] };
+}
