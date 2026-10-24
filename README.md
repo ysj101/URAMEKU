@@ -43,6 +43,36 @@ npm run preview      # dist/ をローカル配信して確認
 
 `public/` 配下のアセットと `manifest.webmanifest` はビルド時にそのまま `dist/` へコピーされます。
 
+### 公開 URL とベースパス（MVP-004）
+
+| 用途 | URL | `base` |
+| --- | --- | --- |
+| 本番 | GitHub Pages プロジェクトサイト `https://<owner>.github.io/URAMEKU/` | `/URAMEKU/` |
+| 開発・プレビュー | `http://localhost:5173/` など（ルート配信） | `/` |
+
+`vite.config.ts` の `base` は環境変数 `VITE_BASE_PATH` で切り替えます（未設定なら `/`、先頭・末尾のスラッシュは自動で補われます）。シェルから直接渡すか、`.env.production` に書きます。
+
+```bash
+VITE_BASE_PATH=/URAMEKU/ npm run build                 # GitHub Pages 向けビルド
+cp .env.production.example .env.production && npm run build   # .env ファイルで指定する場合
+VITE_BASE_PATH=/URAMEKU/ npm run preview               # http://localhost:4173/URAMEKU/ で確認
+```
+
+アセット参照のルール:
+
+- `index.html` と CSS 内の `/assets/...`・`/manifest.webmanifest` の絶対参照は、Vite がビルド時に `base` 付きへ書き換えます（`/URAMEKU/assets/...`）。
+- TypeScript から画像を参照するときは `src/data/assets.ts` の `assetUrl('characters/shinobu/poses/idle.png')` を使います。内部で `import.meta.env.BASE_URL` を付与するため、`"/assets/..."` を直書きしないでください。
+- `public/manifest.webmanifest` の `start_url` / `scope` / `icons[].src` は相対パスで、配置先のベースパスにそのまま追従します。
+
+サブパス配信で 404 が出ないことは `scripts/check_base_path.sh` で確認できます（ビルド → `vite preview` → index.html / JS / CSS / manifest / 画像を curl で検証）。
+
+```bash
+scripts/check_base_path.sh            # /URAMEKU/ で検証
+scripts/check_base_path.sh /          # ルート配信で検証
+```
+
+GitHub Pages への実際のデプロイ（ワークフロー）は MVP-045 で扱います。
+
 ## フォルダ概要
 
 ```text
