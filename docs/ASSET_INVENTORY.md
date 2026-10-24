@@ -1,13 +1,13 @@
 # ウラメク — アセット台帳（収録ファイルの自動照合）
 
-収録ファイル：**534 点**（同一絵のSVG+PNG・サイズ違いを含むため、すべて別デザインではない）。
+収録ファイル：**538 点**（同一絵のSVG+PNG・サイズ違いを含むため、すべて別デザインではない）。
 
 | カテゴリ | ファイル数 | 主な用途 |
 | --- | ---: | --- |
 | `achievements` | 10 | 実績バッジ |
 | `audio` | 11 | 合成効果音 |
 | `backgrounds` | 20 | ゲーム背景 |
-| `c2-highres` | 4 | C-2 高解像度背景（タイトル A 案・事件一覧ヘッダー帯・縦長紙面タイル・コルクボード）。低解像度原画のアップスケールで正式承認前 |
+| `c2-highres` | 8 | C-2 高解像度背景（タイトル A 案・事件一覧ヘッダー帯・縦長紙面タイル・四辺コラージュ紙面・コルクボード・切り抜きの束 3 種）。低解像度原画のアップスケールで正式承認前 |
 | `brand` | 36 | ロゴ / アプリ・PWAアイコン / OGP / スプラッシュ |
 | `cases` | 70 | 5件の事件カバーと資料サムネイル |
 | `characters` | 107 | 4人の既存原画・リアクション・アイコン |
@@ -47,7 +47,7 @@ TypeScript から画像を参照するときは `"/assets/..."` を直書きせ�
 | `characterReaction(id, reaction)` / `characterIcon(id, reaction, size)` | `characters/<id>/reactions/*.png` / `icons/<reaction>-<size>.png` | png |
 | `characterPose(id, pose)` | `characters/<id>/poses/<pose>.png`（シノブ以外は `idle` のみ。型で禁止・実行時は例外） | png |
 | `backgroundUrl(name)` / `textureUrl(name)` | `backgrounds/*` / `textures/*` | svg |
-| `c2HighresUrl(name)` | `c2-highres/*`（`title` / `header` / `paper` / `board`。タイトルは A 案のみ） | webp |
+| `c2HighresUrl(name)` | `c2-highres/*`（`title` / `header` / `paper` / `paperWide` / `board` / `clipping*`。タイトルは A 案のみ） | webp |
 | `encyclopediaArt(id)` / `achievementIcon(id)` / `tutorialStep(n)` | `encyclopedia/*` / `achievements/*` / `tutorial/step-NN.*` | png |
 | `uiStamp` / `uiState` / `uiFrame` / `uiGrade` / `uiIllustration` / `uiIcon` / `uiTape(n)` | `ui/<kind>/*` | svg |
 | `propUrl(name)` / `effectReaction(name)` | `props/*` / `effects/reactions/*` | svg |

@@ -63,6 +63,64 @@ body {
   }
 }
 
+/*
+ * 資料ダイアログの背面：四辺がコラージュの紙を暗く沈めて敷く。
+ * ::backdrop は var() を継承しない実装があるため、色は直書きする。
+ */
+dialog::backdrop {
+  background:
+    linear-gradient(rgba(36, 35, 34, 0.62), rgba(36, 35, 34, 0.62)),
+    url('/assets/c2-highres/backgrounds/edge-paper-3840x2160.webp') center / cover no-repeat;
+}
+
+/*
+ * 切り抜きの束を、本文の外側の余白から覗かせる（広い画面のみ）。
+ * 本文の背面（z-index: -1）に置き、本文側へのはみ出しは左右の内側余白に収める。
+ */
+@media (min-width: 1100px) {
+  .app-main {
+    position: relative;
+    isolation: isolate;
+  }
+  .app-main::before,
+  .app-main::after {
+    position: absolute;
+    z-index: -1;
+    pointer-events: none;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    filter: drop-shadow(0 8px 10px rgba(36, 35, 34, 0.28));
+  }
+  body:has(.result) .app-main::before {
+    content: '';
+    right: -250px;
+    top: 140px;
+    width: 260px;
+    height: 260px;
+    background-image: url('/assets/c2-highres/overlays/clipping-corner-1024.webp');
+    transform: rotate(6deg);
+  }
+  body:has(.encyclopedia) .app-main::before {
+    content: '';
+    right: -250px;
+    top: 180px;
+    width: 260px;
+    height: 400px;
+    background-image: url('/assets/c2-highres/overlays/clipping-vertical-1024.webp');
+    transform: rotate(4deg);
+  }
+  body:has(.play) .app-main::after {
+    content: '';
+    left: -250px;
+    bottom: 160px;
+    width: 260px;
+    height: 200px;
+    background-image: url('/assets/c2-highres/overlays/clipping-horizontal-1024.webp');
+    transform: rotate(-5deg);
+  }
+}
+
 /* 証拠ボード：コルク（縁にコラージュがあるので、カードは内側に寄せる） */
 .evidence-board__surface {
   background-color: #a6703f;
