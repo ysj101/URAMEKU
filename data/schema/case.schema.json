@@ -116,12 +116,40 @@
       },
       "additionalProperties": false
     },
+    "fragmentKind": {
+      "type": "string",
+      "enum": [
+        "correct",
+        "overgeneralization",
+        "misread-statistic",
+        "causal-claim",
+        "ignored-counter-evidence",
+        "unverifiable",
+        "other"
+      ],
+      "description": "断片の種別（docs/GAME_RULES.md 6 章の誤り型）。correct_fragments に含まれる断片は correct、含まれない断片は correct 以外でなければならない（参照整合で検査）。"
+    },
     "headlineFragment": {
       "type": "object",
       "required": ["id", "text"],
       "properties": {
         "id": { "$ref": "#/$defs/fragmentId" },
-        "text": { "type": "string", "minLength": 1, "maxLength": 40 }
+        "text": { "type": "string", "minLength": 1, "maxLength": 40 },
+        "kind": { "$ref": "#/$defs/fragmentKind" },
+        "reason": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 120,
+          "description": "その断片が誤り（または正しい）である理由。1 文。"
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 6,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/documentId" },
+          "description": "reason の根拠となる資料 ID（documents に存在すること）。"
+        }
       },
       "additionalProperties": false
     },

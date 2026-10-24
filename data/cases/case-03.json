@@ -62,35 +62,82 @@
   "headline_fragments": [
     {
       "id": "f0",
-      "text": "8割支持は任意回答者200人での結果"
+      "text": "8割支持は任意回答者200人での結果",
+      "kind": "correct",
+      "reason": "80%は任意回答者200人のうち160人が支持した比率である。",
+      "evidence": [
+        "count",
+        "invite"
+      ]
     },
     {
       "id": "f1",
-      "text": "募集先は公式ファンコミュニティ"
+      "text": "募集先は公式ファンコミュニティ",
+      "kind": "correct",
+      "reason": "回答の募集リンクは公式ファンコミュニティにだけ投稿された。",
+      "evidence": [
+        "invite"
+      ]
     },
     {
       "id": "f2",
-      "text": "利用者全体の支持率とは断定できない"
+      "text": "利用者全体の支持率とは断定できない",
+      "kind": "correct",
+      "reason": "利用者20,000人を代表する抽出ではなく、別調査の支持率も異なるため全体には広げられない。",
+      "evidence": [
+        "population",
+        "other"
+      ]
     },
     {
       "id": "f3",
-      "text": "利用者2万人のうち8割が支持"
+      "text": "利用者2万人のうち8割が支持",
+      "kind": "misread-statistic",
+      "reason": "80%は回答者200人内の比率で、利用者20,000人を代表する抽出ではない。母数をすり替えている。",
+      "evidence": [
+        "count",
+        "population"
+      ]
     },
     {
       "id": "f4",
-      "text": "アンケート結果はすべて無意味"
+      "text": "アンケート結果はすべて無意味",
+      "kind": "overgeneralization",
+      "reason": "160÷200=80%は回答者内の比率として正しく、適用範囲が狭いだけで無意味とは言えない。",
+      "evidence": [
+        "count"
+      ]
     },
     {
       "id": "f5",
-      "text": "反対者は存在しない"
+      "text": "反対者は存在しない",
+      "kind": "ignored-counter-evidence",
+      "reason": "回答200人中40人は支持ではなく、SNSの反対投稿や別調査の不支持も存在する。",
+      "evidence": [
+        "count",
+        "comments",
+        "other"
+      ]
     },
     {
       "id": "f6",
-      "text": "回答者は無作為抽出だった"
+      "text": "回答者は無作為抽出だった",
+      "kind": "ignored-counter-evidence",
+      "reason": "ファンコミュニティにのみリンクを投稿した任意回答で、無作為抽出の証拠はない。",
+      "evidence": [
+        "invite",
+        "population"
+      ]
     },
     {
       "id": "f7",
-      "text": "どの調査も完全に正しい"
+      "text": "どの調査も完全に正しい",
+      "kind": "overgeneralization",
+      "reason": "別調査にも対象時点や質問の違いがあり、SNSの投稿量からも支持率は確定できない。",
+      "evidence": [
+        "other",
+        "comments"
+      ]
     }
   ],
   "correct_fragments": [
