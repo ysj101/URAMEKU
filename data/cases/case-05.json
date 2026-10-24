@@ -62,35 +62,80 @@
   "headline_fragments": [
     {
       "id": "f0",
-      "text": "満足評価は40%から50%へ"
+      "text": "満足評価は40%から50%へ",
+      "kind": "correct",
+      "reason": "元データでは満足評価が100人中40人から50人へ、40%から50%に変わった。",
+      "evidence": [
+        "raw"
+      ]
     },
     {
       "id": "f1",
-      "text": "絶対差は10ポイント"
+      "text": "絶対差は10ポイント",
+      "kind": "correct",
+      "reason": "40%から50%への変化を絶対差で表すと10ポイントである。",
+      "evidence": [
+        "raw",
+        "press"
+      ]
     },
     {
       "id": "f2",
-      "text": "縦軸の範囲が変化を大きく見せている"
+      "text": "縦軸の範囲が変化を大きく見せている",
+      "kind": "correct",
+      "reason": "縦軸を狭い範囲に切った制作指示により、10ポイントの差が大きく見えている。",
+      "evidence": [
+        "graphic",
+        "axis"
+      ]
     },
     {
       "id": "f3",
-      "text": "満足度が2倍に増加した"
+      "text": "満足度が2倍に増加した",
+      "kind": "misread-statistic",
+      "reason": "40%→50%は1.25倍（相対+25%）で、「2倍」は出所不明のSNS投稿だけが根拠。",
+      "evidence": [
+        "raw",
+        "press",
+        "rumor"
+      ]
     },
     {
       "id": "f4",
-      "text": "因果関係が厳密に証明された"
+      "text": "因果関係が厳密に証明された",
+      "kind": "causal-claim",
+      "reason": "対象者の選び方が同一でなく、因果関係は判断できないと設問資料に明記されている。",
+      "evidence": [
+        "questions"
+      ]
     },
     {
       "id": "f5",
-      "text": "回答者全員が満足"
+      "text": "回答者全員が満足",
+      "kind": "misread-statistic",
+      "reason": "今月も満足は100人中50人で、半数は満足と回答していない。",
+      "evidence": [
+        "raw"
+      ]
     },
     {
       "id": "f6",
-      "text": "変化はゼロである"
+      "text": "変化はゼロである",
+      "kind": "ignored-counter-evidence",
+      "reason": "40人から50人への増加は実数として存在する。",
+      "evidence": [
+        "raw"
+      ]
     },
     {
       "id": "f7",
-      "text": "数字の出所は存在しない"
+      "text": "数字の出所は存在しない",
+      "kind": "ignored-counter-evidence",
+      "reason": "各月100人の回答という元データが存在する。出所が無いのは噂の投稿のほう。",
+      "evidence": [
+        "raw",
+        "press"
+      ]
     }
   ],
   "correct_fragments": [

@@ -1,4 +1,4 @@
-import type { CaseData, Difficulty, DocumentVisual } from '../domain/types';
+import { FRAGMENT_KINDS, type CaseData, type Difficulty, type DocumentVisual } from '../domain/types';
 
 /**
  * 事件 JSON（data/cases/*.json）の検証。
@@ -45,7 +45,8 @@ const CASE_KEYS = [
 ] as const;
 const DOCUMENT_KEYS = ['id', 'title', 'content', 'cost', 'visual'] as const;
 const TASK_KEYS = ['id', 'prompt', 'unit', 'expected', 'tolerance'] as const;
-const FRAGMENT_KEYS = ['id', 'text'] as const;
+const FRAGMENT_REQUIRED_KEYS = ['id', 'text'] as const;
+const FRAGMENT_OPTIONAL_KEYS = ['kind', 'reason', 'evidence'] as const;
 const DEBRIEF_KEYS = ['explanation', 'takeaway'] as const;
 
 export interface ValidationResult {
@@ -67,11 +68,13 @@ class Checker {
     this.errors.push(`${path}: ${message}`);
   }
 
-  /** 必須キーの存在と未知キーの不在を確認する */
-  keys(path: string, obj: Obj, required: readonly string[]): void {
+  /** 必須キーの存在と未知キーの不在を確認する（optional は在っても無くてもよい） */
+  keys(path: string, obj: Obj, required: readonly string[], optional: readonly string[] = []): void {
     for (const k of required) if (!(k in obj)) this.fail(`${path}.${k}`, '必須キーがありません');
     for (const k of Object.keys(obj)) {
-      if (!required.includes(k)) this.fail(`${path}.${k}`, '未知のキーです');
+      if (!required.includes(k) && !optional.includes(k)) {
+        this.fail(`${path}.${k}`, '未知のキーです');
+      }
     }
   }
 
@@ -208,23 +211,45 @@ function checkTasks(c: Checker, raw: unknown): void {
   });
 }
 
-function checkFragments(c: Checker, raw: unknown): Set<string> {
-  const ids = new Set<string>();
-  if (!c.array('headline_fragments', raw, { minItems: 8, maxItems: 12 })) return ids;
+interface FragmentInfo {
+  /** 断片 ID → kind（kind が無い・不正な断片は含めない） */
+  kinds: Map<string, string>;
+  ids: Set<string>;
+}
+
+function checkFragments(c: Checker, raw: unknown, docIds: Set<string>): FragmentInfo {
+  const info: FragmentInfo = { kinds: new Map(), ids: new Set() };
+  if (!c.array('headline_fragments', raw, { minItems: 8, maxItems: 12 })) return info;
   raw.forEach((f, i) => {
     const path = `headline_fragments[${i}]`;
     if (!isObject(f)) {
       c.fail(path, 'オブジェクトではありません');
       return;
     }
-    c.keys(path, f, FRAGMENT_KEYS);
-    if (c.string(`${path}.id`, f.id, { pattern: FRAGMENT_ID_PATTERN })) {
-      if (ids.has(f.id)) c.fail(`${path}.id`, `断片 ID "${f.id}" が重複しています`);
-      ids.add(f.id);
+    c.keys(path, f, FRAGMENT_REQUIRED_KEYS, FRAGMENT_OPTIONAL_KEYS);
+    const id = c.string(`${path}.id`, f.id, { pattern: FRAGMENT_ID_PATTERN }) ? f.id : undefined;
+    if (id !== undefined) {
+      if (info.ids.has(id)) c.fail(`${path}.id`, `断片 ID "${id}" が重複しています`);
+      info.ids.add(id);
     }
     c.string(`${path}.text`, f.text, { minLength: 1, maxLength: 40 });
+    // --- 任意フィールド（あれば検証する） ---
+    if ('kind' in f && c.enum(`${path}.kind`, f.kind, FRAGMENT_KINDS) && id !== undefined) {
+      info.kinds.set(id, f.kind);
+    }
+    if ('reason' in f) c.string(`${path}.reason`, f.reason, { minLength: 5, maxLength: 120 });
+    if (
+      'evidence' in f &&
+      c.array(`${path}.evidence`, f.evidence, { minItems: 1, maxItems: 6, unique: true })
+    ) {
+      idList(c, `${path}.evidence`, f.evidence, DOCUMENT_ID_PATTERN).forEach((id, j) => {
+        if (docIds.size > 0 && !docIds.has(id)) {
+          c.fail(`${path}.evidence[${j}]`, `資料 ID "${id}" は documents に存在しません`);
+        }
+      });
+    }
   });
-  return ids;
+  return info;
 }
 
 function checkDebrief(c: Checker, raw: unknown): void {
@@ -260,7 +285,8 @@ export function validateCase(raw: unknown): ValidationResult {
   const costs = checkDocuments(c, raw.documents);
   const docIds = new Set(costs.keys());
   checkTasks(c, raw.analysis_tasks);
-  const fragmentIds = checkFragments(c, raw.headline_fragments);
+  const fragments = checkFragments(c, raw.headline_fragments, docIds);
+  const fragmentIds = fragments.ids;
   checkDebrief(c, raw.debrief);
 
   // --- 参照整合（JSON Schema では表現しにくい規則） ---
@@ -299,6 +325,22 @@ export function validateCase(raw: unknown): ValidationResult {
         c.fail(`correct_fragments[${i}]`, `断片 ID "${id}" は headline_fragments に存在しません`);
       }
     });
+    // kind と correct_fragments の両方向整合:
+    //   correct_fragments に含まれる断片は kind: 'correct'、含まれない断片は 'correct' 以外
+    const correct = new Set(ids);
+    for (const [fid, kind] of fragments.kinds) {
+      if (correct.has(fid) && kind !== 'correct') {
+        c.fail(
+          `headline_fragments(${fid}).kind`,
+          `correct_fragments に含まれる断片は kind: "correct" でなければなりません（"${kind}"）`,
+        );
+      } else if (!correct.has(fid) && kind === 'correct') {
+        c.fail(
+          `headline_fragments(${fid}).kind`,
+          'correct_fragments に含まれない断片に kind: "correct" は付けられません',
+        );
+      }
+    }
   }
 
   return { ok: c.errors.length === 0, errors: c.errors };
