@@ -1,0 +1,2715 @@
+{
+  "product": "ウラメク",
+  "type": "c2-art-review",
+  "issue": "MVP-034",
+  "canonical": "design/reference/c2-canonical-board.png",
+  "statuses": [
+    "pending",
+    "approved",
+    "rejected"
+  ],
+  "note": "approved は人間の目視承認者のみが設定する。スクリプトは status を変更しない。visual_flag / visual_note は AI 事前レビュー（docs/reviews/c2-art-review.md）の所見で承認ではない。",
+  "items": [
+    {
+      "path": "public/assets/characters/harada/icons/happy-128.png",
+      "character": "harada",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "happy バッジが「四角に ×」で喜びとして読めない（フォント未収録の疑い）。意図を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/harada.png",
+      "metrics": {
+        "bbox": [
+          18,
+          7,
+          123,
+          122
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/harada/reactions/happy.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/harada/icons/happy-256.png",
+      "character": "harada",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "happy バッジが「四角に ×」で喜びとして読めない（フォント未収録の疑い）。意図を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/harada.png",
+      "metrics": {
+        "bbox": [
+          39,
+          15,
+          242,
+          241
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/harada/reactions/happy.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/harada/icons/happy-512.png",
+      "character": "harada",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "happy バッジが「四角に ×」で喜びとして読めない（フォント未収録の疑い）。意図を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/harada.png",
+      "metrics": {
+        "bbox": [
+          80,
+          33,
+          482,
+          479
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/harada/reactions/happy.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/harada/icons/happy-64.png",
+      "character": "harada",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "happy バッジが「四角に ×」で喜びとして読めない（フォント未収録の疑い）。意図を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/harada.png",
+      "metrics": {
+        "bbox": [
+          8,
+          2,
+          63,
+          62
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/harada/reactions/happy.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/harada/icons/idle-128.png",
+      "character": "harada",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "ok",
+      "reference": "design/reference/harada.png",
+      "metrics": {
+        "bbox": [
+          18,
+          7,
+          110,
+          122
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/harada/reactions/idle.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/harada/icons/idle-256.png",
+      "character": "harada",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "ok",
+      "reference": "design/reference/harada.png",
+      "metrics": {
+        "bbox": [
+          39,
+          15,
+          217,
+          241
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/harada/reactions/idle.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/harada/icons/idle-512.png",
+      "character": "harada",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "ok",
+      "reference": "design/reference/harada.png",
+      "metrics": {
+        "bbox": [
+          80,
+          33,
+          432,
+          479
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/harada/reactions/idle.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/harada/icons/idle-64.png",
+      "character": "harada",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "ok",
+      "reference": "design/reference/harada.png",
+      "metrics": {
+        "bbox": [
+          8,
+          2,
+          56,
+          62
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/harada/reactions/idle.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/harada/icons/surprised-128.png",
+      "character": "harada",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "ok",
+      "reference": "design/reference/harada.png",
+      "metrics": {
+        "bbox": [
+          18,
+          7,
+          123,
+          122
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/harada/reactions/surprised.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/harada/icons/surprised-256.png",
+      "character": "harada",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "ok",
+      "reference": "design/reference/harada.png",
+      "metrics": {
+        "bbox": [
+          39,
+          15,
+          242,
+          241
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/harada/reactions/surprised.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/harada/icons/surprised-512.png",
+      "character": "harada",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "ok",
+      "reference": "design/reference/harada.png",
+      "metrics": {
+        "bbox": [
+          80,
+          33,
+          482,
+          479
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/harada/reactions/surprised.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/harada/icons/surprised-64.png",
+      "character": "harada",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "ok",
+      "reference": "design/reference/harada.png",
+      "metrics": {
+        "bbox": [
+          8,
+          2,
+          63,
+          62
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/harada/reactions/surprised.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/harada/icons/thinking-128.png",
+      "character": "harada",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "ok",
+      "reference": "design/reference/harada.png",
+      "metrics": {
+        "bbox": [
+          18,
+          7,
+          123,
+          122
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/harada/reactions/thinking.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/harada/icons/thinking-256.png",
+      "character": "harada",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "ok",
+      "reference": "design/reference/harada.png",
+      "metrics": {
+        "bbox": [
+          39,
+          15,
+          242,
+          241
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/harada/reactions/thinking.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/harada/icons/thinking-512.png",
+      "character": "harada",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "ok",
+      "reference": "design/reference/harada.png",
+      "metrics": {
+        "bbox": [
+          80,
+          33,
+          482,
+          479
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/harada/reactions/thinking.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/harada/icons/thinking-64.png",
+      "character": "harada",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "ok",
+      "reference": "design/reference/harada.png",
+      "metrics": {
+        "bbox": [
+          8,
+          2,
+          63,
+          62
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/harada/reactions/thinking.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/harada/icons/worried-128.png",
+      "character": "harada",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "ok",
+      "reference": "design/reference/harada.png",
+      "metrics": {
+        "bbox": [
+          18,
+          7,
+          123,
+          122
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/harada/reactions/worried.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/harada/icons/worried-256.png",
+      "character": "harada",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "ok",
+      "reference": "design/reference/harada.png",
+      "metrics": {
+        "bbox": [
+          39,
+          15,
+          242,
+          241
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/harada/reactions/worried.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/harada/icons/worried-512.png",
+      "character": "harada",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "ok",
+      "reference": "design/reference/harada.png",
+      "metrics": {
+        "bbox": [
+          80,
+          33,
+          482,
+          479
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/harada/reactions/worried.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/harada/icons/worried-64.png",
+      "character": "harada",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "ok",
+      "reference": "design/reference/harada.png",
+      "metrics": {
+        "bbox": [
+          8,
+          2,
+          63,
+          62
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/harada/reactions/worried.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/harada/poses/idle.png",
+      "character": "harada",
+      "kind": "pose",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "パイプを口元から離して持ち書類を抱える。全身は正本に無い。許容可否を確認",
+      "auto_flag": "check",
+      "reference": "design/reference/harada.png",
+      "metrics": {
+        "bbox": [
+          373,
+          81,
+          1275,
+          1954
+        ],
+        "iou_full": 0.274,
+        "iou_upper": 0.437,
+        "aspect_ratio": 0.568,
+        "color_distance": 0.305
+      }
+    },
+    {
+      "path": "public/assets/characters/harada/reactions/happy.png",
+      "character": "harada",
+      "kind": "reaction",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "happy バッジが「四角に ×」で喜びとして読めない（フォント未収録の疑い）。意図を確認",
+      "auto_flag": "check",
+      "reference": "design/reference/harada.png",
+      "metrics": {
+        "bbox": [
+          164,
+          72,
+          860,
+          952
+        ],
+        "iou_full": 0.425,
+        "iou_upper": 0.438,
+        "aspect_ratio": 0.933,
+        "color_distance": 0.312,
+        "changed_ratio": 0.0239,
+        "diff_bbox": [
+          780,
+          83,
+          959,
+          261
+        ],
+        "diff_in_badge_zone": true
+      }
+    },
+    {
+      "path": "public/assets/characters/harada/reactions/idle.png",
+      "character": "harada",
+      "kind": "reaction",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "check",
+      "reference": "design/reference/harada.png",
+      "metrics": {
+        "bbox": [
+          164,
+          72,
+          860,
+          952
+        ],
+        "iou_full": 0.425,
+        "iou_upper": 0.438,
+        "aspect_ratio": 0.933,
+        "color_distance": 0.312
+      }
+    },
+    {
+      "path": "public/assets/characters/harada/reactions/surprised.png",
+      "character": "harada",
+      "kind": "reaction",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "check",
+      "reference": "design/reference/harada.png",
+      "metrics": {
+        "bbox": [
+          164,
+          72,
+          860,
+          952
+        ],
+        "iou_full": 0.425,
+        "iou_upper": 0.438,
+        "aspect_ratio": 0.933,
+        "color_distance": 0.312,
+        "changed_ratio": 0.0239,
+        "diff_bbox": [
+          780,
+          83,
+          959,
+          261
+        ],
+        "diff_in_badge_zone": true
+      }
+    },
+    {
+      "path": "public/assets/characters/harada/reactions/thinking.png",
+      "character": "harada",
+      "kind": "reaction",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "check",
+      "reference": "design/reference/harada.png",
+      "metrics": {
+        "bbox": [
+          164,
+          72,
+          860,
+          952
+        ],
+        "iou_full": 0.425,
+        "iou_upper": 0.438,
+        "aspect_ratio": 0.933,
+        "color_distance": 0.312,
+        "changed_ratio": 0.0239,
+        "diff_bbox": [
+          780,
+          83,
+          959,
+          261
+        ],
+        "diff_in_badge_zone": true
+      }
+    },
+    {
+      "path": "public/assets/characters/harada/reactions/worried.png",
+      "character": "harada",
+      "kind": "reaction",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "check",
+      "reference": "design/reference/harada.png",
+      "metrics": {
+        "bbox": [
+          164,
+          72,
+          860,
+          952
+        ],
+        "iou_full": 0.425,
+        "iou_upper": 0.438,
+        "aspect_ratio": 0.933,
+        "color_distance": 0.312,
+        "changed_ratio": 0.0239,
+        "diff_bbox": [
+          780,
+          83,
+          959,
+          261
+        ],
+        "diff_in_badge_zone": true
+      }
+    },
+    {
+      "path": "public/assets/characters/kuro/icons/happy-128.png",
+      "character": "kuro",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "happy バッジが「四角に ×」で喜びとして読めない（フォント未収録の疑い）。意図を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/kuro.png",
+      "metrics": {
+        "bbox": [
+          10,
+          7,
+          123,
+          77
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/kuro/reactions/happy.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/kuro/icons/happy-256.png",
+      "character": "kuro",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "happy バッジが「四角に ×」で喜びとして読めない（フォント未収録の疑い）。意図を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/kuro.png",
+      "metrics": {
+        "bbox": [
+          22,
+          16,
+          242,
+          151
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/kuro/reactions/happy.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/kuro/icons/happy-512.png",
+      "character": "kuro",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "happy バッジが「四角に ×」で喜びとして読めない（フォント未収録の疑い）。意図を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/kuro.png",
+      "metrics": {
+        "bbox": [
+          46,
+          34,
+          482,
+          300
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/kuro/reactions/happy.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/kuro/icons/happy-64.png",
+      "character": "kuro",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "happy バッジが「四角に ×」で喜びとして読めない（フォント未収録の疑い）。意図を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/kuro.png",
+      "metrics": {
+        "bbox": [
+          4,
+          2,
+          63,
+          40
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/kuro/reactions/happy.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/kuro/icons/idle-128.png",
+      "character": "kuro",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "目の下で水平に切れており鼻・胴・尻尾が無い。切り出し意図を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/kuro.png",
+      "metrics": {
+        "bbox": [
+          10,
+          7,
+          103,
+          77
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/kuro/reactions/idle.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/kuro/icons/idle-256.png",
+      "character": "kuro",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "目の下で水平に切れており鼻・胴・尻尾が無い。切り出し意図を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/kuro.png",
+      "metrics": {
+        "bbox": [
+          22,
+          16,
+          204,
+          151
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/kuro/reactions/idle.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/kuro/icons/idle-512.png",
+      "character": "kuro",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "目の下で水平に切れており鼻・胴・尻尾が無い。切り出し意図を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/kuro.png",
+      "metrics": {
+        "bbox": [
+          46,
+          34,
+          406,
+          300
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/kuro/reactions/idle.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/kuro/icons/idle-64.png",
+      "character": "kuro",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "目の下で水平に切れており鼻・胴・尻尾が無い。切り出し意図を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/kuro.png",
+      "metrics": {
+        "bbox": [
+          4,
+          2,
+          53,
+          40
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/kuro/reactions/idle.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/kuro/icons/surprised-128.png",
+      "character": "kuro",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "目の下で水平に切れており鼻・胴・尻尾が無い。切り出し意図を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/kuro.png",
+      "metrics": {
+        "bbox": [
+          10,
+          7,
+          123,
+          77
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/kuro/reactions/surprised.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/kuro/icons/surprised-256.png",
+      "character": "kuro",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "目の下で水平に切れており鼻・胴・尻尾が無い。切り出し意図を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/kuro.png",
+      "metrics": {
+        "bbox": [
+          22,
+          16,
+          242,
+          151
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/kuro/reactions/surprised.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/kuro/icons/surprised-512.png",
+      "character": "kuro",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "目の下で水平に切れており鼻・胴・尻尾が無い。切り出し意図を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/kuro.png",
+      "metrics": {
+        "bbox": [
+          46,
+          34,
+          482,
+          300
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/kuro/reactions/surprised.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/kuro/icons/surprised-64.png",
+      "character": "kuro",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "目の下で水平に切れており鼻・胴・尻尾が無い。切り出し意図を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/kuro.png",
+      "metrics": {
+        "bbox": [
+          4,
+          2,
+          63,
+          40
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/kuro/reactions/surprised.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/kuro/icons/thinking-128.png",
+      "character": "kuro",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "目の下で水平に切れており鼻・胴・尻尾が無い。切り出し意図を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/kuro.png",
+      "metrics": {
+        "bbox": [
+          10,
+          7,
+          123,
+          77
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/kuro/reactions/thinking.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/kuro/icons/thinking-256.png",
+      "character": "kuro",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "目の下で水平に切れており鼻・胴・尻尾が無い。切り出し意図を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/kuro.png",
+      "metrics": {
+        "bbox": [
+          22,
+          16,
+          242,
+          151
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/kuro/reactions/thinking.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/kuro/icons/thinking-512.png",
+      "character": "kuro",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "目の下で水平に切れており鼻・胴・尻尾が無い。切り出し意図を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/kuro.png",
+      "metrics": {
+        "bbox": [
+          46,
+          34,
+          482,
+          300
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/kuro/reactions/thinking.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/kuro/icons/thinking-64.png",
+      "character": "kuro",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "目の下で水平に切れており鼻・胴・尻尾が無い。切り出し意図を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/kuro.png",
+      "metrics": {
+        "bbox": [
+          4,
+          2,
+          63,
+          40
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/kuro/reactions/thinking.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/kuro/icons/worried-128.png",
+      "character": "kuro",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "目の下で水平に切れており鼻・胴・尻尾が無い。切り出し意図を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/kuro.png",
+      "metrics": {
+        "bbox": [
+          10,
+          7,
+          123,
+          77
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/kuro/reactions/worried.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/kuro/icons/worried-256.png",
+      "character": "kuro",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "目の下で水平に切れており鼻・胴・尻尾が無い。切り出し意図を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/kuro.png",
+      "metrics": {
+        "bbox": [
+          22,
+          16,
+          242,
+          151
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/kuro/reactions/worried.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/kuro/icons/worried-512.png",
+      "character": "kuro",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "目の下で水平に切れており鼻・胴・尻尾が無い。切り出し意図を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/kuro.png",
+      "metrics": {
+        "bbox": [
+          46,
+          34,
+          482,
+          300
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/kuro/reactions/worried.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/kuro/icons/worried-64.png",
+      "character": "kuro",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "目の下で水平に切れており鼻・胴・尻尾が無い。切り出し意図を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/kuro.png",
+      "metrics": {
+        "bbox": [
+          4,
+          2,
+          63,
+          40
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/kuro/reactions/worried.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/kuro/poses/idle.png",
+      "character": "kuro",
+      "kind": "pose",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "全身・脚は正本に無い（胸像のみ）。下半身の承認が必要",
+      "auto_flag": "ok",
+      "reference": "design/reference/kuro.png",
+      "metrics": {
+        "bbox": [
+          177,
+          873,
+          1349,
+          1954
+        ],
+        "iou_full": 0.495,
+        "iou_upper": 0.629,
+        "aspect_ratio": 0.828,
+        "color_distance": 0.057
+      }
+    },
+    {
+      "path": "public/assets/characters/kuro/reactions/happy.png",
+      "character": "kuro",
+      "kind": "reaction",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "happy バッジが「四角に ×」で喜びとして読めない（フォント未収録の疑い）。意図を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/kuro.png",
+      "metrics": {
+        "bbox": [
+          96,
+          72,
+          806,
+          594
+        ],
+        "iou_full": 0.553,
+        "iou_upper": 0.553,
+        "aspect_ratio": 1.039,
+        "color_distance": 0.062,
+        "changed_ratio": 0.0239,
+        "diff_bbox": [
+          780,
+          83,
+          959,
+          261
+        ],
+        "diff_in_badge_zone": true
+      }
+    },
+    {
+      "path": "public/assets/characters/kuro/reactions/idle.png",
+      "character": "kuro",
+      "kind": "reaction",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "目の下で水平に切れており鼻・胴・尻尾が無い。切り出し意図を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/kuro.png",
+      "metrics": {
+        "bbox": [
+          96,
+          72,
+          806,
+          594
+        ],
+        "iou_full": 0.553,
+        "iou_upper": 0.553,
+        "aspect_ratio": 1.039,
+        "color_distance": 0.062
+      }
+    },
+    {
+      "path": "public/assets/characters/kuro/reactions/surprised.png",
+      "character": "kuro",
+      "kind": "reaction",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "目の下で水平に切れており鼻・胴・尻尾が無い。切り出し意図を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/kuro.png",
+      "metrics": {
+        "bbox": [
+          96,
+          72,
+          806,
+          594
+        ],
+        "iou_full": 0.553,
+        "iou_upper": 0.553,
+        "aspect_ratio": 1.039,
+        "color_distance": 0.062,
+        "changed_ratio": 0.0239,
+        "diff_bbox": [
+          780,
+          83,
+          959,
+          261
+        ],
+        "diff_in_badge_zone": true
+      }
+    },
+    {
+      "path": "public/assets/characters/kuro/reactions/thinking.png",
+      "character": "kuro",
+      "kind": "reaction",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "目の下で水平に切れており鼻・胴・尻尾が無い。切り出し意図を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/kuro.png",
+      "metrics": {
+        "bbox": [
+          96,
+          72,
+          806,
+          594
+        ],
+        "iou_full": 0.553,
+        "iou_upper": 0.553,
+        "aspect_ratio": 1.039,
+        "color_distance": 0.062,
+        "changed_ratio": 0.0239,
+        "diff_bbox": [
+          780,
+          83,
+          959,
+          261
+        ],
+        "diff_in_badge_zone": true
+      }
+    },
+    {
+      "path": "public/assets/characters/kuro/reactions/worried.png",
+      "character": "kuro",
+      "kind": "reaction",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "目の下で水平に切れており鼻・胴・尻尾が無い。切り出し意図を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/kuro.png",
+      "metrics": {
+        "bbox": [
+          96,
+          72,
+          806,
+          594
+        ],
+        "iou_full": 0.553,
+        "iou_upper": 0.553,
+        "aspect_ratio": 1.039,
+        "color_distance": 0.062,
+        "changed_ratio": 0.0239,
+        "diff_bbox": [
+          780,
+          83,
+          959,
+          261
+        ],
+        "diff_in_badge_zone": true
+      }
+    },
+    {
+      "path": "public/assets/characters/mega/icons/happy-128.png",
+      "character": "mega",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "happy バッジが「四角に ×」で喜びとして読めない（フォント未収録の疑い）。意図を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/mega.png",
+      "metrics": {
+        "bbox": [
+          23,
+          6,
+          123,
+          122
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/mega/reactions/happy.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/mega/icons/happy-256.png",
+      "character": "mega",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "happy バッジが「四角に ×」で喜びとして読めない（フォント未収録の疑い）。意図を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/mega.png",
+      "metrics": {
+        "bbox": [
+          48,
+          16,
+          242,
+          241
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/mega/reactions/happy.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/mega/icons/happy-512.png",
+      "character": "mega",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "happy バッジが「四角に ×」で喜びとして読めない（フォント未収録の疑い）。意図を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/mega.png",
+      "metrics": {
+        "bbox": [
+          99,
+          34,
+          482,
+          479
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/mega/reactions/happy.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/mega/icons/happy-64.png",
+      "character": "mega",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "happy バッジが「四角に ×」で喜びとして読めない（フォント未収録の疑い）。意図を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/mega.png",
+      "metrics": {
+        "bbox": [
+          10,
+          2,
+          63,
+          62
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/mega/reactions/happy.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/mega/icons/idle-128.png",
+      "character": "mega",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "小物が新聞→グラフ報告書に差し替わり、髪のグレー面が正本より大きい。許容可否を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/mega.png",
+      "metrics": {
+        "bbox": [
+          23,
+          6,
+          102,
+          122
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/mega/reactions/idle.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/mega/icons/idle-256.png",
+      "character": "mega",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "小物が新聞→グラフ報告書に差し替わり、髪のグレー面が正本より大きい。許容可否を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/mega.png",
+      "metrics": {
+        "bbox": [
+          48,
+          16,
+          202,
+          241
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/mega/reactions/idle.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/mega/icons/idle-512.png",
+      "character": "mega",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "小物が新聞→グラフ報告書に差し替わり、髪のグレー面が正本より大きい。許容可否を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/mega.png",
+      "metrics": {
+        "bbox": [
+          99,
+          34,
+          401,
+          479
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/mega/reactions/idle.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/mega/icons/idle-64.png",
+      "character": "mega",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "小物が新聞→グラフ報告書に差し替わり、髪のグレー面が正本より大きい。許容可否を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/mega.png",
+      "metrics": {
+        "bbox": [
+          10,
+          2,
+          52,
+          62
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/mega/reactions/idle.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/mega/icons/surprised-128.png",
+      "character": "mega",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "小物が新聞→グラフ報告書に差し替わり、髪のグレー面が正本より大きい。許容可否を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/mega.png",
+      "metrics": {
+        "bbox": [
+          23,
+          6,
+          123,
+          122
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/mega/reactions/surprised.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/mega/icons/surprised-256.png",
+      "character": "mega",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "小物が新聞→グラフ報告書に差し替わり、髪のグレー面が正本より大きい。許容可否を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/mega.png",
+      "metrics": {
+        "bbox": [
+          48,
+          16,
+          242,
+          241
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/mega/reactions/surprised.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/mega/icons/surprised-512.png",
+      "character": "mega",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "小物が新聞→グラフ報告書に差し替わり、髪のグレー面が正本より大きい。許容可否を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/mega.png",
+      "metrics": {
+        "bbox": [
+          99,
+          34,
+          482,
+          479
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/mega/reactions/surprised.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/mega/icons/surprised-64.png",
+      "character": "mega",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "小物が新聞→グラフ報告書に差し替わり、髪のグレー面が正本より大きい。許容可否を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/mega.png",
+      "metrics": {
+        "bbox": [
+          10,
+          2,
+          63,
+          62
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/mega/reactions/surprised.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/mega/icons/thinking-128.png",
+      "character": "mega",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "小物が新聞→グラフ報告書に差し替わり、髪のグレー面が正本より大きい。許容可否を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/mega.png",
+      "metrics": {
+        "bbox": [
+          23,
+          6,
+          123,
+          122
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/mega/reactions/thinking.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/mega/icons/thinking-256.png",
+      "character": "mega",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "小物が新聞→グラフ報告書に差し替わり、髪のグレー面が正本より大きい。許容可否を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/mega.png",
+      "metrics": {
+        "bbox": [
+          48,
+          16,
+          242,
+          241
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/mega/reactions/thinking.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/mega/icons/thinking-512.png",
+      "character": "mega",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "小物が新聞→グラフ報告書に差し替わり、髪のグレー面が正本より大きい。許容可否を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/mega.png",
+      "metrics": {
+        "bbox": [
+          99,
+          34,
+          482,
+          479
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/mega/reactions/thinking.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/mega/icons/thinking-64.png",
+      "character": "mega",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "小物が新聞→グラフ報告書に差し替わり、髪のグレー面が正本より大きい。許容可否を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/mega.png",
+      "metrics": {
+        "bbox": [
+          10,
+          2,
+          63,
+          62
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/mega/reactions/thinking.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/mega/icons/worried-128.png",
+      "character": "mega",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "小物が新聞→グラフ報告書に差し替わり、髪のグレー面が正本より大きい。許容可否を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/mega.png",
+      "metrics": {
+        "bbox": [
+          23,
+          6,
+          123,
+          122
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/mega/reactions/worried.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/mega/icons/worried-256.png",
+      "character": "mega",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "小物が新聞→グラフ報告書に差し替わり、髪のグレー面が正本より大きい。許容可否を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/mega.png",
+      "metrics": {
+        "bbox": [
+          48,
+          16,
+          242,
+          241
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/mega/reactions/worried.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/mega/icons/worried-512.png",
+      "character": "mega",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "小物が新聞→グラフ報告書に差し替わり、髪のグレー面が正本より大きい。許容可否を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/mega.png",
+      "metrics": {
+        "bbox": [
+          99,
+          34,
+          482,
+          479
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/mega/reactions/worried.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/mega/icons/worried-64.png",
+      "character": "mega",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "小物が新聞→グラフ報告書に差し替わり、髪のグレー面が正本より大きい。許容可否を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/mega.png",
+      "metrics": {
+        "bbox": [
+          10,
+          2,
+          63,
+          62
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/mega/reactions/worried.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/mega/poses/idle.png",
+      "character": "mega",
+      "kind": "pose",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "小物が新聞→グラフ報告書に差し替わり、髪のグレー面が正本より大きい。許容可否を確認",
+      "auto_flag": "check",
+      "reference": "design/reference/mega.png",
+      "metrics": {
+        "bbox": [
+          378,
+          105,
+          1169,
+          1954
+        ],
+        "iou_full": 0.274,
+        "iou_upper": 0.484,
+        "aspect_ratio": 0.514,
+        "color_distance": 0.304
+      }
+    },
+    {
+      "path": "public/assets/characters/mega/reactions/happy.png",
+      "character": "mega",
+      "kind": "reaction",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "happy バッジが「四角に ×」で喜びとして読めない（フォント未収録の疑い）。意図を確認",
+      "auto_flag": "check",
+      "reference": "design/reference/mega.png",
+      "metrics": {
+        "bbox": [
+          203,
+          73,
+          796,
+          952
+        ],
+        "iou_full": 0.528,
+        "iou_upper": 0.474,
+        "aspect_ratio": 0.811,
+        "color_distance": 0.35,
+        "changed_ratio": 0.0239,
+        "diff_bbox": [
+          780,
+          83,
+          959,
+          261
+        ],
+        "diff_in_badge_zone": true
+      }
+    },
+    {
+      "path": "public/assets/characters/mega/reactions/idle.png",
+      "character": "mega",
+      "kind": "reaction",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "小物が新聞→グラフ報告書に差し替わり、髪のグレー面が正本より大きい。許容可否を確認",
+      "auto_flag": "check",
+      "reference": "design/reference/mega.png",
+      "metrics": {
+        "bbox": [
+          203,
+          73,
+          796,
+          952
+        ],
+        "iou_full": 0.528,
+        "iou_upper": 0.474,
+        "aspect_ratio": 0.811,
+        "color_distance": 0.35
+      }
+    },
+    {
+      "path": "public/assets/characters/mega/reactions/surprised.png",
+      "character": "mega",
+      "kind": "reaction",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "小物が新聞→グラフ報告書に差し替わり、髪のグレー面が正本より大きい。許容可否を確認",
+      "auto_flag": "check",
+      "reference": "design/reference/mega.png",
+      "metrics": {
+        "bbox": [
+          203,
+          73,
+          796,
+          952
+        ],
+        "iou_full": 0.528,
+        "iou_upper": 0.474,
+        "aspect_ratio": 0.811,
+        "color_distance": 0.35,
+        "changed_ratio": 0.0239,
+        "diff_bbox": [
+          780,
+          83,
+          959,
+          261
+        ],
+        "diff_in_badge_zone": true
+      }
+    },
+    {
+      "path": "public/assets/characters/mega/reactions/thinking.png",
+      "character": "mega",
+      "kind": "reaction",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "小物が新聞→グラフ報告書に差し替わり、髪のグレー面が正本より大きい。許容可否を確認",
+      "auto_flag": "check",
+      "reference": "design/reference/mega.png",
+      "metrics": {
+        "bbox": [
+          203,
+          73,
+          796,
+          952
+        ],
+        "iou_full": 0.528,
+        "iou_upper": 0.474,
+        "aspect_ratio": 0.811,
+        "color_distance": 0.35,
+        "changed_ratio": 0.0239,
+        "diff_bbox": [
+          780,
+          83,
+          959,
+          261
+        ],
+        "diff_in_badge_zone": true
+      }
+    },
+    {
+      "path": "public/assets/characters/mega/reactions/worried.png",
+      "character": "mega",
+      "kind": "reaction",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "小物が新聞→グラフ報告書に差し替わり、髪のグレー面が正本より大きい。許容可否を確認",
+      "auto_flag": "check",
+      "reference": "design/reference/mega.png",
+      "metrics": {
+        "bbox": [
+          203,
+          73,
+          796,
+          952
+        ],
+        "iou_full": 0.528,
+        "iou_upper": 0.474,
+        "aspect_ratio": 0.811,
+        "color_distance": 0.35,
+        "changed_ratio": 0.0239,
+        "diff_bbox": [
+          780,
+          83,
+          959,
+          261
+        ],
+        "diff_in_badge_zone": true
+      }
+    },
+    {
+      "path": "public/assets/characters/shinobu/icons/happy-128.png",
+      "character": "shinobu",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "happy バッジが「四角に ×」で喜びとして読めない（フォント未収録の疑い）。意図を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/shinobu.png",
+      "metrics": {
+        "bbox": [
+          27,
+          7,
+          123,
+          110
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/shinobu/reactions/happy.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/shinobu/icons/happy-256.png",
+      "character": "shinobu",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "happy バッジが「四角に ×」で喜びとして読めない（フォント未収録の疑い）。意図を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/shinobu.png",
+      "metrics": {
+        "bbox": [
+          25,
+          16,
+          242,
+          217
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/shinobu/reactions/happy.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/shinobu/icons/happy-512.png",
+      "character": "shinobu",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "happy バッジが「四角に ×」で喜びとして読めない（フォント未収録の疑い）。意図を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/shinobu.png",
+      "metrics": {
+        "bbox": [
+          50,
+          35,
+          482,
+          432
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/shinobu/reactions/happy.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/shinobu/icons/happy-64.png",
+      "character": "shinobu",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "happy バッジが「四角に ×」で喜びとして読めない（フォント未収録の疑い）。意図を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/shinobu.png",
+      "metrics": {
+        "bbox": [
+          12,
+          2,
+          63,
+          56
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/shinobu/reactions/happy.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/shinobu/icons/idle-128.png",
+      "character": "shinobu",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "ok",
+      "reference": "design/reference/shinobu.png",
+      "metrics": {
+        "bbox": [
+          27,
+          7,
+          103,
+          110
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/shinobu/reactions/idle.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/shinobu/icons/idle-256.png",
+      "character": "shinobu",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "ok",
+      "reference": "design/reference/shinobu.png",
+      "metrics": {
+        "bbox": [
+          25,
+          16,
+          203,
+          217
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/shinobu/reactions/idle.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/shinobu/icons/idle-512.png",
+      "character": "shinobu",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "ok",
+      "reference": "design/reference/shinobu.png",
+      "metrics": {
+        "bbox": [
+          50,
+          35,
+          428,
+          432
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/shinobu/reactions/idle.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/shinobu/icons/idle-64.png",
+      "character": "shinobu",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "ok",
+      "reference": "design/reference/shinobu.png",
+      "metrics": {
+        "bbox": [
+          12,
+          2,
+          53,
+          56
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/shinobu/reactions/idle.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/shinobu/icons/surprised-128.png",
+      "character": "shinobu",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "ok",
+      "reference": "design/reference/shinobu.png",
+      "metrics": {
+        "bbox": [
+          27,
+          7,
+          123,
+          110
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/shinobu/reactions/surprised.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/shinobu/icons/surprised-256.png",
+      "character": "shinobu",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "ok",
+      "reference": "design/reference/shinobu.png",
+      "metrics": {
+        "bbox": [
+          25,
+          16,
+          242,
+          217
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/shinobu/reactions/surprised.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/shinobu/icons/surprised-512.png",
+      "character": "shinobu",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "ok",
+      "reference": "design/reference/shinobu.png",
+      "metrics": {
+        "bbox": [
+          50,
+          35,
+          482,
+          432
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/shinobu/reactions/surprised.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/shinobu/icons/surprised-64.png",
+      "character": "shinobu",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "ok",
+      "reference": "design/reference/shinobu.png",
+      "metrics": {
+        "bbox": [
+          12,
+          2,
+          63,
+          56
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/shinobu/reactions/surprised.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/shinobu/icons/thinking-128.png",
+      "character": "shinobu",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "ok",
+      "reference": "design/reference/shinobu.png",
+      "metrics": {
+        "bbox": [
+          27,
+          7,
+          123,
+          110
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/shinobu/reactions/thinking.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/shinobu/icons/thinking-256.png",
+      "character": "shinobu",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "ok",
+      "reference": "design/reference/shinobu.png",
+      "metrics": {
+        "bbox": [
+          25,
+          16,
+          242,
+          217
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/shinobu/reactions/thinking.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/shinobu/icons/thinking-512.png",
+      "character": "shinobu",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "ok",
+      "reference": "design/reference/shinobu.png",
+      "metrics": {
+        "bbox": [
+          50,
+          35,
+          482,
+          432
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/shinobu/reactions/thinking.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/shinobu/icons/thinking-64.png",
+      "character": "shinobu",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "ok",
+      "reference": "design/reference/shinobu.png",
+      "metrics": {
+        "bbox": [
+          12,
+          2,
+          63,
+          56
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/shinobu/reactions/thinking.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/shinobu/icons/worried-128.png",
+      "character": "shinobu",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "ok",
+      "reference": "design/reference/shinobu.png",
+      "metrics": {
+        "bbox": [
+          27,
+          7,
+          123,
+          110
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/shinobu/reactions/worried.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/shinobu/icons/worried-256.png",
+      "character": "shinobu",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "ok",
+      "reference": "design/reference/shinobu.png",
+      "metrics": {
+        "bbox": [
+          25,
+          16,
+          242,
+          217
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/shinobu/reactions/worried.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/shinobu/icons/worried-512.png",
+      "character": "shinobu",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "ok",
+      "reference": "design/reference/shinobu.png",
+      "metrics": {
+        "bbox": [
+          50,
+          35,
+          482,
+          432
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/shinobu/reactions/worried.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/shinobu/icons/worried-64.png",
+      "character": "shinobu",
+      "kind": "icon",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "ok",
+      "reference": "design/reference/shinobu.png",
+      "metrics": {
+        "bbox": [
+          12,
+          2,
+          63,
+          56
+        ],
+        "icon_vs_reaction_mean_diff": 0.0,
+        "derived_from": "public/assets/characters/shinobu/reactions/worried.png"
+      }
+    },
+    {
+      "path": "public/assets/characters/shinobu/poses/explain.png",
+      "character": "shinobu",
+      "kind": "pose",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "右腕のみベクター合成（顔は無改変）。腕の質感とペン消失、正本に無い下半身を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/shinobu.png",
+      "metrics": {
+        "bbox": [
+          253,
+          18,
+          945,
+          1426
+        ],
+        "iou_full": 0.358,
+        "iou_upper": 0.611,
+        "aspect_ratio": 0.536,
+        "color_distance": 0.176,
+        "master_size_match": true,
+        "master_diff_bbox": [
+          685,
+          430,
+          945,
+          747
+        ],
+        "head_layer_bbox": [
+          277,
+          18,
+          877,
+          483
+        ],
+        "head_changed_pixels": 0
+      }
+    },
+    {
+      "path": "public/assets/characters/shinobu/poses/idle.png",
+      "character": "shinobu",
+      "kind": "pose",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "全身・脚は正本に無い（胸像のみ）。下半身の承認が必要",
+      "auto_flag": "ok",
+      "reference": "design/reference/shinobu.png",
+      "metrics": {
+        "bbox": [
+          253,
+          18,
+          877,
+          1426
+        ],
+        "iou_full": 0.34,
+        "iou_upper": 0.615,
+        "aspect_ratio": 0.483,
+        "color_distance": 0.172,
+        "master_size_match": true,
+        "master_diff_bbox": null,
+        "head_layer_bbox": [
+          277,
+          18,
+          877,
+          483
+        ],
+        "head_changed_pixels": 0
+      }
+    },
+    {
+      "path": "public/assets/characters/shinobu/poses/inspect.png",
+      "character": "shinobu",
+      "kind": "pose",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "右腕のみベクター合成（顔は無改変）。腕の質感とペン消失、正本に無い下半身を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/shinobu.png",
+      "metrics": {
+        "bbox": [
+          253,
+          18,
+          931,
+          1426
+        ],
+        "iou_full": 0.354,
+        "iou_upper": 0.628,
+        "aspect_ratio": 0.525,
+        "color_distance": 0.174,
+        "master_size_match": true,
+        "master_diff_bbox": [
+          686,
+          505,
+          932,
+          747
+        ],
+        "head_layer_bbox": [
+          277,
+          18,
+          877,
+          483
+        ],
+        "head_changed_pixels": 0
+      }
+    },
+    {
+      "path": "public/assets/characters/shinobu/poses/point.png",
+      "character": "shinobu",
+      "kind": "pose",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "右腕のみベクター合成（顔は無改変）。腕の質感とペン消失、正本に無い下半身を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/shinobu.png",
+      "metrics": {
+        "bbox": [
+          253,
+          18,
+          982,
+          1426
+        ],
+        "iou_full": 0.369,
+        "iou_upper": 0.552,
+        "aspect_ratio": 0.565,
+        "color_distance": 0.176,
+        "master_size_match": true,
+        "master_diff_bbox": [
+          685,
+          368,
+          983,
+          747
+        ],
+        "head_layer_bbox": [
+          277,
+          18,
+          877,
+          483
+        ],
+        "head_changed_pixels": 0
+      }
+    },
+    {
+      "path": "public/assets/characters/shinobu/reactions/happy.png",
+      "character": "shinobu",
+      "kind": "reaction",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "happy バッジが「四角に ×」で喜びとして読めない（フォント未収録の疑い）。意図を確認",
+      "auto_flag": "ok",
+      "reference": "design/reference/shinobu.png",
+      "metrics": {
+        "bbox": [
+          235,
+          75,
+          803,
+          858
+        ],
+        "iou_full": 0.582,
+        "iou_upper": 0.614,
+        "aspect_ratio": 0.791,
+        "color_distance": 0.191,
+        "changed_ratio": 0.0239,
+        "diff_bbox": [
+          780,
+          83,
+          959,
+          261
+        ],
+        "diff_in_badge_zone": true
+      }
+    },
+    {
+      "path": "public/assets/characters/shinobu/reactions/idle.png",
+      "character": "shinobu",
+      "kind": "reaction",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "ok",
+      "reference": "design/reference/shinobu.png",
+      "metrics": {
+        "bbox": [
+          235,
+          75,
+          803,
+          858
+        ],
+        "iou_full": 0.582,
+        "iou_upper": 0.614,
+        "aspect_ratio": 0.791,
+        "color_distance": 0.191
+      }
+    },
+    {
+      "path": "public/assets/characters/shinobu/reactions/surprised.png",
+      "character": "shinobu",
+      "kind": "reaction",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "ok",
+      "reference": "design/reference/shinobu.png",
+      "metrics": {
+        "bbox": [
+          235,
+          75,
+          803,
+          858
+        ],
+        "iou_full": 0.582,
+        "iou_upper": 0.614,
+        "aspect_ratio": 0.791,
+        "color_distance": 0.191,
+        "changed_ratio": 0.0239,
+        "diff_bbox": [
+          780,
+          83,
+          959,
+          261
+        ],
+        "diff_in_badge_zone": true
+      }
+    },
+    {
+      "path": "public/assets/characters/shinobu/reactions/thinking.png",
+      "character": "shinobu",
+      "kind": "reaction",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "ok",
+      "reference": "design/reference/shinobu.png",
+      "metrics": {
+        "bbox": [
+          235,
+          75,
+          803,
+          858
+        ],
+        "iou_full": 0.582,
+        "iou_upper": 0.614,
+        "aspect_ratio": 0.791,
+        "color_distance": 0.191,
+        "changed_ratio": 0.0239,
+        "diff_bbox": [
+          780,
+          83,
+          959,
+          261
+        ],
+        "diff_in_badge_zone": true
+      }
+    },
+    {
+      "path": "public/assets/characters/shinobu/reactions/worried.png",
+      "character": "shinobu",
+      "kind": "reaction",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "none",
+      "visual_note": "",
+      "auto_flag": "ok",
+      "reference": "design/reference/shinobu.png",
+      "metrics": {
+        "bbox": [
+          235,
+          75,
+          803,
+          858
+        ],
+        "iou_full": 0.582,
+        "iou_upper": 0.614,
+        "aspect_ratio": 0.791,
+        "color_distance": 0.191,
+        "changed_ratio": 0.0239,
+        "diff_bbox": [
+          780,
+          83,
+          959,
+          261
+        ],
+        "diff_in_badge_zone": true
+      }
+    }
+  ],
+  "summary": {
+    "total": 107,
+    "pending": 107,
+    "approved": 0,
+    "rejected": 0,
+    "auto_check": 12
+  }
+}
