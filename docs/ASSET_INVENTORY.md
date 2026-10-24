@@ -47,7 +47,7 @@ TypeScript から画像を参照するときは `"/assets/..."` を直書きせ�
 | `characterReaction(id, reaction)` / `characterIcon(id, reaction, size)` | `characters/<id>/reactions/*.png` / `icons/<reaction>-<size>.png` | png |
 | `characterPose(id, pose)` | `characters/<id>/poses/<pose>.png`（シノブ以外は `idle` のみ。型で禁止・実行時は例外） | png |
 | `backgroundUrl(name)` / `textureUrl(name)` | `backgrounds/*` / `textures/*` | svg |
-| `c2HighresUrl(name)` | `c2-highres/*`（`title` / `header` / `paper` / `paperWide` / `board` / `clipping*`。タイトルは A 案のみ） | webp |
+| `c2HighresUrl(name)` | `c2-highres/*`（`title` / `header` / `paperTile` / `paperFrame` / `board` / `clipping*`。タイトルは A 案のみ） | webp |
 | `encyclopediaArt(id)` / `achievementIcon(id)` / `tutorialStep(n)` | `encyclopedia/*` / `achievements/*` / `tutorial/step-NN.*` | png |
 | `uiStamp` / `uiState` / `uiFrame` / `uiGrade` / `uiIllustration` / `uiIcon` / `uiTape(n)` | `ui/<kind>/*` | svg |
 | `propUrl(name)` / `effectReaction(name)` | `props/*` / `effects/reactions/*` | svg |

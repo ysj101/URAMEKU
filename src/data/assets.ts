@@ -106,16 +106,16 @@ export function backgroundUrl(name: BackgroundName, format: ImageFormat = 'svg')
  * ほかの候補（B/C/D）は混在させない。いずれも低解像度原画のアップスケールで、正式アート承認前。
  */
 export const C2_HIGHRES = {
-  title: 'title/variant-A-3840x2160.webp',
-  header: 'header/header-from-A-3840x960.webp',
+  title: 'title-a.webp',
+  header: 'header-band.webp',
   /** 縦長ページ用（左右の端だけコラージュ、縦に繰り返す） */
-  paper: 'backgrounds/edge-paper-vertical-tile.webp',
+  paperTile: 'paper-side-tile.webp',
   /** 画面サイズの面用（四辺がコラージュ、中央が無地）。資料ダイアログの背面 */
-  paperWide: 'backgrounds/edge-paper-3840x2160.webp',
-  board: 'board/cork-board-3840x2160.webp',
-  clippingCorner: 'overlays/clipping-corner-1024.webp',
-  clippingVertical: 'overlays/clipping-vertical-1024.webp',
-  clippingHorizontal: 'overlays/clipping-horizontal-1024.webp',
+  paperFrame: 'paper-frame.webp',
+  board: 'cork-board.webp',
+  clippingCorner: 'clipping-corner.webp',
+  clippingVertical: 'clipping-vertical.webp',
+  clippingHorizontal: 'clipping-horizontal.webp',
 } as const;
 export type C2HighresName = keyof typeof C2_HIGHRES;
 

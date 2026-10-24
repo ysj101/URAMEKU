@@ -210,7 +210,7 @@ describe('用途別ヘルパー（マニフェスト照合）', () => {
     // 収録ファイルとヘルパーの列挙が一致する（比較用の B/C/D 案を混在させない）
     const listed = [...manifestPaths()].filter((p) => p.startsWith('c2-highres/')).sort();
     expect(listed).toEqual(names.map((n) => `c2-highres/${C2_HIGHRES[n]}`).sort());
-    expect(c2HighresUrl('title')).toBe('/URAMEKU/assets/c2-highres/title/variant-A-3840x2160.webp');
+    expect(c2HighresUrl('title')).toBe('/URAMEKU/assets/c2-highres/title-a.webp');
   });
 
   it('UI 部品（スタンプ・状態・フレーム・グレード・イラスト・アイコン・テープ）', () => {

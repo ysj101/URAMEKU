@@ -10,7 +10,7 @@
 /* 汎用紙面：左右の端だけがコラージュの縦長タイル。ページの長さに合わせて縦に繰り返す。 */
 body {
   background-color: var(--color-bg);
-  background-image: url('/assets/c2-highres/backgrounds/edge-paper-vertical-tile.webp');
+  background-image: url('/assets/c2-highres/paper-side-tile.webp');
   background-repeat: repeat-y;
   background-position: center top;
   /* 中央の無地（約 62%）が本文幅 1180px を覆う大きさ。狭い画面では左右の帯は画面外になる。 */
@@ -23,7 +23,7 @@ body {
  */
 @media (min-width: 900px) {
   body:has(.home) {
-    background-image: url('/assets/c2-highres/title/variant-A-3840x2160.webp');
+    background-image: url('/assets/c2-highres/title-a.webp');
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -46,8 +46,8 @@ body {
     position: relative;
     min-height: clamp(150px, 17vw, 230px);
     padding: var(--space-4) clamp(16px, 4vw, 40px);
-    background: var(--color-surface) url('/assets/c2-highres/header/header-from-A-3840x960.webp')
-      center / cover no-repeat;
+    background: var(--color-surface) url('/assets/c2-highres/header-band.webp') center / cover
+      no-repeat;
     justify-content: center;
   }
   .case-select .screen-head .btn {
@@ -70,7 +70,7 @@ body {
 dialog::backdrop {
   background:
     linear-gradient(rgba(36, 35, 34, 0.62), rgba(36, 35, 34, 0.62)),
-    url('/assets/c2-highres/backgrounds/edge-paper-3840x2160.webp') center / cover no-repeat;
+    url('/assets/c2-highres/paper-frame.webp') center / cover no-repeat;
 }
 
 /*
@@ -98,7 +98,7 @@ dialog::backdrop {
     top: 140px;
     width: 260px;
     height: 260px;
-    background-image: url('/assets/c2-highres/overlays/clipping-corner-1024.webp');
+    background-image: url('/assets/c2-highres/clipping-corner.webp');
     transform: rotate(6deg);
   }
   body:has(.encyclopedia) .app-main::before {
@@ -107,7 +107,7 @@ dialog::backdrop {
     top: 180px;
     width: 260px;
     height: 400px;
-    background-image: url('/assets/c2-highres/overlays/clipping-vertical-1024.webp');
+    background-image: url('/assets/c2-highres/clipping-vertical.webp');
     transform: rotate(4deg);
   }
   body:has(.play) .app-main::after {
@@ -116,7 +116,7 @@ dialog::backdrop {
     bottom: 160px;
     width: 260px;
     height: 200px;
-    background-image: url('/assets/c2-highres/overlays/clipping-horizontal-1024.webp');
+    background-image: url('/assets/c2-highres/clipping-horizontal.webp');
     transform: rotate(-5deg);
   }
 }
