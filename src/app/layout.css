@@ -1,0 +1,182 @@
+/* 画面レイアウト（ホーム / 事件一覧 / プレイ）。色・余白はトークンのみ使用。 */
+.app-main {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: var(--space-4) var(--space-4) var(--space-12);
+}
+
+.screen-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-4);
+}
+
+.screen-head h1 {
+  font-family: var(--font-serif);
+  font-size: var(--font-size-xl);
+  margin: 0;
+}
+
+/* ホーム */
+.home {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.home-hero {
+  position: relative;
+  border-bottom: 7px double var(--color-ink);
+  padding: var(--space-4) 0 var(--space-5);
+}
+
+.home-title {
+  font-family: var(--font-serif);
+  font-size: clamp(3rem, 14vw, 6rem);
+  line-height: var(--line-height-tight);
+  letter-spacing: 0.035em;
+  margin: 0;
+}
+
+.home-title span {
+  background: var(--color-accent);
+  color: var(--color-ink-inverse);
+  padding: 0 0.12em;
+}
+
+.home-tagline {
+  font-size: var(--font-size-sm);
+  letter-spacing: 0.12em;
+  margin: var(--space-2) 0 0;
+}
+
+.home-mascot {
+  position: absolute;
+  right: 0;
+  bottom: var(--space-2);
+  width: clamp(72px, 22vw, 140px);
+  height: auto;
+}
+
+.home-actions {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.btn.big {
+  min-height: calc(var(--tap-target-min) + var(--space-3));
+  font-size: var(--font-size-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+}
+
+.btn.big small {
+  font-size: var(--font-size-sm);
+  font-weight: normal;
+}
+
+.home-notice {
+  margin: 0;
+}
+
+/* 事件一覧 */
+.case-cards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-3);
+}
+
+.case-card-button {
+  width: 100%;
+  min-height: var(--tap-target-min);
+  text-align: left;
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  grid-template-areas:
+    'state num status'
+    'state title title'
+    'state meta meta';
+  column-gap: var(--space-3);
+  row-gap: var(--space-1);
+  align-items: center;
+  padding: var(--space-3);
+  background: var(--color-surface);
+  border: 2px solid var(--color-ink);
+  box-shadow: var(--shadow-paper);
+  color: inherit;
+}
+
+.case-card-button:hover,
+.case-card-button:focus-visible {
+  background: var(--color-surface-note);
+}
+
+.case-card-state {
+  grid-area: state;
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+}
+
+.case-card-num {
+  grid-area: num;
+  font-size: var(--font-size-xs);
+  font-weight: 900;
+  letter-spacing: 0.3em;
+}
+
+.case-card-title {
+  grid-area: title;
+  font-family: var(--font-serif);
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+}
+
+.case-card-meta {
+  grid-area: meta;
+  font-size: var(--font-size-sm);
+  color: var(--color-quiet);
+}
+
+.case-card-meta .difficulty {
+  letter-spacing: 0.1em;
+  color: var(--color-accent);
+}
+
+.case-card-status {
+  grid-area: status;
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-aged);
+}
+
+.case-card-status.status-solved {
+  background: var(--color-ink);
+  color: var(--color-ink-inverse);
+}
+
+.case-card-status.status-new {
+  background: transparent;
+}
+
+@media (min-width: 640px) {
+  .home-actions {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .home-actions .btn.big:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .case-cards {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+}
