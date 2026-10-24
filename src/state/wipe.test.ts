@@ -1,3 +1,4 @@
+import { createSaveData } from './persistence';
 import { LEGACY_KEYS, STORAGE_KEY, type SaveData, type StorageLike } from './persistence';
 import {
   isAppKey,
@@ -138,6 +139,7 @@ describe('wipe: 削除と検証', () => {
 
 describe('resetCaseProgress', () => {
   const save: SaveData = {
+    ...createSaveData('case-02'),
     active: 'case-02',
     progress: {
       'case-01': makeProgress({ opened: ['a'], published: true }),
