@@ -20,10 +20,11 @@ export function DocumentGrid({ caseData, progress, onOpen }: Props) {
   return (
     <>
       <div className="document-grid desk-grid">
-        {caseData.documents.map((d) => (
+        {caseData.documents.map((d, index) => (
           <DocumentTile
             key={d.id}
             caseId={caseData.id}
+            index={index}
             document={d}
             opened={progress.opened.includes(d.id)}
             pinned={progress.pinned.includes(d.id)}

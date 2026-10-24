@@ -7,6 +7,12 @@ import './app/global.css';
 import './app/motion.css';
 import './app/layout.css';
 
+import { initMotionPreference } from './app/motionSettings';
+import { getSoundManager, installAutoUnlock } from './audio/soundManager';
+
+initMotionPreference();
+installAutoUnlock(getSoundManager());
+
 const container = document.getElementById('root');
 if (!container) {
   throw new Error('#root が見つかりません');
