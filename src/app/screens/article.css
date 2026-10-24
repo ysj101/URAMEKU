@@ -1,0 +1,141 @@
+/*
+ * 記事編集画面（MVP-025）固有のスタイル。
+ * 色・影・余白は tokens.css のトークンのみを使う。global.css の既存ルールは変更しない。
+ */
+
+/* 3 スロットは縦に並べ、↑↓ で順序を入れ替えられるようにする */
+.headline-preview.article-slots {
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-2);
+}
+.article-slot {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1);
+  border: var(--border-width) dashed transparent;
+}
+.article-slot.is-target {
+  border-color: var(--color-accent);
+  background: var(--color-surface-note);
+}
+.article-slot-number {
+  flex: 0 0 auto;
+  width: var(--space-6);
+  font-family: var(--font-serif);
+  font-size: var(--font-size-sm);
+  color: var(--color-quiet);
+  text-align: center;
+}
+.article-slot-piece {
+  flex: 1 1 auto;
+  text-align: left;
+  cursor: pointer;
+}
+.article-slot.is-target .article-slot-piece {
+  box-shadow: inset 0 0 0 var(--border-width) var(--color-accent);
+}
+.article-slot-piece[aria-disabled='true'] {
+  cursor: default;
+}
+.article-slot-actions {
+  display: flex;
+  flex: 0 0 auto;
+  gap: var(--space-1);
+}
+.article-slot-action {
+  padding: 0 var(--space-3);
+  min-width: var(--tap-target-min);
+  font-size: var(--font-size-md);
+}
+
+.article-edit-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin: var(--space-3) 0 var(--space-5);
+}
+.article-edit-hint {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-quiet);
+  line-height: var(--line-height-normal);
+}
+.btn[aria-disabled='true'] {
+  cursor: not-allowed;
+  opacity: var(--opacity-disabled);
+}
+
+/* 断片一覧（紙の切り抜き風） */
+.fragment-list {
+  list-style: none;
+  padding: 0;
+}
+.fragment-list-item {
+  flex: 1 1 200px;
+  max-width: 100%;
+}
+.fragment-card {
+  height: 100%;
+  padding: 0;
+}
+.fragment-card-button {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
+  width: 100%;
+  min-height: var(--tap-target-min);
+  padding: var(--space-3);
+  border: 0;
+  background: transparent;
+  color: var(--color-ink);
+  font-weight: 800;
+  text-align: left;
+  line-height: var(--line-height-snug);
+  cursor: pointer;
+}
+.fragment-card-button[aria-disabled='true'] {
+  cursor: not-allowed;
+}
+.fragment-card.is-used .fragment-card-text {
+  opacity: var(--opacity-muted);
+  text-decoration: line-through;
+}
+.fragment-card-state {
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  color: var(--color-accent);
+}
+.fragment-card:not(.is-used) .fragment-card-button[aria-disabled='true'] {
+  opacity: var(--opacity-disabled);
+}
+
+/* 提出ボタンの理由表示 */
+.article-submit {
+  flex-direction: column;
+  align-items: flex-start;
+}
+.article-submit-reason {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-quiet);
+}
+.article-submit-row {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+@media (max-width: 520px) {
+  .article-slot {
+    flex-wrap: wrap;
+  }
+  .article-slot-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}

@@ -6,7 +6,7 @@
 - `data/cases/`: 事件の唯一の正本。UIから編集させない。
 - `public/assets/`: 画像・音声・ブランドの公開素材。
 - `assets.manifest.json`: 各画像と音声のパス/形式/サイズ/ハッシュ。
-- `src/characterAssets.ts`: React移行時に使うURLヘルパー。現行試作がそのまま呼び出すわけではない。
+- `src/data/assets.ts`: 用途別アセット URL ヘルパー。キャラクター表示は `src/components/CharImage.tsx` / `CharacterReaction.tsx` を通す（`docs/CHARACTER_USAGE.md`）。
 
 ## フェーズ1：正式MVP
 

@@ -22,7 +22,7 @@ export function PlayScreen({ game, nav }: { game: GameApi; nav: Navigation }) {
       <CaseHeader caseData={current} />
       <div id="game">
         {progress.published ? (
-          <ResultScreen game={game} />
+          <ResultScreen game={game} nav={nav} />
         ) : stage === 'article' ? (
           <ArticleScreen game={game} />
         ) : (
