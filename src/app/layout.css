@@ -3,6 +3,11 @@
   max-width: 1080px;
   margin: 0 auto;
   padding: var(--space-4) var(--space-4) var(--space-12);
+  /* ノッチ・ホームバーのある端末（viewport-fit=cover）では安全領域ぶんを足す */
+  padding-top: calc(var(--space-4) + env(safe-area-inset-top, 0px));
+  padding-right: max(var(--space-4), env(safe-area-inset-right, 0px));
+  padding-bottom: calc(var(--space-12) + env(safe-area-inset-bottom, 0px));
+  padding-left: max(var(--space-4), env(safe-area-inset-left, 0px));
 }
 
 .screen-head {
@@ -29,11 +34,14 @@
   position: relative;
   border-bottom: 7px double var(--color-ink);
   padding: var(--space-4) 0 var(--space-5);
+  /* 右下のマスコットと見出し・副題が重ならないように右に余白を取る */
+  padding-right: calc(clamp(72px, 22vw, 140px) + var(--space-2));
 }
 
 .home-title {
   font-family: var(--font-serif);
-  font-size: clamp(3rem, 14vw, 6rem);
+  /* 320px 幅でもマスコットの左に 4 文字が 1 行で収まる大きさ */
+  font-size: clamp(2.5rem, 12vw, 6rem);
   line-height: var(--line-height-tight);
   letter-spacing: 0.035em;
   margin: 0;
@@ -43,6 +51,12 @@
   background: var(--color-accent);
   color: var(--color-ink-inverse);
   padding: 0 0.12em;
+}
+
+.home-hero .edition {
+  /* 1 行目はマスコット（右下）と重ならないので、hero の右余白を打ち消して全幅を使う */
+  margin-right: calc(-1 * (clamp(72px, 22vw, 140px) + var(--space-2)));
+  letter-spacing: clamp(0.12em, 0.6vw, 0.3em);
 }
 
 .home-tagline {
@@ -179,4 +193,77 @@
   .case-cards {
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   }
+}
+
+/* 設定（App.tsx の #/settings。AudioControl / MotionToggle / SettingsScreen） */
+.settings-audio {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+  margin: 0 0 var(--space-3);
+  padding: var(--space-3);
+  background: var(--color-surface);
+  border: 2px solid var(--color-ink);
+}
+
+.audio-control__mute {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--tap-target-min);
+  min-width: var(--tap-target-min);
+  padding: var(--space-2) var(--space-4);
+  border: 2px solid var(--color-ink);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-weight: 800;
+}
+
+.audio-control__mute[aria-pressed='true'] {
+  background: var(--color-ink);
+  color: var(--color-ink-inverse);
+}
+
+.audio-control__mute-state {
+  font-size: var(--font-size-sm);
+  font-weight: 400;
+}
+
+.audio-control__volume {
+  display: flex;
+  flex: 1 1 200px;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--tap-target-min);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+}
+
+.audio-control__volume input[type='range'] {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: var(--tap-target-min);
+  margin: 0;
+  accent-color: var(--color-accent);
+  cursor: pointer;
+}
+
+.audio-control__volume input[type='range']:disabled {
+  cursor: not-allowed;
+  opacity: var(--opacity-disabled);
+}
+
+.audio-control__volume output {
+  min-width: 3em;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.motion-toggle {
+  margin: 0 0 var(--space-3);
+}
+
+.motion-toggle .fine {
+  margin-top: var(--space-1);
 }

@@ -23,3 +23,6 @@ Thumbs.db
 # logs
 *.log
 npm-debug.log*
+
+# MVP-040: 画面幅検査のスクリーンショット（scripts/check_viewports.mjs の出力）
+qa/screenshots/
