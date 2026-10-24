@@ -25,9 +25,44 @@ export interface AnalysisTask {
   tolerance: number;
 }
 
+/**
+ * 見出し断片の種別。docs/GAME_RULES.md 6 章の誤り型に対応する。
+ * - correct: 正しい断片（correct_fragments に含まれる）
+ * - overgeneralization: 理由なく全体に一般化
+ * - misread-statistic: 統計の誤読（分母・指標の取り違え、相対変化の誇張など）
+ * - causal-claim: 原因・結論の断定
+ * - ignored-counter-evidence: 反対資料の無視
+ * - unverifiable: 資料からは検証できない主張
+ * - other: 上記に当てはまらない誤り
+ */
+export type FragmentKind =
+  | 'correct'
+  | 'overgeneralization'
+  | 'misread-statistic'
+  | 'causal-claim'
+  | 'ignored-counter-evidence'
+  | 'unverifiable'
+  | 'other';
+
+export const FRAGMENT_KINDS: readonly FragmentKind[] = [
+  'correct',
+  'overgeneralization',
+  'misread-statistic',
+  'causal-claim',
+  'ignored-counter-evidence',
+  'unverifiable',
+  'other',
+];
+
 export interface HeadlineFragment {
   id: string;
   text: string;
+  /** 誤り型。correct_fragments に含まれる断片は 'correct'、それ以外は 'correct' 以外 */
+  kind?: FragmentKind;
+  /** その断片が誤り（または正しい）である理由。1 文 */
+  reason?: string;
+  /** reason の根拠となる資料 ID（documents に存在すること） */
+  evidence?: string[];
 }
 
 export interface Debrief {

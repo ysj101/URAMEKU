@@ -62,35 +62,78 @@
   "headline_fragments": [
     {
       "id": "f0",
-      "text": "支払済み300万円は将来の比較から分離"
+      "text": "支払済み300万円は将来の比較から分離",
+      "kind": "correct",
+      "reason": "支払済みの300万円はどちらを選んでも戻らず、将来の比較から分離する。",
+      "evidence": [
+        "spent"
+      ]
     },
     {
       "id": "f1",
-      "text": "継続案の追加費用は150万円"
+      "text": "継続案の追加費用は150万円",
+      "kind": "correct",
+      "reason": "継続案を完成させるには追加で150万円かかる。",
+      "evidence": [
+        "finish"
+      ]
     },
     {
       "id": "f2",
-      "text": "代替案の追加費用は80万円"
+      "text": "代替案の追加費用は80万円",
+      "kind": "correct",
+      "reason": "代替案は追加60万円と保守20万円で合計80万円かかる。",
+      "evidence": [
+        "switch"
+      ]
     },
     {
       "id": "f3",
-      "text": "300万円を使ったので必ず継続"
+      "text": "300万円を使ったので必ず継続",
+      "kind": "misread-statistic",
+      "reason": "300万円はどちらを選んでも戻らず、将来の判断材料にならない（サンクコスト）。",
+      "evidence": [
+        "spent",
+        "minutes"
+      ]
     },
     {
       "id": "f4",
-      "text": "期待便益だけで全て断定できる"
+      "text": "期待便益だけで全て断定できる",
+      "kind": "causal-claim",
+      "reason": "継続案の技術リスクや便益見積りの不確実性が明記されており、便益だけでは断定できない。",
+      "evidence": [
+        "risk"
+      ]
     },
     {
       "id": "f5",
-      "text": "過去の苦労は将来の利益そのもの"
+      "text": "過去の苦労は将来の利益そのもの",
+      "kind": "ignored-counter-evidence",
+      "reason": "チーム自身が「気持ちは重要だが将来の費用便益とは区別する」としている。",
+      "evidence": [
+        "team",
+        "spent"
+      ]
     },
     {
       "id": "f6",
-      "text": "代替案は費用ゼロ"
+      "text": "代替案は費用ゼロ",
+      "kind": "ignored-counter-evidence",
+      "reason": "代替案にも追加60万円と保守20万円の計80万円が発生する。",
+      "evidence": [
+        "switch"
+      ]
     },
     {
       "id": "f7",
-      "text": "不確実性は存在しない"
+      "text": "不確実性は存在しない",
+      "kind": "ignored-counter-evidence",
+      "reason": "監査メモが不確実性を明記し、継続案の便益も「最大100万円」の見積りにすぎない。",
+      "evidence": [
+        "risk",
+        "finish"
+      ]
     }
   ],
   "correct_fragments": [

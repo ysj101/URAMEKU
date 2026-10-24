@@ -62,35 +62,84 @@
   "headline_fragments": [
     {
       "id": "f0",
-      "text": "広告の継続率90%は"
+      "text": "広告の継続率90%は",
+      "kind": "correct",
+      "reason": "広告の数字を主語に据え、以下でその適用範囲を説明する。",
+      "evidence": [
+        "ad"
+      ]
     },
     {
       "id": "f1",
-      "text": "有料契約者を分母にした数字"
+      "text": "有料契約者を分母にした数字",
+      "kind": "correct",
+      "reason": "広告の90%は有料移行者50人のうち45人が継続した比率で、分母は有料契約者である。",
+      "evidence": [
+        "paid",
+        "retained",
+        "memo"
+      ]
     },
     {
       "id": "f2",
-      "text": "体験登録者全体では45%が継続"
+      "text": "体験登録者全体では45%が継続",
+      "kind": "correct",
+      "reason": "体験登録者100人を分母にすると翌月継続は45人で45%になる。",
+      "evidence": [
+        "trial",
+        "retained"
+      ]
     },
     {
       "id": "f3",
-      "text": "ほぼ全利用者が継続"
+      "text": "ほぼ全利用者が継続",
+      "kind": "overgeneralization",
+      "reason": "有料移行者50人の結果を登録者100人全体に広げている。登録者全体では45%しか継続していない。",
+      "evidence": [
+        "trial",
+        "retained"
+      ]
     },
     {
       "id": "f4",
-      "text": "虚偽広告だと断定できる"
+      "text": "虚偽広告だと断定できる",
+      "kind": "causal-claim",
+      "reason": "有料契約者を分母にすれば90%は計算上正しく、分母の説明意図もあるため、虚偽と断定するには資料が足りない。",
+      "evidence": [
+        "paid",
+        "retained",
+        "memo"
+      ]
     },
     {
       "id": "f5",
-      "text": "満足度90%の証拠"
+      "text": "満足度90%の証拠",
+      "kind": "misread-statistic",
+      "reason": "継続率は満足度ではなく、満足度を示す人数の資料は存在しない。",
+      "evidence": [
+        "reviews"
+      ]
     },
     {
       "id": "f6",
-      "text": "登録者の9割が有料契約"
+      "text": "登録者の9割が有料契約",
+      "kind": "misread-statistic",
+      "reason": "登録者100人のうち有料に移行したのは50人で5割。分母を取り違えている。",
+      "evidence": [
+        "trial",
+        "paid"
+      ]
     },
     {
       "id": "f7",
-      "text": "継続率は測定できない"
+      "text": "継続率は測定できない",
+      "kind": "ignored-counter-evidence",
+      "reason": "登録・決済・継続の各資料に測定値があり、「分からない」という感想だけを根拠にしている。",
+      "evidence": [
+        "trial",
+        "paid",
+        "retained"
+      ]
     }
   ],
   "correct_fragments": [
