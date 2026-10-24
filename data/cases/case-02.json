@@ -59,6 +59,7 @@
     "poster",
     "history"
   ],
+  "link_prompt": "「半額」の根拠になっている値段と、実際に売られていた値段。この 2 つを突き合わせる 2 枚を結びます。",
   "headline_fragments": [
     {
       "id": "f0",

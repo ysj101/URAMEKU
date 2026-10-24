@@ -119,6 +119,10 @@ export function EvidenceBoard({ caseData, progress, onToggleLink, onUnpin }: Pro
       <h2 className="section-title">
         証拠ボード <small>カードを 2 枚押して照合（ドラッグ不要）</small>
       </h2>
+      <p className="evidence-board__prompt notice" data-testid="link-prompt">
+        <strong>この事件の照合：</strong>
+        {caseData.link_prompt}
+      </p>
       <div
         ref={surfaceRef}
         className="evidence-board__surface"

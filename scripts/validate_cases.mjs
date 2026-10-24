@@ -174,6 +174,15 @@ function validateIntegrity(c, errors) {
       }
     }
   }
+  if (typeof c.link_prompt === 'string' && Array.isArray(c.documents)) {
+    for (const d of c.documents) {
+      if (d && typeof d.title === 'string' && d.title && c.link_prompt.includes(d.title)) {
+        errors.push(
+          `link_prompt: 資料タイトル「${d.title}」を含んでいます（正解の名指しになります）`,
+        );
+      }
+    }
+  }
   if (Array.isArray(c.required_link)) {
     c.required_link.forEach((id, i) => refDoc(`required_link[${i}]`, id));
     if (c.required_link.length === 2 && c.required_link[0] === c.required_link[1]) {

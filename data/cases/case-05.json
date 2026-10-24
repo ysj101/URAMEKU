@@ -59,6 +59,7 @@
     "graphic",
     "raw"
   ],
+  "link_prompt": "見せ方（グラフ）と、その元になった数字。この 2 つを突き合わせる 2 枚を結びます。",
   "headline_fragments": [
     {
       "id": "f0",
