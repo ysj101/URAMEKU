@@ -13,6 +13,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
     "validate:cases": "node scripts/validate_cases.mjs",
     "check:assets": "node scripts/check_asset_refs.mjs",
     "lint": "eslint .",
@@ -24,10 +26,13 @@
     "analyze:dead-ends": "node scripts/analyze_dead_ends.mjs",
     "lint:content": "node scripts/lint_content.mjs",
     "walkthrough": "node scripts/generate_walkthrough.mjs",
+    "smoke:dist": "node scripts/smoke_dist.mjs",
+    "summarize:user-tests": "node scripts/summarize_user_tests.mjs",
     "audit:assets": "node scripts/audit_assets_size.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",
+    "@playwright/test": "^1.64.1",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
     "@testing-library/user-event": "^14.6.8",

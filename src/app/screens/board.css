@@ -1,0 +1,213 @@
+/*
+ * 証拠ボード（MVP-023）。色・影・余白はすべて tokens.css のトークンを参照する。
+ *
+ * 方針:
+ * - タップ照合優先。ドラッグ&ドロップに依存する表示は無い。
+ * - ホバーでしか見えない要素を作らない（pointer: coarse の端末でも同じ操作・同じ情報）。
+ * - 「外す」ボタンは常時表示。タップ領域は --tap-target-min 以上。
+ */
+.evidence-board__surface {
+  position: relative;
+  min-height: 190px;
+  padding: var(--space-5) var(--space-4);
+  background-color: var(--color-surface-desk);
+  background-position: center;
+  background-size: cover;
+  border: var(--border-width-thick) solid var(--color-ink);
+}
+
+.evidence-board__thread {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  z-index: var(--z-raised);
+}
+.evidence-board__thread line {
+  stroke: var(--color-accent);
+  stroke-width: var(--border-width-thick);
+  stroke-linecap: round;
+}
+
+.evidence-board__empty {
+  margin: 0;
+  padding: var(--space-3);
+  background: var(--color-surface-note);
+  border: var(--border-width-thin) dashed var(--color-border-dashed);
+}
+
+.evidence-board__pins {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--space-5) var(--space-4);
+  align-items: start;
+}
+
+/* ---- ピンカード ---- */
+/* 傾きは外側の li に付ける（PaperCard の出現演出が transform を使うため） */
+.evidence-card-wrap {
+  position: relative;
+  z-index: calc(var(--z-raised) + 1);
+  transform: rotate(var(--card-tilt, 0deg));
+}
+.evidence-card-wrap[data-index='0'] {
+  --card-tilt: -1.3deg;
+}
+.evidence-card-wrap[data-index='1'] {
+  --card-tilt: 1.1deg;
+}
+.evidence-card-wrap[data-index='2'] {
+  --card-tilt: 0.6deg;
+}
+.evidence-card-wrap[data-index='3'] {
+  --card-tilt: -0.8deg;
+}
+
+.evidence-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-2) var(--space-2);
+  transition: box-shadow var(--motion-fast) var(--motion-ease);
+}
+.evidence-card.is-selected {
+  box-shadow: var(--shadow-paper);
+  outline: var(--border-width-thick) solid var(--color-accent);
+  outline-offset: calc(-1 * var(--border-width-thick));
+}
+.evidence-card.is-locked {
+  opacity: var(--opacity-muted);
+}
+
+.evidence-card__pin {
+  position: absolute;
+  top: calc(-1 * var(--space-3));
+  left: 50%;
+  width: 28px;
+  height: 28px;
+  margin-left: -14px;
+  pointer-events: none;
+}
+
+.evidence-card__select {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  width: 100%;
+  min-height: 108px;
+  padding: var(--space-2);
+  background: transparent;
+  border: 0;
+  color: var(--color-ink);
+  text-align: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.evidence-card__select[aria-disabled='true'] {
+  cursor: not-allowed;
+}
+.evidence-card__prop {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+}
+.evidence-card__title {
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-snug);
+}
+.evidence-card__slot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 var(--space-2);
+  font: 900 var(--font-size-sm) var(--font-serif);
+  color: var(--color-ink-inverse);
+  background: var(--color-accent);
+  border-radius: var(--radius-sm);
+  visibility: hidden;
+}
+.evidence-card.is-selected .evidence-card__slot {
+  visibility: visible;
+}
+.evidence-card.is-slot-b .evidence-card__slot {
+  background: var(--color-info);
+}
+
+.evidence-card__reason {
+  margin: 0;
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-snug);
+  color: var(--color-quiet);
+}
+
+/* 「外す」は常時表示（ホバー非依存） */
+.evidence-card__remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  min-height: var(--tap-target-min);
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  color: var(--color-ink);
+  background: var(--color-surface-aged);
+  border: var(--border-width-thin) solid var(--color-ink);
+  cursor: pointer;
+}
+.evidence-card__remove img {
+  width: 16px;
+  height: 16px;
+}
+.evidence-card__remove[aria-disabled='true'] {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}
+
+/* マウス環境だけの軽い持ち上げ。情報の増減は無い。 */
+@media (hover: hover) and (pointer: fine) {
+  .evidence-card__select:not([aria-disabled='true']):hover {
+    text-decoration: underline;
+  }
+}
+
+/* ---- 照合の状態 ---- */
+.evidence-board__status {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+  margin-top: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface-note);
+  border-left: 5px solid var(--color-accent);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-normal);
+}
+.evidence-board__status img {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  margin-top: var(--space-1);
+}
+.evidence-board__slot {
+  font-weight: 700;
+}
+
+@media (max-width: 560px) {
+  .evidence-board__surface {
+    padding: var(--space-4) var(--space-3);
+  }
+  .evidence-board__pins {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-5) var(--space-3);
+  }
+}

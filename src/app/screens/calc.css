@@ -1,0 +1,147 @@
+/* MVP-024: 検証メモ（計算デスク）と数値入力欄。色は tokens.css のトークンのみ */
+.calc-desk__lead {
+  margin: 0 0 var(--space-3);
+  font-size: var(--font-size-sm);
+  color: var(--color-quiet);
+}
+.calc-desk__locked {
+  margin: 0 0 var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-sm);
+  background: var(--color-surface-aged);
+  border-left: var(--border-width-thick) solid var(--color-info);
+}
+.calc-desk__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+  background: var(--color-surface-note);
+  border: var(--border-width) dashed var(--color-border-dashed);
+  padding: var(--space-4);
+}
+.calc-desk__item {
+  margin: 0;
+  padding: var(--space-2) var(--space-3) var(--space-3);
+  border: var(--border-width-thin) solid var(--color-border);
+  background: var(--color-surface);
+  min-width: 0;
+}
+.calc-desk__item:disabled {
+  opacity: var(--opacity-muted);
+}
+.calc-desk__legend {
+  font: 700 var(--font-size-xs) var(--font-sans);
+  letter-spacing: 0.08em;
+  padding: 0 var(--space-1);
+}
+.calc-desk__unit-note {
+  font-weight: 400;
+  color: var(--color-quiet);
+}
+.calc-desk__actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--space-3);
+}
+.calc-desk__actions .btn {
+  min-height: var(--tap-target-min);
+}
+.calc-desk__review {
+  margin-top: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface-explain);
+  border: var(--border-width) solid var(--color-ink);
+  box-shadow: var(--shadow-paper-sm);
+  font-size: var(--font-size-md);
+}
+.calc-desk__review.has-problems {
+  border-color: var(--color-accent);
+}
+.calc-desk__review-title {
+  margin: 0 0 var(--space-2);
+  font-weight: 700;
+}
+.calc-desk__review-list {
+  margin: 0;
+}
+.calc-desk__review-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
+  padding: var(--space-1) 0;
+  border-top: var(--border-width-thin) dashed var(--color-border);
+}
+.calc-desk__review-row dt {
+  flex: 1 1 60%;
+  min-width: 0;
+}
+.calc-desk__review-row dd {
+  margin: 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 数値入力欄 */
+.numeric-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  font-size: var(--font-size-md);
+}
+.numeric-field__label {
+  font-weight: 700;
+  line-height: var(--line-height-snug);
+}
+.numeric-field__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.numeric-field__input {
+  width: min(160px, 100%);
+  min-height: var(--tap-target-min);
+  border: var(--border-width) solid var(--color-ink);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-surface);
+  font: inherit;
+  font-size: var(--font-size-base);
+  font-variant-numeric: tabular-nums;
+}
+.numeric-field__input:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+.numeric-field__input[aria-invalid='true'] {
+  border-color: var(--color-accent);
+}
+.numeric-field__input:read-only {
+  background: var(--color-surface-aged);
+  color: var(--color-quiet);
+}
+.numeric-field__unit {
+  font-weight: 700;
+}
+.numeric-field__hint,
+.numeric-field__normalized {
+  margin: 0;
+  font-size: var(--font-size-sm);
+}
+.numeric-field__hint {
+  color: var(--color-accent);
+}
+.numeric-field__normalized {
+  color: var(--color-quiet);
+}
+.numeric-field__normalized output {
+  color: var(--color-ink);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+@media (max-width: 560px) {
+  .calc-desk__grid {
+    grid-template-columns: 1fr;
+  }
+  .calc-desk__actions .btn {
+    width: 100%;
+  }
+}
