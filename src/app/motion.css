@@ -1,0 +1,158 @@
+/*
+ * ウラメク 演出プリミティブ（MVP-038）
+ *
+ * 方針（docs/MOTION.md）:
+ *   - 動かすのは transform / opacity だけ。width / height / margin などレイアウトは動かさない。
+ *   - will-change は演出中の要素にだけ付け、終了後は外す（animation-fill-mode で見た目は保持）。
+ *   - box-shadow の多重や filter（blur / drop-shadow）は使わない。影は tokens.css のオフセット影 1 枚のみ。
+ *   - 時間・イージングは tokens.css のトークンを参照する。生の色コードは書かない。
+ *   - OS の prefers-reduced-motion、またはアプリ設定 html[data-motion="reduced"] では
+ *     すべての演出を止め、最終状態を即時表示する（末尾のブロック）。
+ *
+ * global.css の既存ルールはここでは変更しない。演出に必要な追加はすべてこのファイルに書く。
+ */
+
+/* ------------------------------------------------------------------
+ * 1. 紙をめくる（資料を開く・ページ送り）
+ * ------------------------------------------------------------------ */
+@keyframes motion-page-turn {
+  from {
+    opacity: 0;
+    transform: perspective(900px) rotateY(-14deg) translateX(calc(var(--motion-lift) * -1));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.motion-page-turn {
+  transform-origin: left center;
+  animation: motion-page-turn var(--motion-base) var(--motion-ease) both;
+}
+
+/* ------------------------------------------------------------------
+ * 2. スタンプを押す（掲載可・要再調査などの判子）
+ * ------------------------------------------------------------------ */
+@keyframes motion-stamp-press {
+  0% {
+    opacity: 0;
+    transform: scale(var(--motion-stamp-scale)) rotate(var(--motion-stamp-tilt));
+  }
+  60% {
+    opacity: 1;
+    transform: scale(0.96) rotate(var(--motion-stamp-tilt));
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(var(--motion-stamp-tilt));
+  }
+}
+.motion-stamp-press {
+  transform-origin: center;
+  animation: motion-stamp-press var(--motion-slow) var(--motion-ease-settle) both;
+}
+
+/* ------------------------------------------------------------------
+ * 3. ピンを刺す（証拠ボードへの固定）
+ * ------------------------------------------------------------------ */
+@keyframes motion-pin-drop {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--motion-pin-drop) * -1)) scale(1.2);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.motion-pin-drop {
+  transform-origin: center top;
+  animation: motion-pin-drop var(--motion-fast) var(--motion-ease-settle) both;
+}
+
+/* ------------------------------------------------------------------
+ * 4. カードが置かれる（紙片・通知・記事断片の出現）
+ * ------------------------------------------------------------------ */
+@keyframes motion-card-place {
+  from {
+    opacity: 0;
+    transform: translateY(var(--motion-lift)) rotate(var(--motion-tilt));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.motion-card-place {
+  transform-origin: center bottom;
+  animation: motion-card-place var(--motion-base) var(--motion-ease) both;
+}
+
+/* 演出中だけ合成レイヤーを確保する（is-animating は JS 側が animationend で外す）。 */
+.motion-page-turn.is-animating,
+.motion-stamp-press.is-animating,
+.motion-pin-drop.is-animating,
+.motion-card-place.is-animating {
+  will-change: transform, opacity;
+}
+
+/* ------------------------------------------------------------------
+ * 演出プリミティブの静的スタイル（PaperCard / Stamp）
+ * ------------------------------------------------------------------ */
+.paper-card {
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-ink);
+  box-shadow: var(--shadow-paper-sm);
+  padding: var(--space-3);
+}
+.paper-card--aged {
+  background: var(--color-surface-aged);
+}
+.paper-card--note {
+  background: var(--color-surface-note);
+}
+
+.stamp {
+  display: inline-block;
+  width: var(--stamp-width, 160px);
+  max-width: 100%;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+  /* 最終状態（演出なしでもこの傾きで表示する） */
+  transform: rotate(var(--motion-stamp-tilt));
+}
+
+/* ------------------------------------------------------------------
+ * Reduced Motion
+ * OS 設定（prefers-reduced-motion）とアプリ設定（html[data-motion="reduced"]）を同じ扱いにする。
+ * 演出は止め、状態変化は即時表示。transition は 0.01ms 相当に潰す。
+ * ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-fast: 0.01ms;
+    --motion-base: 0.01ms;
+    --motion-slow: 0.01ms;
+  }
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+html[data-motion='reduced'] {
+  --motion-fast: 0.01ms;
+  --motion-base: 0.01ms;
+  --motion-slow: 0.01ms;
+}
+html[data-motion='reduced'] *,
+html[data-motion='reduced'] *::before,
+html[data-motion='reduced'] *::after {
+  animation: none !important;
+  transition-duration: 0.01ms !important;
+  transition-delay: 0ms !important;
+  scroll-behavior: auto !important;
+}
