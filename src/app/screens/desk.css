@@ -1,0 +1,128 @@
+/*
+ * 調査デスク（MVP-022）: 資料グリッド・タイル・資料ダイアログ。
+ * global.css の既存ルールは変更せず、ここで上書きする。色は tokens.css のトークンのみ。
+ */
+
+/* --- グリッド: スマホ 2 列、640px 以上で 3 列 --- */
+.document-grid.desk-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+}
+@media (min-width: 640px) {
+  .document-grid.desk-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+}
+
+/* --- タイル --- */
+.desk-grid .doc-tile {
+  min-height: var(--tap-target-min);
+  min-width: 0;
+  gap: var(--space-1);
+  padding: var(--space-3) var(--space-2);
+  cursor: pointer;
+  font: inherit;
+  color: var(--color-ink);
+}
+.desk-grid .doc-tile:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+.desk-grid .doc-tile__thumb {
+  width: 64px;
+  height: 78px;
+  object-fit: contain;
+}
+.desk-grid .doc-tile__title {
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-snug);
+  overflow-wrap: anywhere;
+}
+.desk-grid .doc-tile__status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  color: var(--color-ink);
+}
+.desk-grid .doc-tile__icon {
+  width: 18px;
+  height: 18px;
+}
+.desk-grid .doc-tile__cost {
+  font-size: var(--font-size-xs);
+  color: var(--color-quiet);
+}
+.desk-grid .doc-tile__reason {
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  color: var(--color-accent);
+  border: var(--border-width-thin) dashed var(--color-accent);
+  padding: 0 var(--space-1);
+}
+
+/* 状態は文字とアイコンで示し、色は補助（MVP_SPEC 12 章） */
+.desk-grid .doc-tile--pinned {
+  background: var(--color-surface-note);
+}
+.desk-grid .doc-tile--opened {
+  background: var(--color-surface-aged);
+}
+.desk-grid .doc-tile[aria-disabled='true'] {
+  cursor: not-allowed;
+  border-style: dashed;
+  border-color: var(--color-disabled);
+  box-shadow: none;
+}
+.desk-grid .doc-tile[aria-disabled='true']:hover {
+  transform: none;
+}
+.desk-grid .doc-tile[aria-disabled='true'] .doc-tile__thumb {
+  opacity: var(--opacity-muted);
+}
+
+/* 予算不足の理由（role="status"） */
+.desk-status {
+  margin: calc(-1 * var(--space-4)) 0 var(--space-6);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-sm);
+  background: var(--color-surface-note);
+  border-left: var(--border-width-thick) solid var(--color-accent);
+}
+
+/* --- 資料ダイアログ --- */
+.document-dialog .popup-close {
+  min-width: var(--tap-target-min);
+  min-height: var(--tap-target-min);
+  cursor: pointer;
+}
+.document-dialog #dialog-title:focus {
+  outline: none;
+}
+.document-dialog #dialog-title:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+.document-dialog .document-body {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: var(--font-size-base);
+}
+.document-dialog .popup-foot {
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+.document-dialog .popup-pin {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+  flex: 1 1 200px;
+}
+.document-dialog .btn[aria-disabled='true'] {
+  cursor: not-allowed;
+  opacity: var(--opacity-disabled);
+}

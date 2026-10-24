@@ -6,6 +6,8 @@ import { PlayScreen } from '../screens/PlayScreen';
 import { TutorialScreen } from '../screens/TutorialScreen';
 import { useGame } from '../state/useGame';
 import { findCase } from '../data/cases';
+import { SaveStatusBanner } from '../components/SaveStatusBanner';
+import { OfflineBanner } from '../components/StatusView';
 import { useEffect } from 'react';
 
 export function App() {
@@ -76,6 +78,8 @@ export function App() {
         本編へ
       </a>
       <main id="workbench" className="app-main" tabIndex={-1}>
+        <OfflineBanner />
+        <SaveStatusBanner status={game.saveStatus} />
         {content}
         <div className="footnote">
           このMVPは静的サイトとして動作します。調査内容はこのブラウザのみに保存され、サーバーへ送信しません。

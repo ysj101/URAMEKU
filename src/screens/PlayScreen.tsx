@@ -1,4 +1,5 @@
 import { CaseHeader } from '../components/CaseHeader';
+import { TutorialHint } from '../components/TutorialHint';
 import { ArticleScreen } from './ArticleScreen';
 import { InvestigationScreen } from './InvestigationScreen';
 import { ResultScreen } from './ResultScreen';
@@ -20,6 +21,7 @@ export function PlayScreen({ game, nav }: { game: GameApi; nav: Navigation }) {
         </button>
       </div>
       <CaseHeader caseData={current} />
+      <TutorialHint caseData={current} progress={progress} stage={stage} />
       <div id="game">
         {progress.published ? (
           <ResultScreen game={game} nav={nav} />
