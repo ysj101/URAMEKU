@@ -41,5 +41,34 @@
       "on": "オン",
       "off": "オフ"
     }
+  },
+  "characters": {
+    "names": {
+      "shinobu": "シノブ",
+      "mega": "メガ",
+      "kuro": "クロ",
+      "harada": "ハラダ部長"
+    },
+    "poses": {
+      "idle": "待機",
+      "point": "指さし",
+      "inspect": "調べる",
+      "explain": "説明"
+    },
+    "reactions": {
+      "idle": "通常",
+      "happy": "うれしい",
+      "surprised": "おどろき",
+      "thinking": "考え中",
+      "worried": "心配"
+    },
+    "effects": {
+      "conflict": "矛盾",
+      "discovery": "発見",
+      "focus": "注目",
+      "idea": "ひらめき",
+      "question": "疑問",
+      "surprise": "おどろき"
+    }
   }
 }
