@@ -21,10 +21,10 @@ describe('CaseNotebook', () => {
     expect(screen.getByText('解決')).toBeInTheDocument();
     expect(screen.getByText('調査中')).toBeInTheDocument();
     const spent = spentBudget(c2, p2);
-    expect(screen.getByLabelText(`調査予算 ${spent} / ${c2.budget}`)).toBeInTheDocument();
-    expect(
-      screen.getAllByLabelText(`調査予算 0 / ${CASES[0]!.budget}`).length,
-    ).toBeGreaterThanOrEqual(1);
+    // <dd> の aria-label は読み上げに乗らないため外した（MVP-039）。<dt>「調査予算」が名前になる
+    expect(screen.getByText(`${spent} / ${c2.budget}`)).toBeInTheDocument();
+    expect(screen.getAllByText(`0 / ${CASES[0]!.budget}`).length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText('調査予算')).toHaveLength(CASES.length);
     expect(
       screen.getByText('少数の選択から心理特性を診断するものではありません。'),
     ).toBeInTheDocument();

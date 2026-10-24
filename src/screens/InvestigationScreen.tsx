@@ -37,7 +37,9 @@ export function InvestigationScreen({ game }: { game: GameApi }) {
   return (
     <>
       <div className="meter">
-        <span>STEP 01 / 資料を調べる</span>
+        <span data-focus-target tabIndex={-1}>
+          STEP 01 / 資料を調べる
+        </span>
         <span className="budget">
           調査予算：残り {remainingBudget(current, progress)} / {current.budget}
         </span>
@@ -53,12 +55,12 @@ export function InvestigationScreen({ game }: { game: GameApi }) {
           </button>
         </div>
       )}
-      <h3 className="section-title">
+      <h2 className="section-title">
         調査資料{' '}
         <small>
           {progress.opened.length} / {current.documents.length} 件確認済み
         </small>
-      </h3>
+      </h2>
       <DocumentGrid caseData={current} progress={progress} onOpen={handleOpen} />
       <EvidenceBoard
         caseData={current}

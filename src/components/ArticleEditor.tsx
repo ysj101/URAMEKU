@@ -59,7 +59,7 @@ export function ArticleEditor({
 
   return (
     <>
-      <h3 className="section-title">組み立て中の見出し</h3>
+      <h2 className="section-title">組み立て中の見出し</h2>
       <div
         className="headline-preview article-slots"
         role="group"
@@ -150,9 +150,9 @@ export function ArticleEditor({
           この見出しをクリア
         </button>
       </div>
-      <h3 className="section-title">
+      <h2 className="section-title">
         切り抜きの断片 <small>正確な内容と誤解を招く内容が混在</small>
-      </h3>
+      </h2>
       <ul className="fragment-grid fragment-list" aria-label="切り抜きの断片">
         {caseData.headline_fragments.map((f) => {
           const usedAt = article.indexOf(f.id);

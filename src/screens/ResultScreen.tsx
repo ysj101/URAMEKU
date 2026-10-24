@@ -75,7 +75,9 @@ export function ResultScreen({ game, nav }: { game: GameApi; nav: Navigation }) 
   return (
     <>
       <div className="meter">
-        <span>STEP 03 / 編集部の評価</span>
+        <span data-focus-target tabIndex={-1}>
+          STEP 03 / 編集部の評価
+        </span>
         <span>{r.cleared ? '掲載承認' : '追加調査が必要'}</span>
       </div>
       <section
@@ -85,9 +87,9 @@ export function ResultScreen({ game, nav }: { game: GameApi; nav: Navigation }) 
         data-cleared={r.cleared ? 'true' : 'false'}
       >
         <div className="result-head">
-          <h3 id="result-title">
+          <h2 id="result-title">
             {r.cleared ? '掲載可能な記事になりました！' : '記事を差し戻しました'}
-          </h3>
+          </h2>
           <Stamp
             key={r.cleared ? 'accepted' : 'rejected'}
             kind={r.cleared ? 'accepted' : 'rejected'}
@@ -99,7 +101,7 @@ export function ResultScreen({ game, nav }: { game: GameApi; nav: Navigation }) 
         <div className="result-body">
           <div className="result-score">
             {r.cleared && (
-              <div className="result-rank" aria-label={`評価ランク ${rankOf(r.points)}`}>
+              <div className="result-rank" role="img" aria-label={`評価ランク ${rankOf(r.points)}`}>
                 <span className="result-rank-label" aria-hidden="true">
                   評価
                 </span>
