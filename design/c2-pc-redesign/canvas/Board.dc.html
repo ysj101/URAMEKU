@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>証拠ボードと検証メモ</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@700;800&amp;family=Zen+Kaku+Gothic+New:wght@500;700;900&amp;family=Yomogi&amp;display=swap">
+<style>
+body{margin:0;background:#F2ECDF}
+a{color:#242322}a:hover{color:#B23A36}
+button{font:inherit;cursor:pointer}
+.mc{font-family:'Shippori Mincho B1',serif}
+.hand{font-family:'Yomogi',cursive}
+.ground{background-color:#F2ECDF;background-image:url(/_blob/407ad22aa4aa0dc048d1f4160c3dd060),url(/_blob/7b4bd571ded9edfefe41ffe7b0b3c5f1),url(/_blob/1f4486ed3cd703c4b87c6e26c630dbe3);background-size:100% auto,1400px 900px,512px;background-repeat:no-repeat,repeat,repeat;background-position:center 0,0 0,0 0}
+.grain{position:absolute;inset:0;pointer-events:none;background:url(/_blob/2a26d8caada68b6abc733da1b42ecede) 0 0/512px;mix-blend-mode:multiply;z-index:60}
+.paper{background-color:#FFFAF0;background-image:url(/_blob/7b4bd571ded9edfefe41ffe7b0b3c5f1),url(/_blob/e67ef8005e709ae5421edc7f70686603);background-size:900px 580px,256px}
+.cork{background:#A6703F url(/_blob/20ac7a324fddf54c834c5e24115a8ea1) center/cover no-repeat}
+.lift{box-shadow:0 1px 1px rgba(36,35,34,.25),0 14px 22px -12px rgba(20,14,8,.7)}
+.sh{filter:drop-shadow(0 1px 0 rgba(36,35,34,.25)) drop-shadow(0 10px 12px rgba(36,35,34,.28))}
+.torn{clip-path:polygon(0.0% 0.4%,4.2% 0.9%,8.3% 0.6%,12.5% 1.0%,16.7% 1.0%,20.8% 0.1%,25.0% 0.0%,29.2% 1.3%,33.3% 0.4%,37.5% 0.4%,41.7% 1.6%,45.8% 0.8%,50.0% 1.3%,54.2% 0.8%,58.3% 1.0%,62.5% 0.2%,66.7% 1.0%,70.8% 1.4%,75.0% 0.8%,79.2% 1.2%,83.3% 1.1%,87.5% 0.1%,91.7% 1.2%,95.8% 0.9%,100.0% 0.5%,99.8% 6.2%,99.3% 12.5%,99.6% 18.8%,99.8% 25.0%,99.6% 31.2%,99.9% 37.5%,99.2% 43.8%,99.7% 50.0%,99.2% 56.2%,99.9% 62.5%,99.8% 68.8%,98.7% 75.0%,98.8% 81.2%,98.9% 87.5%,100.0% 93.8%,99.2% 100.0%,95.8% 97.9%,91.7% 98.4%,87.5% 99.1%,83.3% 99.6%,79.2% 98.3%,75.0% 99.4%,70.8% 99.1%,66.7% 99.8%,62.5% 99.9%,58.3% 99.7%,54.2% 98.2%,50.0% 99.3%,45.8% 100.0%,41.7% 99.7%,37.5% 99.8%,33.3% 99.3%,29.2% 99.8%,25.0% 99.1%,20.8% 99.1%,16.7% 98.6%,12.5% 98.6%,8.3% 98.9%,4.2% 98.5%,0.0% 99.2%,0.6% 93.8%,1.2% 87.5%,1.1% 81.2%,0.4% 75.0%,0.9% 68.8%,0.1% 62.5%,0.7% 56.2%,0.1% 50.0%,1.0% 43.8%,0.9% 37.5%,0.4% 31.2%,0.2% 25.0%,0.5% 18.8%,1.0% 12.5%,0.1% 6.2%)}
+.rough{clip-path:polygon(0.0% 3.7%,10.0% 3.0%,20.0% 1.1%,30.0% 6.9%,40.0% 0.1%,50.0% 4.0%,60.0% 7.2%,70.0% 0.6%,80.0% 4.4%,90.0% 4.9%,100.0% 0.3%,99.1% 25.0%,98.4% 50.0%,99.2% 75.0%,97.5% 100.0%,90.0% 94.3%,80.0% 92.8%,70.0% 98.0%,60.0% 95.1%,50.0% 98.2%,40.0% 96.7%,30.0% 99.4%,20.0% 96.1%,10.0% 92.9%,0.0% 93.9%,0.8% 75.0%,0.3% 50.0%,1.3% 25.0%)}
+.worn{-webkit-mask-image:url(/_blob/8111447190e8cf5b2d892f1889a5d09e);mask-image:url(/_blob/8111447190e8cf5b2d892f1889a5d09e);-webkit-mask-size:220px;mask-size:220px}
+.ink{background:url(/_blob/8111447190e8cf5b2d892f1889a5d09e) 0 0/200px;-webkit-background-clip:text;background-clip:text;color:transparent}
+.ink-red{background:url(/_blob/4c49acf00dfb2527e625519bbd41d172) 0 0/200px;-webkit-background-clip:text;background-clip:text;color:transparent}
+.tape{position:absolute;width:96px;height:28px;background:url(/_blob/f0b359b2c4f4efe0362aceef0946a37f) center/100% 100% no-repeat;opacity:.86;mix-blend-mode:multiply}
+.tape.blue{background-image:url(/_blob/77e0e04aba3772fe63d2a38e033e6be9);opacity:.8}
+.tape.red{background:#C83A34;height:18px;opacity:.82}
+.cut{filter:drop-shadow(0 10px 10px rgba(36,35,34,.3))}
+.bubble{position:absolute;z-index:5;background:#FFFCF5;border:1.5px solid #242322;border-radius:22px;padding:12px 18px;font-size:15px;line-height:1.6;font-weight:700;color:#242322;box-shadow:0 8px 16px -10px rgba(36,35,34,.5)}
+.bubble.tail-b::after{content:'';position:absolute;right:46px;bottom:-9px;width:16px;height:16px;background:#FFFCF5;border-right:1.5px solid #242322;border-bottom:1.5px solid #242322;transform:rotate(45deg)}
+.label{display:inline-block;background:#242322;color:#FFF9EF;font-weight:900;font-size:13px;letter-spacing:.14em;padding:6px 14px 6px 12px;clip-path:polygon(0 8%,100% 0,97% 100%,2% 92%)}
+.label.red{background:#C83A34}
+.pin{position:absolute;left:50%;top:-10px;margin-left:-11px;width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f08a84,#C83A34 55%,#7e2420);box-shadow:2px 5px 3px rgba(20,14,8,.5)}
+.ruled{background-color:#FFFCF4;background-image:linear-gradient(90deg,transparent 0 56px,rgba(200,58,52,.5) 56px 57.5px,transparent 57.5px),repeating-linear-gradient(180deg,transparent 0 39px,rgba(63,113,137,.25) 39px 40px)}
+.btn-wrap{display:inline-block;filter:drop-shadow(0 8px 8px rgba(36,35,34,.3))}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:56px;padding:0 34px;background:#C83A34;color:#FFF9EF;font-family:'Shippori Mincho B1',serif;font-weight:800;font-size:19px;letter-spacing:.08em;text-decoration:none;border:0;clip-path:polygon(1% 8%,99% 0,100% 88%,97% 100%,0 94%)}
+.btn-sub{display:inline-flex;align-items:center;min-height:48px;padding:0 8px;background:transparent;border:0;border-bottom:2px solid #242322;font-weight:800;font-size:15px;color:#242322;text-decoration:none}
+</style>
+</helmet>
+<div class="ground" style="position: relative; width: 100%; min-height: 1240px; font-family: 'Zen Kaku Gothic New', sans-serif; color: #242322; overflow: hidden">
+  <div style="max-width: 1360px; margin: 0 auto; padding: 40px 40px 60px">
+    <p style="margin: 0 0 6px; font-size: 13px; font-weight: 700; color: #5E5A54">▲ 調査資料のつづき（同じページの下部）</p>
+    <div style="display: flex; align-items: flex-end; gap: 16px; border-bottom: 2px solid #242322; padding-bottom: 10px">
+      <h3 class="mc ink" style="margin: 0; font-size: 32px; font-weight: 800">証拠ボード</h3>
+      <span style="font-size: 14px; font-weight: 700; color: #5E5A54; padding-bottom: 4px">ピン留めした資料から2枚を選んで照合する</span>
+      <span class="label worn" style="margin-left: auto">採用 4 件</span>
+    </div>
+
+    <div style="overflow-x: auto; margin-top: 24px; padding: 6px 6px 22px">
+      <section aria-label="証拠ボード" class="cork" style="position: relative; width: 1272px; height: 560px; box-sizing: border-box; box-shadow: inset 0 0 40px rgba(30,20,10,.35), 0 18px 30px -16px rgba(36,35,34,.6)">
+        <svg aria-hidden="true" width="1272" height="560" style="position: absolute; left: 0; top: 0; pointer-events: none; z-index: 3">
+          <path d="M 451 93 C 620 250, 820 70, 1021 155" stroke="rgba(20,14,8,.35)" stroke-width="3.5" fill="none" transform="translate(3 6)"></path>
+          <path d="M 451 93 C 620 250, 820 70, 1021 155" stroke="#B8302A" stroke-width="3.5" fill="none" stroke-linecap="round"></path>
+        </svg>
+
+        <sc-for list="{{cards}}" as="c" hint-placeholder-count="4">
+          <button type="button" class="paper lift" style="position: absolute; left: {{c.x}}px; top: {{c.y}}px; width: 232px; text-align: left; border: 0; padding: 24px 18px 18px; transform: rotate({{c.r}}deg) scale({{c.s}}); z-index: 4">
+            <span class="pin"></span>
+            <span style="display: block; font-size: 11px; font-weight: 900; letter-spacing: .14em; color: #5E5A54">{{c.no}}</span>
+            <span class="mc" style="display: block; font-size: 17px; font-weight: 800; line-height: 1.4; margin-top: 4px">{{c.title}}</span>
+            <span class="mc {{c.numClass}}" style="display: block; font-size: 44px; font-weight: 800; line-height: 1.1; margin-top: 10px">{{c.num}}</span>
+            <span style="display: block; font-size: 12px; font-weight: 700; color: #5E5A54; margin-top: 4px">{{c.cap}}</span>
+            <sc-if value="{{c.sel}}" hint-placeholder-val="{{false}}"><span class="mc worn" style="position: absolute; right: 10px; bottom: 12px; width: 46px; height: 46px; border-radius: 50%; border: 3px solid #C83A34; color: #C83A34; font-size: 24px; font-weight: 800; display: flex; align-items: center; justify-content: center; transform: rotate(-12deg); mix-blend-mode: multiply">{{c.sel}}</span></sc-if>
+          </button>
+        </sc-for>
+
+        <div class="sh" style="position: absolute; left: 56px; top: 318px; transform: rotate(-3.5deg); z-index: 4">
+          <div style="position: relative; width: 300px; background: #F1D88A; padding: 26px 20px 22px">
+            <span class="tape" style="left: 102px; top: -12px; transform: rotate(3deg)"></span>
+            <strong class="hand" style="font-size: 19px">照合のお題</strong>
+            <p class="hand" style="margin: 6px 0 0; font-size: 16px; line-height: 1.75">広告の「90%」と、別の母数で計算した数字。その母数がどこから来たかを示す2枚を結ぶ。</p>
+          </div>
+        </div>
+
+        <div class="sh" style="position: absolute; left: 420px; bottom: 34px; transform: rotate(.8deg); z-index: 4">
+          <div class="paper torn" style="width: 640px; padding: 18px 26px 20px; display: flex; flex-direction: column; gap: 8px">
+            <span class="label red worn" style="align-self: flex-start">関係性の証明</span>
+            <span class="mc ink" style="font-size: 22px; font-weight: 800">A　無料体験者の登録台帳　↔　B　翌月の継続状況</span>
+            <span style="font-size: 12px; color: #5E5A54">証拠カードを2枚順に押して照合。もう一度押すと外れます。</span>
+          </div>
+        </div>
+
+        <img class="cut" src="/_blob/6d9d59865907e88ef5278270cced6e3f" alt="" style="position: absolute; right: 20px; bottom: 14px; height: 130px; z-index: 5">
+      </section>
+    </div>
+
+    <div style="display: flex; align-items: flex-end; gap: 16px; border-bottom: 2px solid #242322; padding-bottom: 10px; margin-top: 40px">
+      <h3 class="mc ink" style="margin: 0; font-size: 32px; font-weight: 800">検証メモ</h3>
+      <span style="font-size: 14px; font-weight: 700; color: #5E5A54; padding-bottom: 4px">数字は自分で資料から計算する</span>
+    </div>
+
+    <div style="position: relative; display: flex; gap: 0; margin-top: 30px; align-items: flex-end">
+      <div class="sh" style="flex: 1; transform: rotate(-.5deg)">
+        <div class="ruled torn" style="position: relative; padding: 26px 260px 30px 86px; display: flex; flex-direction: column; gap: 22px">
+          <label style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+            <span style="font-size: 17px; font-weight: 700">無料体験の登録者全体に対する翌月の継続率</span>
+            <span style="display: flex; align-items: center; gap: 8px">
+              <input type="number" value="45" aria-label="無料体験の登録者全体に対する翌月の継続率" class="hand" style="width: 130px; height: 48px; border: 0; border-bottom: 2px solid #242322; background: transparent; font-size: 30px; text-align: center; color: #2F5F76">
+              <span class="mc" style="font-size: 22px; font-weight: 800">%</span>
+            </span>
+          </label>
+          <label style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+            <span style="font-size: 17px; font-weight: 700">有料契約に移行した人の翌月継続率</span>
+            <span style="display: flex; align-items: center; gap: 8px">
+              <input type="number" placeholder="数値を入力" aria-label="有料契約に移行した人の翌月継続率" class="hand" style="width: 130px; height: 48px; border: 0; border-bottom: 2px dashed #86817A; background: transparent; font-size: 18px; text-align: center">
+              <span class="mc" style="font-size: 22px; font-weight: 800">%</span>
+            </span>
+          </label>
+        </div>
+      </div>
+      <span class="tape" style="left: -18px; top: -8px; transform: rotate(-30deg); z-index: 3"></span>
+      <img class="cut" src="/_blob/1570cea22ad44242c1635561139ddd49" alt="データ担当メガ" style="position: absolute; right: 20px; bottom: -20px; height: 330px; z-index: 4">
+      <div class="bubble tail-b" style="right: 150px; top: -110px; width: 200px; font-size: 14px">分母をそろえてから計算しよう。</div>
+    </div>
+
+    <div style="display: flex; gap: 26px; align-items: center; margin-top: 44px; flex-wrap: wrap">
+      <span class="btn-wrap"><a href="Article.dc.html" class="btn">記事を組み立てる →</a></span>
+      <button type="button" class="btn-sub">この事件を最初から</button>
+    </div>
+  </div>
+  <img src="/_blob/5f33a8798e8220dcd0b2852da0cbf29f" alt="" aria-hidden="true" style="position: absolute; left: 520px; bottom: -40px; width: 520px; transform: rotate(-3deg); z-index: 0; filter: drop-shadow(0 8px 10px rgba(36,35,34,.25))">
+  <div class="grain" aria-hidden="true"></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1240}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const raw = [
+      { x: 44, y: 54, r: -3, no: 'DOCUMENT 01', title: 'キャンペーン広告', num: '90%', cap: '利用者の90%が翌月も利用', sel: '' },
+      { x: 335, y: 93, r: 2, no: 'DOCUMENT 02', title: '無料体験者の登録台帳', num: '100人', cap: '無料体験の新規登録者', sel: 'A' },
+      { x: 625, y: 44, r: -1.5, no: 'DOCUMENT 03', title: '料金決済の集計', num: '50人', cap: '有料契約へ移行', sel: '' },
+      { x: 905, y: 155, r: 2.5, no: 'DOCUMENT 04', title: '翌月の継続状況', num: '45人', cap: '有料契約者のうち翌月も継続', sel: 'B' }
+    ];
+    const cards = raw.map(c => ({ ...c, s: c.sel ? 1.04 : 1, numClass: c.sel ? 'ink-red' : 'ink' }));
+    return { cards };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>記事作成</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@700;800&amp;family=Zen+Kaku+Gothic+New:wght@500;700;900&amp;family=Yomogi&amp;display=swap">
+<style>
+body{margin:0;background:#F2ECDF}
+a{color:#242322}a:hover{color:#B23A36}
+button{font:inherit;cursor:pointer}
+.mc{font-family:'Shippori Mincho B1',serif}
+.hand{font-family:'Yomogi',cursive}
+.ground{background-color:#F2ECDF;background-image:url(/_blob/407ad22aa4aa0dc048d1f4160c3dd060),url(/_blob/7b4bd571ded9edfefe41ffe7b0b3c5f1),url(/_blob/1f4486ed3cd703c4b87c6e26c630dbe3);background-size:100% auto,1400px 900px,512px;background-repeat:no-repeat,repeat,repeat;background-position:center 0,0 0,0 0}
+.grain{position:absolute;inset:0;pointer-events:none;background:url(/_blob/2a26d8caada68b6abc733da1b42ecede) 0 0/512px;mix-blend-mode:multiply;z-index:60}
+.paper{background-color:#FFFAF0;background-image:url(/_blob/7b4bd571ded9edfefe41ffe7b0b3c5f1),url(/_blob/e67ef8005e709ae5421edc7f70686603);background-size:900px 580px,256px}
+.kraft{background-color:#D6C4A0;background-image:url(/_blob/7b4bd571ded9edfefe41ffe7b0b3c5f1),url(/_blob/d70b857b89dafd64dc5ff51535bf3aed);background-size:1000px 640px,256px}
+.clip{background-color:#EDE6D8;background-image:url(/_blob/7b4bd571ded9edfefe41ffe7b0b3c5f1),url(/_blob/1f4486ed3cd703c4b87c6e26c630dbe3);background-size:700px 450px,256px;clip-path:polygon(0 4%,6% 0,22% 3%,40% 0,61% 4%,80% 1%,100% 3%,98% 50%,100% 97%,78% 100%,55% 96%,33% 100%,12% 97%,0 100%,2% 52%)}
+.sh{filter:drop-shadow(0 1px 0 rgba(36,35,34,.25)) drop-shadow(0 10px 12px rgba(36,35,34,.28))}
+.sh-sm{display:inline-block;filter:drop-shadow(0 1px 0 rgba(36,35,34,.3)) drop-shadow(0 6px 6px rgba(36,35,34,.3))}
+.torn{clip-path:polygon(0.0% 0.4%,4.2% 0.9%,8.3% 0.6%,12.5% 1.0%,16.7% 1.0%,20.8% 0.1%,25.0% 0.0%,29.2% 1.3%,33.3% 0.4%,37.5% 0.4%,41.7% 1.6%,45.8% 0.8%,50.0% 1.3%,54.2% 0.8%,58.3% 1.0%,62.5% 0.2%,66.7% 1.0%,70.8% 1.4%,75.0% 0.8%,79.2% 1.2%,83.3% 1.1%,87.5% 0.1%,91.7% 1.2%,95.8% 0.9%,100.0% 0.5%,99.8% 6.2%,99.3% 12.5%,99.6% 18.8%,99.8% 25.0%,99.6% 31.2%,99.9% 37.5%,99.2% 43.8%,99.7% 50.0%,99.2% 56.2%,99.9% 62.5%,99.8% 68.8%,98.7% 75.0%,98.8% 81.2%,98.9% 87.5%,100.0% 93.8%,99.2% 100.0%,95.8% 97.9%,91.7% 98.4%,87.5% 99.1%,83.3% 99.6%,79.2% 98.3%,75.0% 99.4%,70.8% 99.1%,66.7% 99.8%,62.5% 99.9%,58.3% 99.7%,54.2% 98.2%,50.0% 99.3%,45.8% 100.0%,41.7% 99.7%,37.5% 99.8%,33.3% 99.3%,29.2% 99.8%,25.0% 99.1%,20.8% 99.1%,16.7% 98.6%,12.5% 98.6%,8.3% 98.9%,4.2% 98.5%,0.0% 99.2%,0.6% 93.8%,1.2% 87.5%,1.1% 81.2%,0.4% 75.0%,0.9% 68.8%,0.1% 62.5%,0.7% 56.2%,0.1% 50.0%,1.0% 43.8%,0.9% 37.5%,0.4% 31.2%,0.2% 25.0%,0.5% 18.8%,1.0% 12.5%,0.1% 6.2%)}
+.worn{-webkit-mask-image:url(/_blob/8111447190e8cf5b2d892f1889a5d09e);mask-image:url(/_blob/8111447190e8cf5b2d892f1889a5d09e);-webkit-mask-size:220px;mask-size:220px}
+.ink{background:url(/_blob/8111447190e8cf5b2d892f1889a5d09e) 0 0/200px;-webkit-background-clip:text;background-clip:text;color:transparent}
+.ln{background-image:repeating-linear-gradient(90deg,transparent 0 150px,#FFFAF0 150px 166px),repeating-linear-gradient(180deg,rgba(36,35,34,.36) 0 1.5px,transparent 1.5px 8px)}
+.ht{background-color:#a9a297;background-image:radial-gradient(rgba(36,35,34,.82) 1.2px,transparent 1.6px),linear-gradient(160deg,rgba(255,255,255,.35),rgba(0,0,0,.25));background-size:4px 4px,100% 100%}
+.tape{position:absolute;width:96px;height:28px;background:url(/_blob/f0b359b2c4f4efe0362aceef0946a37f) center/100% 100% no-repeat;opacity:.86;mix-blend-mode:multiply}
+.tape.gray{background-image:url(/_blob/5abddccbb03fc3232176008bd1785aff);opacity:.6}
+.cut{filter:drop-shadow(0 10px 10px rgba(36,35,34,.3))}
+.bubble{position:absolute;z-index:5;background:#FFFCF5;border:1.5px solid #242322;border-radius:22px;padding:12px 18px;font-size:15px;line-height:1.6;font-weight:700;color:#242322;box-shadow:0 8px 16px -10px rgba(36,35,34,.5)}
+.bubble.tail-b::after{content:'';position:absolute;right:56px;bottom:-9px;width:16px;height:16px;background:#FFFCF5;border-right:1.5px solid #242322;border-bottom:1.5px solid #242322;transform:rotate(45deg)}
+.label{display:inline-block;background:#242322;color:#FFF9EF;font-weight:900;font-size:13px;letter-spacing:.14em;padding:6px 14px 6px 12px;clip-path:polygon(0 8%,100% 0,97% 100%,2% 92%)}
+.label.red{background:#C83A34}
+.btn-wrap{display:inline-block;filter:drop-shadow(0 8px 8px rgba(36,35,34,.3))}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:56px;padding:0 34px;background:#C83A34;color:#FFF9EF;font-family:'Shippori Mincho B1',serif;font-weight:800;font-size:19px;letter-spacing:.08em;text-decoration:none;border:0;clip-path:polygon(1% 8%,99% 0,100% 88%,97% 100%,0 94%)}
+.btn-sub{display:inline-flex;align-items:center;min-height:48px;padding:0 8px;background:transparent;border:0;border-bottom:2px solid #242322;font-weight:800;font-size:15px;color:#242322;text-decoration:none}
+.tabon{background:#242322;color:#FFF9EF;font-weight:900;padding:12px 22px;font-size:15px;letter-spacing:.1em;clip-path:polygon(3% 0,97% 4%,100% 100%,0 100%)}
+.taboff{color:#5E5A54;font-weight:700;padding:10px 22px;font-size:15px;letter-spacing:.1em;clip-path:polygon(4% 6%,96% 0,100% 100%,0 100%)}
+</style>
+</helmet>
+<div class="ground" style="position: relative; width: 100%; min-height: 1240px; font-family: 'Zen Kaku Gothic New', sans-serif; color: #242322; overflow: hidden">
+  <div style="max-width: 1360px; margin: 0 auto; padding: 40px 40px 60px">
+    <p style="margin: 0 0 10px; font-size: 13px; font-weight: 700; color: #5E5A54">マストヘッドと記者手帳（左列）は調査デスクと共通。ここではメイン列のみ表示</p>
+    <div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; border-bottom: 2px solid #242322">
+      <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: flex-end">
+        <span class="taboff paper">01　調査する</span>
+        <span class="tabon worn">02　記事を組み立てる</span>
+        <span class="taboff paper">03　編集部の評価</span>
+      </div>
+      <span style="font-size: 14px; font-weight: 700; padding-bottom: 10px">採用証拠 4 件 ／ 検証メモ 2 件</span>
+    </div>
+
+    <div style="position: relative; margin-top: 40px; padding-right: 250px">
+      <div class="sh" style="transform: rotate(-.4deg)">
+        <section aria-label="組み立て中の見出し" class="paper torn" style="position: relative; padding: 32px 40px 38px">
+          <div style="display: flex; align-items: baseline; justify-content: space-between; border-bottom: 5px double #242322; padding-bottom: 8px">
+            <span class="mc ink" style="font-size: 34px; font-weight: 800; letter-spacing: .12em">ウラメク新報</span>
+            <span style="font-size: 12px; font-weight: 900; letter-spacing: .2em">校正刷り ／ CASE 01</span>
+          </div>
+          <img class="worn" src="/_blob/ae816da0ee9088485a42337c4d4c28ad" alt="下書き" style="position: absolute; right: 40px; top: 76px; width: 200px; transform: rotate(9deg); mix-blend-mode: multiply">
+          <p style="margin: 18px 0 12px; font-size: 13px; font-weight: 700; color: #5E5A54">見出し（断片を3つ、順番に貼る。押すと外せます）</p>
+          <div style="display: flex; flex-wrap: wrap; gap: 14px; align-items: center; min-height: 120px">
+            <span class="sh-sm" style="transform: rotate(-1.2deg)"><button type="button" class="clip mc" style="border: 0; padding: 18px 28px; font-size: 30px; font-weight: 800; color: #242322">広告の継続率90%は</button></span>
+            <span class="sh-sm" style="transform: rotate(.9deg)"><button type="button" class="clip mc" style="border: 0; padding: 18px 28px; font-size: 30px; font-weight: 800; color: #242322">有料契約者を分母にした数字</button></span>
+            <span class="sh-sm" style="transform: rotate(-.6deg)"><button type="button" class="clip mc" style="border: 0; padding: 18px 28px; font-size: 30px; font-weight: 800; color: #242322">体験登録者全体では45%が継続</button></span>
+          </div>
+          <div style="display: flex; gap: 24px; margin-top: 24px">
+            <div class="ht" style="flex: 0 0 230px; height: 170px"></div>
+            <div class="ln" style="flex: 1; height: 170px"></div>
+          </div>
+        </section>
+      </div>
+      <img class="cut" src="/_blob/283d5900439718760c8215fa78ff91a3" alt="調査記者シノブ" style="position: absolute; right: -30px; bottom: -40px; height: 460px; z-index: 4">
+      <div class="bubble tail-b" style="right: 60px; top: -30px; width: 220px; font-size: 15px">この構成でよさそうですか？　数字と分母、合ってる？</div>
+    </div>
+
+    <div style="display: flex; align-items: flex-end; gap: 16px; border-bottom: 2px solid #242322; padding-bottom: 10px; margin-top: 56px">
+      <h3 class="mc ink" style="margin: 0; font-size: 30px; font-weight: 800">切り抜きの断片</h3>
+      <span style="font-size: 14px; font-weight: 700; color: #5E5A54; padding-bottom: 4px">正確な内容と誤解を招く内容が混在</span>
+    </div>
+    <div class="kraft" style="display: flex; flex-wrap: wrap; gap: 30px 26px; margin-top: 26px; padding: 36px 32px 30px; border-radius: 4px; box-shadow: inset 0 0 50px rgba(60,40,20,.28), 0 12px 24px -14px rgba(36,35,34,.5)">
+      <sc-for list="{{frags}}" as="f" hint-placeholder-count="5">
+        <span class="sh-sm" style="position: relative; transform: rotate({{f.r}}deg)">
+          <span class="tape gray" style="left: 50%; top: -12px; margin-left: -30px; width: 60px; height: 22px; z-index: 2"></span>
+          <button type="button" disabled class="clip mc" style="border: 0; padding: 18px 26px; font-size: 21px; font-weight: 800; color: #5E5A54; cursor: not-allowed">{{f.text}}</button>
+        </span>
+      </sc-for>
+      <p style="flex-basis: 100%; margin: 4px 0 0; font-size: 13px; font-weight: 700">見出しが3つ埋まっているため、残りの断片は選べません</p>
+    </div>
+
+    <div class="sh" style="margin-top: 30px; transform: rotate(.4deg)">
+      <div style="display: flex; gap: 14px; align-items: center; padding: 16px 20px; background: #F1D88A">
+        <span class="label red worn">編集部より</span>
+        <span class="hand" style="font-size: 16px; line-height: 1.7">資料を調査しただけでは根拠になりません。証拠ボードに貼り、照合する組み合わせを指定したか確認してください。</span>
+      </div>
+    </div>
+
+    <div style="display: flex; gap: 26px; align-items: center; margin-top: 36px; flex-wrap: wrap">
+      <span class="btn-wrap"><a href="Result.dc.html" class="btn">記事を提出して評価を見る</a></span>
+      <a href="Board.dc.html" class="btn-sub">← 調査へ戻る</a>
+    </div>
+  </div>
+  <img src="/_blob/eeb81f3652d284592d0e50288fdfb9cc" alt="" aria-hidden="true" style="position: absolute; right: 30px; bottom: -30px; width: 440px; transform: rotate(4deg); z-index: 0; filter: drop-shadow(0 8px 10px rgba(36,35,34,.25))">
+  <div class="grain" aria-hidden="true"></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1240}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const t = ['ほぼ全利用者が継続','虚偽広告だと断定できる','満足度90%の証拠','登録者の9割が有料契約','継続率は測定できない'];
+    const r = [-2, 1.5, -1, 2, -1.6];
+    return { frags: t.map((text, i) => ({ text, r: r[i] })) };
+  }
+}
+</script>
+</body>
+</html>
