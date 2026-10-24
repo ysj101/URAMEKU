@@ -25,6 +25,18 @@ python3 -m http.server 8000
 
 試作は React/Vite の完成実装ではありません。ブランドとパスをウラメク用に更新したうえで、既存のゲームロジックを保持しています。
 
+## 開発環境
+
+Node.js 22（`.nvmrc`）と npm を使用します。
+
+```bash
+npm ci               # 依存の再現インストール
+npm run lint         # ESLint
+npm run typecheck    # TypeScript 型検査
+npm run format:check # Prettier 整形チェック（npm run format で修正）
+npm run check        # 上記をまとめて実行
+```
+
 ## フォルダ概要
 
 ```text

@@ -1,0 +1,13 @@
+node_modules
+dist
+coverage
+assets.manifest.json
+qa/*.json
+public/assets
+design
+previews
+prototype
+docs
+data
+*.md
+public/manifest.webmanifest
