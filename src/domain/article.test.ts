@@ -1,9 +1,12 @@
 import {
   addFragment,
+  clearArticle,
   countFragmentsInPlace,
   fragmentFeedback,
   isArticleCorrect,
+  moveFragment,
   removeFragmentAt,
+  replaceFragmentAt,
 } from './article';
 import { publishVerdict } from './publish';
 import { ARTICLE_LENGTH, FRAGMENT_KINDS, type HeadlineFragment } from './types';
@@ -209,4 +212,61 @@ describe('実データの断片メタ情報', () => {
       });
     });
   }
+});
+
+describe('article: 編集操作（MVP-025）', () => {
+  const full = makeProgress({ article: ['f0', 'f1', 'f2'] });
+
+  it('replaceFragmentAt はスロットの断片を差し替える', () => {
+    expect(replaceFragmentAt(full, 1, 'f5').article).toEqual(['f0', 'f5', 'f2']);
+    expect(replaceFragmentAt(full, 0, 'f7').article).toEqual(['f7', 'f1', 'f2']);
+  });
+  it('replaceFragmentAt は別スロットで使用中の断片を拒否する（重複不可）', () => {
+    expect(replaceFragmentAt(full, 1, 'f0')).toBe(full);
+    expect(replaceFragmentAt(full, 1, 'f1')).toBe(full);
+  });
+  it('replaceFragmentAt は空スロット直後なら追加として扱い、3 つ超えは不可', () => {
+    const one = makeProgress({ article: ['f0'] });
+    expect(replaceFragmentAt(one, 1, 'f3').article).toEqual(['f0', 'f3']);
+    // 歯抜けにはしない（index 2 を指定しても末尾に追加）
+    expect(replaceFragmentAt(one, 2, 'f3').article).toEqual(['f0', 'f3']);
+    expect(replaceFragmentAt(full, 3, 'f3')).toBe(full);
+    expect(replaceFragmentAt(full, -1, 'f3')).toBe(full);
+    expect(replaceFragmentAt(full, 1.5, 'f3')).toBe(full);
+  });
+  it('moveFragment は順序を入れ替える', () => {
+    expect(moveFragment(full, 0, 1).article).toEqual(['f1', 'f0', 'f2']);
+    expect(moveFragment(full, 2, 0).article).toEqual(['f2', 'f0', 'f1']);
+    expect(moveFragment(full, 0, 2).article).toEqual(['f1', 'f2', 'f0']);
+  });
+  it('moveFragment は範囲外・同一位置では変更しない', () => {
+    expect(moveFragment(full, 0, 0)).toBe(full);
+    expect(moveFragment(full, 0, 3)).toBe(full);
+    expect(moveFragment(full, -1, 0)).toBe(full);
+    const two = makeProgress({ article: ['f0', 'f1'] });
+    expect(moveFragment(two, 1, 2)).toBe(two);
+    expect(moveFragment(two, 1, 0).article).toEqual(['f1', 'f0']);
+  });
+  it('clearArticle は 3 スロットを空にし、他の進行は保つ', () => {
+    const p = makeProgress({ article: ['f0', 'f1'], pinned: ['a'] });
+    expect(clearArticle(p)).toEqual({ ...p, article: [] });
+    const empty = makeProgress();
+    expect(clearArticle(empty)).toBe(empty);
+  });
+  it('入れ替え・差し替え・外す・クリアを繰り返しても状態が整合する', () => {
+    let p = makeProgress();
+    p = addFragment(p, 'f3');
+    p = addFragment(p, 'f0');
+    p = addFragment(p, 'f1');
+    p = replaceFragmentAt(p, 0, 'f2'); // f2 f0 f1
+    p = moveFragment(p, 0, 2); // f0 f1 f2
+    expect(p.article).toEqual(['f0', 'f1', 'f2']);
+    p = removeFragmentAt(p, 1); // f0 f2
+    p = addFragment(p, 'f1'); // f0 f2 f1
+    p = moveFragment(p, 2, 1); // f0 f1 f2
+    expect(isArticleCorrect(c, p)).toBe(true);
+    p = clearArticle(p);
+    expect(p.article).toEqual([]);
+    expect(new Set(p.article).size).toBe(p.article.length);
+  });
 });
