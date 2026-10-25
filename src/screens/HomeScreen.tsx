@@ -121,6 +121,20 @@ export function HomeScreen({ game, nav }: { game: GameApi; nav: Navigation }) {
           {UI.home.settings}
         </button>
       </div>
+      <ol className="home-guide" aria-label="調査の進め方">
+        <li>
+          <strong>資料をめくる</strong>
+          <p>広告や台帳を開いて、見出しのウラにある事実を読む。</p>
+        </li>
+        <li>
+          <strong>証拠をつなぐ</strong>
+          <p>気になる資料をボードに貼り、2枚の関係を照合する。</p>
+        </li>
+        <li>
+          <strong>記事にまとめる</strong>
+          <p>数字を確かめ、証拠をもとに見出しを組み立てる。</p>
+        </li>
+      </ol>
       <p className="fine home-notice">{UI.notices.fiction}</p>
       <p className="fine home-notice">{UI.notices.notDiagnosis}</p>
     </section>
