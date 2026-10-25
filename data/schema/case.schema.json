@@ -23,55 +23,111 @@
     "disclaimer"
   ],
   "properties": {
-    "id": { "type": "string", "pattern": "^case-[0-9]{2}$" },
-    "title": { "type": "string", "minLength": 3, "maxLength": 60 },
-    "bias": { "type": "string", "minLength": 1, "maxLength": 60 },
-    "difficulty": { "type": "string", "enum": ["NORMAL", "HARD", "EXPERT"] },
-    "estimated_time": { "type": "string", "minLength": 1, "maxLength": 20 },
-    "intro": { "type": "string", "minLength": 10 },
-    "link_prompt": { "type": "string", "minLength": 10, "maxLength": 120 },
-    "budget": { "type": "integer", "minimum": 1, "maximum": 99 },
+    "id": {
+      "type": "string",
+      "pattern": "^case-[0-9]{2}$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 60
+    },
+    "bias": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 60
+    },
+    "difficulty": {
+      "type": "string",
+      "enum": [
+        "NORMAL",
+        "HARD",
+        "EXPERT"
+      ]
+    },
+    "estimated_time": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 20
+    },
+    "intro": {
+      "type": "string",
+      "minLength": 10
+    },
+    "link_prompt": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 120
+    },
+    "budget": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 99
+    },
     "documents": {
       "type": "array",
       "minItems": 5,
       "maxItems": 12,
-      "items": { "$ref": "#/$defs/document" }
+      "items": {
+        "$ref": "#/$defs/document"
+      }
     },
     "required_evidence": {
       "type": "array",
-      "minItems": 3,
-      "maxItems": 3,
+      "minItems": 0,
+      "maxItems": 12,
       "uniqueItems": true,
-      "items": { "$ref": "#/$defs/documentId" }
+      "items": {
+        "$ref": "#/$defs/documentId"
+      }
     },
     "required_link": {
       "type": "array",
-      "minItems": 2,
-      "maxItems": 2,
+      "minItems": 0,
+      "maxItems": 12,
       "uniqueItems": true,
-      "items": { "$ref": "#/$defs/documentId" }
+      "items": {
+        "$ref": "#/$defs/documentId"
+      }
     },
     "analysis_tasks": {
       "type": "array",
-      "minItems": 2,
-      "maxItems": 2,
-      "items": { "$ref": "#/$defs/analysisTask" }
+      "minItems": 0,
+      "maxItems": 20,
+      "items": {
+        "$ref": "#/$defs/analysisTask"
+      }
     },
     "headline_fragments": {
       "type": "array",
-      "minItems": 8,
+      "minItems": 0,
       "maxItems": 12,
-      "items": { "$ref": "#/$defs/headlineFragment" }
+      "items": {
+        "$ref": "#/$defs/headlineFragment"
+      }
     },
     "correct_fragments": {
       "type": "array",
-      "minItems": 3,
-      "maxItems": 3,
+      "minItems": 0,
+      "maxItems": 12,
       "uniqueItems": true,
-      "items": { "$ref": "#/$defs/fragmentId" }
+      "items": {
+        "$ref": "#/$defs/fragmentId"
+      }
     },
-    "debrief": { "$ref": "#/$defs/debrief" },
-    "disclaimer": { "type": "string", "minLength": 5 }
+    "debrief": {
+      "$ref": "#/$defs/debrief"
+    },
+    "disclaimer": {
+      "type": "string",
+      "minLength": 5
+    },
+    "schemaVersion": {
+      "const": 2
+    },
+    "v2": {
+      "$ref": "#/$defs/v2"
+    }
   },
   "additionalProperties": false,
   "$defs": {
@@ -92,29 +148,80 @@
     },
     "visual": {
       "type": "string",
-      "enum": ["advert", "report", "ledger", "news", "photo", "ticket", "clipping", "label", "receipt"]
+      "enum": [
+        "advert",
+        "report",
+        "ledger",
+        "news",
+        "photo",
+        "ticket",
+        "clipping",
+        "label",
+        "receipt"
+      ]
     },
     "document": {
       "type": "object",
-      "required": ["id", "title", "content", "cost", "visual"],
+      "required": [
+        "id",
+        "title",
+        "content",
+        "cost",
+        "visual"
+      ],
       "properties": {
-        "id": { "$ref": "#/$defs/documentId" },
-        "title": { "type": "string", "minLength": 1, "maxLength": 40 },
-        "content": { "type": "string", "minLength": 1 },
-        "cost": { "type": "integer", "minimum": 0, "maximum": 9 },
-        "visual": { "$ref": "#/$defs/visual" }
+        "id": {
+          "$ref": "#/$defs/documentId"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "content": {
+          "type": "string",
+          "minLength": 1
+        },
+        "cost": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9
+        },
+        "visual": {
+          "$ref": "#/$defs/visual"
+        }
       },
       "additionalProperties": false
     },
     "analysisTask": {
       "type": "object",
-      "required": ["id", "prompt", "unit", "expected", "tolerance"],
+      "required": [
+        "id",
+        "prompt",
+        "unit",
+        "expected",
+        "tolerance"
+      ],
       "properties": {
-        "id": { "$ref": "#/$defs/taskId" },
-        "prompt": { "type": "string", "minLength": 1 },
-        "unit": { "type": "string", "minLength": 1, "maxLength": 10 },
-        "expected": { "type": "number" },
-        "tolerance": { "type": "number", "minimum": 0 }
+        "id": {
+          "$ref": "#/$defs/taskId"
+        },
+        "prompt": {
+          "type": "string",
+          "minLength": 1
+        },
+        "unit": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 10
+        },
+        "expected": {
+          "type": "number"
+        },
+        "tolerance": {
+          "type": "number",
+          "minimum": 0
+        }
       },
       "additionalProperties": false
     },
@@ -133,11 +240,22 @@
     },
     "headlineFragment": {
       "type": "object",
-      "required": ["id", "text"],
+      "required": [
+        "id",
+        "text"
+      ],
       "properties": {
-        "id": { "$ref": "#/$defs/fragmentId" },
-        "text": { "type": "string", "minLength": 1, "maxLength": 40 },
-        "kind": { "$ref": "#/$defs/fragmentKind" },
+        "id": {
+          "$ref": "#/$defs/fragmentId"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "kind": {
+          "$ref": "#/$defs/fragmentKind"
+        },
         "reason": {
           "type": "string",
           "minLength": 5,
@@ -149,7 +267,9 @@
           "minItems": 1,
           "maxItems": 6,
           "uniqueItems": true,
-          "items": { "$ref": "#/$defs/documentId" },
+          "items": {
+            "$ref": "#/$defs/documentId"
+          },
           "description": "reason の根拠となる資料 ID（documents に存在すること）。"
         }
       },
@@ -157,12 +277,414 @@
     },
     "debrief": {
       "type": "object",
-      "required": ["explanation", "takeaway"],
+      "required": [
+        "explanation",
+        "takeaway"
+      ],
       "properties": {
-        "explanation": { "type": "string", "minLength": 15 },
-        "takeaway": { "type": "string", "minLength": 8 }
+        "explanation": {
+          "type": "string",
+          "minLength": 15
+        },
+        "takeaway": {
+          "type": "string",
+          "minLength": 8
+        }
       },
       "additionalProperties": false
+    },
+    "v2": {
+      "type": "object",
+      "required": [
+        "revision",
+        "modes",
+        "decoding",
+        "graph",
+        "reportPrompt"
+      ],
+      "properties": {
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "modes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "items": {
+            "enum": [
+              "decoding",
+              "experiment",
+              "decision"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "decoding": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 20,
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "prompt",
+              "options"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/taskId"
+              },
+              "prompt": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 5000
+              },
+              "options": {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 20,
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "text",
+                    "status",
+                    "accepted",
+                    "reason",
+                    "evidence"
+                  ],
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/taskId"
+                    },
+                    "text": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 5000
+                    },
+                    "status": {
+                      "enum": [
+                        "supported",
+                        "contradicted",
+                        "uncertain"
+                      ]
+                    },
+                    "accepted": {
+                      "type": "boolean"
+                    },
+                    "reason": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 5000
+                    },
+                    "evidence": {
+                      "type": "array",
+                      "minItems": 1,
+                      "maxItems": 100,
+                      "items": {
+                        "$ref": "#/$defs/documentId"
+                      },
+                      "uniqueItems": true
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "graph": {
+          "type": "object",
+          "required": [
+            "prompt",
+            "paths"
+          ],
+          "properties": {
+            "prompt": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 5000
+            },
+            "paths": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 20,
+              "items": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 20,
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "from",
+                    "to",
+                    "relation"
+                  ],
+                  "properties": {
+                    "from": {
+                      "$ref": "#/$defs/documentId"
+                    },
+                    "to": {
+                      "$ref": "#/$defs/documentId"
+                    },
+                    "relation": {
+                      "enum": [
+                        "supports",
+                        "contradicts",
+                        "qualifies",
+                        "sequence"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "experiment": {
+          "type": "object",
+          "required": [
+            "id",
+            "prompt",
+            "conditions",
+            "choices",
+            "revealDocuments",
+            "comparisonPrompt",
+            "explanation"
+          ],
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/taskId"
+            },
+            "prompt": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 5000
+            },
+            "conditions": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 10,
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "label",
+                  "prompt"
+                ],
+                "properties": {
+                  "id": {
+                    "$ref": "#/$defs/taskId"
+                  },
+                  "label": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 5000
+                  },
+                  "prompt": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 5000
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "choices": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 20,
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "text"
+                ],
+                "properties": {
+                  "id": {
+                    "$ref": "#/$defs/taskId"
+                  },
+                  "text": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 5000
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "revealDocuments": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 100,
+              "items": {
+                "$ref": "#/$defs/documentId"
+              },
+              "uniqueItems": true
+            },
+            "comparisonPrompt": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 5000
+            },
+            "explanation": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 5000
+            }
+          },
+          "additionalProperties": false
+        },
+        "decision": {
+          "type": "object",
+          "required": [
+            "prompt",
+            "objectives",
+            "options",
+            "resources",
+            "revealDocuments",
+            "updatePrompt"
+          ],
+          "properties": {
+            "prompt": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 5000
+            },
+            "objectives": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 20,
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "text"
+                ],
+                "properties": {
+                  "id": {
+                    "$ref": "#/$defs/taskId"
+                  },
+                  "text": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 5000
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "options": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 20,
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "text",
+                  "outcome",
+                  "tradeoff",
+                  "cost"
+                ],
+                "properties": {
+                  "id": {
+                    "$ref": "#/$defs/taskId"
+                  },
+                  "text": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 5000
+                  },
+                  "outcome": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 5000
+                  },
+                  "tradeoff": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 5000
+                  },
+                  "cost": {
+                    "type": "integer",
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "resources": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "revealDocuments": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 100,
+              "items": {
+                "$ref": "#/$defs/documentId"
+              },
+              "uniqueItems": true
+            },
+            "updatePrompt": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 5000
+            }
+          },
+          "additionalProperties": false
+        },
+        "reportPrompt": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 5000
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "if": {
+    "required": [
+      "schemaVersion"
+    ],
+    "properties": {
+      "schemaVersion": {
+        "const": 2
+      }
+    }
+  },
+  "then": {
+    "required": [
+      "v2"
+    ]
+  },
+  "else": {
+    "properties": {
+      "required_evidence": {
+        "minItems": 3,
+        "maxItems": 3
+      },
+      "required_link": {
+        "minItems": 2,
+        "maxItems": 2
+      },
+      "analysis_tasks": {
+        "minItems": 2,
+        "maxItems": 2
+      },
+      "headline_fragments": {
+        "minItems": 8,
+        "maxItems": 12
+      },
+      "correct_fragments": {
+        "minItems": 3,
+        "maxItems": 3
+      }
     }
   }
 }
