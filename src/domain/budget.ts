@@ -8,6 +8,7 @@
  * すべて純粋関数。DOM や保存処理に依存しない。
  */
 import type { CaseData, CaseDocument, CaseProgress } from './types';
+import { v2RequiredDocumentSets } from './v2Requirements';
 
 /** 資料を開こうとした結果 */
 export type OpenDocumentOutcome =
@@ -144,6 +145,15 @@ export function unopenedRequiredDocuments(
  * 必要証拠をすべて閲覧済みなら false。事件リセットで再挑戦可能。
  */
 export function isDeadEnd(caseData: CaseData, progress: CaseProgress): boolean {
+  if (caseData.v2) {
+    const remaining = remainingBudget(caseData, progress);
+    return !v2RequiredDocumentSets(caseData).some(
+      (ids) =>
+        caseData.documents
+          .filter((document) => ids.includes(document.id) && !progress.opened.includes(document.id))
+          .reduce((sum, document) => sum + documentCost(document), 0) <= remaining,
+    );
+  }
   const needed = unopenedRequiredDocuments(caseData, progress).reduce(
     (sum, d) => sum + documentCost(d),
     0,
