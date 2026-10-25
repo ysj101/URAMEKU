@@ -11,7 +11,7 @@ import type { CaseData, CaseDocument, CaseProgress } from './types';
 
 /** 資料を開こうとした結果 */
 export type OpenDocumentOutcome =
-  'opened' | 'already-open' | 'insufficient-budget' | 'unknown-document';
+  'opened' | 'already-open' | 'insufficient-budget' | 'unknown-document' | 'sealed';
 
 export interface OpenDocumentResult {
   progress: CaseProgress;
@@ -54,6 +54,21 @@ export function remainingBudget(caseData: CaseData, progress: CaseProgress): num
   return caseBudget(caseData) - spentBudget(caseData, progress);
 }
 
+/** Initial judgments must precede the additional information in all entry points. */
+export function isDocumentSealed(
+  caseData: CaseData,
+  progress: CaseProgress,
+  documentId: string,
+): boolean {
+  const v2 = caseData.v2;
+  if (!v2) return false;
+  return !!(
+    (v2.experiment?.revealDocuments.includes(documentId) &&
+      !progress.v2?.experiment?.initialChoice) ||
+    (v2.decision?.revealDocuments.includes(documentId) && !progress.v2?.decisions.length)
+  );
+}
+
 /**
  * 資料を開こうとし、新しい進行状態と「開けた／開けなかった理由」を返す。
  * 開けない場合（または既に閲覧済みの場合）は状態を変えずに同じ参照を返す。
@@ -65,6 +80,7 @@ export function tryOpenDocument(
 ): OpenDocumentResult {
   const doc = findDocument(caseData, documentId);
   if (!doc) return { progress, outcome: 'unknown-document' };
+  if (isDocumentSealed(caseData, progress, documentId)) return { progress, outcome: 'sealed' };
   if (progress.opened.includes(documentId)) return { progress, outcome: 'already-open' };
   if (remainingBudget(caseData, progress) < documentCost(doc)) {
     return { progress, outcome: 'insufficient-budget' };
@@ -101,7 +117,10 @@ export function openDocument(
 export function affordableDocuments(caseData: CaseData, progress: CaseProgress): CaseDocument[] {
   const remaining = remainingBudget(caseData, progress);
   return caseData.documents.filter(
-    (d) => !progress.opened.includes(d.id) && documentCost(d) <= remaining,
+    (d) =>
+      !progress.opened.includes(d.id) &&
+      documentCost(d) <= remaining &&
+      !isDocumentSealed(caseData, progress, d.id),
   );
 }
 

@@ -168,14 +168,14 @@ export function useGame(options: UseGameOptions = {}): GameApi {
   }, []);
 
   const current = useMemo(() => findCase(save.active) ?? CASES[0]!, [save.active]);
-  const progress = save.progress[current.id] ?? createProgress();
+  const progress = save.progress[current.id] ?? createProgress(current);
 
   const dispatch = useCallback(
     (action: GameAction) => {
       update((prev) => {
         const caseData = findCase(prev.active);
         if (!caseData) return prev;
-        const before = prev.progress[caseData.id] ?? createProgress();
+        const before = prev.progress[caseData.id] ?? createProgress(caseData);
         const after = reduceProgress(caseData, before, action);
         let session = prev.session;
         if (action.type === 'reset') {
