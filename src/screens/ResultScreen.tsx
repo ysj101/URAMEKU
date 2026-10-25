@@ -9,6 +9,15 @@ import { evaluateCase, failureReasons } from '../domain/scoring';
 import type { Navigation } from '../app/navigation';
 import type { GameApi } from '../state/useGame';
 import '../app/screens/result.css';
+import { V2ResultScreen } from './V2ResultScreen';
+
+export function ResultScreen({ game, nav }: { game: GameApi; nav: Navigation }) {
+  return game.current.v2 ? (
+    <V2ResultScreen key={game.current.id} game={game} nav={nav} />
+  ) : (
+    <LegacyResultScreen game={game} nav={nav} />
+  );
+}
 
 /**
  * 点数帯の評価ランク（文字）。uiGrade() の実在画像は A のみなので画像は使わない。
@@ -30,7 +39,7 @@ function rankOf(points: number): 'S' | 'A' | 'B' | 'C' {
  *   公開後は AnswerReveal（正解と自分の断片ごとの理由）と Debrief を出す。
  * - やり直しは window.confirm を使わず 2 段階ボタンで確認する。
  */
-export function ResultScreen({ game, nav }: { game: GameApi; nav: Navigation }) {
+function LegacyResultScreen({ game, nav }: { game: GameApi; nav: Navigation }) {
   const { cases, current, progress, dispatch } = game;
   const r = evaluateCase(current, progress);
   const reasons = r.cleared ? [] : failureReasons(current, progress);
