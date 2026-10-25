@@ -46,6 +46,13 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Validate content, alternative budget paths and walkthrough
+        run: |
+          npm run validate:cases
+          npm run lint:content
+          npm run analyze:dead-ends -- --check
+          npm run walkthrough -- --check
+
       - name: Setup Python
         uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:

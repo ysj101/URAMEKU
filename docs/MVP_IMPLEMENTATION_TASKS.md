@@ -27,3 +27,7 @@
 3方式の正常・未完了・別方針・保留・判断更新を確認する。5事件が計算正答なしで遊べ、資料を読まない推測のみでは完了しない。JSON正本、事実・分母、C-2素材、保存、削除、非診断、アクセシビリティを維持する。
 
 `npm run check`、`npm run build`、`npm run validate:cases`、`npm run lint:content`、`npm run analyze:dead-ends`、`npm run test:e2e` を行う。完了前に `python3 scripts/validate_assets.py` と `qa/coverage.json` を確認する。利用者5人以上・実機・人手承認は実施証跡がある場合のみ完了扱いとし、未実施項目は残す。配布・デプロイは本実装Issueとは別に扱う。
+
+## 実装・確認の記録（2026-10-26）
+
+V2-001〜014は各1本のPRをmainへマージ済み。V2-015が統合検証の証跡をまとめる。PR対応一覧は親Issue #99、確認結果は `qa/v2-validation.md` を参照。ユーザーの最新指示に従い今回の受入はMac上の確認に限定し、5人評価・iOS/Android実機を必須条件から外す。これらを実施済みにはせず、素材や本番リリースの人手承認も変更しない。
