@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>調査デスク</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@700;800&amp;family=Zen+Kaku+Gothic+New:wght@500;700;900&amp;family=Yomogi&amp;display=swap">
+<style>
+body{margin:0;background:#F2ECDF}
+a{color:#242322}a:hover{color:#B23A36}
+button{font:inherit;cursor:pointer}
+.mc{font-family:'Shippori Mincho B1',serif}
+.hand{font-family:'Yomogi',cursive}
+.ground{background-color:#F2ECDF;background-image:url(/_blob/1e040d95c616e2a22bf4b7a7d9404ded),url(/_blob/7b4bd571ded9edfefe41ffe7b0b3c5f1),url(/_blob/1f4486ed3cd703c4b87c6e26c630dbe3);background-size:100% auto,1400px 900px,512px;background-repeat:no-repeat,repeat,repeat;background-position:center 230px,0 0,0 0}
+.hdr{background:url(/_blob/c6b6165576941ddff1953e478c465e7a) right center/cover no-repeat;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 30%);mask-image:linear-gradient(90deg,transparent 0,#000 30%)}
+.grain{position:absolute;inset:0;pointer-events:none;background:url(/_blob/2a26d8caada68b6abc733da1b42ecede) 0 0/512px;mix-blend-mode:multiply;z-index:60}
+.paper{background-color:#FFFAF0;background-image:url(/_blob/7b4bd571ded9edfefe41ffe7b0b3c5f1),url(/_blob/e67ef8005e709ae5421edc7f70686603);background-size:900px 580px,256px}
+.kraft{background-color:#D6C4A0;background-image:url(/_blob/7b4bd571ded9edfefe41ffe7b0b3c5f1),url(/_blob/d70b857b89dafd64dc5ff51535bf3aed);background-size:1000px 640px,256px}
+.lift{box-shadow:0 1px 1px rgba(36,35,34,.2),0 12px 22px -12px rgba(36,35,34,.6)}
+.sh{filter:drop-shadow(0 1px 0 rgba(36,35,34,.25)) drop-shadow(0 10px 12px rgba(36,35,34,.28))}
+.torn{clip-path:polygon(0.0% 0.4%,4.2% 0.9%,8.3% 0.6%,12.5% 1.0%,16.7% 1.0%,20.8% 0.1%,25.0% 0.0%,29.2% 1.3%,33.3% 0.4%,37.5% 0.4%,41.7% 1.6%,45.8% 0.8%,50.0% 1.3%,54.2% 0.8%,58.3% 1.0%,62.5% 0.2%,66.7% 1.0%,70.8% 1.4%,75.0% 0.8%,79.2% 1.2%,83.3% 1.1%,87.5% 0.1%,91.7% 1.2%,95.8% 0.9%,100.0% 0.5%,99.8% 6.2%,99.3% 12.5%,99.6% 18.8%,99.8% 25.0%,99.6% 31.2%,99.9% 37.5%,99.2% 43.8%,99.7% 50.0%,99.2% 56.2%,99.9% 62.5%,99.8% 68.8%,98.7% 75.0%,98.8% 81.2%,98.9% 87.5%,100.0% 93.8%,99.2% 100.0%,95.8% 97.9%,91.7% 98.4%,87.5% 99.1%,83.3% 99.6%,79.2% 98.3%,75.0% 99.4%,70.8% 99.1%,66.7% 99.8%,62.5% 99.9%,58.3% 99.7%,54.2% 98.2%,50.0% 99.3%,45.8% 100.0%,41.7% 99.7%,37.5% 99.8%,33.3% 99.3%,29.2% 99.8%,25.0% 99.1%,20.8% 99.1%,16.7% 98.6%,12.5% 98.6%,8.3% 98.9%,4.2% 98.5%,0.0% 99.2%,0.6% 93.8%,1.2% 87.5%,1.1% 81.2%,0.4% 75.0%,0.9% 68.8%,0.1% 62.5%,0.7% 56.2%,0.1% 50.0%,1.0% 43.8%,0.9% 37.5%,0.4% 31.2%,0.2% 25.0%,0.5% 18.8%,1.0% 12.5%,0.1% 6.2%)}
+.torn-b{clip-path:polygon(0% 0%,100% 0%,100% 97.7%,96.7% 96.0%,93.3% 98.2%,90.0% 98.1%,86.7% 99.9%,83.3% 97.2%,80.0% 97.0%,76.7% 98.9%,73.3% 97.7%,70.0% 98.0%,66.7% 99.8%,63.3% 98.5%,60.0% 98.2%,56.7% 98.4%,53.3% 98.6%,50.0% 98.1%,46.7% 97.8%,43.3% 97.5%,40.0% 99.6%,36.7% 99.8%,33.3% 97.3%,30.0% 99.5%,26.7% 96.2%,23.3% 96.6%,20.0% 98.4%,16.7% 97.6%,13.3% 96.8%,10.0% 96.1%,6.7% 98.4%,3.3% 96.3%,0% 97.2%)}
+.rough{clip-path:polygon(0.0% 3.7%,10.0% 3.0%,20.0% 1.1%,30.0% 6.9%,40.0% 0.1%,50.0% 4.0%,60.0% 7.2%,70.0% 0.6%,80.0% 4.4%,90.0% 4.9%,100.0% 0.3%,99.1% 25.0%,98.4% 50.0%,99.2% 75.0%,97.5% 100.0%,90.0% 94.3%,80.0% 92.8%,70.0% 98.0%,60.0% 95.1%,50.0% 98.2%,40.0% 96.7%,30.0% 99.4%,20.0% 96.1%,10.0% 92.9%,0.0% 93.9%,0.8% 75.0%,0.3% 50.0%,1.3% 25.0%)}
+.worn{-webkit-mask-image:url(/_blob/8111447190e8cf5b2d892f1889a5d09e);mask-image:url(/_blob/8111447190e8cf5b2d892f1889a5d09e);-webkit-mask-size:220px;mask-size:220px}
+.ink{background:url(/_blob/8111447190e8cf5b2d892f1889a5d09e) 0 0/200px;-webkit-background-clip:text;background-clip:text;color:transparent}
+.brush{background:url(/_blob/4c49acf00dfb2527e625519bbd41d172) 0 0/200px;clip-path:polygon(0 38%,3% 10%,30% 0,62% 12%,100% 4%,97% 62%,70% 100%,35% 84%,4% 100%)}
+.np{position:absolute;background-color:#ECE5D7;background-image:url(/_blob/1f4486ed3cd703c4b87c6e26c630dbe3);background-size:256px;overflow:hidden;color:#2b2a28}
+.ln{background-image:repeating-linear-gradient(90deg,transparent 0 46px,#ECE5D7 46px 54px),repeating-linear-gradient(180deg,rgba(36,35,34,.38) 0 1.5px,transparent 1.5px 6px)}
+.ht{position:absolute;background-color:#a9a297;background-image:radial-gradient(rgba(36,35,34,.82) 1.2px,transparent 1.6px),linear-gradient(160deg,rgba(255,255,255,.35),rgba(0,0,0,.25));background-size:4px 4px,100% 100%}
+.tape{position:absolute;width:96px;height:28px;background:url(/_blob/f0b359b2c4f4efe0362aceef0946a37f) center/100% 100% no-repeat;opacity:.86;mix-blend-mode:multiply}
+.tape.blue{background-image:url(/_blob/77e0e04aba3772fe63d2a38e033e6be9);opacity:.8}
+.tape.red{background:#C83A34;height:18px;opacity:.82}
+.cut{filter:drop-shadow(0 10px 10px rgba(36,35,34,.3))}
+.bubble{position:absolute;z-index:5;background:#FFFCF5;border:1.5px solid #242322;border-radius:22px;padding:12px 18px;font-size:15px;line-height:1.6;font-weight:700;color:#242322;box-shadow:0 8px 16px -10px rgba(36,35,34,.5)}
+.bubble.tail-r::after{content:'';position:absolute;right:-9px;bottom:18px;width:16px;height:16px;background:#FFFCF5;border-right:1.5px solid #242322;border-bottom:1.5px solid #242322;transform:rotate(-45deg)}
+.bubble.tail-b::after{content:'';position:absolute;right:38px;bottom:-9px;width:16px;height:16px;background:#FFFCF5;border-right:1.5px solid #242322;border-bottom:1.5px solid #242322;transform:rotate(45deg)}
+.label{display:inline-block;background:#242322;color:#FFF9EF;font-weight:900;font-size:13px;letter-spacing:.14em;padding:6px 14px 6px 12px;clip-path:polygon(0 8%,100% 0,97% 100%,2% 92%)}
+.label.red{background:#C83A34}
+.stamp{display:inline-block;border:3px solid #C83A34;color:#C83A34;font-weight:900;letter-spacing:.18em;padding:1px 10px;transform:rotate(-9deg);font-size:15px;mix-blend-mode:multiply}
+.pin{position:absolute;width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f08a84,#C83A34 55%,#7e2420);box-shadow:2px 4px 3px rgba(36,35,34,.4)}
+.holes{background-image:radial-gradient(circle,#F2ECDF 4px,transparent 5px);background-size:14px 34px;background-position:center 10px}
+</style>
+</helmet>
+<div class="ground" style="position: relative; width: 100%; min-height: 1480px; font-family: 'Zen Kaku Gothic New', sans-serif; color: #242322; overflow: hidden">
+
+  <header style="position: relative; z-index: 3; height: 216px">
+    <div aria-hidden="true" style="position: absolute; right: 0; top: 0; bottom: 0; width: 66%">
+      <div class="hdr" style="position: absolute; inset: 0"></div>
+      <img class="cut" src="/_blob/147c61b6306de0af5ead7c0dbd2b28df" alt="" style="position: absolute; right: 278px; bottom: -66px; height: 268px">
+      <img class="cut" src="/_blob/1570cea22ad44242c1635561139ddd49" alt="" style="position: absolute; right: 150px; bottom: -62px; height: 256px">
+      <img class="cut" src="/_blob/6d9d59865907e88ef5278270cced6e3f" alt="" style="position: absolute; right: 20px; bottom: -40px; height: 118px">
+    </div>
+    <div style="position: relative; z-index: 2; max-width: 1360px; margin: 0 auto; padding: 28px 40px; display: flex; flex-direction: column; gap: 10px; align-items: flex-start">
+      <span style="font-size: 12px; font-weight: 900; letter-spacing: .3em">ウラメク調査編集局 ／ 第001号 ／ ARCHIVE EDITION</span>
+      <img src="/_blob/1f2f21b53707fdfe9dfae6d08e92882d" alt="ウラメク" class="worn" style="width: 310px; display: block">
+      <p class="mc ink" style="margin: 0; font-size: 23px; font-weight: 800; letter-spacing: .06em">見えているのは、ほんの一部。</p>
+    </div>
+  </header>
+  <div style="position: relative; z-index: 2; background: #242322; color: #F2ECDF; font-size: 13px; font-weight: 700; letter-spacing: .12em; border-top: 3px double #F2ECDF; box-shadow: 0 -3px 0 #242322">
+    <div style="max-width: 1360px; margin: 0 auto; padding: 7px 40px; display: flex; gap: 28px; flex-wrap: wrap">
+      <span>調査編集局デスク</span><span>CASE 01 調査中</span><span style="margin-left: auto; color: #CFC3AC">企業・統計・人物はすべて架空です</span>
+    </div>
+  </div>
+
+  <div style="position: relative; z-index: 1; max-width: 1360px; margin: 0 auto; padding: 40px 40px 60px; display: flex; flex-wrap: wrap; gap: 40px; align-items: flex-start">
+
+    <aside aria-label="事件選択" class="kraft lift" style="flex: 1 1 290px; max-width: 310px; position: relative; border-radius: 2px 10px 10px 2px; padding: 24px 18px 140px 36px">
+      <div class="holes" style="position: absolute; left: 0; top: 0; bottom: 0; width: 18px; background-color: #2E2A26"></div>
+      <span class="label worn" style="font-size: 15px; padding: 8px 16px; transform: rotate(-2deg)">記者手帳 ／ 事件ファイル</span>
+      <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 20px">
+        <sc-for list="{{cases}}" as="c" hint-placeholder-count="5">
+          <button type="button" class="paper lift" style="position: relative; display: flex; gap: 12px; align-items: center; text-align: left; border: 0; padding: 12px; transform: {{c.tilt}}; opacity: {{c.fade}}">
+            <sc-if value="{{c.active}}" hint-placeholder-val="{{false}}"><span class="tape red" style="left: -14px; top: 8px; width: 56px; transform: rotate(-40deg)"></span></sc-if>
+            <img src="{{c.cover}}" alt="" style="width: 78px; height: 46px; object-fit: cover; flex-shrink: 0; filter: grayscale(.4) contrast(1.05)">
+            <span style="display: flex; flex-direction: column; gap: 3px; min-width: 0">
+              <span style="font-size: 11px; font-weight: 900; letter-spacing: .14em; color: #B23A36">{{c.no}}</span>
+              <span class="mc" style="font-size: 16px; font-weight: 800; line-height: 1.35">{{c.title}}</span>
+              <span style="font-size: 11px; color: #5E5A54">HARD ／ 5〜10分</span>
+            </span>
+            <sc-if value="{{c.showBadge}}" hint-placeholder-val="{{true}}"><img class="worn" src="/_blob/06fb2ca27705ce22cfd375bf6be59ffa" alt="未着手" style="position: absolute; right: -8px; top: -10px; height: 22px; transform: rotate(6deg)"></sc-if>
+          </button>
+        </sc-for>
+      </div>
+      <div class="sh" style="margin-top: 30px; transform: rotate(1.6deg)">
+        <div style="position: relative; background: #F1D88A; padding: 24px 18px 18px">
+          <span class="tape" style="left: 50%; top: -12px; margin-left: -48px; transform: rotate(-4deg)"></span>
+          <strong class="hand" style="font-size: 19px">遊び方</strong>
+          <p class="hand" style="margin: 6px 0 0; font-size: 15px; line-height: 1.75">資料を調べて、重要な証拠をボードにピン留め。2枚の資料を結び、見出しの断片を3つ組んで記事を出そう。</p>
+        </div>
+      </div>
+      <p style="font-size: 12px; line-height: 1.8; color: #5E5A54; margin: 18px 0 0">判断傾向の心理診断は行いません。</p>
+      <a href="#" style="font-size: 12px; color: #5E5A54">この端末の記録を削除</a>
+      <img class="cut" src="/_blob/6d9d59865907e88ef5278270cced6e3f" alt="" style="position: absolute; right: -30px; bottom: -22px; height: 128px">
+    </aside>
+
+    <main style="flex: 999 1 640px; min-width: 0; display: flex; flex-direction: column">
+      <div style="position: relative">
+        <div class="sh">
+          <section class="paper torn" style="position: relative; padding: 34px 300px 40px 38px; min-height: 250px">
+            <div style="display: flex; gap: 8px; align-items: center">
+              <span class="label red worn">CASE 01</span><span class="label worn">FICTION</span><span style="font-size: 13px; font-weight: 700; color: #5E5A54; margin-left: 4px">HARD ／ 5〜10分</span>
+            </div>
+            <h2 class="mc ink" style="margin: 16px 0 2px; font-size: 52px; font-weight: 800; line-height: 1.2; letter-spacing: .02em">消えた55人の利用者</h2>
+            <div class="brush" style="width: 380px; height: 12px; margin-bottom: 18px"></div>
+            <p style="margin: 0; font-size: 16px; line-height: 1.9; max-width: 58ch">広告には「驚異の継続率90%」。編集長は数字の対象集団を調べ、掲載可能な見出しに修正するよう命じた。</p>
+          </section>
+        </div>
+        <div class="tape" style="left: -26px; top: 12px; transform: rotate(-32deg)"></div>
+        <div class="tape blue" style="left: 44%; top: -12px; transform: rotate(5deg)"></div>
+        <img class="cut" src="/_blob/b422b114e0ca3b8a1b0ef0759c68709d" alt="ハラダ部長" style="position: absolute; right: 8px; bottom: -58px; height: 330px; z-index: 4">
+        <div class="bubble tail-r" style="right: 196px; top: 26px; width: 170px; font-size: 15px">数字の“分母”を洗い出してこい。</div>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; margin-top: 46px; border-bottom: 2px solid #242322">
+        <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: flex-end">
+          <span class="worn" style="background: #242322; color: #FFF9EF; font-weight: 900; padding: 12px 22px; font-size: 15px; letter-spacing: .1em; clip-path: polygon(3% 0,97% 4%,100% 100%,0 100%)">01　調査する</span>
+          <span class="paper" style="color: #5E5A54; font-weight: 700; padding: 10px 22px; font-size: 15px; letter-spacing: .1em; clip-path: polygon(4% 6%,96% 0,100% 100%,0 100%)">02　記事を組み立てる</span>
+          <span class="paper" style="color: #5E5A54; font-weight: 700; padding: 10px 22px; font-size: 15px; letter-spacing: .1em; clip-path: polygon(3% 0,97% 6%,100% 100%,0 100%)">03　編集部の評価</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 9px; padding-bottom: 8px">
+          <span style="font-weight: 900; font-size: 14px; letter-spacing: .1em">調査予算</span>
+          <span class="worn" style="width: 24px; height: 24px; border-radius: 50%; background: #C83A34"></span>
+          <span class="worn" style="width: 24px; height: 24px; border-radius: 50%; background: #C83A34"></span>
+          <span style="width: 24px; height: 24px; border-radius: 50%; border: 2px dashed #86817A; box-sizing: border-box"></span>
+          <span style="width: 24px; height: 24px; border-radius: 50%; border: 2px dashed #86817A; box-sizing: border-box"></span>
+          <span class="mc ink" style="font-size: 22px; font-weight: 800; margin-left: 4px">残り 2 / 4</span>
+        </div>
+      </div>
+
+      <h3 class="mc ink" style="margin: 30px 0 16px; font-size: 28px; font-weight: 800">調査資料 <span style="font-family: 'Zen Kaku Gothic New'; font-size: 14px; font-weight: 700; color: #5E5A54; -webkit-text-fill-color: #5E5A54; margin-left: 10px">3 / 6 件確認済み</span></h3>
+
+      <section class="kraft" style="position: relative; padding: 40px 34px 40px; box-shadow: inset 0 0 50px rgba(60,40,20,.28), 0 12px 24px -14px rgba(36,35,34,.5); border-radius: 4px">
+        <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 34px 28px; padding-right: 190px">
+          <sc-for list="{{docs}}" as="d" hint-placeholder-count="6">
+            <button type="button" class="paper lift" style="position: relative; display: flex; gap: 14px; align-items: flex-start; text-align: left; border: 0; padding: 18px 14px 16px; transform: {{d.tilt}}; min-height: 184px">
+              <span class="tape" style="left: 50%; top: -13px; margin-left: -42px; width: 84px; transform: rotate(-3deg)"></span>
+              <img src="{{d.img}}" alt="" style="width: 92px; height: 121px; object-fit: cover; flex-shrink: 0; box-shadow: 0 1px 3px rgba(36,35,34,.35); filter: sepia(.18) contrast(1.05)">
+              <span style="display: flex; flex-direction: column; gap: 6px; min-width: 0">
+                <span style="font-size: 11px; font-weight: 900; letter-spacing: .14em; color: #5E5A54">{{d.no}}</span>
+                <span class="mc" style="font-size: 17px; font-weight: 800; line-height: 1.4">{{d.title}}</span>
+                <span class="worn" style="display: inline-block; align-self: flex-start; font-size: 12px; font-weight: 900; padding: 3px 9px; color: #FFF9EF; background: {{d.costBg}}; clip-path: polygon(0 10%,100% 0,98% 100%,2% 92%)">{{d.cost}}</span>
+                <sc-if value="{{d.opened}}" hint-placeholder-val="{{true}}"><span class="stamp worn" style="align-self: flex-start; margin-top: 6px">調査済</span></sc-if>
+                <sc-if value="{{d.pinned}}" hint-placeholder-val="{{false}}"><span style="font-size: 12px; font-weight: 900; color: #B23A36">ボードに貼付済み</span></sc-if>
+              </span>
+              <sc-if value="{{d.pinned}}" hint-placeholder-val="{{false}}"><span class="pin" style="right: 14px; top: -8px"></span></sc-if>
+            </button>
+          </sc-for>
+        </div>
+        <img class="cut" src="/_blob/05f5f134c21ee9c94e832eafc249988a" alt="調査記者シノブ" style="position: absolute; right: -14px; bottom: -6px; height: 420px; z-index: 4">
+        <div class="bubble tail-b" style="right: 40px; top: -40px; width: 186px; font-size: 14px">何から調べるかは自由。見落とすと予算が足りなくなるよ。</div>
+      </section>
+
+      <p style="margin: 20px 0 0; font-size: 13px; font-weight: 700; color: #5E5A54">▼ この下に「証拠ボード」と「検証メモ」が続きます</p>
+    </main>
+  </div>
+  <img src="/_blob/26d06fc38f88fec0a025ba34aa35b56b" alt="" aria-hidden="true" style="position: absolute; left: 10px; bottom: 20px; width: 400px; transform: rotate(-4deg); z-index: 0; filter: drop-shadow(0 8px 10px rgba(36,35,34,.25))">
+  <img src="/_blob/07224908b9718d0e31d980adce115c31" alt="" aria-hidden="true" style="position: absolute; right: -90px; top: 300px; height: 560px; transform: rotate(5deg); z-index: 0; filter: drop-shadow(0 8px 10px rgba(36,35,34,.25))">
+  <div class="grain" aria-hidden="true"></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1480}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const B = '/_blob/';
+    const covers = ['b5c23958391d7ed8b43bd639f4d95932','f51d3806e9c8cb2600db7bf3a29a03e7','0b4fb6423413ddcdbcbcc80c7f7a6837','4246515ce7fe430a17ca4ee3d482d462','dde3bb405d5ce086ed4cec84a48ee789'];
+    const titles = ['消えた55人の利用者','半額セールの値札','8割が支持の正体','取り戻せない開発費','急上昇するグラフ'];
+    const cases = titles.map((t, i) => ({
+      no: 'CASE ' + String(i + 1).padStart(2, '0') + (i === 0 ? '　調査中' : ''),
+      title: t,
+      cover: B + covers[i],
+      active: i === 0,
+      showBadge: i !== 0,
+      fade: i === 0 ? '1' : '.88',
+      tilt: i === 0 ? 'rotate(-1.4deg) translateX(10px) scale(1.03)' : (i % 2 ? 'rotate(.7deg)' : 'rotate(-.6deg)')
+    }));
+    const docs = [
+      ['01','キャンペーン広告','300d1641bf60ce1c40e350dad6efdbdd','無料で確認',true,false],
+      ['02','無料体験者の登録台帳','cb15b4620a19741d02675f6581a88bb1','調査コスト 1',true,true],
+      ['03','料金決済の集計','a6cb744508ecde0dfe31c15d538d5d6d','調査コスト 1',true,true],
+      ['04','翌月の継続状況','b872c2eda514810336f81bf15862e58e','調査コスト 1',false,false],
+      ['05','広告担当者のメモ','6333b2d57826a4666a967f8759236a1f','調査コスト 1',false,false],
+      ['06','利用者の声','129c16f8564ce1feb89c937acdbd02e1','調査コスト 1',false,false]
+    ].map((d, i) => ({
+      no: 'DOCUMENT ' + d[0], title: d[1], img: B + d[2], cost: d[3],
+      costBg: d[4] ? '#86817A' : (d[3] === '無料で確認' ? '#3F7189' : '#C83A34'),
+      opened: d[4], pinned: d[5],
+      tilt: ['rotate(-1.6deg)','rotate(1.1deg) translateY(6px)','rotate(-.7deg)','rotate(1.4deg)','rotate(-1.1deg) translateY(-4px)','rotate(.8deg)'][i]
+    }));
+    return { cases, docs };
+  }
+}
+</script>
+</body>
+</html>

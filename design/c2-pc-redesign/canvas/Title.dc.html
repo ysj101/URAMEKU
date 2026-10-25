@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>タイトル画面</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@700;800&amp;family=Zen+Kaku+Gothic+New:wght@500;700;900&amp;family=Yomogi&amp;display=swap">
+<style>
+body{margin:0;background:#F2ECDF}
+a{color:#242322}a:hover{color:#B23A36}
+button{font:inherit;cursor:pointer}
+.mc{font-family:'Shippori Mincho B1',serif}
+.titlebg{background:#EFE6D4 url(/_blob/0e9d5aed1c4dad23ab7732969bbe3383) center/cover no-repeat}
+.grain{position:absolute;inset:0;pointer-events:none;background:url(/_blob/2a26d8caada68b6abc733da1b42ecede) 0 0/512px;mix-blend-mode:multiply;z-index:60;opacity:.7}
+.paper{background-color:#FFFAF0;background-image:url(/_blob/7b4bd571ded9edfefe41ffe7b0b3c5f1),url(/_blob/e67ef8005e709ae5421edc7f70686603);background-size:900px 580px,256px}
+.worn{-webkit-mask-image:url(/_blob/8111447190e8cf5b2d892f1889a5d09e);mask-image:url(/_blob/8111447190e8cf5b2d892f1889a5d09e);-webkit-mask-size:220px;mask-size:220px}
+.ink{background:url(/_blob/8111447190e8cf5b2d892f1889a5d09e) 0 0/200px;-webkit-background-clip:text;background-clip:text;color:transparent}
+.brush{background:url(/_blob/4c49acf00dfb2527e625519bbd41d172) 0 0/200px;clip-path:polygon(0 38%,3% 10%,30% 0,62% 12%,100% 4%,97% 62%,70% 100%,35% 84%,4% 100%)}
+.tape{position:absolute;width:96px;height:28px;background:url(/_blob/f0b359b2c4f4efe0362aceef0946a37f) center/100% 100% no-repeat;opacity:.86;mix-blend-mode:multiply}
+.cut{filter:drop-shadow(0 12px 12px rgba(36,35,34,.32))}
+.btn-wrap{display:inline-block;filter:drop-shadow(0 8px 8px rgba(36,35,34,.3))}
+.btn{display:flex;align-items:center;justify-content:center;width:300px;min-height:60px;background:#C83A34;color:#FFF9EF;font-family:'Shippori Mincho B1',serif;font-weight:800;font-size:22px;letter-spacing:.2em;text-decoration:none;border:0;clip-path:polygon(1% 8%,99% 0,100% 88%,97% 100%,0 94%)}
+.slip{display:flex;align-items:center;justify-content:center;width:260px;min-height:50px;color:#242322;font-family:'Shippori Mincho B1',serif;font-weight:800;font-size:18px;letter-spacing:.16em;text-decoration:none;border:0;clip-path:polygon(0 6%,100% 0,99% 94%,2% 100%)}
+.bubble{position:absolute;z-index:5;background:#FFFCF5;border:1.5px solid #242322;border-radius:22px;padding:12px 18px;font-size:15px;line-height:1.6;font-weight:700;color:#242322;box-shadow:0 8px 16px -10px rgba(36,35,34,.5)}
+.bubble.tail-bl::after{content:'';position:absolute;left:40px;bottom:-9px;width:16px;height:16px;background:#FFFCF5;border-right:1.5px solid #242322;border-bottom:1.5px solid #242322;transform:rotate(45deg)}
+</style>
+</helmet>
+<div class="titlebg" style="position: relative; width: 1440px; height: 810px; overflow: hidden; font-family: 'Zen Kaku Gothic New', sans-serif; color: #242322">
+
+  <div style="position: absolute; left: 0; right: 0; top: 118px; display: flex; flex-direction: column; align-items: center; gap: 14px; z-index: 2">
+    <span style="font-size: 13px; font-weight: 900; letter-spacing: .4em">ウラメク調査編集局 ／ 行動経済学 × 推理</span>
+    <img class="worn" src="/_blob/1f2f21b53707fdfe9dfae6d08e92882d" alt="ウラメク" style="width: 520px; display: block; transform: rotate(-1.5deg)">
+    <p class="mc ink" style="margin: 6px 0 0; font-size: 32px; font-weight: 800; letter-spacing: .12em">見えているのは、ほんの一部。</p>
+    <div class="brush" style="width: 440px; height: 12px"></div>
+  </div>
+
+  <nav aria-label="メインメニュー" style="position: absolute; left: 0; right: 0; top: 432px; display: flex; flex-direction: column; align-items: center; gap: 14px; z-index: 3">
+    <span class="btn-wrap" style="transform: rotate(-1deg)"><a href="Main.dc.html" class="btn">はじめる</a></span>
+    <span class="btn-wrap" style="transform: rotate(.8deg)"><a href="Main.dc.html" class="slip paper">つづきから</a></span>
+    <span class="btn-wrap" style="transform: rotate(-.6deg)"><a href="Main.dc.html" class="slip paper">事件ファイル</a></span>
+    <span class="btn-wrap" style="transform: rotate(1deg)"><a href="#" class="slip paper">設定</a></span>
+  </nav>
+
+  <img class="cut" src="/_blob/147c61b6306de0af5ead7c0dbd2b28df" alt="調査記者シノブ" style="position: absolute; left: 250px; bottom: -40px; height: 470px; z-index: 4">
+  <img class="cut" src="/_blob/1570cea22ad44242c1635561139ddd49" alt="データ担当メガ" style="position: absolute; left: 90px; bottom: -50px; height: 420px; z-index: 3">
+  <div class="bubble tail-bl" style="left: 360px; top: 300px; width: 190px; font-size: 14px">その数字、ウラまで見た？</div>
+
+  <p style="position: absolute; left: 0; right: 0; bottom: 22px; margin: 0; text-align: center; font-size: 12px; font-weight: 700; color: #5E5A54; z-index: 2">企業・統計・人物はすべて架空です　／　v0.1 prototype</p>
+  <div class="grain" aria-hidden="true"></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":810}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

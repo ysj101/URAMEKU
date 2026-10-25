@@ -101,6 +101,28 @@ export function backgroundUrl(name: BackgroundName, format: ImageFormat = 'svg')
   return assetUrl(`backgrounds/${name}.${format}`);
 }
 
+/**
+ * C-2 高解像度素材（`public/assets/c2-highres`）。タイトル背景は採用済みの A 案のみ収録し、
+ * ほかの候補（B/C/D）は混在させない。いずれも低解像度原画のアップスケールで、正式アート承認前。
+ */
+export const C2_HIGHRES = {
+  title: 'title-a.webp',
+  header: 'header-band.webp',
+  /** 縦長ページ用（左右の端だけコラージュ、縦に繰り返す） */
+  paperTile: 'paper-side-tile.webp',
+  /** 画面サイズの面用（四辺がコラージュ、中央が無地）。資料ダイアログの背面 */
+  paperFrame: 'paper-frame.webp',
+  board: 'cork-board.webp',
+  clippingCorner: 'clipping-corner.webp',
+  clippingVertical: 'clipping-vertical.webp',
+  clippingHorizontal: 'clipping-horizontal.webp',
+} as const;
+export type C2HighresName = keyof typeof C2_HIGHRES;
+
+export function c2HighresUrl(name: C2HighresName): string {
+  return assetUrl(`c2-highres/${C2_HIGHRES[name]}`);
+}
+
 export const TEXTURE_NAMES = [
   'blueprint',
   'halftone',
