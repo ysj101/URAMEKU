@@ -17,6 +17,15 @@ export interface SaveStatusBannerProps {
  * 記録の削除はここでは行わず、設定画面へ誘導するだけにする。
  */
 export function SaveStatusBanner({ status, onOpenSettings }: SaveStatusBannerProps) {
+  if (status === 'read-only')
+    return (
+      <div className="status-banner" role="status" data-kind="save-read-only">
+        <p className="status-banner__text">
+          <span className="status-banner__title">新しい形式の記録を保護しています</span>
+          元の記録を上書きしません。この画面での変更は保存されません。対応する新しい版で再開してください。
+        </p>
+      </div>
+    );
   if (status !== 'failed' && status !== 'unavailable') return null;
 
   const failed = status === 'failed';

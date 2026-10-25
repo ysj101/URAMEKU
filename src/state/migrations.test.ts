@@ -56,14 +56,14 @@ describe('detectVersion', () => {
 });
 
 describe('migrate', () => {
-  it('v0 → v3（旧キー形式、calculations は文字列）', () => {
+  it('v0 → v4（旧キー形式、calculations は文字列）', () => {
     const r = migrate(v0, 'case-01', { assumeVersion: 0, now });
     expect(r.reset).toBe(false);
     expect(r.migratedFrom).toBe(0);
     expect(r.data.active).toBe('case-02');
-    expect(r.data.progress['case-01']?.calculations).toEqual({ t1: '12.5', t2: '' });
-    expect(r.data.progress['case-01']?.published).toBe(true);
-    expect(r.data.progress['case-02']).toEqual({
+    expect(r.data.legacyProgress?.['case-01']?.calculations).toEqual({ t1: '12.5', t2: '' });
+    expect(r.data.legacyProgress?.['case-01']?.published).toBe(true);
+    expect(r.data.legacyProgress?.['case-02']).toEqual({
       opened: ['d1'],
       pinned: [],
       chosenLink: [],
@@ -72,18 +72,20 @@ describe('migrate', () => {
       published: false,
       revealed: false,
     });
-    expect(r.data.finished).toEqual({ 'case-01': true });
+    expect(r.data.legacyFinished).toEqual({ 'case-01': true });
+    expect(r.data.finished).toEqual({});
+    expect(r.data.progress).toEqual({});
     expect(r.data.session).toEqual({ stage: 'investigate', lastDocumentId: null });
     expect(r.data.revision).toBe(0);
   });
-  it('v1 → v3（現行キー、version 無し）', () => {
+  it('v1 → v4（現行キー、version 無し）', () => {
     const r = migrate(v1, 'case-01', { now });
     expect(r.reset).toBe(false);
     expect(r.migratedFrom).toBe(1);
     expect(r.data.active).toBe('case-02');
-    expect(r.data.progress['case-01']?.opened).toEqual(['d1', 'd2']);
+    expect(r.data.legacyProgress?.['case-01']?.opened).toEqual(['d1', 'd2']);
   });
-  it('v2 → v3（session は調査画面、revision 0）', () => {
+  it('v2 → v4（session は調査画面、revision 0）', () => {
     const r = migrate({ ...v1, version: 2, savedAt: NOW }, 'case-01', { now });
     expect(r.reset).toBe(false);
     expect(r.migratedFrom).toBe(2);
@@ -91,7 +93,7 @@ describe('migrate', () => {
     expect(r.data.session).toEqual({ stage: 'investigate', lastDocumentId: null });
     expect(r.data.revision).toBe(0);
   });
-  it('v3 はそのまま（migratedFrom null）', () => {
+  it('v3 は旧記録を保管してV2を開始する', () => {
     const r = migrate(
       {
         ...v1,
@@ -104,8 +106,8 @@ describe('migrate', () => {
       { now },
     );
     expect(r.reset).toBe(false);
-    expect(r.migratedFrom).toBeNull();
-    expect(r.data.session).toEqual({ stage: 'article', lastDocumentId: 'd2' });
+    expect(r.migratedFrom).toBe(3);
+    expect(r.data.session).toEqual({ stage: 'investigate', lastDocumentId: null });
     expect(r.data.revision).toBe(12);
   });
   it('session / revision の不正値は既定値に整える', () => {
@@ -116,12 +118,12 @@ describe('migrate', () => {
       [{ stage: 'article', lastDocumentId: '' }, null],
     ];
     for (const [session, revision] of cases) {
-      const r = migrate({ ...v1, version: 3, savedAt: NOW, session, revision }, 'case-01', { now });
+      const r = migrate({ ...v1, version: 4, savedAt: NOW, session, revision }, 'case-01', { now });
       expect(r.data.session.lastDocumentId).toBeNull();
       expect(r.data.revision).toBe(0);
     }
     expect(
-      migrate({ ...v1, version: 3, session: { stage: 'article' } }, 'case-01', { now }).data.session
+      migrate({ ...v1, version: 4, session: { stage: 'article' } }, 'case-01', { now }).data.session
         .stage,
     ).toBe('article');
   });
@@ -165,7 +167,7 @@ describe('migrate', () => {
       'case-01',
       { now },
     );
-    expect(r.data.finished).toEqual({ a: true });
+    expect(r.data.legacyFinished).toEqual({ a: true });
   });
   it('progress の各ケースが normalizeProgress を通る', () => {
     const r = migrate(
@@ -190,13 +192,13 @@ describe('migrate', () => {
       published: false,
       revealed: false,
     };
-    expect(r.data.progress.a).toEqual(empty);
-    expect(r.data.progress.b).toEqual(empty);
-    expect(r.data.progress.c?.opened).toEqual(['x']);
-    expect(r.data.progress.c?.chosenLink).toEqual(['1', '2']);
-    expect(r.data.progress.c?.article).toEqual(['1', '2', '3']);
-    expect(r.data.progress.d?.calculations).toEqual({ t1: '3', t2: 'x' });
-    expect(r.data.progress.d?.published).toBe(false);
+    expect(r.data.legacyProgress?.a).toEqual(empty);
+    expect(r.data.legacyProgress?.b).toEqual(empty);
+    expect(r.data.legacyProgress?.c?.opened).toEqual(['x']);
+    expect(r.data.legacyProgress?.c?.chosenLink).toEqual(['1', '2']);
+    expect(r.data.legacyProgress?.c?.article).toEqual(['1', '2', '3']);
+    expect(r.data.legacyProgress?.d?.calculations).toEqual({ t1: '3', t2: 'x' });
+    expect(r.data.legacyProgress?.d?.published).toBe(false);
   });
   it('active が文字列でなければ fallback', () => {
     expect(migrate({ active: 3 }, 'case-01', { now }).data.active).toBe('case-01');
@@ -219,7 +221,7 @@ describe('toSaveDataV3', () => {
       revision: 4,
     };
     const out = toSaveDataV3(data, now);
-    expect(out).toEqual({ version: 3, savedAt: NOW, ...data });
+    expect(out).toEqual({ version: CURRENT_SAVE_VERSION, gameVersion: 2, savedAt: NOW, ...data });
     // 互換用の別名も最新形式で包む
     expect(toSaveDataV2(data, now)).toEqual(out);
   });

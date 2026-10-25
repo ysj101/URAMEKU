@@ -2,7 +2,7 @@ import { act, renderHook } from '@testing-library/react';
 import { CASES } from '../data/cases';
 import { SAVE_DEBOUNCE_MS, useGame } from './useGame';
 import { persistSaveData, STORAGE_KEY, createSaveData, type StorageLike } from './persistence';
-import { clearedProgress } from '../test/fixtures';
+import { createProgress } from '../domain/game';
 
 /** setItem の回数を数えられるメモリ storage */
 function memoryStorage(): StorageLike & { map: Map<string, string>; writes: number } {
@@ -40,7 +40,8 @@ function fireStorage(newValue: string | null, key: string | null = STORAGE_KEY) 
 const FIRST = CASES[0]!;
 const SECOND = CASES[1]!;
 const FREE_DOC = FIRST.documents.find((d) => d.cost === 0)!.id;
-const TASK = FIRST.analysis_tasks[0]!.id;
+// Persistence debounce is independent of case content and legacy answer keys.
+const TASK = 'legacy_input';
 
 beforeEach(() => {
   vi.useFakeTimers();
@@ -120,7 +121,7 @@ describe('useGame のデバウンス', () => {
     act(() => vi.advanceTimersByTime(SAVE_DEBOUNCE_MS));
     expect(s.writes).toBe(1);
     const data = stored(s)!;
-    expect(data.version).toBe(3);
+    expect(data.version).toBe(4);
     expect(data.revision).toBe(3);
     expect(data.progress[FIRST.id]?.calculations[TASK]).toBe('123');
   });
@@ -151,7 +152,8 @@ describe('useGame の競合処理（他タブ）', () => {
 
     const remote = {
       ...createSaveData(SECOND.id),
-      progress: { [SECOND.id]: clearedProgress() },
+      progress: { [SECOND.id]: { ...createProgress(SECOND), published: true } },
+      ...(SECOND.v2 ? { caseRevisions: { [SECOND.id]: SECOND.v2.revision } } : {}),
       finished: { [SECOND.id]: true },
       session: { stage: 'investigate' as const, lastDocumentId: null },
       revision: 5,
