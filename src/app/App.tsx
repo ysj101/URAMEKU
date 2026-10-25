@@ -104,6 +104,11 @@ export function App() {
       >
         <OfflineBanner />
         <SaveStatusBanner status={game.saveStatus} />
+        {game.migrationNotice && (
+          <p className="notice" role="status">
+            {game.migrationNotice}
+          </p>
+        )}
         {content}
         <div className="footnote">
           このMVPは静的サイトとして動作します。調査内容はこのブラウザのみに保存され、サーバーへ送信しません。

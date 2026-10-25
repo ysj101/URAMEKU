@@ -53,7 +53,7 @@ describe('persistence', () => {
     persistSaveData(createSaveData('x'), s);
     const stored = JSON.parse(s.map.get(STORAGE_KEY)!) as { version: number; savedAt: string };
     expect(stored.version).toBe(CURRENT_SAVE_VERSION);
-    expect(stored.version).toBe(3);
+    expect(stored.version).toBe(4);
     expect(Date.parse(stored.savedAt)).toBeGreaterThanOrEqual(before - 1000);
     expect(stored.savedAt).toBe(new Date(stored.savedAt).toISOString());
   });
@@ -61,6 +61,7 @@ describe('persistence', () => {
     const s = memoryStorage();
     persistSaveData(createSaveData('x'), s);
     expect(loadSaveData('case-01', s)).toEqual({
+      gameVersion: 2,
       active: 'x',
       progress: {},
       finished: {},
@@ -105,7 +106,7 @@ describe('persistence', () => {
     expect(r.migratedFrom).toBe(1);
     expect(r.reset).toBe(false);
     expect(r.data.active).toBe('case-02');
-    expect(r.data.progress['case-02']?.calculations).toEqual({ t1: '4' });
+    expect(r.data.legacyProgress?.['case-02']?.calculations).toEqual({ t1: '4' });
   });
   it('現行キーが無ければ旧キー（試作 v0）から読み、旧キーは消さない', () => {
     expect(LEGACY_KEYS).toContain(LEGACY_KEY);
@@ -115,11 +116,12 @@ describe('persistence', () => {
     expect(r.sourceKey).toBe(LEGACY_KEY);
     expect(r.migratedFrom).toBe(0);
     expect(r.data.active).toBe('case-02');
-    expect(r.data.finished).toEqual({ 'case-01': true });
+    expect(r.data.legacyFinished).toEqual({ 'case-01': true });
+    expect(r.data.finished).toEqual({});
     expect(s.map.has(LEGACY_KEY)).toBe(true);
     // 保存し直すと現行キーに v2 で書かれ、旧キーはそのまま
     persistSaveData(r.data, s);
-    expect(JSON.parse(s.map.get(STORAGE_KEY)!).version).toBe(3);
+    expect(JSON.parse(s.map.get(STORAGE_KEY)!).version).toBe(4);
     expect(s.map.has(LEGACY_KEY)).toBe(true);
   });
   it('現行キーがあれば旧キーは見ない', () => {

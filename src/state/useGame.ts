@@ -1,3 +1,5 @@
+import { resetCaseProgress } from './wipe';
+import { restoreProgress } from './restoreProgress';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { CASES, findCase, nextCaseId } from '../data/cases';
 import { createProgress, reduceProgress, type GameAction } from '../domain/game';
@@ -25,9 +27,11 @@ export type { Stage };
  * - failed: 書き込みが失敗した（容量超過など）。進行は画面上では続くが端末には残らない
  * - unavailable: この環境では保存先（localStorage）が使えない
  */
-export type SaveStatus = 'saved' | 'failed' | 'unavailable';
+export type SaveStatus = 'saved' | 'failed' | 'unavailable' | 'read-only';
 
 export interface GameApi {
+  migrationNotice?: string;
+  legacyFinished?: Record<string, boolean>;
   cases: CaseData[];
   current: CaseData;
   progress: CaseProgress;
@@ -62,7 +66,30 @@ export const SAVE_DEBOUNCE_MS = 150;
 const FIRST_CASE = CASES[0]?.id ?? 'case-01';
 
 /** 読み込んだ保存内容を、存在する事件・資料に合わせて整える（revision は保つ）。 */
-function sanitize(loaded: SaveData): SaveData {
+export function sanitize(loaded: SaveData): SaveData {
+  const progress = { ...loaded.progress };
+  const finished = { ...loaded.finished };
+  const archivedProgress = { ...loaded.archivedProgress };
+  let migrationNotice = loaded.migrationNotice;
+  for (const c of CASES) {
+    if (!c.v2) continue;
+    if (progress[c.id] && (!progress[c.id]?.v2 || loaded.caseRevisions?.[c.id] !== c.v2.revision)) {
+      archivedProgress[`${c.id}@${loaded.caseRevisions?.[c.id] ?? 'legacy'}`] = progress[c.id]!;
+      delete progress[c.id];
+      delete finished[c.id];
+      migrationNotice =
+        '事件の形式が変わったため、対応できない途中状態を履歴に保管して調査を再開します。';
+    }
+    if (loaded.caseRevisions?.[c.id] !== c.v2.revision) delete finished[c.id];
+    if (progress[c.id]) progress[c.id] = restoreProgress(c, progress[c.id]!);
+  }
+  loaded = {
+    ...loaded,
+    progress,
+    finished,
+    ...(Object.keys(archivedProgress).length ? { archivedProgress } : {}),
+    ...(migrationNotice ? { migrationNotice } : {}),
+  };
   const caseData = findCase(loaded.active);
   if (!caseData) return { ...loaded, active: FIRST_CASE, session: createSession() };
   const last = loaded.session.lastDocumentId;
@@ -80,7 +107,9 @@ export function useGame(options: UseGameOptions = {}): GameApi {
 
   const [initial] = useState(() => loadSaveDataDetailed(FIRST_CASE, storage));
   const [save, setSave] = useState<SaveData>(() => sanitize(initial.data));
-  const [saveStatus, setSaveStatus] = useState<SaveStatus>(storage ? 'saved' : 'unavailable');
+  const [saveStatus, setSaveStatus] = useState<SaveStatus>(
+    initial.data.readOnlyVersion ? 'read-only' : storage ? 'saved' : 'unavailable',
+  );
 
   /** 最後に書き込んだ（または storage から取り込んだ）revision と時刻。これと同じなら書かない */
   const persistedRef = useRef<{ revision: number; savedAt: string | null }>({
@@ -101,6 +130,10 @@ export function useGame(options: UseGameOptions = {}): GameApi {
   const flush = useCallback(() => {
     cancelTimer();
     const data = latestRef.current;
+    if (data.readOnlyVersion) {
+      setSaveStatus('read-only');
+      return;
+    }
     if (data.revision === persistedRef.current.revision) return;
     if (!storage) {
       setSaveStatus('unavailable');
@@ -148,7 +181,8 @@ export function useGame(options: UseGameOptions = {}): GameApi {
       const remote = parseStoredSaveData(e.newValue, FIRST_CASE);
       if (!remote) return;
       const local = { revision: latestRef.current.revision, savedAt: persistedRef.current.savedAt };
-      if (resolveConflict(local, remote) !== 'take-remote') return;
+      if (!remote.readOnlyVersion && resolveConflict(local, remote) !== 'take-remote') return;
+      if (remote.readOnlyVersion) setSaveStatus('read-only');
       const { savedAt, ...data } = remote;
       cancelTimer();
       persistedRef.current = { revision: data.revision, savedAt };
@@ -190,12 +224,19 @@ export function useGame(options: UseGameOptions = {}): GameApi {
         if (after === before && session === prev.session) return prev;
         const finished = { ...prev.finished };
         if (after.published && evaluateCase(caseData, after).cleared) finished[caseData.id] = true;
-        return {
+        const next: SaveData = {
           ...prev,
           progress: { ...prev.progress, [caseData.id]: after },
+          ...(caseData.v2
+            ? {
+                gameVersion: 2 as const,
+                caseRevisions: { ...prev.caseRevisions, [caseData.id]: caseData.v2.revision },
+              }
+            : {}),
           finished,
           session,
         };
+        return action.type === 'reset' ? resetCaseProgress(next, caseData.id) : next;
       });
     },
     [update],
@@ -253,6 +294,8 @@ export function useGame(options: UseGameOptions = {}): GameApi {
   }, [cancelTimer, storage]);
 
   return {
+    migrationNotice: save.migrationNotice,
+    legacyFinished: save.legacyFinished,
     cases: CASES,
     current,
     progress,

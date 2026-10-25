@@ -10,12 +10,13 @@ import type { CaseProgress } from '../domain/types';
  *       v0 と v1 は中身だけでは区別できないため、読み出し元キーで判定する（`assumeVersion`）。
  * - v2: `version: 2` と `savedAt`（ISO 8601）を付けた形式。
  * - v3: MVP-030。途中状態 `session`（画面段階と最後に開いた資料）と、
- *       複数タブの競合判定に使う単調増加の `revision` を追加した現行形式。
+ *       複数タブの競合判定に使う単調増加の `revision` を追加。
+ * - v4: ゲームV2。旧記録をlegacyへ分離し、事件改訂・V2履歴を保存する現行形式。
  *
  * 将来の形式変更は `migrations` 配列に `{ from, to, up }` を 1 つ追加し、
  * `CURRENT_SAVE_VERSION` を上げるだけでよい。
  */
-export const CURRENT_SAVE_VERSION = 3;
+export const CURRENT_SAVE_VERSION = 4;
 
 /** 画面の段階。`useGame` が公開する `Stage` と同じもの。 */
 export type Stage = 'investigate' | 'article';
@@ -29,6 +30,15 @@ export interface SaveSession {
 
 /** アプリ内で扱う保存内容（`version` / `savedAt` は含まない）。 */
 export interface SaveData {
+  /** Game rules and storage format have independent versions. */
+  gameVersion?: 2;
+  caseRevisions?: Record<string, number>;
+  legacyProgress?: Record<string, CaseProgress>;
+  legacyFinished?: Record<string, boolean>;
+  archivedProgress?: Record<string, CaseProgress>;
+  migrationNotice?: string;
+  /** Unknown future saves are read-only and must never be overwritten. */
+  readOnlyVersion?: number;
   active: string;
   progress: Record<string, CaseProgress>;
   finished: Record<string, boolean>;
@@ -41,13 +51,14 @@ export interface SaveData {
 }
 
 /** 実際に storage へ書き込まれる現行形式。 */
-export interface SaveDataV3 extends SaveData {
-  version: 3;
+export interface SaveDataV4 extends SaveData {
+  version: 4;
   savedAt: string;
 }
 
-/** 互換用の別名。書き込み形式は常に最新（SaveDataV3）。 */
-export type SaveDataV2 = SaveDataV3;
+/** 互換用の別名。書き込み形式は常に最新（SaveDataV4）。 */
+export type SaveDataV3 = SaveDataV4;
+export type SaveDataV2 = SaveDataV4;
 
 export function createSession(): SaveSession {
   return { stage: 'investigate', lastDocumentId: null };
@@ -88,14 +99,16 @@ function isRecord(v: unknown): v is Record<string, unknown> {
 function normalizeProgressMap(raw: unknown): Record<string, CaseProgress> {
   const out: Record<string, CaseProgress> = {};
   if (!isRecord(raw)) return out;
-  for (const [id, p] of Object.entries(raw)) out[id] = normalizeProgress(p);
+  for (const [id, p] of Object.entries(raw))
+    if (!['__proto__', 'constructor', 'prototype'].includes(id)) out[id] = normalizeProgress(p);
   return out;
 }
 
 function normalizeFinished(raw: unknown): Record<string, boolean> {
   const out: Record<string, boolean> = {};
   if (!isRecord(raw)) return out;
-  for (const [id, v] of Object.entries(raw)) if (v === true) out[id] = true;
+  for (const [id, v] of Object.entries(raw))
+    if (v === true && !['__proto__', 'constructor', 'prototype'].includes(id)) out[id] = true;
   return out;
 }
 
@@ -116,7 +129,33 @@ export function normalizeRevision(raw: unknown): number {
 
 /** 読み取れるフィールドだけを拾って SaveData の形に整える。 */
 export function normalizeSaveData(raw: Record<string, unknown>, fallbackCaseId: string): SaveData {
+  const revisions: Record<string, number> = {};
+  if (isRecord(raw.caseRevisions))
+    for (const [id, revision] of Object.entries(raw.caseRevisions)) {
+      if (
+        typeof revision === 'number' &&
+        Number.isInteger(revision) &&
+        revision > 0 &&
+        !['__proto__', 'constructor', 'prototype'].includes(id)
+      )
+        revisions[id] = revision;
+    }
   return {
+    ...(raw.gameVersion === 2 ? { gameVersion: 2 as const } : {}),
+    ...(isRecord(raw.caseRevisions) ? { caseRevisions: revisions } : {}),
+    ...(isRecord(raw.legacyProgress)
+      ? { legacyProgress: normalizeProgressMap(raw.legacyProgress) }
+      : {}),
+    ...(isRecord(raw.legacyFinished)
+      ? { legacyFinished: normalizeFinished(raw.legacyFinished) }
+      : {}),
+    ...(isRecord(raw.archivedProgress)
+      ? { archivedProgress: normalizeProgressMap(raw.archivedProgress) }
+      : {}),
+    ...(typeof raw.migrationNotice === 'string' ? { migrationNotice: raw.migrationNotice } : {}),
+    ...(typeof raw.readOnlyVersion === 'number' && raw.readOnlyVersion > CURRENT_SAVE_VERSION
+      ? { readOnlyVersion: raw.readOnlyVersion }
+      : {}),
     active: typeof raw.active === 'string' && raw.active !== '' ? raw.active : fallbackCaseId,
     progress: normalizeProgressMap(raw.progress),
     finished: normalizeFinished(raw.finished),
@@ -158,6 +197,22 @@ export const migrations: readonly MigrationStep[] = [
       revision: 0,
     }),
   },
+  {
+    from: 3,
+    to: 4,
+    up: (raw) => ({
+      ...raw,
+      version: 4,
+      gameVersion: 2,
+      caseRevisions: {},
+      legacyProgress: normalizeProgressMap(raw.progress),
+      legacyFinished: normalizeFinished(raw.finished),
+      progress: {},
+      finished: {},
+      session: createSession(),
+      migrationNotice: '旧MVPの記録を履歴として保持しました。V2では事件を新しく開始します。',
+    }),
+  },
 ];
 
 /** `version` を読む。無ければ assumeVersion。 */
@@ -187,7 +242,7 @@ function resetResult(fallbackCaseId: string): MigrateResult {
  *
  * - 配列・プリミティブ・`version` が不正 → 初期化（`reset: true`）
  * - `version` が CURRENT_SAVE_VERSION より大きい（将来の形式、ロールバック時など）→
- *   初期化せず、読める共通フィールドだけを拾う。`migratedFrom` にその値を入れる。
+ *   初期化せず、読める共通フィールドだけを拾う。readOnlyVersionで上書きを禁止する。
  */
 export function migrate(
   raw: unknown,
@@ -200,7 +255,16 @@ export function migrate(
   if (version === null) return resetResult(fallbackCaseId);
 
   if (version > CURRENT_SAVE_VERSION) {
-    return { data: normalizeSaveData(raw, fallbackCaseId), migratedFrom: version, reset: false };
+    return {
+      data: {
+        ...normalizeSaveData(raw, fallbackCaseId),
+        readOnlyVersion: version,
+        migrationNotice:
+          'この記録は新しい保存形式です。元の記録を保護するため、この画面では保存しません。',
+      },
+      migratedFrom: version,
+      reset: false,
+    };
   }
 
   let current = raw;
@@ -219,13 +283,19 @@ export function migrate(
 }
 
 /** 書き込み用に現行形式へ包む。 */
-export function toSaveDataV3(
+export function toSaveDataV4(
   data: SaveData,
   now: () => string = () => new Date().toISOString(),
-): SaveDataV3 {
+): SaveDataV4 {
   return {
     version: CURRENT_SAVE_VERSION,
     savedAt: now(),
+    gameVersion: 2,
+    ...(data.caseRevisions ? { caseRevisions: data.caseRevisions } : {}),
+    ...(data.legacyProgress ? { legacyProgress: data.legacyProgress } : {}),
+    ...(data.legacyFinished ? { legacyFinished: data.legacyFinished } : {}),
+    ...(data.archivedProgress ? { archivedProgress: data.archivedProgress } : {}),
+    ...(data.migrationNotice ? { migrationNotice: data.migrationNotice } : {}),
     active: data.active,
     progress: data.progress,
     finished: data.finished,
@@ -234,5 +304,6 @@ export function toSaveDataV3(
   };
 }
 
-/** 互換用の別名。常に最新形式（v3）で包む。 */
-export const toSaveDataV2 = toSaveDataV3;
+/** 互換用の別名。常に最新形式（v4）で包む。 */
+export const toSaveDataV3 = toSaveDataV4;
+export const toSaveDataV2 = toSaveDataV4;
