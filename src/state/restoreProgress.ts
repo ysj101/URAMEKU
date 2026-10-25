@@ -29,9 +29,7 @@ export function restoreProgress(caseData: CaseData, raw: CaseProgress): CaseProg
       config.experiment.revealDocuments.every((id) => progress.opened.includes(id))
     );
     v2.experiment = {
-      conditionId: config.experiment.conditions.some((c) => c.id === e?.conditionId)
-        ? e!.conditionId
-        : base.experiment!.conditionId,
+      conditionId: base.experiment!.conditionId,
       initialChoice: initial,
       updatedChoice: complete ? updated : null,
       stage: complete ? 'complete' : initial ? 'comparison' : 'initial',
@@ -40,6 +38,8 @@ export function restoreProgress(caseData: CaseData, raw: CaseProgress): CaseProg
   } else delete v2.experiment;
   const validEvidence = (evidence: string[]) =>
     evidence.every((id) => progress.pinned.includes(id));
+  const knownHistory = (evidence: string[]) =>
+    evidence.every((id) => ids.has(id) && progress.opened.includes(id));
   v2.decisions = config.decision
     ? v2.decisions.filter(
         (r) =>
@@ -48,8 +48,8 @@ export function restoreProgress(caseData: CaseData, raw: CaseProgress): CaseProg
             (o) => o.id === r.optionId && o.cost <= config.decision!.resources,
           ) &&
           r.evidence.length > 0 &&
-          validEvidence(r.evidence) &&
-          validEvidence(r.counterEvidence) &&
+          knownHistory(r.evidence) &&
+          knownHistory(r.counterEvidence) &&
           r.reason.trim() &&
           r.assumptions.trim(),
       )

@@ -68,5 +68,70 @@
       "file_present_or_complete": false,
       "reference": "docs/PRODUCTION_RELEASE_TASKS.md"
     }
-  ]
+  ],
+  "inventorySemantics": "file_present_or_complete records historical file availability, not runtime verification or human release approval.",
+  "v2Verification": {
+    "gameVersion": 2,
+    "automated": {
+      "status": "passed-on-Mac-with-two-documented-platform-skips",
+      "commands": [
+        "npm run check",
+        "npm run build",
+        "npm run validate:cases",
+        "npm run lint:content",
+        "npm run analyze:dead-ends -- --check",
+        "npm run walkthrough -- --check",
+        "node_modules/.bin/playwright test --project=chromium --project=mobile-chromium --workers=2",
+        "python3 scripts/validate_assets.py"
+      ],
+      "evidence": {
+        "report": "docs/qa/v2-validation.md",
+        "unitTestFiles": 80,
+        "unitTestsPassed": 791,
+        "browserTestsPassed": 70,
+        "browserTestsSkipped": 2,
+        "skipReason": "macOS headless native select arrow-key automation limitation; keyboard walkthrough remains mandatory on Linux CI",
+        "assetsChecked": 538,
+        "casesChecked": 5
+      }
+    },
+    "manual": {
+      "firstTimeUsers": {
+        "status": "out-of-scope-per-user",
+        "completed": 0,
+        "required": 5,
+        "evidence": [],
+        "requiredForThisMigration": 0
+      },
+      "physicalDevices": {
+        "status": "out-of-scope-per-user",
+        "required": [
+          "iOS Safari",
+          "Android Chrome"
+        ],
+        "evidence": [],
+        "requiredForThisMigration": []
+      },
+      "artAndRightsApproval": {
+        "status": "pending",
+        "evidence": "qa/art-review.json and docs/PRODUCTION_RELEASE_TASKS.md; machine validation is not approval."
+      }
+    },
+    "tracking": {
+      "parentIssue": 99,
+      "qaIssue": 114,
+      "completion": "Mac acceptance per user instruction. Do not treat excluded human/device checks or pending art/rights approval as performed."
+    },
+    "acceptanceScope": {
+      "platform": "Mac",
+      "userInstruction": "Macで確認だけでいい",
+      "confirmedOn": "2026-10-26",
+      "excludedFromThisMigration": [
+        "初見利用者5人の評価",
+        "iOS Safari実機確認",
+        "Android Chrome実機確認"
+      ],
+      "productionApproval": "unchanged; not release-approved"
+    }
+  }
 }

@@ -176,3 +176,24 @@ it('individual reset removes old and V2 histories only for that case', () => {
   expect(reset.archivedProgress).toEqual({ 'other@1': p });
   expect(reset.caseRevisions).toEqual({ other: 1 });
 });
+
+it('preserves initial decision history after old evidence is unpinned', () => {
+  let p = createProgress(c);
+  for (const documentId of ['a', 'b']) {
+    p = reduceProgress(c, p, { type: 'open-document', documentId });
+    p = reduceProgress(c, p, { type: 'toggle-pin', documentId });
+  }
+  p = reduceProgress(c, p, {
+    type: 'v2-decision',
+    record: {
+      objectiveId: 'cost',
+      optionId: 'hold',
+      reason: '情報を待つ',
+      assumptions: '未確定',
+      evidence: ['a'],
+      counterEvidence: ['b'],
+    },
+  });
+  p = reduceProgress(c, p, { type: 'toggle-pin', documentId: 'a' });
+  expect(restoreProgress(c, p).v2?.decisions).toEqual(p.v2?.decisions);
+});
