@@ -2,6 +2,20 @@ import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { App } from '../app/App';
 
+// Retain the V1 keyboard regression against immutable content; active V2 has its own play tests.
+vi.mock('../data/cases', async () => {
+  const { LEGACY_CASES: cases } = await import('./legacyCases');
+  return {
+    CASES: cases,
+    findCase: (id: string) => cases.find((c) => c.id === id),
+    caseIndex: (id: string) => cases.findIndex((c) => c.id === id),
+    nextCaseId: (id: string) => {
+      const i = cases.findIndex((c) => c.id === id);
+      return cases[i < 0 ? 0 : (i + 1) % cases.length]?.id;
+    },
+  };
+});
+
 /**
  * キーボードのみの統合テスト（MVP-039 / docs/TEST_STRATEGY.md T13）。
  * マウス（click）は一切使わず、Tab / Enter / Escape / 矢印キーだけで
@@ -61,7 +75,7 @@ beforeEach(() => {
   window.location.hash = '';
 });
 
-describe('キーボードのみで CASE 01 を解決できる（T13）', () => {
+describe('V1互換UIをキーボードのみで完了できる（旧T13）', () => {
   it('ホーム → 事件一覧 → 調査 → 記事 → 提出 → 結果 → 次の事件', async () => {
     render(<App />);
 

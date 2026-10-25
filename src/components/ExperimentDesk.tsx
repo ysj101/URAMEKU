@@ -1,3 +1,4 @@
+import { createV2Progress } from '../domain/v2Progress';
 import { useState } from 'react';
 import {
   comparisonAvailable,
@@ -14,7 +15,11 @@ export function ExperimentDesk({ caseData, progress, onAction }: V2DeskProps) {
   const [reason, setReason] = useState('');
   if (!definition) return null;
   const initial = !record?.initialChoice;
-  const condition = experimentCondition(definition, progress);
+  const condition = experimentCondition(
+    definition,
+    progress,
+    createV2Progress(caseData).experiment?.conditionId,
+  );
   const compared = experimentComparison(caseData, progress);
   const canCompare = comparisonAvailable(caseData, progress);
   const finished = record?.stage === 'complete';

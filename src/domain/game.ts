@@ -51,6 +51,19 @@ export function reduceProgress(
   progress: CaseProgress,
   action: GameAction,
 ): CaseProgress {
+  if (
+    caseData.v2 &&
+    [
+      'toggle-link',
+      'set-calculation',
+      'add-fragment',
+      'remove-fragment',
+      'replace-fragment',
+      'move-fragment',
+      'clear-article',
+    ].includes(action.type)
+  )
+    return progress;
   if (action.type.startsWith('v2-'))
     return reduceV2Progress(caseData, progress, action as V2Action);
   switch (action.type) {

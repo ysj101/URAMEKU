@@ -10,7 +10,7 @@ import {
 } from './article';
 import { publishVerdict } from './publish';
 import { ARTICLE_LENGTH, FRAGMENT_KINDS, type HeadlineFragment } from './types';
-import { CASES } from '../data/cases';
+import { LEGACY_CASES as CASES } from '../test/legacyCases';
 import { clearedProgress, makeCase, makeProgress } from '../test/fixtures';
 
 const c = makeCase();
@@ -174,7 +174,7 @@ describe('単独正解ではクリアにならない', () => {
   });
 });
 
-describe('実データの断片メタ情報', () => {
+describe('V1互換fixtureの断片メタ情報', () => {
   for (const data of CASES) {
     describe(data.id, () => {
       const correct = new Set(data.correct_fragments);

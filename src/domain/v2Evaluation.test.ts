@@ -164,3 +164,62 @@ describe('V2 evaluation', () => {
     expect(caseStatus(data.id, progress, {})).toBe('investigating');
   });
 });
+
+it('records an unchanged policy once after disclosure, then ignores duplicate reaffirmations', () => {
+  const data = makeV2Case();
+  data.v2!.decision = {
+    prompt: '方針を選ぶ',
+    objectives: [{ id: 'safety', text: '安全を重視' }],
+    options: [{ id: 'hold', text: '保留', cost: 0, outcome: '待機', tradeoff: '時間経過' }],
+    resources: 0,
+    revealDocuments: ['c'],
+    updatePrompt: '維持も可能',
+  };
+  const record: V2DecisionRecord = {
+    objectiveId: 'safety',
+    optionId: 'hold',
+    reason: '不確実なので待つ',
+    assumptions: 'まだ需要が不明',
+    evidence: ['a'],
+    counterEvidence: ['b'],
+  };
+  let progress = makeV2Progress({ opened: ['a', 'b'], pinned: ['a', 'b'] });
+  progress = reduceProgress(data, progress, { type: 'v2-decision', record });
+  expect(progress.v2!.decisions).toHaveLength(1);
+  expect(reduceProgress(data, progress, { type: 'v2-decision', record })).toBe(progress);
+  progress = reduceProgress(data, progress, { type: 'open-document', documentId: 'c' });
+  progress = reduceProgress(data, progress, { type: 'v2-decision', record });
+  expect(progress.v2!.decisions).toEqual([record, record]);
+  expect(reduceProgress(data, progress, { type: 'v2-decision', record })).toBe(progress);
+});
+
+it('refuses legacy answer actions in V2 and overlapping decision evidence', () => {
+  const data = makeV2Case();
+  const progress = complete();
+  expect(
+    reduceProgress(data, progress, { type: 'set-calculation', taskId: 'old', value: '45' }),
+  ).toBe(progress);
+  expect(reduceProgress(data, progress, { type: 'add-fragment', fragmentId: 'f0' })).toBe(progress);
+  data.v2!.decision = {
+    prompt: '方針を選ぶ',
+    objectives: [{ id: 'safety', text: '安全' }],
+    options: [{ id: 'hold', text: '保留', cost: 0, outcome: '待機', tradeoff: '時間経過' }],
+    resources: 0,
+    revealDocuments: ['c'],
+    updatePrompt: '更新',
+  };
+  expect(
+    reduceProgress(data, progress, {
+      type: 'v2-decision',
+      record: {
+        objectiveId: 'safety',
+        optionId: 'hold',
+        reason: '理由',
+        assumptions: '前提',
+        evidence: ['a'],
+        counterEvidence: ['a'],
+      },
+    }),
+  ).toBe(progress);
+  expect(evaluateV2Case({ ...data, schemaVersion: undefined }, progress).completed).toBe(false);
+});

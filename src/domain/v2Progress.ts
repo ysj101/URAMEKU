@@ -240,11 +240,19 @@ export function reduceV2Progress(
         !record.assumptions.trim() ||
         record.evidence.length === 0 ||
         !validEvidence(record.evidence) ||
-        !validEvidence(record.counterEvidence)
+        !validEvidence(record.counterEvidence) ||
+        new Set([...record.evidence, ...record.counterEvidence]).size !==
+          record.evidence.length + record.counterEvidence.length
       )
         return progress;
       if (v2.decisions.length > 0 && !compared(d.revealDocuments)) return progress;
-      if (JSON.stringify(v2.decisions.at(-1)) === JSON.stringify(record)) return progress;
+      const explicitFirstReaffirmation =
+        v2.decisions.length === 1 && d.revealDocuments.length > 0 && compared(d.revealDocuments);
+      if (
+        !explicitFirstReaffirmation &&
+        JSON.stringify(v2.decisions.at(-1)) === JSON.stringify(record)
+      )
+        return progress;
       return commit(
         {
           ...v2,

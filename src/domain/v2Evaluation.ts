@@ -33,7 +33,7 @@ export const V2_TRACK_LABELS: Record<V2Track, string> = {
 
 /** Completion measures documented work, never a value judgement, a reaction or outcome luck. */
 export function evaluateV2Case(caseData: CaseData, progress: CaseProgress): V2Evaluation {
-  const definition = caseData.v2;
+  const definition = caseData.schemaVersion === 2 ? caseData.v2 : undefined;
   const reviews = decodingReviews(caseData, progress);
   const experiment = progress.v2?.experiment;
   const decisionRecords = progress.v2?.decisions ?? [];

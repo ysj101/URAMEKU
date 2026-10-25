@@ -43,3 +43,36 @@ describe('role-labelled evidence routes', () => {
     );
   });
 });
+
+it('removes unpinned sources from editable decoding while preserving historical decisions', () => {
+  const data = makeV2Case();
+  let progress = makeV2Progress();
+  progress.v2!.decoding.scope = {
+    optionId: 'limited',
+    evidence: ['a', 'b'],
+    note: '対象範囲の記録',
+  };
+  const historical = {
+    objectiveId: 'safety',
+    optionId: 'hold',
+    reason: '当時の理由',
+    assumptions: '当時の前提',
+    evidence: ['a'],
+    counterEvidence: ['b'],
+  };
+  progress.v2!.decisions = [historical];
+  progress = reduceProgress(data, progress, { type: 'toggle-pin', documentId: 'a' });
+  expect(progress.v2!.decoding.scope).toEqual({
+    optionId: 'limited',
+    evidence: ['b'],
+    note: '対象範囲の記録',
+  });
+  expect(progress.v2!.decisions).toEqual([historical]);
+  progress = reduceProgress(data, progress, {
+    type: 'v2-decode',
+    taskId: 'scope',
+    optionId: 'open',
+    evidence: ['b'],
+  });
+  expect(progress.v2!.decoding.scope!.optionId).toBe('open');
+});

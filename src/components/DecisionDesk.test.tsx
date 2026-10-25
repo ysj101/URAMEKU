@@ -94,3 +94,58 @@ it('waits for newly revealed documents before accepting an update', () => {
   expect(screen.queryByRole('button', { name: '判断を記録' })).not.toBeInTheDocument();
   expect(screen.getByRole('list', { name: '判断の履歴' })).toHaveTextContent('最初の判断');
 });
+
+it('does not submit a stale source after it is removed from the evidence board', () => {
+  const onAction = vi.fn();
+  const data = fixture();
+  const progress = makeV2Progress();
+  const { rerender } = render(
+    <DecisionDesk caseData={data} progress={progress} onAction={onAction} />,
+  );
+  fireEvent.change(screen.getByRole('combobox', { name: '優先する目的' }), {
+    target: { value: 'safety' },
+  });
+  fireEvent.click(screen.getByRole('radio', { name: /保留/ }));
+  fireEvent.click(
+    within(screen.getByRole('group', { name: '方針を支える資料' })).getByRole('checkbox', {
+      name: '資料A',
+    }),
+  );
+  fireEvent.click(
+    within(screen.getByRole('group', { name: '反対の見方・制約を示す資料' })).getByRole(
+      'checkbox',
+      { name: '資料B' },
+    ),
+  );
+  fireEvent.change(screen.getByRole('textbox', { name: 'この判断が成り立つ前提・不確実な点' }), {
+    target: { value: '需要は未確定' },
+  });
+  fireEvent.change(screen.getByRole('textbox', { name: '目的と根拠を踏まえた選択理由' }), {
+    target: { value: '調べる時間を取る' },
+  });
+  rerender(
+    <DecisionDesk
+      caseData={data}
+      progress={{ ...progress, pinned: ['b', 'c'] }}
+      onAction={onAction}
+    />,
+  );
+  expect(screen.getByRole('button', { name: '判断を記録' })).toBeDisabled();
+  fireEvent.click(
+    within(screen.getByRole('group', { name: '方針を支える資料' })).getByRole('checkbox', {
+      name: '資料C',
+    }),
+  );
+  fireEvent.click(screen.getByRole('button', { name: '判断を記録' }));
+  expect(onAction).toHaveBeenCalledWith({
+    type: 'v2-decision',
+    record: {
+      objectiveId: 'safety',
+      optionId: 'hold',
+      reason: '調べる時間を取る',
+      assumptions: '需要は未確定',
+      evidence: ['c'],
+      counterEvidence: ['b'],
+    },
+  });
+});

@@ -27,7 +27,7 @@ const BUDGET_SHORT_TEXT = '予算不足';
 function tileState(opened: boolean, pinned: boolean, outcome: OpenDocumentOutcome): TileState {
   if (pinned) return 'pinned';
   if (opened) return 'opened';
-  if (outcome === 'insufficient-budget') return 'locked';
+  if (outcome === 'insufficient-budget' || outcome === 'sealed') return 'locked';
   return 'unseen';
 }
 
@@ -57,9 +57,10 @@ export function DocumentTile({
 }: Props) {
   const state = tileState(opened, pinned, outcome);
   const blocked = state === 'locked';
+  const blockedText = outcome === 'sealed' ? '初回の判断を記録すると開示' : BUDGET_SHORT_TEXT;
   const cost = documentCost(doc);
   const costText = opened ? '再読は無料' : cost === 0 ? '無料で確認' : `調査コスト ${cost}`;
-  const label = `${doc.title}、${STATE_LABEL[state]}、${costText}${blocked ? `、${BUDGET_SHORT_TEXT}` : ''}`;
+  const label = `${doc.title}、${STATE_LABEL[state]}、${costText}${blocked ? `、${blockedText}` : ''}`;
 
   return (
     <button
@@ -94,7 +95,7 @@ export function DocumentTile({
         {STATE_LABEL[state]}
       </span>
       <span className="doc-tile__cost">{costText}</span>
-      {blocked && <span className="doc-tile__reason">{BUDGET_SHORT_TEXT}</span>}
+      {blocked && <span className="doc-tile__reason">{blockedText}</span>}
     </button>
   );
 }

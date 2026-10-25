@@ -5,7 +5,7 @@ import {
   linkStatus,
   toggleLinkSelection,
 } from './link';
-import { CASES } from '../data/cases';
+import { LEGACY_CASES as CASES } from '../test/legacyCases';
 import { makeCase, makeProgress } from '../test/fixtures';
 
 const c = makeCase();
@@ -99,7 +99,7 @@ describe('link: 正誤判定', () => {
   });
 });
 
-describe('link: 実データ（data/cases）との整合', () => {
+describe('link: V1互換fixtureとの整合', () => {
   it('5 件のケースが読み込まれている', () => {
     expect(CASES).toHaveLength(5);
   });

@@ -8,11 +8,13 @@ import { remainingBudget } from '../domain/budget';
 import { isDeadEnd } from '../domain/deadEnd';
 import type { GameApi } from '../state/useGame';
 import '../app/screens/desk.css';
+import { V2InvestigationScreen } from './V2InvestigationScreen';
 
 export function InvestigationScreen({ game }: { game: GameApi }) {
   const { current, progress, dispatch } = game;
   const play = useSound();
   const [openId, setOpenId] = useState<string | null>(null);
+  if (current.v2) return <V2InvestigationScreen key={current.id} game={game} />;
   const deadEnd = isDeadEnd(current, progress);
 
   const handleOpen = (documentId: string) => {

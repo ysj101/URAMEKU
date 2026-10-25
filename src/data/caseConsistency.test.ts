@@ -1,12 +1,13 @@
-import { CASES, findCase } from './cases';
+import { LEGACY_CASES as CASES } from '../test/legacyCases';
+const findCase = (id: string) => CASES.find((c) => c.id === id);
 import { ARTICLE_LENGTH, LINK_SIZE } from '../domain/types';
 
 /**
  * 設計上の整合チェック（MVP-014）。
  * MVP-006 のスキーマ検証は「不正データの拒否」が目的だが、こちらは
- * 「ゲームとして解けるか」を 5 件の実データに対して確認する。
+ * 「ゲームとして解けるか」を 不変のV1 fixtureに対して確認する。V2の現行データはv2Content.test.tsとcases.test.tsで検証する。
  */
-describe('事件データの設計整合', () => {
+describe('V1互換fixtureの設計整合', () => {
   for (const c of CASES) {
     describe(c.id, () => {
       const docIds = new Set(c.documents.map((d) => d.id));

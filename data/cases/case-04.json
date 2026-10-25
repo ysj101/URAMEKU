@@ -4,7 +4,7 @@
   "bias": "サンクコスト効果",
   "difficulty": "HARD",
   "estimated_time": "5〜10分",
-  "intro": "編集部が新しい配信システムの継続を議論中。「すでに投じた費用」をどう扱うべきか。",
+  "intro": "新しい配信システムを続けるか、別案へ移るか、いったん止めるか。過去に戻らない費用と将来の条件を整理し、目的・前提・根拠を添えた方針を残そう。",
   "budget": 5,
   "documents": [
     {
@@ -24,14 +24,14 @@
     {
       "id": "finish",
       "title": "継続案の見積り",
-      "content": "完成まで追加で120万円、保守に30万円。来期の期待便益は最大100万円相当という見積り。",
+      "content": "完成まで追加で120万円、保守に30万円。来期の期待便益は最大100万円相当という見積り。今後の費用欄の合計は150万円。",
       "cost": 1,
       "visual": "report"
     },
     {
       "id": "switch",
       "title": "代替案の見積り",
-      "content": "既存サービス導入は追加60万円、保守20万円。来期の期待便益は120万円相当という見積り。",
+      "content": "既存サービス導入は追加60万円、保守20万円。来期の期待便益は120万円相当という見積り。今後の費用欄の合計は80万円。",
       "cost": 1,
       "visual": "report"
     },
@@ -59,7 +59,7 @@
     "spent",
     "finish"
   ],
-  "link_prompt": "すでに払ってしまった額と、これから払う額。この 2 つを並べて比べる 2 枚を結びます。",
+  "link_prompt": "取り戻せない支払い、これからの負担、別案の条件。それぞれの役割を分けて比べます。",
   "headline_fragments": [
     {
       "id": "f0",
@@ -143,24 +143,217 @@
     "f2"
   ],
   "debrief": {
-    "explanation": "返金されない支払済み費用は、今後の意思決定でどちらを選んでも変わらない。将来の便益・追加費用・リスクで判断するのが合理的な比較の出発点。",
-    "takeaway": "このゲームの数値は仮定。過去に投じた金額と、今後増えるコストを混ぜない。"
+    "explanation": "返金不可の300万円はどの方針でも戻らない。将来の費用は継続150万円・代替80万円と読めるが、便益は見積りで、両案に別のリスクが残る。来期条件を重視する方針と、未確認の長期目的を調べる方針、保留は前提を区別して説明する。",
+    "takeaway": "「使ってしまった」と「これから引き受ける」を分ける。結果の幸不幸だけで当時の判断や人を評価せず、当時の情報と前提へ戻る。"
   },
   "disclaimer": "登場人物・企業・統計・広告はすべて架空です。",
-  "analysis_tasks": [
-    {
-      "id": "continue",
-      "prompt": "継続案で今後発生する費用の合計",
-      "unit": "万円",
-      "expected": 150,
-      "tolerance": 0
+  "analysis_tasks": [],
+  "v2": {
+    "revision": 1,
+    "modes": [
+      "decoding",
+      "decision"
+    ],
+    "decoding": [
+      {
+        "id": "past_cost",
+        "prompt": "すでに払った300万円を、いまの方針比較でどう扱う？",
+        "options": [
+          {
+            "id": "recover_if_continue",
+            "text": "継続さえ選べば、すでに払った300万円が返金される。",
+            "status": "contradicted",
+            "accepted": false,
+            "reason": "支払い明細が返金不可と明記している。",
+            "evidence": [
+              "spent"
+            ]
+          },
+          {
+            "id": "past_is_benefit",
+            "text": "過去に300万円を投じた事実だけで、来期の利益が保証される。",
+            "status": "uncertain",
+            "accepted": false,
+            "reason": "支払いの事実から将来便益は保証できない。",
+            "evidence": [
+              "spent",
+              "finish"
+            ]
+          },
+          {
+            "id": "separate_past",
+            "text": "どの案を選んでも返金されない支払いとして、今後の負担とは区別して記録する。",
+            "status": "supported",
+            "accepted": true,
+            "reason": "支払済みで返金不可という条件は、継続の義務でも将来便益でもない。",
+            "evidence": [
+              "spent"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "future_comparison",
+        "prompt": "将来条件について、資料から比較できる範囲は？",
+        "options": [
+          {
+            "id": "same_with_past",
+            "text": "継続案に過去の300万円を足し、その額だけを代替案の将来費用と比較すれば十分である。",
+            "status": "contradicted",
+            "accepted": false,
+            "reason": "過去の返金不可費用と今後の費用を混ぜている。",
+            "evidence": [
+              "spent",
+              "finish",
+              "switch"
+            ]
+          },
+          {
+            "id": "compare_forward",
+            "text": "継続案は今後150万円、代替案は80万円の費用見積り。便益の見積りと費用の記録を分けて比較する。",
+            "status": "supported",
+            "accepted": true,
+            "reason": "両案の費用欄は比較できるが、最大便益や期待便益は確実な回収額ではない。",
+            "evidence": [
+              "finish",
+              "switch"
+            ]
+          },
+          {
+            "id": "free_alternative",
+            "text": "代替案には導入費用も保守費用も発生しない。",
+            "status": "contradicted",
+            "accepted": false,
+            "reason": "代替案にも追加60万円と保守20万円の記載がある。",
+            "evidence": [
+              "switch"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "risk_limit",
+        "prompt": "見積りの数字を読んでもなお残る不確実性は？",
+        "options": [
+          {
+            "id": "risk_free_switch",
+            "text": "代替案の期待便益が高いので、移行に失敗する可能性はない。",
+            "status": "contradicted",
+            "accepted": false,
+            "reason": "監査メモは代替案にも移行リスクがあると記している。",
+            "evidence": [
+              "risk",
+              "switch"
+            ]
+          },
+          {
+            "id": "risk_unresolved",
+            "text": "継続案には技術リスク、代替案には移行リスクがある。来期の便益の実現額はまだ確定していない。",
+            "status": "uncertain",
+            "accepted": true,
+            "reason": "監査の指摘は費用見積りだけでは解消されない。",
+            "evidence": [
+              "risk",
+              "finish",
+              "switch"
+            ]
+          },
+          {
+            "id": "benefit_guaranteed",
+            "text": "継続案は最大100万円の便益があるので、来期に100万円を必ず回収できる。",
+            "status": "uncertain",
+            "accepted": false,
+            "reason": "最大という見積りは回収保証ではなく、監査に不確実性がある。",
+            "evidence": [
+              "risk",
+              "finish"
+            ]
+          }
+        ]
+      }
+    ],
+    "graph": {
+      "prompt": "過去の費用が将来比較をどう限定し、両案の見積りがどんな比較関係にあるかを残してください。",
+      "paths": [
+        [
+          {
+            "from": "spent",
+            "to": "finish",
+            "relation": "qualifies"
+          },
+          {
+            "from": "finish",
+            "to": "switch",
+            "relation": "qualifies"
+          }
+        ],
+        [
+          {
+            "from": "spent",
+            "to": "switch",
+            "relation": "qualifies"
+          },
+          {
+            "from": "finish",
+            "to": "switch",
+            "relation": "qualifies"
+          }
+        ]
+      ]
     },
-    {
-      "id": "alternative",
-      "prompt": "代替案で今後発生する費用の合計",
-      "unit": "万円",
-      "expected": 80,
-      "tolerance": 0
-    }
-  ]
+    "decision": {
+      "prompt": "編集局のシミュレーションでは追加投入の上限を150万円と置く。実際の費用・便益・リスクの資料を読み、何を優先するかと条件付き方針を記録してください。",
+      "objectives": [
+        {
+          "id": "near_term",
+          "text": "来期の追加負担と見積便益を優先する"
+        },
+        {
+          "id": "capability",
+          "text": "内部で技術を持つ可能性を調べることを優先する"
+        },
+        {
+          "id": "uncertainty",
+          "text": "不確実な条件を先に確認する"
+        }
+      ],
+      "resources": 150,
+      "options": [
+        {
+          "id": "continue",
+          "text": "継続案に進む",
+          "cost": 150,
+          "outcome": "シミュレーション上、今後150万円の枠を継続案に使う。来期便益の最大100万円は保証されず、技術リスクの確認が必要な状態で次の検討へ進む。",
+          "tradeoff": "内部技術の将来価値を見込むなら、それは未確認の前提として記録する。来期の費用負担と技術リスクを引き受ける。"
+        },
+        {
+          "id": "switch",
+          "text": "代替サービス案に移る",
+          "cost": 80,
+          "outcome": "シミュレーション上、今後80万円の枠を代替案に使う。期待便益120万円は保証ではなく、移行リスクが残る。",
+          "tradeoff": "来期見積りを重視できる一方、移行失敗や内部技術の扱いは未解決。過去費用が返金されるわけではない。"
+        },
+        {
+          "id": "stop",
+          "text": "新規投入をいったん止める",
+          "cost": 0,
+          "outcome": "シミュレーション上、この場で新たな投入を確約しない。支払済み300万円は戻らず、便益を得る時期も先送りになる。",
+          "tradeoff": "追加負担は抑えるが、現在の配信上の課題や代替導入の機会を残す。"
+        },
+        {
+          "id": "hold",
+          "text": "追加確認を条件に保留する",
+          "cost": 0,
+          "outcome": "シミュレーション上、監査と便益見積りの確認を次の判断条件として記録する。今この場での投入は確約しない。",
+          "tradeoff": "情報を待つ間の遅延を受け入れる。何を確かめたら方針を変えるかを明示する。"
+        }
+      ],
+      "revealDocuments": [
+        "risk"
+      ],
+      "updatePrompt": "監査の開示前後で、目的と方針を維持するか更新するか。支持資料・反対材料・まだ仮定している点を添えて記録してください。"
+    },
+    "reportPrompt": "過去費用、将来の見積り、残るリスク、選んだ目的と方針を区別して報告してください。実現していない便益を事実として書かないでください。"
+  },
+  "schemaVersion": 2
 }

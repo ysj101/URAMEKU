@@ -1,7 +1,12 @@
+import { createV2Progress } from './v2Progress';
 import type { CaseData, CaseProgress, V2Experiment } from './types';
 
-export function experimentCondition(experiment: V2Experiment, progress: CaseProgress) {
-  const assigned = progress.v2?.experiment?.conditionId;
+export function experimentCondition(
+  experiment: V2Experiment,
+  progress: CaseProgress,
+  fallbackConditionId?: string,
+) {
+  const assigned = progress.v2?.experiment?.conditionId ?? fallbackConditionId;
   return (
     experiment.conditions.find((condition) => condition.id === assigned) ?? experiment.conditions[0]
   );
@@ -38,7 +43,11 @@ export function experimentComparison(caseData: CaseData, progress: CaseProgress)
   if (!definition || !experiment) return null;
   const text = (id: string | null) => definition.choices.find((choice) => choice.id === id)?.text;
   return {
-    condition: experimentCondition(definition, progress),
+    condition: experimentCondition(
+      definition,
+      progress,
+      createV2Progress(caseData).experiment?.conditionId,
+    ),
     initial: text(experiment.initialChoice),
     updated: text(experiment.updatedChoice),
     changed:

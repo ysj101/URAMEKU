@@ -131,6 +131,12 @@ function removePin(progress: CaseProgress, documentId: string): CaseProgress {
       ? {
           v2: {
             ...progress.v2,
+            decoding: Object.fromEntries(
+              Object.entries(progress.v2.decoding).map(([id, record]) => [
+                id,
+                { ...record, evidence: record.evidence.filter((source) => source !== documentId) },
+              ]),
+            ),
             links: progress.v2.links.filter(
               (link) => link.from !== documentId && link.to !== documentId,
             ),
