@@ -35,6 +35,9 @@ export function validateV2(raw) {
   }); unique(taskIds,'v2.decoding');
   if(keys(v.graph,'v2.graph',['prompt','paths'])){
     text(v.graph.prompt,'v2.graph.prompt');
+    if (typeof v.graph.prompt === 'string') for (const document of docs.values()) {
+      if (typeof document.title === 'string' && document.title.length > 0 && v.graph.prompt.includes(document.title)) fail('v2.graph.prompt', `資料タイトル「${document.title}」を含んでいます（正解の名指しになります）`);
+    }
     list(v.graph.paths,'v2.graph.paths',1,20).forEach((path,i)=>{
       const signatures=[];list(path,`v2.graph.paths[${i}]`,1,20).forEach((edge,j)=>{
         const ep=`v2.graph.paths[${i}][${j}]`;if(!keys(edge,ep,['from','to','relation']))return;

@@ -39,3 +39,11 @@ describe('V2 data contract', () => {
     expect(JSON.stringify(c)).toBe(before);
   });
 });
+
+
+it('keeps V2 graph questions role-based instead of revealing a source title', () => {
+  const data = makeV2Case();
+  data.v2!.graph.prompt = `根拠となる${data.documents[1]!.title}を選んでください。`;
+  expect(validateCase(data).errors.some((error) => error.startsWith('v2.graph.prompt:'))).toBe(true);
+  expect(cliErrors(data).some((error) => error.startsWith('v2.graph.prompt:'))).toBe(true);
+});

@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
+import { createV2Progress } from '../domain/v2Progress';
 import { ExperimentDesk } from './ExperimentDesk';
 import { makeV2Case, makeV2Progress } from '../test/mechanicsFixtures';
 
@@ -24,10 +25,13 @@ function fixture() {
 
 it('records an initial reaction without showing the comparison condition or explanation', () => {
   const onAction = vi.fn();
-  render(<ExperimentDesk caseData={fixture()} progress={makeV2Progress()} onAction={onAction} />);
+  const data = fixture();
+  render(<ExperimentDesk caseData={data} progress={makeV2Progress()} onAction={onAction} />);
   fireEvent.click(screen.getByRole('button', { name: '保留する' }));
   expect(onAction).toHaveBeenCalledWith({ type: 'v2-experiment-initial', choiceId: 'hold' });
-  expect(screen.queryByText('比較価格を示さない。')).not.toBeInTheDocument();
+  const assigned = createV2Progress(data).experiment!.conditionId;
+  const hidden = data.v2!.experiment!.conditions.find((condition) => condition.id !== assigned)!;
+  expect(screen.queryByText(hidden.prompt)).not.toBeInTheDocument();
   expect(screen.queryByText('まだ開示しない種明かし。')).not.toBeInTheDocument();
 });
 
@@ -62,4 +66,15 @@ it('requires comparison sources before the update form and accepts unchanged cho
     choiceId: 'hold',
     reason: '条件を見ても情報が足りないため',
   });
+});
+
+it('shows the same assigned initial condition even if an uninitialized progress is supplied', () => {
+  const data = fixture();
+  const assignment = createV2Progress(data).experiment!.conditionId;
+  const expected = data.v2!.experiment!.conditions.find(
+    (condition) => condition.id === assignment,
+  )!;
+  render(<ExperimentDesk caseData={data} progress={makeV2Progress()} onAction={vi.fn()} />);
+  expect(screen.getByRole('heading', { name: expected.label })).toBeInTheDocument();
+  expect(screen.getByText(expected.prompt)).toBeInTheDocument();
 });

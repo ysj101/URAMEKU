@@ -2,7 +2,7 @@ import { act, renderHook } from '@testing-library/react';
 import { CASES } from '../data/cases';
 import { SAVE_DEBOUNCE_MS, useGame } from './useGame';
 import { persistSaveData, STORAGE_KEY, createSaveData, type StorageLike } from './persistence';
-import { createProgress } from '../domain/game';
+import { createProgress, type GameAction } from '../domain/game';
 
 /** setItem の回数を数えられるメモリ storage */
 function memoryStorage(): StorageLike & { map: Map<string, string>; writes: number } {
@@ -27,7 +27,14 @@ function stored(s: { map: Map<string, string> }) {
     revision: number;
     active: string;
     session: { stage: string; lastDocumentId: string | null };
-    progress: Record<string, { calculations: Record<string, string>; opened: string[] }>;
+    progress: Record<
+      string,
+      {
+        calculations: Record<string, string>;
+        opened: string[];
+        v2?: { report: { claim: string; uncertainty: string } };
+      }
+    >;
   } | null;
 }
 
@@ -42,6 +49,10 @@ const SECOND = CASES[1]!;
 const FREE_DOC = FIRST.documents.find((d) => d.cost === 0)!.id;
 // Persistence debounce is independent of case content and legacy answer keys.
 const TASK = 'legacy_input';
+const editAction = (value: string): GameAction =>
+  FIRST.v2
+    ? { type: 'v2-report', claim: value, uncertainty: 'まだ調査していない点を保留する' }
+    : { type: 'set-calculation', taskId: TASK, value };
 
 beforeEach(() => {
   vi.useFakeTimers();
@@ -55,9 +66,7 @@ describe('useGame の途中保存と復元', () => {
     const s = memoryStorage();
     const first = renderHook(() => useGame({ storage: s }));
     act(() => first.result.current.dispatch({ type: 'open-document', documentId: FREE_DOC }));
-    act(() =>
-      first.result.current.dispatch({ type: 'set-calculation', taskId: TASK, value: '12' }),
-    );
+    act(() => first.result.current.dispatch(editAction('12')));
     act(() => first.result.current.setStage('article'));
     expect(first.result.current.stage).toBe('article');
     expect(first.result.current.lastDocumentId).toBe(FREE_DOC);
@@ -69,7 +78,11 @@ describe('useGame の途中保存と復元', () => {
     expect(second.result.current.stage).toBe('article');
     expect(second.result.current.lastDocumentId).toBe(FREE_DOC);
     expect(second.result.current.progress.opened).toEqual([FREE_DOC]);
-    expect(second.result.current.progress.calculations[TASK]).toBe('12');
+    expect(
+      FIRST.v2
+        ? second.result.current.progress.v2?.report.claim
+        : second.result.current.progress.calculations[TASK],
+    ).toBe('12');
     expect(second.result.current.saveStatus).toBe('saved');
   });
 
@@ -114,7 +127,7 @@ describe('useGame のデバウンス', () => {
     const s = memoryStorage();
     const { result } = renderHook(() => useGame({ storage: s }));
     for (const v of ['1', '12', '123']) {
-      act(() => result.current.dispatch({ type: 'set-calculation', taskId: TASK, value: v }));
+      act(() => result.current.dispatch(editAction(v)));
       act(() => vi.advanceTimersByTime(SAVE_DEBOUNCE_MS - 50));
     }
     expect(s.writes).toBe(0);
@@ -123,7 +136,11 @@ describe('useGame のデバウンス', () => {
     const data = stored(s)!;
     expect(data.version).toBe(4);
     expect(data.revision).toBe(3);
-    expect(data.progress[FIRST.id]?.calculations[TASK]).toBe('123');
+    expect(
+      FIRST.v2
+        ? data.progress[FIRST.id]?.v2?.report.claim
+        : data.progress[FIRST.id]?.calculations[TASK],
+    ).toBe('123');
   });
 
   it('pagehide / beforeunload で待たずに書く', () => {

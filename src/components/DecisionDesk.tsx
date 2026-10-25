@@ -19,13 +19,22 @@ export function DecisionDesk({ caseData, progress, onAction }: V2DeskProps) {
   const comparisonAvailable = decisionComparisonAvailable(caseData, progress);
   const waiting = records.length > 0 && !comparisonAvailable;
   const outcome = decisionOutcome(caseData, progress);
-  const valid =
-    objectiveId &&
-    optionId &&
+  const selectedEvidence = evidence.filter((id) =>
+    documents.some((document) => document.id === id),
+  );
+  const selectedCounterEvidence = counterEvidence.filter((id) =>
+    documents.some((document) => document.id === id),
+  );
+  const valid = Boolean(
+    definition.objectives.some((objective) => objective.id === objectiveId) &&
+    definition.options.some(
+      (option) => option.id === optionId && option.cost <= definition.resources,
+    ) &&
     reason.trim() &&
     assumptions.trim() &&
-    evidence.length &&
-    counterEvidence.length;
+    selectedEvidence.length &&
+    selectedCounterEvidence.length,
+  );
   const toggle = (ids: string[], id: string, checked: boolean) =>
     checked ? [...ids, id] : ids.filter((source) => source !== id);
   return (
@@ -62,7 +71,14 @@ export function DecisionDesk({ caseData, progress, onAction }: V2DeskProps) {
             if (!valid) return;
             onAction({
               type: 'v2-decision',
-              record: { objectiveId, optionId, reason, assumptions, evidence, counterEvidence },
+              record: {
+                objectiveId,
+                optionId,
+                reason,
+                assumptions,
+                evidence: selectedEvidence,
+                counterEvidence: selectedCounterEvidence,
+              },
             });
             setReason('');
             setAssumptions('');

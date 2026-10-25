@@ -4,6 +4,7 @@ import { canSubmitArticle } from '../domain/publish';
 import { ARTICLE_LENGTH } from '../domain/types';
 import type { GameApi } from '../state/useGame';
 import '../app/screens/article.css';
+import { V2ArticleScreen } from './V2ArticleScreen';
 
 /** 提出できない理由（提出できるなら null） */
 function submitBlockedReason(progress: GameApi['progress']): string | null {
@@ -16,6 +17,7 @@ function submitBlockedReason(progress: GameApi['progress']): string | null {
 export function ArticleScreen({ game }: { game: GameApi }) {
   const { current, progress, dispatch } = game;
   const play = useSound();
+  if (current.v2) return <V2ArticleScreen key={current.id} game={game} />;
   const filledCalcs = Object.values(progress.calculations).filter((v) => v !== '').length;
   const reason = submitBlockedReason(progress);
   const canSubmit = reason === null && canSubmitArticle(progress);

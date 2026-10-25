@@ -4,7 +4,7 @@
   "bias": "スケール効果とフレーミング",
   "difficulty": "HARD",
   "estimated_time": "5〜10分",
-  "intro": "新サービスの評価グラフが急上昇。どの程度変わったのか、正確に記事へ落とし込もう。",
+  "intro": "急上昇に見える評価グラフ。数字の出所、軸、調査の対象を読む。速報として伝えるか、表現を留保するか、追加確認するかを根拠付きで決めよう。",
   "budget": 4,
   "documents": [
     {
@@ -59,7 +59,7 @@
     "graphic",
     "raw"
   ],
-  "link_prompt": "見せ方（グラフ）と、その元になった数字。この 2 つを突き合わせる 2 枚を結びます。",
+  "link_prompt": "グラフの見せ方と回答記録、比較を限定する調査条件。それぞれの資料の役割を組みます。",
   "headline_fragments": [
     {
       "id": "f0",
@@ -145,24 +145,220 @@
     "f2"
   ],
   "debrief": {
-    "explanation": "40%→50%は10ポイント増で、元の40%に対して25%の相対増加。縦軸の取り方によって視覚的な印象が変わる。対象が完全に一致しないため、原因まで断定できない。",
-    "takeaway": "割合の絶対差・相対変化・グラフ軸・調査方法をそれぞれ確認する。"
+    "explanation": "回答集団内では40%から50%へ変化し、絶対差10ポイントと相対増加25%は別の表し方である。縦軸35〜55は変化を強く見せるが、記録された差を消すわけではない。対象の選び方が異なり、原因や全利用者の変化は未確認である。",
+    "takeaway": "見た目の印象、測定値、比較条件、掲載方針を分ける。限定付き掲載と追加確認と保留は、それぞれ引き受ける制約を説明する。"
   },
   "disclaimer": "登場人物・企業・統計・広告はすべて架空です。",
-  "analysis_tasks": [
-    {
-      "id": "absolute",
-      "prompt": "前月と今月の満足評価の絶対差",
-      "unit": "ポイント",
-      "expected": 10,
-      "tolerance": 0
+  "analysis_tasks": [],
+  "v2": {
+    "revision": 1,
+    "modes": [
+      "decoding",
+      "decision"
+    ],
+    "decoding": [
+      {
+        "id": "measured_change",
+        "prompt": "元データから直接伝えられる変化は？",
+        "options": [
+          {
+            "id": "double_quality",
+            "text": "品質そのものが2倍になったと測定された。",
+            "status": "contradicted",
+            "accepted": false,
+            "reason": "満足の回答割合の変化と品質の倍増は同じではない。",
+            "evidence": [
+              "raw",
+              "graphic"
+            ]
+          },
+          {
+            "id": "no_change",
+            "text": "軸が切られているので実際の回答結果には変化がない。",
+            "status": "contradicted",
+            "accepted": false,
+            "reason": "表示の強調があっても、40人から50人という記録の差は消えない。",
+            "evidence": [
+              "raw",
+              "axis"
+            ]
+          },
+          {
+            "id": "observed_change",
+            "text": "各月の回答100人のうち満足が40人から50人へ変わった。回答集団内の割合は40%から50%である。",
+            "status": "supported",
+            "accepted": true,
+            "reason": "元データの対象と指標をその範囲のまま記述している。",
+            "evidence": [
+              "raw"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "axis_framing",
+        "prompt": "急上昇という見え方を読む際に必要な説明は？",
+        "options": [
+          {
+            "id": "axis_is_source",
+            "text": "縦軸の切り方だけを見れば元データの出所まで確認できる。",
+            "status": "uncertain",
+            "accepted": false,
+            "reason": "軸設定の指示は回答の収集方法や人数を証明する資料ではない。",
+            "evidence": [
+              "graphic",
+              "axis"
+            ]
+          },
+          {
+            "id": "axis_range",
+            "text": "縦軸の表示範囲は35〜55で、0〜100の軸とは同じ変化でも見た目の強さが異なる。",
+            "status": "supported",
+            "accepted": true,
+            "reason": "広告の軸範囲と制作指示を突き合わせ、表示と元の測定を分けている。",
+            "evidence": [
+              "graphic",
+              "axis"
+            ]
+          },
+          {
+            "id": "all_graphs_false",
+            "text": "軸が0から始まらないので、回答100人の記録は架空だと証明できる。",
+            "status": "uncertain",
+            "accepted": false,
+            "reason": "表現の強調とデータそのものの有無を混同している。",
+            "evidence": [
+              "graphic",
+              "axis"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cause_limit",
+        "prompt": "記事で原因まで断定する前に、何を留保する？",
+        "options": [
+          {
+            "id": "ignore_method",
+            "text": "割合の増加さえ確認できれば調査対象や設問の記録は不要になる。",
+            "status": "contradicted",
+            "accepted": false,
+            "reason": "何について比較できるかを限定する資料を除外している。",
+            "evidence": [
+              "questions",
+              "raw"
+            ]
+          },
+          {
+            "id": "causality_unresolved",
+            "text": "設問は同一でも対象者の選び方は完全には同じではない。変化の原因や全利用者への広がりはまだ確認できない。",
+            "status": "uncertain",
+            "accepted": true,
+            "reason": "元データの記録と調査条件を合わせても、対象の比較可能性と因果は確定しない。",
+            "evidence": [
+              "raw",
+              "questions"
+            ]
+          },
+          {
+            "id": "cause_proven",
+            "text": "両月の設問が同一なので、サービス改善が満足を増やした原因だと厳密に証明された。",
+            "status": "contradicted",
+            "accepted": false,
+            "reason": "設問が同一であることだけでは対象者の違いや原因を統制できない。",
+            "evidence": [
+              "questions",
+              "raw"
+            ]
+          }
+        ]
+      }
+    ],
+    "graph": {
+      "prompt": "測定の出所、グラフの見せ方、比較を限定する調査条件を区別して関係を組んでください。",
+      "paths": [
+        [
+          {
+            "from": "raw",
+            "to": "graphic",
+            "relation": "supports"
+          },
+          {
+            "from": "axis",
+            "to": "graphic",
+            "relation": "qualifies"
+          },
+          {
+            "from": "questions",
+            "to": "raw",
+            "relation": "qualifies"
+          }
+        ],
+        [
+          {
+            "from": "graphic",
+            "to": "axis",
+            "relation": "supports"
+          },
+          {
+            "from": "axis",
+            "to": "raw",
+            "relation": "qualifies"
+          },
+          {
+            "from": "questions",
+            "to": "raw",
+            "relation": "qualifies"
+          }
+        ]
+      ]
     },
-    {
-      "id": "relative",
-      "prompt": "前月の40%を基準にした相対増加率",
-      "unit": "%",
-      "expected": 25,
-      "tolerance": 0.1
-    }
-  ]
+    "decision": {
+      "prompt": "編集シミュレーションの追加作業枠は2。いま分かったことをどう伝えるか、速さと確認範囲の優先順位を添えて方針を残してください。作業枠はこの演習内の仮定です。",
+      "objectives": [
+        {
+          "id": "speed",
+          "text": "確認済みの変化を早く伝える"
+        },
+        {
+          "id": "comparability",
+          "text": "調査の比較可能性を先に確かめる"
+        },
+        {
+          "id": "clarity",
+          "text": "誤解しにくい表現を優先する"
+        }
+      ],
+      "resources": 2,
+      "options": [
+        {
+          "id": "publish_scoped",
+          "text": "対象と軸の注記を付けて掲載する",
+          "cost": 1,
+          "outcome": "シミュレーション上、回答集団内の40%から50%への変化として掲載する。原因や全体への一般化を留保した記事になる。",
+          "tradeoff": "早く伝えられるが、対象者の抽出の違いや変化の原因は未解決のまま残る。"
+        },
+        {
+          "id": "investigate",
+          "text": "調査方法を追加確認する",
+          "cost": 2,
+          "outcome": "シミュレーション上、対象者の選定方法と比較条件を次の取材課題にする。追加取材の回答はまだ得られておらず、原因は確定しない。",
+          "tradeoff": "掲載は遅れる。追加確認しても因果が分かるとは限らない。"
+        },
+        {
+          "id": "hold",
+          "text": "掲載方針を保留する",
+          "cost": 0,
+          "outcome": "シミュレーション上、確定していない点と判断を再開する条件を記録し、掲載を確約しない。",
+          "tradeoff": "不確かな一般化を避ける一方、確認済みの変化を伝える時期も遅れる。"
+        }
+      ],
+      "revealDocuments": [
+        "questions"
+      ],
+      "updatePrompt": "調査条件が開示された後の方針を、初回と同じでも異なっていても記録してください。速報の価値と未確認事項を両方扱ってください。"
+    },
+    "reportPrompt": "回答集団内の変化、グラフの軸、対象の違い、掲載判断と未確認の原因を区別して報告してください。反実仮想の取材結果を実際の事実として書かないでください。"
+  },
+  "schemaVersion": 2
 }

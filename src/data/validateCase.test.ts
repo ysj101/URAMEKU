@@ -1,5 +1,5 @@
 import schema from '../../data/schema/case.schema.json';
-import { CASES } from './cases';
+import { LEGACY_CASES as CASES } from '../test/legacyCases';
 import {
   CASE_ID_PATTERN,
   DOCUMENT_ID_PATTERN,

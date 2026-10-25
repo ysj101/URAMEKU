@@ -29,13 +29,15 @@ test('有料資料を 2 度開いても予算消費は初回のみ', async ({ pa
 });
 
 /** T09: 外れ資料 2 件で必要資料を開けなくなり、詰み案内 → 最初からやり直しで復帰 */
-test('外れ資料 2 件で詰み案内が出て、最初からやり直すと復帰する', async ({ page }) => {
+test('代替経路も予算不足なら案内が出て再調査できる', async ({ page }) => {
   await gotoCase01(page);
   await openDoc(page, CASE01.docs.memo);
   await closeDialog(page);
   await openDoc(page, CASE01.docs.reviews);
   await closeDialog(page);
-  await expectBudget(page, 2);
+  await openDoc(page, CASE01.docs.paid);
+  await closeDialog(page);
+  await expectBudget(page, 1);
 
   const notice = page
     .getByRole('status')
@@ -43,8 +45,11 @@ test('外れ資料 2 件で詰み案内が出て、最初からやり直すと�
   await expect(notice).toBeVisible();
 
   // window.confirm を承諾して最初からやり直す
-  page.once('dialog', (d) => d.accept());
   await notice.getByRole('button', { name: 'この事件を最初からやり直す' }).click();
+  await page
+    .getByRole('alertdialog')
+    .getByRole('button', { name: 'やり直す', exact: true })
+    .click();
 
   await expect(notice).toHaveCount(0);
   await expectBudget(page, 4);
