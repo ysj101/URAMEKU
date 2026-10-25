@@ -11,6 +11,7 @@ export function completeV2Case(
     experimentChoice?: string;
     experimentUpdatedChoice?: string;
     decisionChoice?: string;
+    decisionObjective?: string;
   } = {},
 ): CaseProgress {
   if (!c.v2) throw new Error('V2 case required');
@@ -31,7 +32,7 @@ export function completeV2Case(
     step({ type: 'v2-experiment-initial', choiceId: experimentChoice });
   const decision = c.v2.decision;
   const record: V2DecisionRecord | undefined = decision && {
-    objectiveId: decision.objectives[0]!.id,
+    objectiveId: options.decisionObjective ?? decision.objectives[0]!.id,
     optionId: options.decisionChoice ?? decision.options.find((o) => o.id === 'hold')!.id,
     reason: '初回の資料だけで確定できない点を残して方針を記録する。',
     evidence: [initial.id],

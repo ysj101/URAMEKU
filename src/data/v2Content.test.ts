@@ -24,6 +24,31 @@ describe('V2 staged case content', () => {
         p = reduceProgress(c, p, { type: 'submit' });
         expect(evaluateCase(c, p).cleared).toBe(false);
       });
+      if (c.v2?.decision) {
+        it('allows all authored affordable policies, objectives and hold without grading the choice itself', () => {
+          const d = c.v2!.decision!;
+          for (const objective of d.objectives) {
+            for (const choice of d.options.filter((o) => o.cost <= d.resources)) {
+              const p = completeV2Case(c, { decisionChoice: choice.id, decisionObjective: objective.id });
+              expect(p.v2?.decisions).toHaveLength(2);
+              expect(p.v2?.decisions[0]?.optionId).toBe(choice.id);
+              expect(p.v2?.decisions[1]?.optionId).toBe(choice.id);
+              expect(evaluateCase(c, p).cleared, `${objective.id}/${choice.id}`).toBe(true);
+            }
+          }
+        });
+        it('blocks unaffordable policy commitments while retaining a zero-resource hold path', () => {
+          const d = c.v2!.decision!;
+          const constrained = { ...c, v2: { ...c.v2!, decision: { ...d, resources: 0 } } };
+          const hold = d.options.find((o) => o.id === 'hold')!;
+          expect(evaluateCase(constrained, completeV2Case(constrained, { decisionChoice: hold.id })).cleared).toBe(true);
+          for (const choice of d.options.filter((o) => o.cost > 0)) {
+            const p = completeV2Case(constrained, { decisionChoice: choice.id });
+            expect(p.v2?.decisions).toEqual([]);
+            expect(evaluateCase(constrained, p).cleared).toBe(false);
+          }
+        });
+      }
       if (c.v2?.experiment) {
         it('keeps purchase/support/hold reactions and judgement changes outside the factual verdict', () => {
           const e = c.v2!.experiment!;
