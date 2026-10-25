@@ -11,6 +11,7 @@
  *   required / properties / additionalProperties / items / minItems / maxItems / uniqueItems / $ref）。
  * アプリ側の実行時検証は src/data/validateCase.ts（同じ規則を手書き型ガードで実装）。
  */
+import { validateV2 } from '../src/data/validateV2.mjs';
 import { readFileSync, readdirSync } from 'node:fs';
 import { resolve, dirname, join, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -69,11 +70,20 @@ const SUPPORTED = new Set([
   'minItems',
   'maxItems',
   'uniqueItems',
+  'if',
+  'then',
+  'else',
 ]);
 
 function validateSchema(root, schema, value, path, errors) {
   for (const key of Object.keys(schema)) {
     if (!SUPPORTED.has(key)) throw new Error(`スキーマ語彙 "${key}" は未対応です（${path}）`);
+  }
+  if (schema.if) {
+    const conditionErrors = [];
+    validateSchema(root, schema.if, value, path, conditionErrors);
+    const branch = conditionErrors.length === 0 ? schema.then : schema.else;
+    if (branch) validateSchema(root, branch, value, path, errors);
   }
   if (schema.$ref) {
     validateSchema(root, resolveRef(root, schema.$ref), value, path, errors);
@@ -241,6 +251,7 @@ export function validateCaseJson(schema, data) {
   if (errors.length === 0 && (data === null || typeof data !== 'object'))
     errors.push('(root): オブジェクトではありません');
   validateIntegrity(data, errors);
+  errors.push(...validateV2(data));
   return errors;
 }
 

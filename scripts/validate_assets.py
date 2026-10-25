@@ -21,7 +21,11 @@ for item in manifest['assets']:
 for fp in sorted((ROOT/'data/cases').glob('*.json')):
  try:
   case=json.loads(fp.read_text(encoding='utf-8'))
-  assert len(case['documents'])>=5 and len(case['analysis_tasks'])==2
+  assert len(case['documents'])>=5
+  if case.get('schemaVersion') == 2:
+   assert isinstance(case.get('v2'),dict) and case['v2'].get('modes')
+  else:
+   assert 'schemaVersion' not in case and len(case['analysis_tasks'])==2
   for d in case['documents']:
    path=ROOT/'public/assets/cases'/case['id']/'documents'/(str(d['id'])+'.png')
    if not path.exists(): problems.append('CASE-DOC '+str(path))

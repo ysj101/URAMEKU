@@ -1,3 +1,6 @@
+import type { V2Case, V2Progress } from './v2Types';
+export type * from './v2Types';
+
 /**
  * 事件データ（data/cases/*.json）と進行状態の型。
  * ここに DOM 依存のものを入れない。
@@ -71,6 +74,8 @@ export interface Debrief {
 }
 
 export interface CaseData {
+  schemaVersion?: 2;
+  v2?: V2Case;
   id: string;
   title: string;
   bias: string;
@@ -92,6 +97,7 @@ export interface CaseData {
 
 /** 1 事件ぶんの進行状態。保存対象。 */
 export interface CaseProgress {
+  v2?: V2Progress;
   /** 閲覧済み資料 ID（閲覧順） */
   opened: string[];
   /** 証拠ボードに採用した資料 ID */
