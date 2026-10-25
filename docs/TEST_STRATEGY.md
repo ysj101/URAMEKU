@@ -31,4 +31,4 @@
 - 実機iOS Safari/Android Chromeで音・保存・中断復帰・削除・操作を検証する。
 - C-2正本の目視比較・アート/権利/音の承認は自動検査とは別。
 
-計画は `qa/user-test-plan.md`、観察シートは `qa/user-test-session-template.md`、同意文は `qa/user-test-consent.md`。実施のない人の記録を作らず、例示データを実績に含めない。人手要件がpendingの間は #114 と親 #99 を全受入完了として閉じない。残作業、実行コマンド、実測結果、対象commit/環境をPRとQA証跡へ残す。
+計画は `qa/user-test-plan.md`、観察シートは `qa/user-test-session-template.md`、同意文は `qa/user-test-consent.md`。実施のない人の記録を作らず、例示データを実績に含めない。2026-10-26のユーザー指示「Macで確認だけでいい」により、今回の移行はMac上の確認を受入範囲とし、以下の5人評価・実機確認は将来の調査計画として扱う。未実施を実施済みと記録せず、これらを今回の #114 / #99 の完了条件には含めない。残作業、実行コマンド、実測結果、対象commit/環境をPRとQA証跡へ残す。
