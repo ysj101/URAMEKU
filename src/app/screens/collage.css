@@ -28,8 +28,51 @@ dialog {
   font-weight: 900;
   border-bottom-width: 5px;
 }
+/* Keep the newspaper at its content height. On tall windows, center the complete
+   page over the collage instead of creating empty space inside the feature row. */
+/* Reuse the existing newspaper collage; only HOME receives this artwork.
+   The portrait layout repeats at native aspect ratio so side cutouts remain visible. */
+body:has(.home) {
+  background: var(--color-bg) url('/assets/c2-highres/title-a.webp') center top / 100% auto repeat-y;
+}
+.app-main--home {
+  padding-top: max(56px, env(safe-area-inset-top, 0px));
+  padding-inline: max(20px, env(safe-area-inset-left, 0px));
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-bottom: calc(var(--space-4) + env(safe-area-inset-bottom, 0px));
+}
+.app-main--home > .home {
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: 1080px;
+  margin-inline: auto;
+}
+@media (min-width: 900px) {
+  body:has(.home) {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+  .app-main--home {
+    padding-top: max(32px, env(safe-area-inset-top, 0px));
+  }
+}
+.app-main--home > .footnote {
+  flex: none;
+  align-self: center;
+  width: 100%;
+  max-width: 1080px;
+  margin-top: var(--space-4);
+  padding: 12px 16px;
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
 /* Front page: a masthead, a large editorial cutout, and a narrow action column. */
 .home {
+  grid-template-rows: auto auto auto minmax(min-content, 1fr) auto auto auto;
   grid-template-columns: minmax(0, 1fr) 270px;
   gap: 20px 28px;
   padding: 20px;
@@ -49,6 +92,7 @@ dialog {
 .home-frontpage {
   grid-column: 1;
   grid-row: 4;
+  align-self: center;
 }
 .home-actions {
   grid-row: 4;
@@ -189,6 +233,7 @@ dialog {
 .home-actions {
   grid-column: 2;
   grid-row: 4;
+  align-self: center;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -226,6 +271,38 @@ dialog {
 .home-notice:first-of-type {
   border-top: 1px solid var(--color-border);
   padding-top: 16px;
+}
+.home-guide {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  list-style: none;
+  counter-reset: home-guide;
+  margin: 0;
+  padding: 20px 0;
+  border-block: 4px double var(--color-ink);
+}
+.home-guide li {
+  counter-increment: home-guide;
+  position: relative;
+  padding-left: 34px;
+}
+.home-guide li::before {
+  content: counter(home-guide, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-weight: 900;
+  color: var(--color-info);
+}
+.home-guide strong {
+  font-size: 1rem;
+}
+.home-guide p {
+  margin-top: 8px;
+  font-size: 0.8rem;
+  line-height: 1.8;
 }
 /* Case files: unique existing artwork, staggered paper mounts, regular metadata. */
 .case-select .screen-head {
@@ -597,6 +674,7 @@ dialog {
 }
 @media (max-width: 800px) {
   .home {
+    grid-template-rows: auto auto auto minmax(min-content, 1fr) auto auto auto auto;
     grid-template-columns: 1fr;
   }
   .home-actions {
@@ -700,6 +778,14 @@ dialog {
   }
   .home-actions {
     padding-top: 14px;
+  }
+  .home-guide {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding-block: 16px;
+  }
+  .home-guide p {
+    margin-top: 4px;
   }
   .case-cards {
     grid-template-columns: 1fr;

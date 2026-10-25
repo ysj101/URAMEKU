@@ -97,7 +97,11 @@ export function App() {
       <div className="visually-hidden" aria-live="polite" aria-atomic="true">
         {announcement}
       </div>
-      <main id="workbench" className="app-main" tabIndex={-1}>
+      <main
+        id="workbench"
+        className={`app-main${route.screen === 'home' ? ' app-main--home' : ''}`}
+        tabIndex={-1}
+      >
         <OfflineBanner />
         <SaveStatusBanner status={game.saveStatus} />
         {content}
