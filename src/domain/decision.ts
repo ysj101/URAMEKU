@@ -48,10 +48,24 @@ export function decisionComplete(caseData: CaseData, progress: CaseProgress): bo
   const minimumRecords = definition.revealDocuments.length ? 2 : 1;
   if (records.length < minimumRecords || !decisionComparisonAvailable(caseData, progress))
     return false;
-  return records.every((record) => {
-    const review = reviewDecisionRecord(caseData, progress, record);
-    return review.recorded && review.grounded && review.affordable;
-  });
+  const latest = records.at(-1)!;
+  return (
+    reviewDecisionRecord(caseData, progress, latest).grounded &&
+    records.every((record) => {
+      const review = reviewDecisionRecord(caseData, progress, record);
+      const historicalSources = [...record.evidence, ...record.counterEvidence];
+      return (
+        review.recorded &&
+        review.affordable &&
+        record.evidence.length > 0 &&
+        historicalSources.every(
+          (id) =>
+            caseData.documents.some((document) => document.id === id) &&
+            progress.opened.includes(id),
+        )
+      );
+    })
+  );
 }
 
 /** Outcomes describe the authored scenario, not a score for a player's judgement. */

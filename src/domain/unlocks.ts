@@ -1,6 +1,6 @@
 import { ENCYCLOPEDIA, type EncyclopediaEntry } from '../data/encyclopedia';
 import { countCorrectCalculations } from './calculation';
-import { isLinkCorrect } from './link';
+import { isLinkCorrect, v2GraphComplete } from './link';
 import type { CaseData, CaseProgress } from './types';
 
 /**
@@ -132,8 +132,8 @@ export function achievementConditions(state: AchievementState): Record<Achieveme
     const p = progressOf(state, c.id);
     if (!p) continue;
     if (Array.isArray(p.pinned) && p.pinned.length > 0) anyPinned = true;
-    if (isLinkCorrect(c, p)) anyLink = true;
-    correctCalcs += countCorrectCalculations(c, p);
+    if (c.v2 ? v2GraphComplete(c, p) : isLinkCorrect(c, p)) anyLink = true;
+    if (!c.v2) correctCalcs += countCorrectCalculations(c, p);
   }
 
   const noHint = cleared.some((id) => progressOf(state, id)?.revealed === false);

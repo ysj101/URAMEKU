@@ -1,3 +1,4 @@
+import { evaluateV2Case, type V2Evaluation } from './v2Evaluation';
 import { countFragmentsInPlace, isArticleCorrect } from './article';
 import { remainingBudget } from './budget';
 import { countCorrectCalculations } from './calculation';
@@ -44,6 +45,7 @@ export interface FailureReason {
 }
 
 export interface Evaluation {
+  v2?: V2Evaluation;
   /** 採用済みの必要証拠 ID */
   requiredFound: string[];
   requiredTotal: number;
@@ -60,6 +62,23 @@ export interface Evaluation {
 }
 
 export function evaluateCase(caseData: CaseData, progress: CaseProgress): Evaluation {
+  if (caseData.v2) {
+    const v2 = evaluateV2Case(caseData, progress);
+    return {
+      v2,
+      requiredFound: progress.pinned.filter((id) => progress.opened.includes(id)),
+      requiredTotal: caseData.documents.length,
+      linkCorrect: v2.tracks.graph.done === v2.tracks.graph.total,
+      calculationsCorrect: 0,
+      calculationsTotal: 0,
+      fragmentsInPlace: 0,
+      articleCorrect: v2.tracks.report.done === v2.tracks.report.total,
+      remainingBudget: remainingBudget(caseData, progress),
+      points: 0,
+      cleared: v2.completed,
+      breakdown: [],
+    };
+  }
   const requiredFound = caseData.required_evidence.filter((id) => progress.pinned.includes(id));
   const linkCorrect = isLinkCorrect(caseData, progress);
   const calculationsCorrect = countCorrectCalculations(caseData, progress);
@@ -134,6 +153,11 @@ export function evaluateCase(caseData: CaseData, progress: CaseProgress): Evalua
  * （正解は「解説と正解を公開する」の明示操作でのみ開示する）。
  */
 export function failureReasons(caseData: CaseData, progress: CaseProgress): FailureReason[] {
+  if (caseData.v2)
+    return evaluateV2Case(caseData, progress).missing.map((message) => ({
+      track: 'article' as const,
+      message,
+    }));
   const verdict = publishVerdict(caseData, progress);
   return verdict.missing.map((track) => ({
     track,

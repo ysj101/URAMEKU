@@ -129,6 +129,7 @@ export function reduceV2Progress(
   progress: CaseProgress,
   action: V2Action,
 ): CaseProgress {
+  if (progress.published) return progress;
   const config = caseData.v2;
   if (caseData.schemaVersion !== 2 || !config) return progress;
   const v2 = progress.v2 ?? createV2Progress(caseData);
