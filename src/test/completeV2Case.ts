@@ -9,6 +9,7 @@ export function completeV2Case(
     path?: number;
     alternative?: boolean;
     experimentChoice?: string;
+    experimentUpdatedChoice?: string;
     decisionChoice?: string;
   } = {},
 ): CaseProgress {
@@ -56,7 +57,7 @@ export function completeV2Case(
   if (experiment && experimentChoice)
     step({
       type: 'v2-experiment-update',
-      choiceId: experimentChoice,
+      choiceId: options.experimentUpdatedChoice ?? experimentChoice,
       reason: '提示範囲と開示後の比較条件を分けて考え、今回の判断を維持する。',
     });
   if (record)
