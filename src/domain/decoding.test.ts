@@ -1,0 +1,36 @@
+import { describe, expect, it } from 'vitest';
+import { completedDecodingCount, decodingReviews } from './decoding';
+import { makeV2Case, makeV2Progress } from '../test/mechanicsFixtures';
+
+const data = makeV2Case();
+const record = (optionId: string, evidence = ['a', 'b']) => {
+  const progress = makeV2Progress();
+  progress.v2!.decoding.scope = { optionId, evidence };
+  return progress;
+};
+
+describe('information decoding', () => {
+  it('requires reading and adopting every piece of evidence, without charging twice', () => {
+    const progress = record('limited');
+    expect(completedDecodingCount(data, progress)).toBe(1);
+    expect(progress.opened).toEqual(['a', 'b', 'c']);
+    expect(completedDecodingCount(data, { ...progress, opened: ['a'] })).toBe(0);
+    expect(completedDecodingCount(data, { ...progress, pinned: ['a'] })).toBe(0);
+    expect(completedDecodingCount(data, record('limited', ['a']))).toBe(0);
+  });
+  it('distinguishes an unknown scope from a factually contradicted generalisation', () => {
+    expect(decodingReviews(data, record('open'))[0]).toMatchObject({
+      status: 'uncertain',
+      factuallyConsistent: true,
+    });
+    expect(decodingReviews(data, record('everyone'))[0]).toMatchObject({
+      grounded: true,
+      factuallyConsistent: false,
+    });
+  });
+  it('rejects unknown choices and empty or fabricated evidence', () => {
+    expect(completedDecodingCount(data, record('missing'))).toBe(0);
+    expect(completedDecodingCount(data, record('limited', []))).toBe(0);
+    expect(completedDecodingCount(data, record('limited', ['a', 'b', 'fake']))).toBe(0);
+  });
+});

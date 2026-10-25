@@ -1,0 +1,74 @@
+.v2-desk {
+  margin-block: 1.5rem;
+  padding: clamp(0.75rem, 2vw, 1.5rem);
+  border: 1px solid currentColor;
+  background: var(--paper, #f6f0df);
+  overflow-wrap: anywhere;
+}
+
+.v2-desk fieldset {
+  min-inline-size: 0;
+  margin-block: 1rem;
+  padding: 1rem;
+  border: 1px solid currentColor;
+}
+
+.v2-desk legend {
+  font-weight: bold;
+  max-inline-size: 100%;
+}
+
+.v2-desk label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-block-size: 44px;
+}
+
+.v2-desk input[type='checkbox'],
+.v2-desk input[type='radio'] {
+  flex: 0 0 auto;
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+}
+
+.v2-desk textarea,
+.v2-desk select {
+  display: block;
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-block-size: 44px;
+  font: inherit;
+  color: inherit;
+  background: var(--paper, #fffdf6);
+  border: 1px solid currentColor;
+  padding: 0.65rem;
+}
+
+.v2-desk textarea {
+  min-block-size: 5rem;
+}
+
+.v2-desk button {
+  min-block-size: 44px;
+  margin-block: 0.4rem;
+}
+
+.v2-desk__choices {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.v2-desk__history {
+  padding-inline-start: 1.5rem;
+}
+
+.v2-desk__history li {
+  margin-block: 0.75rem;
+}
+
+.v2-desk__columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: 1rem;
+}
