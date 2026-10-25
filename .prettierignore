@@ -11,3 +11,6 @@ docs
 data
 *.md
 public/manifest.webmanifest
+
+# Preserve byte-for-byte V1 content snapshots.
+src/test/fixtures/v1
