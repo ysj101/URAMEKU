@@ -1,5 +1,5 @@
 import { useId, useState, type KeyboardEvent } from 'react';
-import { TUTORIAL_STEPS, tutorialStep, type TutorialStep } from '../data/assets';
+import { TUTORIAL_STEPS } from '../data/assets';
 import { UI } from '../data/ui';
 import { useTutorialState } from '../state/tutorialState';
 import type { Navigation } from '../app/navigation';
@@ -26,7 +26,6 @@ export function TutorialScreen({ nav, game, storage }: TutorialScreenProps) {
   const { markCompleted } = useTutorialState(storage);
   const headingId = useId();
   const total = TUTORIAL_STEPS.length;
-  const step = TUTORIAL_STEPS[index] as TutorialStep;
   const content = UI.tutorial.steps[index]!;
   const isFirst = index === 0;
   const isLast = index === total - 1;
@@ -92,10 +91,9 @@ export function TutorialScreen({ nav, game, storage }: TutorialScreenProps) {
           aria-label={stepLabel}
           aria-live="polite"
         >
-          <figure className="tutorial-figure">
-            {/* 画像は補助。説明は右のテキストで完結させるため alt は空にする */}
-            <img src={tutorialStep(step)} alt="" width={600} height={440} />
-          </figure>
+          <div className="tutorial-figure" aria-hidden="true">
+            <span className="tutorial-step-number">{String(index + 1).padStart(2, '0')}</span>
+          </div>
           <div>
             <span className="tutorial-step-number">{stepLabel}</span>
             <h2 id={headingId}>{content.title}</h2>

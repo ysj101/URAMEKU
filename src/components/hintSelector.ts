@@ -10,6 +10,17 @@ export type HintKey = keyof Omit<typeof UI.tutorial.hint, 'label' | 'dismiss' | 
  */
 export function hintFor(caseData: CaseData, progress: CaseProgress, stage: Stage): HintKey | null {
   if (progress.published) return null;
+  if (caseData.v2) {
+    if (stage === 'article') return 'v2Report';
+    if (caseData.v2.experiment && progress.v2?.experiment?.stage !== 'complete')
+      return 'v2Experiment';
+    if (!progress.opened.length) return 'open';
+    if (!progress.pinned.length) return 'pin';
+    if (caseData.v2.decoding.some((t) => !progress.v2?.decoding[t.id])) return 'v2Decode';
+    if (!progress.v2?.links.length) return 'v2Graph';
+    if (caseData.v2.decision && (progress.v2?.decisions.length ?? 0) < 2) return 'v2Decision';
+    return 'v2Report';
+  }
   if (stage === 'article') {
     return progress.article.length < ARTICLE_LENGTH ? 'fragments' : 'submit';
   }

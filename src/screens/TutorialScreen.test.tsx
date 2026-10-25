@@ -30,7 +30,7 @@ const stepHeading = (n: number) =>
   screen.getByRole('heading', { level: 2, name: UI.tutorial.steps[n - 1]!.title });
 
 describe('TutorialScreen', () => {
-  it('文言は 6 ステップぶんあり、画像は本文テキストと対で表示される', () => {
+  it('6手順を本文で説明し、旧計算操作の画像を表示しない', () => {
     expect(UI.tutorial.steps).toHaveLength(TUTORIAL_STEPS.length);
     setup();
     const region = screen.getByRole('region', { name: UI.tutorial.carouselLabel });
@@ -39,9 +39,8 @@ describe('TutorialScreen', () => {
     expect(slide()).toHaveAccessibleName('手順 1 / 6');
     expect(stepHeading(1)).toBeInTheDocument();
     expect(screen.getByText(UI.tutorial.steps[0]!.body)).toBeInTheDocument();
-    const img = slide().querySelector('img');
-    expect(img).toHaveAttribute('src', '/assets/tutorial/step-01.png');
-    expect(img).toHaveAttribute('alt', '');
+    expect(slide().querySelector('img')).toBeNull();
+    expect(UI.tutorial.steps.map((s) => s.title).join(' ')).not.toMatch(/計算|3 断片/);
     expect(screen.getByRole('button', { name: '手順 1 / 6' })).toHaveAttribute(
       'aria-current',
       'step',
@@ -59,7 +58,7 @@ describe('TutorialScreen', () => {
       'step',
     );
     expect(screen.getByRole('button', { name: '手順 1 / 6' })).not.toHaveAttribute('aria-current');
-    expect(slide().querySelector('img')).toHaveAttribute('src', '/assets/tutorial/step-02.png');
+    expect(screen.getByText(UI.tutorial.steps[1]!.body)).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: UI.tutorial.prev }));
     expect(slide()).toHaveAccessibleName('手順 1 / 6');
   });
