@@ -1,3 +1,5 @@
+import type { GameAction } from '../domain/game';
+import { V2EvidenceBoard } from './V2EvidenceBoard';
 import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { PinCard, type PinSlot } from './PinCard';
 import { c2HighresUrl, uiIcon } from '../data/assets';
@@ -27,6 +29,7 @@ interface Props {
   progress: CaseProgress;
   onToggleLink: (documentId: string) => void;
   onUnpin: (documentId: string) => void;
+  onAction?: (action: GameAction) => void;
 }
 
 const SELECT_REASON: Record<LinkSelectReason, string> = {
@@ -48,7 +51,19 @@ interface Thread {
   y2: number;
 }
 
-export function EvidenceBoard({ caseData, progress, onToggleLink, onUnpin }: Props) {
+export function EvidenceBoard(props: Props) {
+  if (props.caseData.v2 && props.onAction)
+    return (
+      <V2EvidenceBoard
+        caseData={props.caseData}
+        progress={props.progress}
+        onAction={props.onAction}
+      />
+    );
+  return <LegacyEvidenceBoard {...props} />;
+}
+
+function LegacyEvidenceBoard({ caseData, progress, onToggleLink, onUnpin }: Props) {
   const play = useSound();
   const surfaceRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef(new Map<string, HTMLButtonElement>());
