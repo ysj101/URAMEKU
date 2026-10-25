@@ -7,6 +7,7 @@
  */
 import { remainingBudget } from './budget';
 import type { CaseData, CaseDocument, CaseProgress } from './types';
+import { v2RequiredDocumentSets } from './v2Requirements';
 
 export interface DeadEndReason {
   /** 詰みかどうか */
@@ -23,12 +24,19 @@ export interface DeadEndReason {
 
 /** クリアに必要な資料 ID の和集合（documents 順。JSON に無い ID は無視） */
 export function requiredDocumentIds(caseData: CaseData): string[] {
+  if (caseData.v2) return [...new Set(v2RequiredDocumentSets(caseData).flat())];
   const needed = new Set<string>([...caseData.required_evidence, ...caseData.required_link]);
   return caseData.documents.filter((d) => needed.has(d.id)).map((d) => d.id);
 }
 
 export function deadEndReason(caseData: CaseData, progress: CaseProgress): DeadEndReason {
-  const needed = new Set(requiredDocumentIds(caseData));
+  const paths = caseData.v2 ? v2RequiredDocumentSets(caseData) : [requiredDocumentIds(caseData)];
+  const pathCost = (ids: string[]) =>
+    caseData.documents
+      .filter((document) => ids.includes(document.id) && !progress.opened.includes(document.id))
+      .reduce((sum, document) => sum + document.cost, 0);
+  const best = [...paths].sort((a, b) => pathCost(a) - pathCost(b))[0] ?? [];
+  const needed = new Set(best);
   const missing = caseData.documents.filter(
     (d) => needed.has(d.id) && !progress.opened.includes(d.id),
   );
