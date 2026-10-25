@@ -11,6 +11,13 @@ export function caseStatus(
   if (finished[caseId]) return 'solved';
   if (!progress) return 'new';
   if (progress.published) return 'published';
+  if (progress.v2?.report.claim.trim() || progress.v2?.report.uncertainty.trim()) return 'draft';
+  if (
+    progress.v2?.experiment?.initialChoice ||
+    progress.v2?.decisions.length ||
+    Object.keys(progress.v2?.decoding ?? {}).length > 0
+  )
+    return 'investigating';
   if (progress.article.length > 0) return 'draft';
   if (progress.opened.length > 0 || progress.pinned.length > 0) return 'investigating';
   return 'new';

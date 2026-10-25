@@ -1,3 +1,4 @@
+import { evaluateV2Case, type V2Evaluation } from './v2Evaluation';
 import { countFragmentsInPlace, isArticleComplete, isArticleCorrect } from './article';
 import { countCorrectCalculations } from './calculation';
 import { isLinkCorrect } from './link';
@@ -20,6 +21,7 @@ export interface TrackDetail {
 }
 
 export interface PublishVerdict {
+  v2?: V2Evaluation;
   /** 4 系統すべてが揃っているときだけ true */
   approved: boolean;
   /** 揃っていない系統（VERDICT_TRACKS の順） */
@@ -55,6 +57,25 @@ export interface PublishVerdict {
  * - 点数計算は `scoring.ts` が担当し、合否はこの関数に委譲する。
  */
 export function publishVerdict(caseData: CaseData, progress: CaseProgress): PublishVerdict {
+  if (caseData.v2) {
+    const v2 = evaluateV2Case(caseData, progress);
+    const detail = {
+      evidence: v2.tracks.decoding,
+      link: v2.tracks.graph,
+      calculation: { done: 0, total: 0 },
+      article: v2.tracks.report,
+    };
+    const missing: VerdictTrack[] = [];
+    if (detail.evidence.done < detail.evidence.total) missing.push('evidence');
+    if (detail.link.done < detail.link.total) missing.push('link');
+    if (
+      detail.article.done < detail.article.total ||
+      v2.tracks.experiment.done < v2.tracks.experiment.total ||
+      v2.tracks.decision.done < v2.tracks.decision.total
+    )
+      missing.push('article');
+    return { approved: v2.completed, missing, detail, v2 };
+  }
   const evidenceDone = caseData.required_evidence.filter((id) =>
     progress.pinned.includes(id),
   ).length;
@@ -82,6 +103,12 @@ export function publishVerdict(caseData: CaseData, progress: CaseProgress): Publ
 
 /** 提出操作が可能か（評価の合否とは別。3 断片が揃っていれば提出できる） */
 export function canSubmitArticle(progress: CaseProgress): boolean {
+  if (progress.v2)
+    return (
+      !!progress.v2.report.claim.trim() &&
+      !!progress.v2.report.uncertainty.trim() &&
+      !progress.published
+    );
   return isArticleComplete(progress) && !progress.published;
 }
 

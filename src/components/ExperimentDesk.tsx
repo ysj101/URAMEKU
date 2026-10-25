@@ -109,7 +109,7 @@ export function ExperimentDesk({ caseData, progress, onAction }: V2DeskProps) {
         </>
       )}
       <p className="fine">
-        これは見え方を振り返るための小さな体験です。一度の反応から性格や能力を診断することはできません。記録はこの端末に保存します。
+        これは見え方を振り返るための小さな体験です。一度の反応を個人の特徴に一般化しません。記録はこの端末に保存します。
       </p>
     </section>
   );
