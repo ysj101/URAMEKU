@@ -6,7 +6,7 @@ import {
   parseNumericInput,
 } from './calculation';
 import { makeCase, makeProgress } from '../test/fixtures';
-import { CASES } from '../data/cases';
+import { LEGACY_CASES as CASES } from '../test/legacyCases';
 import type { AnalysisTask } from './types';
 
 const c = makeCase();
@@ -171,7 +171,7 @@ describe('許容誤差', () => {
   });
 });
 
-describe('実データ 5 件 × 2 問', () => {
+describe('V1互換fixture 5 件 × 2 問', () => {
   /** 境界値を小数1桁に丸めて文字列化（0.1+0.2 のような表記揺れを避ける） */
   const fmt = (n: number) => n.toFixed(2).replace(/0$/, '');
 
