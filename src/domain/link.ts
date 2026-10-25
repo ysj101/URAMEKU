@@ -1,4 +1,4 @@
-import { LINK_SIZE, type CaseData, type CaseProgress } from './types';
+import { LINK_SIZE, type CaseData, type CaseProgress, type V2EvidenceLink } from './types';
 
 /**
  * 2 資料照合のルール。
@@ -86,4 +86,41 @@ export function isLinkCorrect(caseData: CaseData, progress: CaseProgress): boole
 export function linkStatus(caseData: CaseData, progress: CaseProgress): LinkStatus {
   if (!isLinkComplete(progress)) return 'incomplete';
   return isLinkCorrect(caseData, progress) ? 'correct' : 'incorrect';
+}
+
+/** V2 relations keep direction and role; a matching pair alone is insufficient. */
+export function sameEvidenceLink(a: V2EvidenceLink, b: V2EvidenceLink): boolean {
+  return a.from === b.from && a.to === b.to && a.relation === b.relation;
+}
+
+export function validV2Links(caseData: CaseData, progress: CaseProgress) {
+  return (progress.v2?.links ?? []).filter(
+    (link) =>
+      link.from !== link.to &&
+      [link.from, link.to].every(
+        (id) =>
+          caseData.documents.some((document) => document.id === id) &&
+          progress.opened.includes(id) &&
+          progress.pinned.includes(id),
+      ),
+  );
+}
+
+/** Any full authored path is valid. Alternative paths are not forced into the first path. */
+export function v2GraphProgress(caseData: CaseData, progress: CaseProgress) {
+  const links = validV2Links(caseData, progress);
+  const paths = caseData.v2?.graph.paths ?? [];
+  const counts = paths.map((path) => ({
+    done: path.filter((required) => links.some((link) => sameEvidenceLink(link, required))).length,
+    total: path.length,
+  }));
+  return (
+    counts.find((count) => count.total > 0 && count.done === count.total) ??
+    counts.sort((a, b) => b.done / b.total - a.done / a.total)[0] ?? { done: 0, total: 1 }
+  );
+}
+
+export function v2GraphComplete(caseData: CaseData, progress: CaseProgress): boolean {
+  const count = v2GraphProgress(caseData, progress);
+  return count.total > 0 && count.done === count.total;
 }
