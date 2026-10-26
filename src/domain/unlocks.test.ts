@@ -1,6 +1,7 @@
 import { CASES } from '../data/cases';
 import { ENCYCLOPEDIA, type EncyclopediaEntry } from '../data/encyclopedia';
 import { clearedProgress, makeCase, makeProgress } from '../test/fixtures';
+import { makeV2Case, makeV2Progress } from '../test/mechanicsFixtures';
 import { createProgress, reduceProgress } from './game';
 import { evaluateCase } from './scoring';
 import type { CaseData, CaseProgress } from './types';
@@ -79,8 +80,8 @@ describe('unlockDelta', () => {
     const r = unlockDelta({}, { 'case-99': true, 'case-01': false, 'case-02': true }, entries);
     expect(r.newlyUnlocked).toEqual(['e2']);
   });
-  it('useGame と同じ流れ: 合格した瞬間に 1 回だけ解放され、以降は空', () => {
-    const c = CASES[0]!;
+  it('旧形式の useGame と同じ流れ: 合格した瞬間に 1 回だけ解放され、以降は空', () => {
+    const c = makeCase({ id: 'case-01' });
     let p = createProgress();
     let finished: Record<string, boolean> = {};
     const step = (next: CaseProgress) => {
@@ -300,4 +301,21 @@ describe('evaluateAchievements', () => {
     });
     expect(() => new Date(r.earned['first-evidence']!).toISOString()).not.toThrow();
   });
+});
+
+it('V2は根拠付き完了後の提出でのみ図鑑を一度解放し、計算実績を要求しない', () => {
+  const c = makeV2Case({ id: 'case-01' });
+  let p = makeV2Progress();
+  p.v2!.decoding.scope = { optionId: 'open', evidence: ['a', 'b'] };
+  p.v2!.links = [{ from: 'a', to: 'b', relation: 'qualifies' }];
+  p.v2!.report = { claim: '対象範囲内に限られる', uncertainty: '範囲外は未確認' };
+  expect(evaluateCase(c, p).cleared).toBe(true);
+  expect(unlockedEntries({})).toEqual([]);
+  p = reduceProgress(c, p, { type: 'submit' });
+  const finished = p.published && evaluateCase(c, p).cleared ? { [c.id]: true } : {};
+  expect(unlockDelta({}, finished).newlyUnlocked).toEqual(['framing']);
+  expect(unlockDelta(finished, finished).newlyUnlocked).toEqual([]);
+  const conditions = achievementConditions({ cases: [c], progress: { [c.id]: p }, finished });
+  expect(conditions['first-link']).toBe(true);
+  expect(conditions['number-check']).toBe(false);
 });

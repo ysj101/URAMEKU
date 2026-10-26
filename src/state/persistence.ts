@@ -1,6 +1,8 @@
 import {
   createSession,
   migrate,
+  detectVersion,
+  CURRENT_SAVE_VERSION,
   toSaveDataV3,
   type MigrateResult,
   type SaveData,
@@ -11,6 +13,7 @@ export type {
   SaveData,
   SaveDataV2,
   SaveDataV3,
+  SaveDataV4,
   SaveSession,
   Stage,
   MigrateResult,
@@ -142,8 +145,14 @@ export function persistSaveData(
   storage: StorageLike | null = defaultStorage(),
   now: () => string = () => new Date().toISOString(),
 ): boolean {
-  if (!storage) return false;
+  if (!storage || data.readOnlyVersion) return false;
   try {
+    const existing = storage.getItem(STORAGE_KEY);
+    if (existing) {
+      const parsed = safeParse(existing);
+      const version = parsed.ok ? detectVersion(parsed.value) : null;
+      if (version !== null && version > CURRENT_SAVE_VERSION) return false;
+    }
     storage.setItem(STORAGE_KEY, JSON.stringify(toSaveDataV3(data, now)));
     return true;
   } catch {

@@ -29,6 +29,13 @@ describe('SaveStatusBanner', () => {
     expect(open).toHaveBeenCalledTimes(1);
   });
 
+  it('read-only は未来形式の保護と保存しないことを伝え、削除に誘導しない', () => {
+    render(<SaveStatusBanner status="read-only" />);
+    expect(screen.getByRole('status')).toHaveTextContent('元の記録を上書きしません');
+    expect(screen.queryByRole('alert')).toBeNull();
+    expect(screen.queryByRole('link')).toBeNull();
+  });
+
   it('unavailable は保存が無効なことと、閉じると進行が消えることを伝える', () => {
     render(<SaveStatusBanner status="unavailable" />);
     const banner = screen.getByRole('alert');

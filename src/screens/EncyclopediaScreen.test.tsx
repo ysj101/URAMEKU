@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { EncyclopediaScreen } from './EncyclopediaScreen';
 import { CASES } from '../data/cases';
+import { LEGACY_CASES } from '../test/legacyCases';
 import { ENCYCLOPEDIA } from '../data/encyclopedia';
 import { createProgress } from '../domain/game';
 import type { GameApi } from '../state/useGame';
@@ -138,11 +139,14 @@ describe('EncyclopediaScreen: 事件手帳タブ', () => {
 });
 
 describe('EncyclopediaScreen: 実績タブ', () => {
-  it('5 件を取得 / 未取得で出す', async () => {
+  it('旧MVP互換では5件の実績を取得 / 未取得で出す', async () => {
     const user = userEvent.setup();
     render(
       <EncyclopediaScreen
-        game={api({ progressByCase: { 'case-01': { ...createProgress(), pinned: ['ad'] } } })}
+        game={api({
+          cases: LEGACY_CASES,
+          progressByCase: { 'case-01': { ...createProgress(), pinned: ['ad'] } },
+        })}
         nav={nav}
       />,
     );

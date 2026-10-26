@@ -1,3 +1,4 @@
+import { validateV2 } from './validateV2.mjs';
 import { FRAGMENT_KINDS, type CaseData, type Difficulty, type DocumentVisual } from '../domain/types';
 
 /**
@@ -191,8 +192,8 @@ function checkDocuments(c: Checker, raw: unknown): Map<string, number> {
   return costs;
 }
 
-function checkTasks(c: Checker, raw: unknown): void {
-  if (!c.array('analysis_tasks', raw, { minItems: 2, maxItems: 2 })) return;
+function checkTasks(c: Checker, raw: unknown, v2 = false): void {
+  if (!c.array('analysis_tasks', raw, { minItems: v2 ? 0 : 2, maxItems: v2 ? 20 : 2 })) return;
   const seen = new Set<string>();
   raw.forEach((t, i) => {
     const path = `analysis_tasks[${i}]`;
@@ -218,9 +219,9 @@ interface FragmentInfo {
   ids: Set<string>;
 }
 
-function checkFragments(c: Checker, raw: unknown, docIds: Set<string>): FragmentInfo {
+function checkFragments(c: Checker, raw: unknown, docIds: Set<string>, v2 = false): FragmentInfo {
   const info: FragmentInfo = { kinds: new Map(), ids: new Set() };
-  if (!c.array('headline_fragments', raw, { minItems: 8, maxItems: 12 })) return info;
+  if (!c.array('headline_fragments', raw, { minItems: v2 ? 0 : 8, maxItems: 12 })) return info;
   raw.forEach((f, i) => {
     const path = `headline_fragments[${i}]`;
     if (!isObject(f)) {
@@ -286,7 +287,10 @@ export function validateCase(raw: unknown): ValidationResult {
   if (!isObject(raw)) {
     return { ok: false, errors: ['(root): オブジェクトではありません'] };
   }
-  c.keys('(root)', raw, CASE_KEYS);
+  c.keys('(root)', raw, CASE_KEYS, ['schemaVersion', 'v2']);
+  const v2 = raw.schemaVersion === 2;
+  if ('schemaVersion' in raw && !v2) c.fail('schemaVersion', '未知の形式です');
+  c.errors.push(...validateV2(raw));
 
   c.string('id', raw.id, { pattern: CASE_ID_PATTERN });
   c.string('title', raw.title, { minLength: 3, maxLength: 60 });
@@ -300,8 +304,8 @@ export function validateCase(raw: unknown): ValidationResult {
   const costs = checkDocuments(c, raw.documents);
   checkLinkPrompt(c, raw.link_prompt, raw.documents);
   const docIds = new Set(costs.keys());
-  checkTasks(c, raw.analysis_tasks);
-  const fragments = checkFragments(c, raw.headline_fragments, docIds);
+  checkTasks(c, raw.analysis_tasks, v2);
+  const fragments = checkFragments(c, raw.headline_fragments, docIds, v2);
   const fragmentIds = fragments.ids;
   checkDebrief(c, raw.debrief);
 
@@ -312,7 +316,7 @@ export function validateCase(raw: unknown): ValidationResult {
     }
   };
 
-  if (c.array('required_evidence', raw.required_evidence, { minItems: 3, maxItems: 3, unique: true })) {
+  if (c.array('required_evidence', raw.required_evidence, { minItems: v2 ? 0 : 3, maxItems: v2 ? 12 : 3, unique: true })) {
     const ids = idList(c, 'required_evidence', raw.required_evidence, DOCUMENT_ID_PATTERN);
     ids.forEach((id, i) => refDoc(`required_evidence[${i}]`, id));
     if (budgetOk && docIds.size > 0 && ids.every((id) => docIds.has(id))) {
@@ -326,7 +330,7 @@ export function validateCase(raw: unknown): ValidationResult {
     }
   }
 
-  if (c.array('required_link', raw.required_link, { minItems: 2, maxItems: 2 })) {
+  if (c.array('required_link', raw.required_link, { minItems: v2 ? 0 : 2, maxItems: v2 ? 12 : 2 })) {
     const ids = idList(c, 'required_link', raw.required_link, DOCUMENT_ID_PATTERN);
     ids.forEach((id, i) => refDoc(`required_link[${i}]`, id));
     if (ids.length === 2 && ids[0] === ids[1]) {
@@ -334,7 +338,7 @@ export function validateCase(raw: unknown): ValidationResult {
     }
   }
 
-  if (c.array('correct_fragments', raw.correct_fragments, { minItems: 3, maxItems: 3, unique: true })) {
+  if (c.array('correct_fragments', raw.correct_fragments, { minItems: v2 ? 0 : 3, maxItems: v2 ? 12 : 3, unique: true })) {
     const ids = idList(c, 'correct_fragments', raw.correct_fragments, FRAGMENT_ID_PATTERN);
     ids.forEach((id, i) => {
       if (fragmentIds.size > 0 && !fragmentIds.has(id)) {

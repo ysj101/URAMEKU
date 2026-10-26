@@ -125,5 +125,22 @@ export function resetCaseProgress(save: SaveData, caseId: string): SaveData {
   delete progress[caseId];
   const finished = { ...save.finished };
   delete finished[caseId];
-  return { ...save, progress, finished };
+  const legacyProgress = { ...save.legacyProgress };
+  delete legacyProgress[caseId];
+  const legacyFinished = { ...save.legacyFinished };
+  delete legacyFinished[caseId];
+  const archivedProgress = { ...save.archivedProgress };
+  for (const key of Object.keys(archivedProgress))
+    if (key.startsWith(`${caseId}@`)) delete archivedProgress[key];
+  const caseRevisions = { ...save.caseRevisions };
+  delete caseRevisions[caseId];
+  return {
+    ...save,
+    progress,
+    finished,
+    ...(save.legacyProgress ? { legacyProgress } : {}),
+    ...(save.legacyFinished ? { legacyFinished } : {}),
+    ...(save.archivedProgress ? { archivedProgress } : {}),
+    ...(save.caseRevisions ? { caseRevisions } : {}),
+  };
 }

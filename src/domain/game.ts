@@ -14,10 +14,12 @@ import { setCalculation } from './calculation';
 import { togglePin } from './evidence';
 import { toggleLinkSelection } from './link';
 import { revealAnswer, submitArticle, withdrawArticle } from './publish';
-import type { CaseData, CaseProgress } from './types';
+import type { CaseData, CaseProgress, V2Action } from './types';
+import { createV2Progress, normalizeV2Progress, reduceV2Progress } from './v2Progress';
 
-export function createProgress(): CaseProgress {
+export function createProgress(caseData?: CaseData): CaseProgress {
   return {
+    ...(caseData?.v2 ? { v2: createV2Progress(caseData) } : {}),
     opened: [],
     pinned: [],
     chosenLink: [],
@@ -29,6 +31,7 @@ export function createProgress(): CaseProgress {
 }
 
 export type GameAction =
+  | V2Action
   | { type: 'open-document'; documentId: string }
   | { type: 'toggle-pin'; documentId: string }
   | { type: 'toggle-link'; documentId: string }
@@ -48,6 +51,21 @@ export function reduceProgress(
   progress: CaseProgress,
   action: GameAction,
 ): CaseProgress {
+  if (
+    caseData.v2 &&
+    [
+      'toggle-link',
+      'set-calculation',
+      'add-fragment',
+      'remove-fragment',
+      'replace-fragment',
+      'move-fragment',
+      'clear-article',
+    ].includes(action.type)
+  )
+    return progress;
+  if (action.type.startsWith('v2-'))
+    return reduceV2Progress(caseData, progress, action as V2Action);
   switch (action.type) {
     case 'open-document':
       return openDocument(caseData, progress, action.documentId);
@@ -74,8 +92,9 @@ export function reduceProgress(
     case 'reveal':
       return revealAnswer(progress);
     case 'reset':
-      return createProgress();
+      return createProgress(caseData);
   }
+  return progress;
 }
 
 /** 保存データなどから読み込んだ値を安全な形に正規化する */
@@ -92,6 +111,7 @@ export function normalizeProgress(raw: unknown): CaseProgress {
     }
   }
   return {
+    ...(normalizeV2Progress(r.v2) ? { v2: normalizeV2Progress(r.v2) } : {}),
     opened: strArray(r.opened),
     pinned: strArray(r.pinned),
     chosenLink: strArray(r.chosenLink).slice(0, 2),

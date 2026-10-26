@@ -38,44 +38,6 @@ body {
       0 1px 2px rgba(36, 35, 34, 0.25),
       0 28px 48px -24px rgba(36, 35, 34, 0.55);
   }
-
-  /*
-   * 紙面を画面の高さに合わせる。
-   * - main を縦 flex にして、紙面（.home）に余った高さを渡す。脚注は紙面の下に残る。
-   * - 紙面の中では特集の段（4 行目）だけを伸ばし、見出し・導線・注記の高さは変えない。
-   * - 見出しとキャラクターの寸法を vh でも決めて、低い画面ではコンパクトに、
-   *   高い画面では大きく見せる。
-   */
-  body:has(.home) .app-main {
-    display: flex;
-    flex-direction: column;
-    min-height: 100dvh;
-  }
-  .home {
-    width: 100%;
-    flex: 1 0 auto;
-    grid-template-rows: auto auto auto minmax(0, 1fr) auto auto;
-  }
-  .home-title {
-    font-size: clamp(3.5rem, min(13vw, 14vh), 11rem);
-  }
-  /* 特集の段は行いっぱいに伸ばし、見出し文は中央、キャラクターの紙は段の高さを使い切る */
-  .home-frontpage {
-    align-self: stretch;
-    min-height: 0;
-  }
-  .home-lead {
-    align-self: center;
-  }
-  .home-ensemble {
-    align-self: stretch;
-    height: auto;
-    min-height: clamp(280px, 36vh, 520px);
-  }
-  .home-clipping {
-    width: clamp(150px, 20vh, 240px);
-    height: clamp(190px, 25vh, 300px);
-  }
 }
 
 /* 事件一覧のヘッダー帯（A 案からの切り抜き）。見出しは帯の中央の無地に紙片で載せる。 */

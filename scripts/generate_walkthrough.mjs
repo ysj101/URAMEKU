@@ -10,6 +10,7 @@
  * ファイルが無い場合は手書きセクションのひな形付きで新規作成する。
  * Node 標準モジュールのみ使用。データ (`data/`) や `src/` は読むだけで書かない。
  */
+import { requiredDocumentPaths } from './analyze_dead_ends.mjs';
 import { readdirSync, readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -127,7 +128,8 @@ function roleOf(c, a, d) {
   return roles.join('・');
 }
 
-function renderGenerated(c) {
+export function renderGenerated(c) {
+  if (c.schemaVersion === 2 && c.v2) return renderV2(c);
   const a = analyze(c);
   const L = [];
   L.push(START);
@@ -244,6 +246,128 @@ function renderGenerated(c) {
   return L.join('\n');
 }
 
+function renderV2(c) {
+  const v2 = c.v2;
+  const L = [
+    START,
+    `<!-- このブロックは scripts/generate_walkthrough.mjs が data/cases/${c.id}.json から生成します。直接編集しないでください。 -->`,
+    '',
+    '## 自動生成: V2の根拠・操作・振り返り',
+    '',
+    '### 基本情報',
+    '',
+    `- 事件: ${c.id} ${c.title}`,
+    `- 改訂: ${v2.revision} / 方式: ${v2.modes.join(', ')}`,
+    `- 調査予算: ${c.budget}`,
+    '- 固定100点、計算入力、唯一の見出し順序は用いない。事実整合・根拠充足・操作完了を、判断や実験の反応と区別する。',
+    '',
+    '### 資料一覧',
+    '',
+    '| ID | コスト | タイトル | 本文 |',
+    '| --- | ---: | --- | --- |',
+  ];
+  for (const d of c.documents)
+    L.push(`| ${d.id} | ${d.cost} | ${cell(d.title)} | ${cell(d.content)} |`);
+  L.push('', '### 情報解読: 妥当な解釈と事実誤認', '');
+  for (const task of v2.decoding) {
+    L.push(
+      `#### ${task.id}: ${task.prompt}`,
+      '',
+      '| 選択 | 事実区分 | 整合 | 根拠 | 説明 |',
+      '| --- | --- | --- | --- | --- |',
+    );
+    for (const option of task.options)
+      L.push(
+        `| ${cell(option.text)} | ${option.status} | ${option.accepted ? '根拠付きで成立' : '資料と不整合'} | ${option.evidence.join(', ')} | ${cell(option.reason)} |`,
+      );
+    L.push('');
+  }
+  L.push('### 根拠グラフと代替経路', '', v2.graph.prompt, '');
+  v2.graph.paths.forEach((path, i) =>
+    L.push(
+      `${i + 1}. ${path.map((edge) => `${edge.from} → ${edge.to} (${edge.relation})`).join(' / ')}`,
+    ),
+  );
+  const paths = requiredDocumentPaths(c);
+  L.push(
+    '',
+    '### 予算内で到達する資料集合',
+    '',
+    '| 経路 | 必要資料（解読・グラフ・開示） | コスト | 残予算 |',
+    '| --- | --- | ---: | ---: |',
+  );
+  paths.forEach((path, i) => {
+    const cost = path.reduce((sum, id) => sum + docById(c, id).cost, 0);
+    L.push(`| ${i + 1} | ${path.join(', ')} | ${cost} | ${c.budget - cost} |`);
+  });
+  L.push(
+    '',
+    '資料は開いたあと証拠として採用する。最安経路だけを唯一の正解にしない。初回反応・方針の記録前は追加資料が封じられるため、先に公開資料から初回判断を記録する。',
+  );
+  if (v2.experiment) {
+    const e = v2.experiment;
+    L.push(
+      '',
+      '### 心理実験: 初回 → 比較 → 更新',
+      '',
+      e.prompt,
+      '',
+      '| 条件 | 提示 |',
+      '| --- | --- |',
+    );
+    for (const condition of e.conditions)
+      L.push(`| ${cell(condition.label)} (${condition.id}) | ${cell(condition.prompt)} |`);
+    L.push(
+      '',
+      `- 共通選択肢: ${e.choices.map((choice) => `${choice.id}: ${choice.text}`).join(' / ')}`,
+      `- 初回を記録した後に開く資料: ${e.revealDocuments.join(', ')}`,
+      `- 比較の問い: ${e.comparisonPrompt}`,
+      `- 限界・解説: ${e.explanation}`,
+      '- 初回と更新後の両反応を保存し、判断維持・変更のどちらでも比較を完了できる。一回の反応から個人特性を判定しない。',
+    );
+  }
+  if (v2.decision) {
+    const d = v2.decision;
+    L.push(
+      '',
+      '### 意思決定: 目的・制約・別方針',
+      '',
+      d.prompt,
+      `- 目的: ${d.objectives.map((goal) => `${goal.id}: ${goal.text}`).join(' / ')}`,
+      `- 利用可能な資源: ${d.resources}`,
+      `- 初回の後に開く資料: ${d.revealDocuments.join(', ')}`,
+      `- 更新の問い: ${d.updatePrompt}`,
+      '',
+      '| 方針 | 費用 | 条件付き結果 | トレードオフ |',
+      '| --- | ---: | --- | --- |',
+    );
+    for (const option of d.options)
+      L.push(
+        `| ${option.id}: ${cell(option.text)} | ${option.cost} | ${cell(option.outcome)} | ${cell(option.tradeoff)} |`,
+      );
+    L.push(
+      '',
+      '支持資料・反証・前提・理由を記録し、追加情報後に方針を維持または更新する。保留も方針。結果の幸不幸で判断を正誤化せず、未選択の結果は反実仮想として区別する。',
+    );
+  }
+  L.push(
+    '',
+    '### 報告と留保',
+    '',
+    v2.reportPrompt,
+    '',
+    '主張と未確認事項を分けて記録する。自由文の自動正誤判定はしない。根拠不足や事実誤認は、選んだ方針・実験反応とは別の観点で確認する。',
+    '',
+    '### 振り返り',
+    '',
+    `- 事件の説明: ${c.debrief.explanation}`,
+    `- 持ち帰り: ${c.debrief.takeaway}`,
+    '',
+    END,
+  );
+  return L.join('\n');
+}
+
 function template(c) {
   return [
     `# ${c.id} 攻略・答え合わせ: ${c.title}`,
@@ -313,4 +437,4 @@ function main() {
   }
 }
 
-main();
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();

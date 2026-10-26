@@ -1,0 +1,172 @@
+{
+  "id": "case-01",
+  "title": "消えた55人の利用者",
+  "bias": "分母の省略とフレーミング",
+  "difficulty": "HARD",
+  "estimated_time": "5〜10分",
+  "intro": "広告には「驚異の継続率90%」。編集長は数字の対象集団を調べ、掲載可能な見出しに修正するよう命じた。",
+  "budget": 4,
+  "documents": [
+    {
+      "id": "ad",
+      "title": "キャンペーン広告",
+      "content": "「利用者の90%が翌月も利用！」と大書されている。何を「利用者」と数えるかの脚注はない。",
+      "cost": 0,
+      "visual": "advert"
+    },
+    {
+      "id": "trial",
+      "title": "無料体験者の登録台帳",
+      "content": "同じ月に無料体験に登録した新規利用者は100人。これを集計の起点とする。",
+      "cost": 1,
+      "visual": "ledger"
+    },
+    {
+      "id": "paid",
+      "title": "料金決済の集計",
+      "content": "無料体験の登録者のうち、50人が有料契約へ移行した。残りは有料契約へ移らず、無料体験のまま終わった。",
+      "cost": 1,
+      "visual": "receipt"
+    },
+    {
+      "id": "retained",
+      "title": "翌月の継続状況",
+      "content": "有料契約へ移行した人のうち、翌月も契約を継続したのは45人。無料体験のまま終わった人は、この集計の対象に入っていない。",
+      "cost": 1,
+      "visual": "report"
+    },
+    {
+      "id": "memo",
+      "title": "広告担当者のメモ",
+      "content": "社内では「有料契約へ移った人を母数にしている」と説明する予定だったが、紙面用の脚注が落ちた。",
+      "cost": 1,
+      "visual": "clipping"
+    },
+    {
+      "id": "reviews",
+      "title": "利用者の声",
+      "content": "「便利」「難しい」などさまざまな口コミ。何人が継続したかはこの資料だけでは分からない。",
+      "cost": 1,
+      "visual": "news"
+    }
+  ],
+  "required_evidence": [
+    "trial",
+    "paid",
+    "retained"
+  ],
+  "required_link": [
+    "trial",
+    "retained"
+  ],
+  "link_prompt": "広告の「90%」と、別の母数で計算した数字。その母数がどこから来たかを示す 2 枚を結びます。",
+  "headline_fragments": [
+    {
+      "id": "f0",
+      "text": "広告の継続率90%は",
+      "kind": "correct",
+      "reason": "広告の数字を主語に据え、以下でその適用範囲を説明する。",
+      "evidence": [
+        "ad"
+      ]
+    },
+    {
+      "id": "f1",
+      "text": "有料契約者を分母にした数字",
+      "kind": "correct",
+      "reason": "広告の90%は有料移行者50人のうち45人が継続した比率で、分母は有料契約者である。",
+      "evidence": [
+        "paid",
+        "retained",
+        "memo"
+      ]
+    },
+    {
+      "id": "f2",
+      "text": "体験登録者全体では45%が継続",
+      "kind": "correct",
+      "reason": "体験登録者100人を分母にすると翌月継続は45人で45%になる。",
+      "evidence": [
+        "trial",
+        "retained"
+      ]
+    },
+    {
+      "id": "f3",
+      "text": "ほぼ全利用者が継続",
+      "kind": "overgeneralization",
+      "reason": "有料移行者50人の結果を登録者100人全体に広げている。登録者全体では45%しか継続していない。",
+      "evidence": [
+        "trial",
+        "retained"
+      ]
+    },
+    {
+      "id": "f4",
+      "text": "虚偽広告だと断定できる",
+      "kind": "causal-claim",
+      "reason": "有料契約者を分母にすれば90%は計算上正しく、分母の説明意図もあるため、虚偽と断定するには資料が足りない。",
+      "evidence": [
+        "paid",
+        "retained",
+        "memo"
+      ]
+    },
+    {
+      "id": "f5",
+      "text": "満足度90%の証拠",
+      "kind": "misread-statistic",
+      "reason": "継続率は満足度ではなく、満足度を示す人数の資料は存在しない。",
+      "evidence": [
+        "reviews"
+      ]
+    },
+    {
+      "id": "f6",
+      "text": "登録者の9割が有料契約",
+      "kind": "misread-statistic",
+      "reason": "登録者100人のうち有料に移行したのは50人で5割。分母を取り違えている。",
+      "evidence": [
+        "trial",
+        "paid"
+      ]
+    },
+    {
+      "id": "f7",
+      "text": "継続率は測定できない",
+      "kind": "ignored-counter-evidence",
+      "reason": "登録・決済・継続の各資料に測定値があり、「分からない」という感想だけを根拠にしている。",
+      "evidence": [
+        "trial",
+        "paid",
+        "retained"
+      ]
+    }
+  ],
+  "correct_fragments": [
+    "f0",
+    "f1",
+    "f2"
+  ],
+  "debrief": {
+    "explanation": "50人の有料契約者のうち45人が継続したため90%は計算上正しい。一方、無料体験登録者100人を起点にすると継続者は45%。母数を省くと読み手の理解が変わる。",
+    "takeaway": "「割合は何を分母にした数か」を確認する。90%という数字だけで虚偽や成功を断定しない。"
+  },
+  "disclaimer": "登場人物・企業・統計・広告はすべて架空です。",
+  "analysis_tasks": [
+    {
+      "id": "all",
+      "prompt": "無料体験の登録者全体に対する翌月の継続率",
+      "unit": "%",
+      "expected": 45,
+      "tolerance": 0.1
+    },
+    {
+      "id": "paid",
+      "prompt": "有料契約に移行した人の翌月継続率",
+      "unit": "%",
+      "expected": 90,
+      "tolerance": 0.1
+    }
+  ]
+}

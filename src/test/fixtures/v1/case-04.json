@@ -1,0 +1,166 @@
+{
+  "id": "case-04",
+  "title": "取り戻せない開発費",
+  "bias": "サンクコスト効果",
+  "difficulty": "HARD",
+  "estimated_time": "5〜10分",
+  "intro": "編集部が新しい配信システムの継続を議論中。「すでに投じた費用」をどう扱うべきか。",
+  "budget": 5,
+  "documents": [
+    {
+      "id": "minutes",
+      "title": "会議議事録",
+      "content": "チームは「すでに300万円使ったのだから今さら止められない」と主張。",
+      "cost": 0,
+      "visual": "news"
+    },
+    {
+      "id": "spent",
+      "title": "支払い明細",
+      "content": "過去の開発費300万円は支払済みで返金不可。今後の選択で回収額は変わらない。",
+      "cost": 1,
+      "visual": "receipt"
+    },
+    {
+      "id": "finish",
+      "title": "継続案の見積り",
+      "content": "完成まで追加で120万円、保守に30万円。来期の期待便益は最大100万円相当という見積り。",
+      "cost": 1,
+      "visual": "report"
+    },
+    {
+      "id": "switch",
+      "title": "代替案の見積り",
+      "content": "既存サービス導入は追加60万円、保守20万円。来期の期待便益は120万円相当という見積り。",
+      "cost": 1,
+      "visual": "report"
+    },
+    {
+      "id": "risk",
+      "title": "品質監査メモ",
+      "content": "継続案は重大な技術リスクがあり、便益見積りには不確実性がある。代替案にも移行リスクはある。",
+      "cost": 1,
+      "visual": "clipping"
+    },
+    {
+      "id": "team",
+      "title": "メンバーの声",
+      "content": "「ここまで作ったのに」「苦労が無駄になる」。気持ちは重要だが将来の費用便益とは区別する。",
+      "cost": 1,
+      "visual": "news"
+    }
+  ],
+  "required_evidence": [
+    "spent",
+    "finish",
+    "switch"
+  ],
+  "required_link": [
+    "spent",
+    "finish"
+  ],
+  "link_prompt": "すでに払ってしまった額と、これから払う額。この 2 つを並べて比べる 2 枚を結びます。",
+  "headline_fragments": [
+    {
+      "id": "f0",
+      "text": "支払済み300万円は将来の比較から分離",
+      "kind": "correct",
+      "reason": "支払済みの300万円はどちらを選んでも戻らず、将来の比較から分離する。",
+      "evidence": [
+        "spent"
+      ]
+    },
+    {
+      "id": "f1",
+      "text": "継続案の追加費用は150万円",
+      "kind": "correct",
+      "reason": "継続案を完成させるには追加で150万円かかる。",
+      "evidence": [
+        "finish"
+      ]
+    },
+    {
+      "id": "f2",
+      "text": "代替案の追加費用は80万円",
+      "kind": "correct",
+      "reason": "代替案は追加60万円と保守20万円で合計80万円かかる。",
+      "evidence": [
+        "switch"
+      ]
+    },
+    {
+      "id": "f3",
+      "text": "300万円を使ったので必ず継続",
+      "kind": "misread-statistic",
+      "reason": "300万円はどちらを選んでも戻らず、将来の判断材料にならない（サンクコスト）。",
+      "evidence": [
+        "spent",
+        "minutes"
+      ]
+    },
+    {
+      "id": "f4",
+      "text": "期待便益だけで全て断定できる",
+      "kind": "causal-claim",
+      "reason": "継続案の技術リスクや便益見積りの不確実性が明記されており、便益だけでは断定できない。",
+      "evidence": [
+        "risk"
+      ]
+    },
+    {
+      "id": "f5",
+      "text": "過去の苦労は将来の利益そのもの",
+      "kind": "ignored-counter-evidence",
+      "reason": "チーム自身が「気持ちは重要だが将来の費用便益とは区別する」としている。",
+      "evidence": [
+        "team",
+        "spent"
+      ]
+    },
+    {
+      "id": "f6",
+      "text": "代替案は費用ゼロ",
+      "kind": "ignored-counter-evidence",
+      "reason": "代替案にも追加60万円と保守20万円の計80万円が発生する。",
+      "evidence": [
+        "switch"
+      ]
+    },
+    {
+      "id": "f7",
+      "text": "不確実性は存在しない",
+      "kind": "ignored-counter-evidence",
+      "reason": "監査メモが不確実性を明記し、継続案の便益も「最大100万円」の見積りにすぎない。",
+      "evidence": [
+        "risk",
+        "finish"
+      ]
+    }
+  ],
+  "correct_fragments": [
+    "f0",
+    "f1",
+    "f2"
+  ],
+  "debrief": {
+    "explanation": "返金されない支払済み費用は、今後の意思決定でどちらを選んでも変わらない。将来の便益・追加費用・リスクで判断するのが合理的な比較の出発点。",
+    "takeaway": "このゲームの数値は仮定。過去に投じた金額と、今後増えるコストを混ぜない。"
+  },
+  "disclaimer": "登場人物・企業・統計・広告はすべて架空です。",
+  "analysis_tasks": [
+    {
+      "id": "continue",
+      "prompt": "継続案で今後発生する費用の合計",
+      "unit": "万円",
+      "expected": 150,
+      "tolerance": 0
+    },
+    {
+      "id": "alternative",
+      "prompt": "代替案で今後発生する費用の合計",
+      "unit": "万円",
+      "expected": 80,
+      "tolerance": 0
+    }
+  ]
+}

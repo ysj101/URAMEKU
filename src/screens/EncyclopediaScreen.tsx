@@ -142,7 +142,9 @@ export function EncyclopediaScreen({ game, nav }: { game: GameApi; nav: Navigati
             )}
             {selected && t.id === 'achievements' && (
               <ul className="achievement-list">
-                {ACHIEVEMENTS.map((a) => {
+                {ACHIEVEMENTS.filter(
+                  (a) => a.id !== 'number-check' || game.cases.some((c) => !c.v2),
+                ).map((a) => {
                   const got = earned.has(a.id);
                   const icon = iconFor(a.id);
                   return (

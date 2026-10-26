@@ -42,8 +42,10 @@ describe('TutorialScreen', () => {
     expect(stepHeading(1)).toBeInTheDocument();
     expect(screen.getByText(UI.tutorial.steps[0]!.body)).toBeInTheDocument();
     const scene = slide().querySelector('.ts-scene');
-    expect(scene).toHaveAttribute('data-scene', 'desk-open');
+    expect(scene).toHaveAttribute('data-scene', 'document-source');
     expect(scene).toHaveAttribute('aria-hidden', 'true');
+    // V2: 旧計算操作の文言を含まない
+    expect(UI.tutorial.steps.map((s) => s.title).join(' ')).not.toMatch(/計算|3 断片/);
     // 触る場所の説明は HTML テキストで読める
     const guide = UI.tutorial.steps[0]!.guide;
     expect(screen.getByText(guide.spot)).toBeInTheDocument();

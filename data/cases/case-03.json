@@ -4,7 +4,7 @@
   "bias": "社会的証明とサンプル選択",
   "difficulty": "HARD",
   "estimated_time": "5〜10分",
-  "intro": "ニュースには「利用者の8割が新サービスを支持」。調査の対象と集計手法を検証しよう。",
+  "intro": "「利用者の8割が支持」という速報を読んだ時点の判断を記録しよう。募集方法を開示した後、支持判断と、記事が言える範囲を分けて考える。",
   "budget": 4,
   "documents": [
     {
@@ -59,7 +59,7 @@
     "count",
     "invite"
   ],
-  "link_prompt": "「8 割が支持」という結果と、誰に聞いたのか。この 2 つを突き合わせる 2 枚を結びます。",
+  "link_prompt": "集計結果と、誰が回答へ参加できたか。その関係から、どの範囲の人について説明できるかを考えます。",
   "headline_fragments": [
     {
       "id": "f0",
@@ -147,24 +147,207 @@
     "f2"
   ],
   "debrief": {
-    "explanation": "160÷200=80%は回答者の比率として正しいが、任意参加・ファンコミュニティ経由では選択バイアスが大きい可能性がある。社会的証明の表現は意思決定に影響しうる。",
-    "takeaway": "支持率の数値と、どの集団について推定できる数値なのかを切り分ける。"
+    "explanation": "回答者200人中160人の支持は回答者内の事実である。募集先の限定と任意参加により、利用者全体への一般化には留保が要る。別調査の1,000人中540人という結果も、時点と設問が違うため直ちに唯一の真実とはできない。",
+    "takeaway": "人気があるかという主張と、自分の目的に合うかという判断を分ける。代表性が未確認でも、逆向きの断定をしない。"
   },
   "disclaimer": "登場人物・企業・統計・広告はすべて架空です。",
-  "analysis_tasks": [
-    {
-      "id": "response",
-      "prompt": "利用者全体に対するアンケート回答者の割合",
-      "unit": "%",
-      "expected": 1,
-      "tolerance": 0.1
+  "analysis_tasks": [],
+  "v2": {
+    "revision": 1,
+    "modes": [
+      "experiment",
+      "decoding"
+    ],
+    "decoding": [
+      {
+        "id": "respondents",
+        "prompt": "80%という結果は、どの集団について直接確認できる？",
+        "options": [
+          {
+            "id": "meaningless_result",
+            "text": "任意回答なので、200人の回答内容についても何も言えない。",
+            "status": "contradicted",
+            "accepted": false,
+            "reason": "代表性の限界があっても、実際に回答した人の集計は読める。",
+            "evidence": [
+              "count",
+              "invite"
+            ]
+          },
+          {
+            "id": "respondent_result",
+            "text": "ファンコミュニティ経由で任意に回答した200人の中で、160人が支持した結果である。",
+            "status": "supported",
+            "accepted": true,
+            "reason": "集計表だけでなく、回答者が集まった方法も含めて適用範囲を示している。",
+            "evidence": [
+              "count",
+              "invite"
+            ]
+          },
+          {
+            "id": "population_result",
+            "text": "利用者約20,000人のうち80%が支持していることを直接数えた結果である。",
+            "status": "contradicted",
+            "accepted": false,
+            "reason": "集計は200人。利用者全体の抽出・集計ではない。",
+            "evidence": [
+              "count",
+              "population"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "sampling",
+        "prompt": "回答者内の結果を利用者全体へ広げるには、どんな留保がある？",
+        "options": [
+          {
+            "id": "random_sample",
+            "text": "母集団が大きくても、回答200人がいれば無作為抽出と同じように扱える。",
+            "status": "contradicted",
+            "accepted": false,
+            "reason": "人数の大小は募集経路と任意参加を無作為抽出へ変えない。",
+            "evidence": [
+              "invite",
+              "population"
+            ]
+          },
+          {
+            "id": "not_representative",
+            "text": "募集先が限定され任意参加なので、全利用者を代表する抽出だとは確認できない。",
+            "status": "supported",
+            "accepted": true,
+            "reason": "募集方法と利用者全体の資料を照合する。代表性の証拠がないことと、全体の支持率を知ることは別。",
+            "evidence": [
+              "invite",
+              "population"
+            ]
+          },
+          {
+            "id": "reverse_majority",
+            "text": "代表性がないので、利用者全体では反対が多数だと確定する。",
+            "status": "uncertain",
+            "accepted": false,
+            "reason": "偏りの可能性から反対多数という逆向きの断定もできない。",
+            "evidence": [
+              "invite",
+              "population"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "unknown_population",
+        "prompt": "この取材の後にも未確認として残すべきことは？",
+        "options": [
+          {
+            "id": "all_support_known",
+            "text": "80%が支持したという見出しを見れば、未回答者の意見も分かる。",
+            "status": "uncertain",
+            "accepted": false,
+            "reason": "未回答者の意見は提示されていない。",
+            "evidence": [
+              "count",
+              "population"
+            ]
+          },
+          {
+            "id": "alternative_is_truth",
+            "text": "別調査があるなら、その数字だけで時期も設問も異なるすべての利用者の真の意見が分かる。",
+            "status": "uncertain",
+            "accepted": false,
+            "reason": "別調査にも時点・質問の違いがあり、その比較可能性を別途確認する必要がある。",
+            "evidence": [
+              "other",
+              "population"
+            ]
+          },
+          {
+            "id": "whole_support_unknown",
+            "text": "全利用者の支持率と、支持が生まれた原因はこの投票だけでは特定できない。",
+            "status": "uncertain",
+            "accepted": true,
+            "reason": "利用者全体の代表抽出がなく、投票の支持理由や因果比較もない。",
+            "evidence": [
+              "count",
+              "invite",
+              "population"
+            ]
+          }
+        ]
+      }
+    ],
+    "graph": {
+      "prompt": "回答結果が適用できる範囲を、募集の経路と母集団の範囲から限定してください。",
+      "paths": [
+        [
+          {
+            "from": "invite",
+            "to": "count",
+            "relation": "qualifies"
+          },
+          {
+            "from": "population",
+            "to": "count",
+            "relation": "qualifies"
+          }
+        ],
+        [
+          {
+            "from": "invite",
+            "to": "population",
+            "relation": "qualifies"
+          },
+          {
+            "from": "count",
+            "to": "invite",
+            "relation": "supports"
+          }
+        ]
+      ]
     },
-    {
-      "id": "support",
-      "prompt": "別の調査会社の回答者の支持割合",
-      "unit": "%",
-      "expected": 54,
-      "tolerance": 0.1
-    }
-  ]
+    "experiment": {
+      "id": "majority_frame",
+      "prompt": "速報の第一印象として、このサービスをどう扱うか記録してください。支持・反対・保留のいずれにも正解を設定しません。",
+      "conditions": [
+        {
+          "id": "percent_first",
+          "label": "提示A",
+          "prompt": "利用者の80%が新サービスを支持！ 回答者200人中160人が支持した速報がある。サービスの採用をどう考える？"
+        },
+        {
+          "id": "count_first",
+          "label": "提示B",
+          "prompt": "回答者200人中160人が支持。速報の大見出しは利用者の80%が支持となっている。サービスの採用をどう考える？"
+        }
+      ],
+      "choices": [
+        {
+          "id": "try",
+          "text": "自分の用途に合うか試してみたい"
+        },
+        {
+          "id": "skeptical",
+          "text": "自分の判断材料としては慎重に扱う"
+        },
+        {
+          "id": "pass",
+          "text": "採用を見送る"
+        },
+        {
+          "id": "hold",
+          "text": "募集方法を調べるまで保留する"
+        }
+      ],
+      "revealDocuments": [
+        "invite",
+        "population"
+      ],
+      "comparisonPrompt": "募集方法を知った後、サービスへの判断と、80%という表現が言える範囲をそれぞれどう考えるか記録してください。",
+      "explanation": "多数派を示す表現が判断の手がかりになることはあるが、一回の反応からその影響や個人の特徴は決められない。支持したままでも、支持の適用範囲を慎重に扱うことはできる。"
+    },
+    "reportPrompt": "回答者内の結果、募集方法の制約、未回答者について分からないことを区別して報告してください。自分の支持判断はそのままでも更新してもかまいません。"
+  },
+  "schemaVersion": 2
 }

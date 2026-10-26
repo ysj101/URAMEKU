@@ -127,6 +127,22 @@ function removePin(progress: CaseProgress, documentId: string): CaseProgress {
     ...progress,
     pinned: progress.pinned.filter((id) => id !== documentId),
     chosenLink: progress.chosenLink.filter((id) => id !== documentId),
+    ...(progress.v2
+      ? {
+          v2: {
+            ...progress.v2,
+            decoding: Object.fromEntries(
+              Object.entries(progress.v2.decoding).map(([id, record]) => [
+                id,
+                { ...record, evidence: record.evidence.filter((source) => source !== documentId) },
+              ]),
+            ),
+            links: progress.v2.links.filter(
+              (link) => link.from !== documentId && link.to !== documentId,
+            ),
+          },
+        }
+      : {}),
   };
 }
 

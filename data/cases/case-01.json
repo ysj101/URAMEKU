@@ -4,7 +4,7 @@
   "bias": "分母の省略とフレーミング",
   "difficulty": "HARD",
   "estimated_time": "5〜10分",
-  "intro": "広告には「驚異の継続率90%」。編集長は数字の対象集団を調べ、掲載可能な見出しに修正するよう命じた。",
+  "intro": "広告には「驚異の継続率90%」。誰の、いつの結果なのか。出典をたどり、確認できた事実とまだ分からないことを分けて編集局に報告しよう。",
   "budget": 4,
   "documents": [
     {
@@ -31,7 +31,7 @@
     {
       "id": "retained",
       "title": "翌月の継続状況",
-      "content": "有料契約へ移行した人のうち、翌月も契約を継続したのは45人。無料体験のまま終わった人は、この集計の対象に入っていない。",
+      "content": "有料契約へ移行した人のうち、翌月も契約を継続したのは45人。無料体験のまま終わった人は、この集計の対象に入っていない。体験登録者全体を起点にした翌月の契約継続率の欄には45%と記載されている。",
       "cost": 1,
       "visual": "report"
     },
@@ -59,7 +59,7 @@
     "trial",
     "retained"
   ],
-  "link_prompt": "広告の「90%」と、別の母数で計算した数字。その母数がどこから来たかを示す 2 枚を結びます。",
+  "link_prompt": "広告の集計対象と、調査の起点になった集団。範囲の違いと数字の出所を示す関係を組みます。",
   "headline_fragments": [
     {
       "id": "f0",
@@ -149,24 +149,165 @@
     "f2"
   ],
   "debrief": {
-    "explanation": "50人の有料契約者のうち45人が継続したため90%は計算上正しい。一方、無料体験登録者100人を起点にすると継続者は45%。母数を省くと読み手の理解が変わる。",
-    "takeaway": "「割合は何を分母にした数か」を確認する。90%という数字だけで虚偽や成功を断定しない。"
+    "explanation": "有料契約に移行した人の継続を示す90%と、体験登録者全体の翌月契約継続を示す45%は、適用する集団が異なる。同じ出来事でも起点を省けば読み手の理解が変わる。担当者の意図や広告の因果効果は、この資料からは確定しない。",
+    "takeaway": "数字の大小だけで結論を決めず、対象・期間・指標・情報の欠落を資料に戻って確かめる。保留できる点は保留する。"
   },
   "disclaimer": "登場人物・企業・統計・広告はすべて架空です。",
-  "analysis_tasks": [
-    {
-      "id": "all",
-      "prompt": "無料体験の登録者全体に対する翌月の継続率",
-      "unit": "%",
-      "expected": 45,
-      "tolerance": 0.1
+  "analysis_tasks": [],
+  "schemaVersion": 2,
+  "v2": {
+    "revision": 1,
+    "modes": [
+      "decoding"
+    ],
+    "decoding": [
+      {
+        "id": "scope",
+        "prompt": "広告の「90%」を、資料の範囲を超えずに説明するには？",
+        "options": [
+          {
+            "id": "all_users",
+            "text": "無料体験を含めて登録した人なら、ほぼ全員が翌月も契約を続けた。",
+            "status": "contradicted",
+            "accepted": false,
+            "reason": "体験登録者全体の継続率の欄は45%。広告の90%を集団全体に広げている。",
+            "evidence": [
+              "trial",
+              "retained"
+            ]
+          },
+          {
+            "id": "paid_cohort",
+            "text": "決済集計と翌月の記録を照合すると、有料契約へ移行した人を起点にした継続の数字と読める。",
+            "status": "supported",
+            "accepted": true,
+            "reason": "有料移行者の記録と、その集団を対象とする翌月の記録を合わせた説明。",
+            "evidence": [
+              "paid",
+              "retained"
+            ]
+          },
+          {
+            "id": "editor_memo",
+            "text": "担当者の説明は有料移行者を母数とし、翌月の記録も有料契約の継続を集計している。",
+            "status": "supported",
+            "accepted": true,
+            "reason": "担当者の説明だけに頼らず、実際の集計対象を翌月の記録で裏付けている。",
+            "evidence": [
+              "memo",
+              "retained"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "missing_denominator",
+        "prompt": "広告の読み手が見落としやすい対象の違いは？",
+        "options": [
+          {
+            "id": "unmeasurable",
+            "text": "資料が異なるため、継続について確認できる事実は一つもない。",
+            "status": "contradicted",
+            "accepted": false,
+            "reason": "対象を分ければ各資料の人数と継続率は確認できる。比較の注意と測定不能は別。",
+            "evidence": [
+              "trial",
+              "retained"
+            ]
+          },
+          {
+            "id": "starting_group",
+            "text": "登録台帳の集団と翌月集計の集団は同じ範囲ではない。体験で終わった人を含めるかを説明する必要がある。",
+            "status": "supported",
+            "accepted": true,
+            "reason": "台帳は無料体験登録者全体、翌月の記録は有料移行者の継続。集団の範囲を区別する。",
+            "evidence": [
+              "trial",
+              "retained"
+            ]
+          },
+          {
+            "id": "same_indicator",
+            "text": "継続率の広告から満足度も同じ割合と分かる。",
+            "status": "uncertain",
+            "accepted": false,
+            "reason": "契約継続と満足という回答は別の指標。満足度の調査は提示されていない。",
+            "evidence": [
+              "ad",
+              "retained"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "causal_limit",
+        "prompt": "この取材でまだ確かめられないことは？",
+        "options": [
+          {
+            "id": "proof_of_effect",
+            "text": "継続者がいるので、この広告に契約を継続させる効果があった。",
+            "status": "uncertain",
+            "accepted": false,
+            "reason": "契約の記録だけから広告の効果へ飛躍している。",
+            "evidence": [
+              "ad",
+              "retained"
+            ]
+          },
+          {
+            "id": "intent_proven",
+            "text": "母数の脚注がないので、担当者が意図的に読者をだましたと証明できる。",
+            "status": "uncertain",
+            "accepted": false,
+            "reason": "説明不足と意図の立証は別。資料だけで意図は確定しない。",
+            "evidence": [
+              "ad",
+              "retained"
+            ]
+          },
+          {
+            "id": "effect_unknown",
+            "text": "広告を見たから契約を続けたのかは分からない。継続の記録だけでは原因まで決められない。",
+            "status": "uncertain",
+            "accepted": true,
+            "reason": "広告に触れなかった集団との比較や継続理由の調査がない。",
+            "evidence": [
+              "ad",
+              "retained"
+            ]
+          }
+        ]
+      }
+    ],
+    "graph": {
+      "prompt": "どの資料が集計の出所を支え、どの資料が広告の適用範囲を限定するか。両方の関係を残してください。",
+      "paths": [
+        [
+          {
+            "from": "paid",
+            "to": "retained",
+            "relation": "supports"
+          },
+          {
+            "from": "trial",
+            "to": "retained",
+            "relation": "qualifies"
+          }
+        ],
+        [
+          {
+            "from": "memo",
+            "to": "retained",
+            "relation": "supports"
+          },
+          {
+            "from": "trial",
+            "to": "retained",
+            "relation": "qualifies"
+          }
+        ]
+      ]
     },
-    {
-      "id": "paid",
-      "prompt": "有料契約に移行した人の翌月継続率",
-      "unit": "%",
-      "expected": 90,
-      "tolerance": 0.1
-    }
-  ]
+    "reportPrompt": "広告について裏付けられた範囲と、調査しても確かめられなかった原因や意図を区別して報告してください。数値の再計算は不要です。"
+  }
 }

@@ -1,0 +1,169 @@
+{
+  "id": "case-02",
+  "title": "半額セールの値札",
+  "bias": "アンカリングと参照価格",
+  "difficulty": "HARD",
+  "estimated_time": "5〜10分",
+  "intro": "靴店の「8,000円から半額！」という広告。値下げの大きさを数字で裏付けてほしい。",
+  "budget": 4,
+  "documents": [
+    {
+      "id": "poster",
+      "title": "店舗のポスター",
+      "content": "新作スニーカー 8,000円 → 4,000円。「今だけ50%OFF」とある。",
+      "cost": 0,
+      "visual": "advert"
+    },
+    {
+      "id": "launch",
+      "title": "発売時の価格台帳",
+      "content": "発売初日に8,000円で販売された記録はある。ただし発売直後に価格が変更された。",
+      "cost": 1,
+      "visual": "ledger"
+    },
+    {
+      "id": "history",
+      "title": "30日間の価格履歴",
+      "content": "直近30日間の大半は4,200円で販売。セール当日4,000円。4,200円との差は200円（約4.8%）。",
+      "cost": 1,
+      "visual": "report"
+    },
+    {
+      "id": "stock",
+      "title": "在庫と販売記録",
+      "content": "直近30日間に4,200円で実際の販売があった。8,000円は発売時の短期間の価格。",
+      "cost": 1,
+      "visual": "receipt"
+    },
+    {
+      "id": "interview",
+      "title": "広告担当の取材記録",
+      "content": "「半額」は発売時の8,000円を基準にした表現だと説明。直前価格との比較ではない。",
+      "cost": 1,
+      "visual": "clipping"
+    },
+    {
+      "id": "competitor",
+      "title": "競合店の価格",
+      "content": "競合店の類似シューズは3,900〜7,000円（同一商品ではない）。対象商品の正しい割引率の直接証拠にはならない。",
+      "cost": 1,
+      "visual": "news"
+    }
+  ],
+  "required_evidence": [
+    "launch",
+    "history",
+    "stock"
+  ],
+  "required_link": [
+    "poster",
+    "history"
+  ],
+  "link_prompt": "「半額」の根拠になっている値段と、実際に売られていた値段。この 2 つを突き合わせる 2 枚を結びます。",
+  "headline_fragments": [
+    {
+      "id": "f0",
+      "text": "半額表示の基準は発売時価格",
+      "kind": "correct",
+      "reason": "「半額」の基準価格8,000円は発売初日の価格だと、発売資料と担当者の説明が示している。",
+      "evidence": [
+        "launch",
+        "interview"
+      ]
+    },
+    {
+      "id": "f1",
+      "text": "直近の主な販売価格との差は約5%",
+      "kind": "correct",
+      "reason": "直近30日の主な販売価格4,200円との差は200円で約5%にすぎない。",
+      "evidence": [
+        "history"
+      ]
+    },
+    {
+      "id": "f2",
+      "text": "現在の販売価格は4,000円",
+      "kind": "correct",
+      "reason": "セール当日の販売価格は4,000円である。",
+      "evidence": [
+        "poster",
+        "history"
+      ]
+    },
+    {
+      "id": "f3",
+      "text": "常に8,000円で販売されていた",
+      "kind": "ignored-counter-evidence",
+      "reason": "8,000円は発売初日の短期間のみで、直近30日の大半は4,200円で実売があった。",
+      "evidence": [
+        "launch",
+        "history",
+        "stock"
+      ]
+    },
+    {
+      "id": "f4",
+      "text": "絶対に不当表示である",
+      "kind": "causal-claim",
+      "reason": "資料は価格履歴と担当者の説明を示すだけで、法的な評価に必要な事実の確認がなく、断定は資料の範囲を超える。",
+      "evidence": [
+        "interview"
+      ]
+    },
+    {
+      "id": "f5",
+      "text": "競合より必ず最安値",
+      "kind": "overgeneralization",
+      "reason": "競合の類似品には4,000円より安い例があり、同一商品でもないため「必ず最安値」とは言えない。",
+      "evidence": [
+        "competitor"
+      ]
+    },
+    {
+      "id": "f6",
+      "text": "直近30日の価格は不明",
+      "kind": "ignored-counter-evidence",
+      "reason": "30日間の価格履歴と販売記録が存在し、直近価格は4,200円と確認できる。",
+      "evidence": [
+        "history",
+        "stock"
+      ]
+    },
+    {
+      "id": "f7",
+      "text": "購入者は全員損をした",
+      "kind": "overgeneralization",
+      "reason": "4,000円は直近価格より200円安く、購入者が損をしたことを示す資料はない。",
+      "evidence": [
+        "stock",
+        "history"
+      ]
+    }
+  ],
+  "correct_fragments": [
+    "f0",
+    "f1",
+    "f2"
+  ],
+  "debrief": {
+    "explanation": "8,000円という先に示された数字が比較基準になり、4,000円を大幅に安く感じさせる。一方、実際に多く販売されていた4,200円との差は200円。",
+    "takeaway": "相対的な値引き表現と価格履歴を分けて考える。法的評価は追加事実と法域の確認が必要。"
+  },
+  "disclaimer": "登場人物・企業・統計・広告はすべて架空です。",
+  "analysis_tasks": [
+    {
+      "id": "diff",
+      "prompt": "直近30日の主な価格と現在価格の差額",
+      "unit": "円",
+      "expected": 200,
+      "tolerance": 0
+    },
+    {
+      "id": "relative",
+      "prompt": "直近の主な価格からの実際の値引率（小数1桁）",
+      "unit": "%",
+      "expected": 4.8,
+      "tolerance": 0.1
+    }
+  ]
+}

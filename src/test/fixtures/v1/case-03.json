@@ -1,0 +1,170 @@
+{
+  "id": "case-03",
+  "title": "8割が支持の正体",
+  "bias": "社会的証明とサンプル選択",
+  "difficulty": "HARD",
+  "estimated_time": "5〜10分",
+  "intro": "ニュースには「利用者の8割が新サービスを支持」。調査の対象と集計手法を検証しよう。",
+  "budget": 4,
+  "documents": [
+    {
+      "id": "headline",
+      "title": "速報記事",
+      "content": "「利用者の80%が新サービスを支持！」。調査概要へのリンクがない。",
+      "cost": 0,
+      "visual": "news"
+    },
+    {
+      "id": "count",
+      "title": "オンライン投票の集計表",
+      "content": "回答した200人中160人が「支持」。この回答者内の割合は80%。",
+      "cost": 1,
+      "visual": "report"
+    },
+    {
+      "id": "invite",
+      "title": "アンケートの募集方法",
+      "content": "新サービスの公式ファンコミュニティにのみアンケートリンクを投稿。任意回答。",
+      "cost": 1,
+      "visual": "clipping"
+    },
+    {
+      "id": "population",
+      "title": "利用者全体の資料",
+      "content": "利用者は約20,000人。投票した200人が母集団を代表するよう抽出された証拠はない。",
+      "cost": 1,
+      "visual": "ledger"
+    },
+    {
+      "id": "other",
+      "title": "別の調査会社の発表",
+      "content": "無作為抽出を目指した別調査では1,000人中540人が支持。ただし対象時点や質問の違いもある。",
+      "cost": 1,
+      "visual": "report"
+    },
+    {
+      "id": "comments",
+      "title": "SNSの反応",
+      "content": "支持・反対双方の投稿がある。投稿量から実際の支持率を確定することはできない。",
+      "cost": 1,
+      "visual": "news"
+    }
+  ],
+  "required_evidence": [
+    "count",
+    "invite",
+    "population"
+  ],
+  "required_link": [
+    "count",
+    "invite"
+  ],
+  "link_prompt": "「8 割が支持」という結果と、誰に聞いたのか。この 2 つを突き合わせる 2 枚を結びます。",
+  "headline_fragments": [
+    {
+      "id": "f0",
+      "text": "8割支持は任意回答者200人での結果",
+      "kind": "correct",
+      "reason": "80%は任意回答者200人のうち160人が支持した比率である。",
+      "evidence": [
+        "count",
+        "invite"
+      ]
+    },
+    {
+      "id": "f1",
+      "text": "募集先は公式ファンコミュニティ",
+      "kind": "correct",
+      "reason": "回答の募集リンクは公式ファンコミュニティにだけ投稿された。",
+      "evidence": [
+        "invite"
+      ]
+    },
+    {
+      "id": "f2",
+      "text": "利用者全体の支持率とは断定できない",
+      "kind": "correct",
+      "reason": "利用者20,000人を代表する抽出ではなく、別調査の支持率も異なるため全体には広げられない。",
+      "evidence": [
+        "population",
+        "other"
+      ]
+    },
+    {
+      "id": "f3",
+      "text": "利用者2万人のうち8割が支持",
+      "kind": "misread-statistic",
+      "reason": "80%は回答者200人内の比率で、利用者20,000人を代表する抽出ではない。母数をすり替えている。",
+      "evidence": [
+        "count",
+        "population"
+      ]
+    },
+    {
+      "id": "f4",
+      "text": "アンケート結果はすべて無意味",
+      "kind": "overgeneralization",
+      "reason": "160÷200=80%は回答者内の比率として正しく、適用範囲が狭いだけで無意味とは言えない。",
+      "evidence": [
+        "count"
+      ]
+    },
+    {
+      "id": "f5",
+      "text": "反対者は存在しない",
+      "kind": "ignored-counter-evidence",
+      "reason": "回答200人中40人は支持ではなく、SNSの反対投稿や別調査の不支持も存在する。",
+      "evidence": [
+        "count",
+        "comments",
+        "other"
+      ]
+    },
+    {
+      "id": "f6",
+      "text": "回答者は無作為抽出だった",
+      "kind": "ignored-counter-evidence",
+      "reason": "ファンコミュニティにのみリンクを投稿した任意回答で、無作為抽出の証拠はない。",
+      "evidence": [
+        "invite",
+        "population"
+      ]
+    },
+    {
+      "id": "f7",
+      "text": "どの調査も完全に正しい",
+      "kind": "overgeneralization",
+      "reason": "別調査にも対象時点や質問の違いがあり、SNSの投稿量からも支持率は確定できない。",
+      "evidence": [
+        "other",
+        "comments"
+      ]
+    }
+  ],
+  "correct_fragments": [
+    "f0",
+    "f1",
+    "f2"
+  ],
+  "debrief": {
+    "explanation": "160÷200=80%は回答者の比率として正しいが、任意参加・ファンコミュニティ経由では選択バイアスが大きい可能性がある。社会的証明の表現は意思決定に影響しうる。",
+    "takeaway": "支持率の数値と、どの集団について推定できる数値なのかを切り分ける。"
+  },
+  "disclaimer": "登場人物・企業・統計・広告はすべて架空です。",
+  "analysis_tasks": [
+    {
+      "id": "response",
+      "prompt": "利用者全体に対するアンケート回答者の割合",
+      "unit": "%",
+      "expected": 1,
+      "tolerance": 0.1
+    },
+    {
+      "id": "support",
+      "prompt": "別の調査会社の回答者の支持割合",
+      "unit": "%",
+      "expected": 54,
+      "tolerance": 0.1
+    }
+  ]
+}

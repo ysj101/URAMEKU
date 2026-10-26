@@ -33,7 +33,13 @@ export function DocumentGrid({ caseData, progress, onOpen }: Props) {
               setBlocked(null);
               onOpen(id);
             }}
-            onBlocked={(doc) => setBlocked(blockedMessage(caseData, progress, doc))}
+            onBlocked={(doc, outcome) =>
+              setBlocked(
+                outcome === 'sealed'
+                  ? `「${doc.title}」は、最初の判断を記録すると開示されます。`
+                  : blockedMessage(caseData, progress, doc),
+              )
+            }
           />
         ))}
       </div>
