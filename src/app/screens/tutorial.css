@@ -15,9 +15,6 @@
   border: var(--border-width) solid var(--color-ink);
   background: var(--color-surface);
   box-shadow: var(--shadow-paper);
-  padding: var(--space-4);
-  display: grid;
-  gap: var(--space-4);
 }
 
 .tutorial-carousel:focus-visible {
@@ -25,30 +22,54 @@
   outline-offset: var(--focus-ring-offset);
 }
 
+/* 左: 調査画面のモック / 右: 説明。狭い画面では縦に積む */
 .tutorial-slide {
   display: grid;
-  gap: var(--space-4);
   grid-template-columns: minmax(0, 1fr);
 }
 
-@media (min-width: 720px) {
+@media (min-width: 860px) {
   .tutorial-slide {
-    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-    align-items: start;
+    grid-template-columns: minmax(0, 11fr) minmax(0, 9fr);
+    align-items: stretch;
   }
 }
 
-.tutorial-figure {
-  margin: 0;
-  border: var(--border-width-thin) solid var(--color-border);
+.tutorial-scene-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
   background: var(--color-surface-aged);
+  border-bottom: var(--border-width-thin) solid var(--color-border);
 }
 
-.tutorial-figure img {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 600 / 440;
+@media (min-width: 860px) {
+  .tutorial-scene-column {
+    border-bottom: 0;
+    border-right: var(--border-width-thin) solid var(--color-border);
+  }
+}
+
+.tutorial-scene-label {
+  font-size: var(--font-size-xs);
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  color: var(--color-quiet);
+}
+
+.tutorial-scene-note {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  color: var(--color-quiet);
+}
+
+.tutorial-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-5) var(--space-4);
 }
 
 .tutorial-step-number {
@@ -57,18 +78,40 @@
   font-weight: 800;
   letter-spacing: 0.12em;
   color: var(--color-accent);
-  margin-bottom: var(--space-1);
 }
 
 .tutorial-slide h2 {
   font-family: var(--font-serif);
-  font-size: var(--font-size-lg);
-  margin: 0 0 var(--space-2);
+  font-size: var(--font-size-xl);
+  font-weight: 900;
+  line-height: var(--line-height-snug);
+  margin: 0;
 }
 
-.tutorial-slide p {
+.tutorial-body {
   margin: 0;
   line-height: var(--line-height-relaxed);
+}
+
+.tutorial-guide {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-2) var(--space-4);
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-bg);
+  border: var(--border-width-thin) solid var(--color-border);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-normal);
+}
+
+.tutorial-guide dt {
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.tutorial-guide dd {
+  margin: 0;
 }
 
 .tutorial-dots {
@@ -99,6 +142,9 @@
   flex-wrap: wrap;
   gap: var(--space-2);
   align-items: center;
+  margin-top: auto;
+  padding-top: var(--space-4);
+  border-top: var(--border-width-thin) solid var(--color-border);
 }
 
 .tutorial-controls .spacer {
@@ -109,6 +155,354 @@
   margin: 0;
   font-size: var(--font-size-xs);
   color: var(--color-quiet);
+}
+
+/* ------------------------------------------------------------------
+ * V2 調査画面のモック（TutorialScene）。装飾のみ。文字は小さく、操作はできない。
+ * ------------------------------------------------------------------ */
+.ts-scene {
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-snug);
+  color: var(--color-ink);
+}
+
+.ts-paper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: var(--border-width-thin) solid var(--color-ink);
+  background: var(--color-surface);
+  min-height: 300px;
+}
+
+.ts-paper.ts-dimmed {
+  justify-content: center;
+  background: var(--color-surface-smudge);
+}
+
+.ts-section {
+  display: block;
+  padding-bottom: var(--space-1);
+  border-bottom: 3px double var(--color-ink);
+  font-size: var(--font-size-sm);
+  font-weight: 900;
+}
+
+.ts-section small {
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  color: var(--color-quiet);
+}
+
+.ts-fine {
+  color: var(--color-quiet);
+}
+
+.ts-meter {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  background: var(--color-ink);
+  color: var(--color-ink-inverse);
+  font-weight: 700;
+  border-left: 7px solid var(--color-accent);
+}
+
+.ts-budget {
+  color: var(--color-warning);
+}
+
+.ts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-2);
+  background: var(--color-surface-desk);
+}
+
+.ts-doc {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-2);
+  border: var(--border-width-thin) solid var(--color-border);
+  border-top: 4px solid var(--color-ink);
+  background: var(--color-surface);
+}
+
+.ts-doc-blue {
+  border-top-color: var(--color-info);
+}
+
+.ts-doc-note {
+  border-style: dashed;
+  border-top-style: solid;
+  background: var(--color-surface-note);
+}
+
+.ts-kind {
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  color: var(--color-quiet);
+}
+
+.ts-thumb {
+  display: block;
+  height: 36px;
+  background: var(--color-bg);
+  border-bottom: var(--border-width-thin) solid var(--color-border);
+}
+
+.ts-doc-title {
+  font-weight: 800;
+}
+
+.ts-title {
+  font-size: var(--font-size-md);
+  font-weight: 900;
+}
+
+.ts-cost {
+  font-weight: 800;
+  color: var(--color-quiet);
+}
+
+.ts-cost-free {
+  color: var(--color-success);
+}
+
+.ts-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.ts-btn {
+  position: relative;
+  display: inline-block;
+  width: fit-content;
+  padding: var(--space-1) var(--space-3);
+  border: var(--border-width-thin) solid var(--color-ink);
+  background: var(--color-bg);
+  font-weight: 800;
+}
+
+.ts-btn-primary {
+  background: var(--color-accent);
+  color: var(--color-ink-inverse);
+  border-color: var(--color-accent);
+}
+
+.ts-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: var(--space-3) auto;
+  width: min(100%, 340px);
+  padding: var(--space-3);
+  border: var(--border-width-thin) solid var(--color-ink);
+  border-top: 6px solid var(--color-ink);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-paper);
+}
+
+.ts-dialog-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ts-close {
+  font-size: var(--font-size-lg);
+  font-weight: 900;
+  line-height: 1;
+}
+
+.ts-source {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-1) var(--space-3);
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-surface-explain);
+  border-left: 3px solid var(--color-info);
+}
+
+.ts-source dt {
+  font-weight: 900;
+}
+
+.ts-source dd {
+  margin: 0;
+}
+
+.ts-lines {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-2) 0;
+}
+
+.ts-lines span {
+  display: block;
+  height: 6px;
+  background: var(--color-surface-smudge);
+}
+
+.ts-pins {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-2);
+}
+
+.ts-chip {
+  padding: 2px var(--space-2);
+  border: var(--border-width-thin) solid var(--color-ink);
+  background: var(--color-surface);
+  font-weight: 700;
+}
+
+.ts-note {
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-surface-note);
+  border: var(--border-width-thin) dashed var(--color-border-dashed);
+}
+
+/* フォーム風の部品。select / radio / checkbox / textarea を span で模す */
+.ts-form {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3) var(--space-3);
+  background: var(--color-bg);
+  border: var(--border-width-thin) solid var(--color-border);
+}
+
+.ts-form .ts-btn {
+  margin-top: var(--space-2);
+}
+
+.ts-legend {
+  margin-top: var(--space-1);
+  font-weight: 900;
+}
+
+.ts-label {
+  margin-top: var(--space-1);
+  font-weight: 700;
+  color: var(--color-quiet);
+}
+
+.ts-select {
+  display: flex;
+  justify-content: space-between;
+  width: min(100%, 260px);
+  padding: 3px var(--space-2);
+  border: var(--border-width-thin) solid var(--color-ink);
+  background: var(--color-surface);
+  font-weight: 700;
+}
+
+.ts-select::after {
+  content: '▾';
+}
+
+.ts-radio,
+.ts-check {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: 700;
+}
+
+.ts-radio::before,
+.ts-check::before {
+  content: '';
+  flex-shrink: 0;
+  width: 12px;
+  height: 12px;
+  box-sizing: border-box;
+  border: var(--border-width-thin) solid var(--color-ink);
+  background: var(--color-surface);
+}
+
+.ts-radio::before {
+  border-radius: 50%;
+}
+
+.ts-radio-on::before,
+.ts-check-on::before {
+  background: var(--color-ink);
+  box-shadow: inset 0 0 0 2px var(--color-surface);
+}
+
+.ts-textarea {
+  display: block;
+  min-height: 30px;
+  padding: var(--space-1) var(--space-2);
+  border: var(--border-width-thin) solid var(--color-ink);
+  background: var(--color-surface);
+}
+
+.ts-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+  margin-top: var(--space-1);
+}
+
+.ts-columns > div {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+/* 触る場所: 赤い枠と吹き出し */
+.ts-target {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+.ts-callout {
+  position: absolute;
+  right: 8px;
+  top: -12px;
+  z-index: 1;
+  padding: 3px var(--space-2);
+  background: var(--color-accent);
+  color: var(--color-ink-inverse);
+  font-size: var(--font-size-xs);
+  font-weight: 900;
+  white-space: nowrap;
+  transform: rotate(-2deg);
+}
+
+/* 吹き出しのぶん、枠の上に余白を取る */
+.ts-target {
+  margin-top: var(--space-2);
+}
+
+/* 予算メーターは細い帯なので、吹き出しを帯の上に出す */
+.ts-meter .ts-callout {
+  top: -22px;
+  right: -4px;
+  transform: rotate(2deg);
+}
+
+@media (max-width: 480px) {
+  .ts-grid,
+  .ts-columns {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* プレイ画面の段階ヒント */

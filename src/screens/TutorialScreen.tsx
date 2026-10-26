@@ -1,7 +1,9 @@
 import { useId, useState, type KeyboardEvent } from 'react';
-import { TUTORIAL_STEPS } from '../data/assets';
+import { TUTORIAL_STEPS, type TutorialStep } from '../data/assets';
 import { UI } from '../data/ui';
 import { useTutorialState } from '../state/tutorialState';
+import { TutorialScene } from '../components/TutorialScene';
+import { sceneForStep } from '../components/tutorialScenes';
 import type { Navigation } from '../app/navigation';
 import type { GameApi } from '../state/useGame';
 import type { StorageLike } from '../state/persistence';
@@ -18,14 +20,16 @@ export interface TutorialScreenProps {
 }
 
 /**
- * 遊び方（MVP-021）。6 枚の手順画像をカルーセルで見せる。
- * 説明は画像内の文字に頼らず HTML テキストで表示する（MVP_SPEC 12 章）。
+ * 遊び方（MVP-021）。6 つの手順をカルーセルで見せる。
+ * 左に調査画面の簡略モックを置き、その手順で触る場所を赤い枠で示す。
+ * 説明はモック内の文字に頼らず右側の HTML テキストで完結させる（MVP_SPEC 12 章）。
  */
 export function TutorialScreen({ nav, game, storage }: TutorialScreenProps) {
   const [index, setIndex] = useState(0);
   const { markCompleted } = useTutorialState(storage);
   const headingId = useId();
   const total = TUTORIAL_STEPS.length;
+  const step = TUTORIAL_STEPS[index] as TutorialStep;
   const content = UI.tutorial.steps[index]!;
   const isFirst = index === 0;
   const isLast = index === total - 1;
@@ -58,9 +62,9 @@ export function TutorialScreen({ nav, game, storage }: TutorialScreenProps) {
     }
   };
 
-  const stepLabel = UI.tutorial.stepLabel
-    .replace('{n}', String(index + 1))
-    .replace('{total}', String(total));
+  const labelOf = (n: number) =>
+    UI.tutorial.stepLabel.replace('{n}', String(n)).replace('{total}', String(total));
+  const stepLabel = labelOf(index + 1);
 
   return (
     <section className="tutorial" aria-labelledby="tutorial-title">
@@ -91,58 +95,68 @@ export function TutorialScreen({ nav, game, storage }: TutorialScreenProps) {
           aria-label={stepLabel}
           aria-live="polite"
         >
-          <div className="tutorial-figure" aria-hidden="true">
-            <span className="tutorial-step-number">{String(index + 1).padStart(2, '0')}</span>
+          <div className="tutorial-scene-column">
+            <span className="tutorial-scene-label" aria-hidden="true">
+              {UI.tutorial.sceneLabel}
+            </span>
+            <TutorialScene scene={sceneForStep(step)} callout={content.guide.callout} />
+            <p className="tutorial-scene-note">{UI.tutorial.sceneNote}</p>
           </div>
-          <div>
+
+          <div className="tutorial-text">
+            <ol className="tutorial-dots" aria-label={UI.tutorial.carouselLabel}>
+              {TUTORIAL_STEPS.map((n, i) => (
+                <li key={n}>
+                  <button
+                    type="button"
+                    className="tutorial-dot"
+                    aria-current={i === index ? 'step' : undefined}
+                    aria-label={labelOf(i + 1)}
+                    onClick={() => goTo(i)}
+                  >
+                    {i + 1}
+                  </button>
+                </li>
+              ))}
+            </ol>
             <span className="tutorial-step-number">{stepLabel}</span>
             <h2 id={headingId}>{content.title}</h2>
-            <p>{content.body}</p>
-          </div>
-        </div>
+            <p className="tutorial-body">{content.body}</p>
+            <dl className="tutorial-guide" aria-label={UI.tutorial.guideHeading}>
+              <dt>{UI.tutorial.guideLabels.spot}</dt>
+              <dd>{content.guide.spot}</dd>
+              <dt>{UI.tutorial.guideLabels.cue}</dt>
+              <dd>{content.guide.cue}</dd>
+              <dt>{UI.tutorial.guideLabels.result}</dt>
+              <dd>{content.guide.result}</dd>
+            </dl>
 
-        <ol className="tutorial-dots" aria-label={UI.tutorial.carouselLabel}>
-          {TUTORIAL_STEPS.map((n, i) => (
-            <li key={n}>
+            <div className="tutorial-controls">
               <button
                 type="button"
-                className="tutorial-dot"
-                aria-current={i === index ? 'step' : undefined}
-                aria-label={UI.tutorial.stepLabel
-                  .replace('{n}', String(i + 1))
-                  .replace('{total}', String(total))}
-                onClick={() => goTo(i)}
+                className="btn ghost"
+                disabled={isFirst}
+                onClick={() => goTo(index - 1)}
               >
-                {i + 1}
+                {UI.tutorial.prev}
               </button>
-            </li>
-          ))}
-        </ol>
-
-        <div className="tutorial-controls">
-          <button
-            type="button"
-            className="btn ghost"
-            disabled={isFirst}
-            onClick={() => goTo(index - 1)}
-          >
-            {UI.tutorial.prev}
-          </button>
-          {isLast ? (
-            <button type="button" className="btn primary" onClick={() => finish('play')}>
-              {UI.tutorial.start}
-            </button>
-          ) : (
-            <button type="button" className="btn secondary" onClick={() => goTo(index + 1)}>
-              {UI.tutorial.next}
-            </button>
-          )}
-          <span className="spacer" />
-          <button type="button" className="btn ghost" onClick={() => finish('cases')}>
-            {UI.tutorial.skip}
-          </button>
+              {isLast ? (
+                <button type="button" className="btn primary" onClick={() => finish('play')}>
+                  {UI.tutorial.start}
+                </button>
+              ) : (
+                <button type="button" className="btn secondary" onClick={() => goTo(index + 1)}>
+                  {UI.tutorial.next}
+                </button>
+              )}
+              <span className="spacer" />
+              <button type="button" className="btn ghost" onClick={() => finish('cases')}>
+                {UI.tutorial.skip}
+              </button>
+            </div>
+            <p className="tutorial-keyboard-note">{UI.tutorial.keyboardNote}</p>
+          </div>
         </div>
-        <p className="tutorial-keyboard-note">{UI.tutorial.keyboardNote}</p>
       </div>
       <p className="fine">{UI.notices.fiction}</p>
     </section>
