@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { FIRST_CASE_ID, TutorialScreen } from './TutorialScreen';
 import { UI } from '../data/ui';
 import { TUTORIAL_STEPS } from '../data/assets';
+import { TUTORIAL_SCENES } from '../components/tutorialScenes';
 import { loadTutorialState } from '../state/tutorialState';
 import type { Navigation } from '../app/navigation';
 import type { StorageLike } from '../state/persistence';
@@ -30,8 +31,9 @@ const stepHeading = (n: number) =>
   screen.getByRole('heading', { level: 2, name: UI.tutorial.steps[n - 1]!.title });
 
 describe('TutorialScreen', () => {
-  it('文言は 6 ステップぶんあり、画像は本文テキストと対で表示される', () => {
+  it('文言は 6 ステップぶんあり、画面モックは装飾として本文テキストと対で表示される', () => {
     expect(UI.tutorial.steps).toHaveLength(TUTORIAL_STEPS.length);
+    expect(TUTORIAL_SCENES).toHaveLength(TUTORIAL_STEPS.length);
     setup();
     const region = screen.getByRole('region', { name: UI.tutorial.carouselLabel });
     expect(region).toHaveAttribute('aria-roledescription', 'carousel');
@@ -39,9 +41,14 @@ describe('TutorialScreen', () => {
     expect(slide()).toHaveAccessibleName('手順 1 / 6');
     expect(stepHeading(1)).toBeInTheDocument();
     expect(screen.getByText(UI.tutorial.steps[0]!.body)).toBeInTheDocument();
-    const img = slide().querySelector('img');
-    expect(img).toHaveAttribute('src', '/assets/tutorial/step-01.png');
-    expect(img).toHaveAttribute('alt', '');
+    const scene = slide().querySelector('.ts-scene');
+    expect(scene).toHaveAttribute('data-scene', 'desk-open');
+    expect(scene).toHaveAttribute('aria-hidden', 'true');
+    // 触る場所の説明は HTML テキストで読める
+    const guide = UI.tutorial.steps[0]!.guide;
+    expect(screen.getByText(guide.spot)).toBeInTheDocument();
+    expect(screen.getByText(guide.cue)).toBeInTheDocument();
+    expect(screen.getByText(guide.result)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: '手順 1 / 6' })).toHaveAttribute(
       'aria-current',
       'step',
@@ -59,7 +66,7 @@ describe('TutorialScreen', () => {
       'step',
     );
     expect(screen.getByRole('button', { name: '手順 1 / 6' })).not.toHaveAttribute('aria-current');
-    expect(slide().querySelector('img')).toHaveAttribute('src', '/assets/tutorial/step-02.png');
+    expect(slide().querySelector('.ts-scene')).toHaveAttribute('data-scene', 'desk-budget');
     await user.click(screen.getByRole('button', { name: UI.tutorial.prev }));
     expect(slide()).toHaveAccessibleName('手順 1 / 6');
   });
