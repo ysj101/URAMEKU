@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DocumentDialog } from '../components/DocumentDialog';
 import { DocumentGrid } from '../components/DocumentGrid';
 import { InformationDesk } from '../components/InformationDesk';
@@ -7,9 +7,63 @@ import { DecisionDesk } from '../components/DecisionDesk';
 import { V2EvidenceBoard } from '../components/V2EvidenceBoard';
 import { canOpenDocument, remainingBudget } from '../domain/budget';
 import { isDeadEnd } from '../domain/deadEnd';
+import { decisionComplete } from '../domain/decision';
+import { experimentComplete } from '../domain/experiment';
+import type { CaseData, CaseProgress } from '../domain/types';
 import type { GameApi } from '../state/useGame';
 import '../app/screens/desk.css';
 import '../app/screens/v2-integration.css';
+import '../app/screens/v2-desk.css';
+
+/** 右側デスクのタブ。事件が持つ方式（modes）に応じて増減する */
+type DeskTab = 'experiment' | 'decoding' | 'board' | 'decision';
+
+const TAB_LABEL: Record<DeskTab, string> = {
+  experiment: '見え方のミニ実験',
+  decoding: '情報解読メモ',
+  board: '証拠ボード',
+  decision: '意思決定',
+};
+
+const TAB_STORAGE_PREFIX = 'urameku:desk-tab:';
+
+function readStoredTab(caseId: string, tabs: DeskTab[]): DeskTab | null {
+  try {
+    const raw = window.sessionStorage.getItem(TAB_STORAGE_PREFIX + caseId);
+    return tabs.find((tab) => tab === raw) ?? null;
+  } catch {
+    return null;
+  }
+}
+
+function storeTab(caseId: string, tab: DeskTab) {
+  try {
+    window.sessionStorage.setItem(TAB_STORAGE_PREFIX + caseId, tab);
+  } catch {
+    /* プライベートモード等で保存できなくても画面は動く */
+  }
+}
+
+/** 進捗ストリップに出す数字。すべて progress から導出する */
+function summarize(caseData: CaseData, progress: CaseProgress) {
+  const v2 = caseData.v2;
+  const tasks = v2?.decoding ?? [];
+  const answered = tasks.filter((task) => progress.v2?.decoding[task.id]?.optionId).length;
+  const links = progress.v2?.links.length ?? 0;
+  const paths = v2?.graph.paths ?? [];
+  const linkTarget = paths.length ? Math.min(...paths.map((path) => path.length)) : 0;
+  return {
+    opened: progress.opened.length,
+    total: caseData.documents.length,
+    pinned: progress.pinned.length,
+    answered,
+    tasks: tasks.length,
+    links,
+    linkTarget,
+    remainingTasks: Math.max(0, tasks.length - answered),
+    remainingLinks: Math.max(0, linkTarget - links),
+  };
+}
 
 /** V2の操作をJSONの方式から組み立てる。旧計算デスクは表示しない。 */
 export function V2InvestigationScreen({ game }: { game: GameApi }) {
@@ -18,24 +72,114 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
   const [confirmReset, setConfirmReset] = useState(false);
   const [resetEpoch, setResetEpoch] = useState(0);
   const v2 = current.v2;
+  const tabs: DeskTab[] = [
+    ...(v2?.experiment ? (['experiment'] as const) : []),
+    'decoding',
+    'board',
+    ...(v2?.decision ? (['decision'] as const) : []),
+  ];
+  const [tab, setTab] = useState<DeskTab>(() => readStoredTab(current.id, tabs) ?? 'decoding');
+  useEffect(() => storeTab(current.id, tab), [current.id, tab]);
   if (!v2) return null;
+
   const props = { caseData: current, progress, onAction: dispatch };
   const initialExperiment = Boolean(v2.experiment && !progress.v2?.experiment?.initialChoice);
+  const summary = summarize(current, progress);
+  const budget = remainingBudget(current, progress);
+  const tabDone: Partial<Record<DeskTab, boolean>> = {
+    experiment: experimentComplete(current, progress),
+    decoding: summary.tasks > 0 && summary.remainingTasks === 0,
+    board: summary.linkTarget > 0 && summary.remainingLinks === 0,
+    decision: decisionComplete(current, progress),
+  };
+  const tabBadge: Partial<Record<DeskTab, string>> = {
+    decoding: `${summary.answered} / ${summary.tasks}`,
+    board: `${summary.links} 件`,
+    experiment: tabDone.experiment ? '記録済み' : '未完了',
+    decision: tabDone.decision ? '記録済み' : '未完了',
+  };
+  const selectTab = (next: DeskTab) => {
+    setTab(next);
+    requestAnimationFrame(() => {
+      document.getElementById('v2-desk-panel')?.scrollIntoView({ block: 'nearest' });
+    });
+  };
+  const pending = [
+    summary.remainingTasks > 0 ? `読み取り あと ${summary.remainingTasks} 問` : null,
+    summary.remainingLinks > 0 ? `関係 あと ${summary.remainingLinks} 件` : null,
+  ].filter(Boolean);
 
   return (
-    <div className="v2-workspace">
-      <div className="meter">
+    <div className="v2-workspace v2-desk-screen">
+      <div className="meter v2-meter">
         <span data-focus-target tabIndex={-1}>
           STEP 01 / 資料を調べる
         </span>
-        <span className="budget">
-          調査予算：残り {remainingBudget(current, progress)} / {current.budget}
+        <span className="v2-meter__budget">
+          <span className="v2-meter__pips" aria-hidden="true">
+            {Array.from({ length: current.budget }, (_, i) => (
+              <span key={i} className={i < budget ? 'v2-meter__pip' : 'v2-meter__pip is-spent'} />
+            ))}
+          </span>
+          <span className="budget">
+            調査予算：残り {budget} / {current.budget}
+          </span>
         </span>
       </div>
-      <p className="notice">
-        主張の範囲・出典・欠けている情報を読み、仮説を根拠で支えます。反対の資料にも目を向け、
-        分からない点は残したまま整理できます。予算が足りないときは最初から調査し直せます。
-      </p>
+
+      <div className="v2-progress" aria-label="この事件の進捗">
+        <button type="button" className="v2-progress__tile" onClick={() => selectTab('decoding')}>
+          <span className="v2-progress__label">資料確認</span>
+          <span className="v2-progress__value">
+            {summary.opened}
+            <small> / {summary.total}</small>
+          </span>
+        </button>
+        <button type="button" className="v2-progress__tile" onClick={() => selectTab('board')}>
+          <span className="v2-progress__label">証拠に採用</span>
+          <span className="v2-progress__value">
+            {summary.pinned}
+            <small> 件</small>
+          </span>
+        </button>
+        <button
+          type="button"
+          className={`v2-progress__tile ${tabDone.decoding ? '' : 'is-pending'}`}
+          onClick={() => selectTab('decoding')}
+        >
+          <span className="v2-progress__label">読み取り記録</span>
+          <span className="v2-progress__value">
+            {summary.answered}
+            <small> / {summary.tasks}</small>
+          </span>
+          {summary.remainingTasks > 0 && (
+            <span className="v2-progress__todo">あと {summary.remainingTasks} 問</span>
+          )}
+        </button>
+        <button
+          type="button"
+          className={`v2-progress__tile ${tabDone.board ? '' : 'is-pending'}`}
+          onClick={() => selectTab('board')}
+        >
+          <span className="v2-progress__label">資料の関係</span>
+          <span className="v2-progress__value">
+            {summary.links}
+            <small> 件</small>
+          </span>
+          {summary.linkTarget > 0 && (
+            <span className="v2-progress__todo">{summary.linkTarget} 件以上が目安</span>
+          )}
+        </button>
+      </div>
+
+      <details className="v2-guide">
+        <summary>このステップの進め方</summary>
+        <p>
+          主張の範囲・出典・欠けている情報を読み、仮説を根拠で支えます。反対の資料にも目を向け、
+          分からない点は残したまま整理できます。予算が足りないときは最初から調査し直せます。
+        </p>
+      </details>
+
       {isDeadEnd(current, progress) && (
         <p className="notice" role="status">
           必要な資料を開く調査予算が残っていません。この事件を最初から調査し直せます。
@@ -44,19 +188,20 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
           </button>
         </p>
       )}
-      {v2.experiment && (
-        <section className="v2-panel">
-          <ExperimentDesk key={resetEpoch} {...props} />
-        </section>
-      )}
+
       {initialExperiment ? (
-        <p className="notice">
-          まず最初の表示に対する判断を記録します。その後に調査資料を開けます。保留を選んでも構いません。
-        </p>
-      ) : (
         <>
-          <section aria-labelledby="v2-documents">
-            <h2 className="section-title" id="v2-documents">
+          <section className="v2-panel">
+            <ExperimentDesk key={resetEpoch} {...props} />
+          </section>
+          <p className="notice">
+            まず最初の表示に対する判断を記録します。その後に調査資料を開けます。保留を選んでも構いません。
+          </p>
+        </>
+      ) : (
+        <div className="v2-desk-layout">
+          <section className="v2-docs" aria-labelledby="v2-documents">
+            <h2 className="section-title v2-docs__title" id="v2-documents">
               調査資料{' '}
               <small>
                 {progress.opened.length} / {current.documents.length} 件確認済み
@@ -73,27 +218,58 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
               }}
             />
           </section>
-          <section className="v2-panel">
-            <InformationDesk key={resetEpoch} {...props} />
+
+          <section className="v2-desk-panel" id="v2-desk-panel" aria-label="デスク">
+            <div className="v2-tabs" role="tablist" aria-label="デスクの切り替え">
+              {tabs.map((candidate) => (
+                <button
+                  key={candidate}
+                  type="button"
+                  role="tab"
+                  id={`v2-tab-${candidate}`}
+                  className={`v2-tab ${tabDone[candidate] ? 'is-done' : ''}`}
+                  aria-selected={tab === candidate}
+                  aria-controls="v2-tabpanel"
+                  onClick={() => selectTab(candidate)}
+                >
+                  {TAB_LABEL[candidate]}
+                  {tabBadge[candidate] && (
+                    <span className="v2-tab__badge">{tabBadge[candidate]}</span>
+                  )}
+                </button>
+              ))}
+            </div>
+            <div
+              className="v2-tabpanel"
+              id="v2-tabpanel"
+              role="tabpanel"
+              aria-labelledby={`v2-tab-${tab}`}
+            >
+              {tab === 'experiment' && v2.experiment && (
+                <ExperimentDesk key={resetEpoch} {...props} />
+              )}
+              {tab === 'decoding' && <InformationDesk key={resetEpoch} {...props} />}
+              {tab === 'board' && <V2EvidenceBoard key={resetEpoch} {...props} />}
+              {tab === 'decision' && v2.decision && <DecisionDesk key={resetEpoch} {...props} />}
+            </div>
           </section>
-          <section className="v2-panel">
-            <V2EvidenceBoard key={resetEpoch} {...props} />
-          </section>
-          {v2.decision && (
-            <section className="v2-panel">
-              <DecisionDesk key={resetEpoch} {...props} />
-            </section>
-          )}
-        </>
+        </div>
       )}
-      <div className="stage-switch">
-        <button type="button" className="btn primary" onClick={() => game.setStage('article')}>
-          調査報告をまとめる →
-        </button>
+
+      <div className="stage-switch v2-actions">
+        <span className="v2-actions__status">
+          {pending.length
+            ? `報告の前に：${pending.join('・')}（記録せずに進むこともできます）`
+            : '記録はそろっています。報告へ進めます。'}
+        </span>
         <button type="button" className="btn ghost" onClick={() => setConfirmReset(true)}>
           この事件を最初から
         </button>
+        <button type="button" className="btn primary" onClick={() => game.setStage('article')}>
+          調査報告をまとめる →
+        </button>
       </div>
+
       {confirmReset && (
         <section
           className="notice"

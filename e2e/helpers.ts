@@ -53,7 +53,23 @@ export async function openAndPin(page: Page, title: string) {
   if (await button.count()) await button.click();
   else await dialog.getByRole('button', { name: '戻る', exact: true }).click();
   await expect(dialog).toBeHidden();
-  await expect(page.getByRole('list', { name: '採用した資料', exact: true })).toContainText(title);
+  await expect(docTile(page, title)).toHaveAccessibleName(/採用済み/);
+}
+/** 右側デスクのタブを切り替える（既に選択中なら何もしない） */
+export async function showDesk(page: Page, label: string) {
+  const tab = page.getByRole('tab', { name: label });
+  await expect(tab).toBeVisible();
+  if ((await tab.getAttribute('aria-selected')) !== 'true') await tab.click();
+  await expect(tab).toHaveAttribute('aria-selected', 'true');
+}
+/** 情報解読メモの問い（アコーディオン）を開いて返す */
+export async function openTask(page: Page, prompt: string): Promise<Locator> {
+  await showDesk(page, '情報解読メモ');
+  const group = page.getByRole('group', { name: prompt, exact: true });
+  const head = group.getByRole('button', { expanded: false });
+  if (await head.count()) await head.click();
+  await expect(group.getByRole('radio').first()).toBeVisible();
+  return group;
 }
 export async function goToArticle(page: Page) {
   await page.getByRole('button', { name: '調査報告をまとめる →' }).click();
@@ -73,6 +89,7 @@ export async function submitArticle(page: Page) {
 async function recordDecision(page: Page, c: CaseData, sources: string[], optionId?: string) {
   const definition = c.v2!.decision!;
   const title = (id: string) => c.documents.find((d) => d.id === id)!.title;
+  await showDesk(page, '意思決定');
   const desk = page.getByRole('region', { name: '意思決定シミュレーション' });
   await desk.getByLabel('優先する目的', { exact: true }).selectOption(definition.objectives[0]!.id);
   const option =
@@ -141,6 +158,7 @@ export async function prepareV2Case(
     const choice =
       v.experiment.choices.find((x) => x.id === options.experimentChoice) ??
       v.experiment.choices[0]!;
+    await showDesk(page, '見え方のミニ実験');
     const group = page.getByRole('group', {
       name: '比較後の判断（変わらなくても構いません）',
       exact: true,
@@ -152,11 +170,12 @@ export async function prepareV2Case(
     await group.getByRole('button', { name: '比較後の判断を記録' }).click();
   }
   for (const { task, option } of selections) {
-    const group = page.getByRole('group', { name: task.prompt, exact: true });
+    const group = await openTask(page, task.prompt);
     await group.getByRole('radio', { name: option.text, exact: true }).check();
     for (const id of option.evidence)
       await group.getByRole('checkbox', { name: title(id), exact: true }).check();
   }
+  await showDesk(page, '証拠ボード');
   for (const link of path) {
     await page.getByLabel('起点となる資料', { exact: true }).selectOption(link.from);
     await page.getByLabel('関係の役割', { exact: true }).selectOption(link.relation);

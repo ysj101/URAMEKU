@@ -20,7 +20,10 @@ export function PlayScreen({ game, nav }: { game: GameApi; nav: Navigation }) {
           ← 事件一覧
         </button>
       </div>
-      <CaseHeader caseData={current} />
+      <CaseHeader
+        caseData={current}
+        introOpen={progress.opened.length === 0 && !progress.published}
+      />
       <TutorialHint caseData={current} progress={progress} stage={stage} />
       <div id="game">
         {progress.published ? (

@@ -6,7 +6,9 @@ import {
   goToArticle,
   gotoCase,
   openAndPin,
+  openTask,
   prepareV2Case,
+  showDesk,
   submitArticle,
 } from './helpers';
 
@@ -84,10 +86,12 @@ test('実験は初回表示を固定し、保留から判断を変えても途�
     .poll(() => page.evaluate((key) => localStorage.getItem(key), storageKey))
     .toContain('"initialChoice":"hold"');
   await page.reload();
+  await showDesk(page, '見え方のミニ実験');
   await expect(desk.getByText(`最初の判断：${initial.text}`, { exact: true })).toBeVisible();
   for (const id of definition.revealDocuments) {
     await openAndPin(page, c.documents.find((document) => document.id === id)!.title);
   }
+  await showDesk(page, '見え方のミニ実験');
   await desk.getByRole('radio', { name: updated.text, exact: true }).check();
   const reason = '比較情報を確認して、用途と条件を見直した。';
   await desk.getByRole('textbox', { name: '維持・変更した理由' }).fill(reason);
@@ -97,6 +101,7 @@ test('実験は初回表示を固定し、保留から判断を変えても途�
     .poll(() => page.evaluate((key) => localStorage.getItem(key), storageKey))
     .toContain(reason);
   await page.reload();
+  await showDesk(page, '見え方のミニ実験');
   await expect(desk.getByText(`最初の判断：${initial.text}`, { exact: true })).toBeVisible();
   await expect(desk.getByText(`比較後の判断：${updated.text}`, { exact: true })).toBeVisible();
   await expect(desk.getByText(reason, { exact: true })).toBeVisible();
@@ -116,6 +121,7 @@ test('意思決定の理由・初回と更新の履歴を報告途中から復�
     page.getByRole('textbox', { name: '確認できたこと・採る方針', exact: true }),
   ).toHaveValue(claim);
   await page.getByRole('button', { name: '← 調査へ戻る', exact: true }).click();
+  await showDesk(page, '意思決定');
   const history = page.getByRole('list', { name: '判断の履歴', exact: true });
   await expect(history.getByRole('listitem')).toHaveCount(2);
   await expect(history).toContainText('最初の判断');
@@ -148,10 +154,8 @@ test('資料上の事実誤認と方針・保留を区別し、明示操作後�
   const wrong = task.options.find((option) => !option.accepted)!;
   await prepareV2Case(page, c);
   await page.getByRole('button', { name: '← 調査へ戻る', exact: true }).click();
-  await page
-    .getByRole('group', { name: task.prompt, exact: true })
-    .getByRole('radio', { name: wrong.text, exact: true })
-    .check();
+  const group = await openTask(page, task.prompt);
+  await group.getByRole('radio', { name: wrong.text, exact: true }).check();
   await expect(page.getByText(wrong.reason, { exact: true })).toHaveCount(0);
   await goToArticle(page);
   await submitArticle(page);
@@ -208,6 +212,15 @@ async function tabTo(page: Page, target: Locator) {
   throw new Error(`Tabで対象へ到達できません: ${await target.getAttribute('aria-label')}`);
 }
 
+/** デスクのタブを Tab と Enter で切り替える */
+async function keyboardShowDesk(page: Page, label: string) {
+  const tab = page.getByRole('tab', { name: label });
+  if ((await tab.getAttribute('aria-selected')) === 'true') return;
+  await tabTo(page, tab);
+  await page.keyboard.press('Enter');
+  await expect(tab).toHaveAttribute('aria-selected', 'true');
+}
+
 async function keyboardSelect(page: Page, select: Locator, value: string) {
   const index = await select
     .locator('option')
@@ -255,8 +268,14 @@ test('マウスとドラッグを使わずTab・矢印・Space・EnterでCASE01�
     await page.keyboard.press('Space');
     await expect(dialog).toBeHidden();
   }
+  await keyboardShowDesk(page, '情報解読メモ');
   for (const { task, option } of selections) {
     const group = page.getByRole('group', { name: task.prompt, exact: true });
+    const head = group.getByRole('button', { expanded: false });
+    if (await head.count()) {
+      await tabTo(page, head);
+      await page.keyboard.press('Enter');
+    }
     await tabTo(page, group.getByRole('radio').first());
     const index = task.options.findIndex((candidate) => candidate.id === option.id);
     // Radio arrow keys both move focus and select; Space also handles the first option.
@@ -270,6 +289,7 @@ test('マウスとドラッグを使わずTab・矢印・Space・EnterでCASE01�
       await expect(checkbox).toBeChecked();
     }
   }
+  await keyboardShowDesk(page, '証拠ボード');
   for (const link of path) {
     await keyboardSelect(page, page.getByLabel('起点となる資料', { exact: true }), link.from);
     await keyboardSelect(page, page.getByLabel('関係の役割', { exact: true }), link.relation);
