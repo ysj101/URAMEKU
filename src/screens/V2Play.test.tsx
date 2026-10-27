@@ -60,6 +60,38 @@ describe('V2プレイの統合', () => {
     expect(screen.getByRole('heading', { name: '情報解読メモ' })).toBeInTheDocument();
   });
 
+  it('解読タスクは1問ずつ開き、回答済みは選んだ答えを1行に畳む', () => {
+    render(<Harness data={makeV2Case()} />);
+    const group = screen.getByRole('group', { name: '主張の対象範囲を確認してください。' });
+    fireEvent.click(screen.getByRole('radio', { name: '確認した対象に限られる' }));
+    expect(screen.getByText('問 1 ・ 回答済み ・ 根拠 0 件')).toBeInTheDocument();
+    // 畳むと選択肢は消え、選んだ答えが見出しに残る
+    fireEvent.click(screen.getByRole('button', { name: /閉じる/ }));
+    expect(screen.queryByRole('radio')).not.toBeInTheDocument();
+    expect(group).toHaveTextContent('→ 確認した対象に限られる');
+    fireEvent.click(screen.getByRole('button', { name: /変更する/ }));
+    expect(screen.getByRole('radio', { name: '確認した対象に限られる' })).toBeChecked();
+  });
+
+  it('デスクはタブで切り替わり、進捗ストリップから証拠ボードへ移れる', () => {
+    render(<Harness data={makeV2Case(['decoding', 'decision'])} />);
+    const tabs = screen.getAllByRole('tab').map((tab) => tab.textContent);
+    expect(tabs).toEqual(['情報解読メモ0 / 1', '証拠ボード0 件', '意思決定未完了']);
+    expect(screen.getByRole('tab', { name: /情報解読メモ/ })).toHaveAttribute(
+      'aria-selected',
+      'true',
+    );
+    expect(screen.queryByRole('group', { name: '証拠ボード' })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /資料の関係/ }));
+    expect(screen.getByRole('group', { name: '証拠ボード' })).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: /証拠ボード/ })).toHaveAttribute(
+      'aria-selected',
+      'true',
+    );
+    fireEvent.click(screen.getByRole('tab', { name: /意思決定/ }));
+    expect(screen.getByRole('region', { name: '意思決定シミュレーション' })).toBeInTheDocument();
+  });
+
   it('未開示資料を押しても本文をダイアログへ漏らさない', () => {
     render(<Harness data={makeV2Case(['decoding', 'decision'])} />);
     const tile = screen.getByRole('button', { name: /^資料C、未調査/ });
