@@ -31,19 +31,9 @@
   line-height: 1.3;
 }
 .case-header__intro {
-  margin-top: var(--space-1);
-}
-.case-header__intro summary {
-  cursor: pointer;
-  font-size: var(--font-size-sm);
-  font-weight: 700;
-  color: var(--color-info);
-  min-height: 32px;
-  display: flex;
-  align-items: center;
-}
-.case-header__intro p {
   margin: var(--space-1) 0 0;
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-normal);
 }
 .case-header .case-mascot {
   width: 56px;
