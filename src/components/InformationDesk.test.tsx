@@ -26,11 +26,11 @@ it('lists the referenced sources with their adoption state and no manual picking
   progress.v2!.decoding.scope = { optionId: 'open', evidence: ['a', 'b'] };
   progress.pinned = ['a'];
   render(<InformationDesk caseData={makeV2Case()} progress={progress} onAction={vi.fn()} />);
-  const refs = screen.getByRole('region', { name: 'この読み取りが参照する資料' });
-  expect(refs).toHaveTextContent('資料A採用済み');
-  expect(refs).toHaveTextContent('資料B未採用');
-  expect(screen.getByRole('status')).toHaveTextContent('未採用の資料があります');
-  expect(screen.getByText('問 1 ・ 回答済み ・ 参照資料が未採用 1 件')).toBeInTheDocument();
+  const refs = screen.getByRole('region', { name: 'この答えのもとになる資料' });
+  expect(refs).toHaveTextContent('資料Aボードに貼った');
+  expect(refs).toHaveTextContent('資料Bまだ貼っていない');
+  expect(screen.getByRole('status')).toHaveTextContent('まだ貼っていない資料があります');
+  expect(screen.getByText('問 1 ・ 回答済み ・ まだ貼っていない資料 1 件')).toBeInTheDocument();
 });
 
 it('allows revising notes, with native keyboard-accessible controls', () => {

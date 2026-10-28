@@ -90,7 +90,7 @@ it('waits for newly revealed documents before accepting an update', () => {
     },
   ];
   render(<DecisionDesk caseData={fixture()} progress={progress} onAction={vi.fn()} />);
-  expect(screen.getByRole('status')).toHaveTextContent('新たに閲覧できる資料を確認');
+  expect(screen.getByRole('status')).toHaveTextContent('新しく開けるようになった資料を確かめると');
   expect(screen.queryByRole('button', { name: '判断を記録' })).not.toBeInTheDocument();
   expect(screen.getByRole('list', { name: '判断の履歴' })).toHaveTextContent('最初の判断');
 });

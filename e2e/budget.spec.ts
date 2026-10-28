@@ -41,7 +41,7 @@ test('代替経路も予算不足なら案内が出て再調査できる', async
 
   const notice = page
     .getByRole('status')
-    .filter({ hasText: '必要な資料を開く調査予算が残っていません' });
+    .filter({ hasText: '資料を開くための調査予算が残っていません' });
   await expect(notice).toBeVisible();
 
   // window.confirm を承諾して最初からやり直す

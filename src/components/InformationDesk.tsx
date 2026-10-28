@@ -31,7 +31,7 @@ export function InformationDesk({ caseData, progress, onAction }: V2DeskProps) {
     <section className="v2-desk" aria-label="情報解読メモ">
       <h2 className="section-title">情報解読メモ</h2>
       <p className="v2-desk__lead">
-        答えを選ぶと、その読み取りが参照する資料が並びます。参照する資料をすべて開いて証拠ボードに採用すると、根拠ありとして記録が完了します。
+        答えを選ぶと、その答えのもとになる資料が下に並びます。並んだ資料をすべて開いて証拠ボードに貼ると「根拠あり」になり、この問いの記録が完了します。
       </p>
       {tasks.map((task, index) => {
         const record = progress.v2?.decoding[task.id];
@@ -81,7 +81,7 @@ export function InformationDesk({ caseData, progress, onAction }: V2DeskProps) {
                 <span className="v2-task__meta">
                   問 {index + 1} ・ {answered ? '回答済み' : '未回答'}
                   {grounded && ` ・ 根拠 ${references.length} 件`}
-                  {needsEvidence && ` ・ 参照資料が未採用 ${missing.length} 件`}
+                  {needsEvidence && ` ・ まだ貼っていない資料 ${missing.length} 件`}
                 </span>
                 <span className="v2-task__prompt" id={promptId}>
                   {task.prompt}
@@ -115,10 +115,12 @@ export function InformationDesk({ caseData, progress, onAction }: V2DeskProps) {
                 </div>
                 <section
                   className={`v2-task__evidence ${needsEvidence ? 'v2-task__evidence--needed' : ''}`}
-                  aria-label="この読み取りが参照する資料"
+                  aria-label="この答えのもとになる資料"
                 >
-                  <h3 className="v2-task__evidence-title">この読み取りが参照する資料</h3>
-                  {!answered && <p>答えを選ぶと、参照する資料と採用状況がここに並びます。</p>}
+                  <h3 className="v2-task__evidence-title">この答えのもとになる資料</h3>
+                  {!answered && (
+                    <p>答えを選ぶと、もとになる資料と、貼ったかどうかがここに並びます。</p>
+                  )}
                   {answered && (
                     <ul className="v2-task__refs">
                       {references.map((id) => (
@@ -128,19 +130,19 @@ export function InformationDesk({ caseData, progress, onAction }: V2DeskProps) {
                         >
                           <span aria-hidden="true">{adopted(id) ? '✓' : '○'}</span>
                           {title(id)}
-                          <small>{adopted(id) ? '採用済み' : '未採用'}</small>
+                          <small>{adopted(id) ? 'ボードに貼った' : 'まだ貼っていない'}</small>
                         </li>
                       ))}
                     </ul>
                   )}
                   {needsEvidence && (
                     <p className="v2-task__warning" role="status">
-                      未採用の資料があります。左の調査資料から開き、「証拠ボードに貼る」で採用すると根拠ありになります。
+                      まだ貼っていない資料があります。左の調査資料から開いて「証拠ボードに貼る」を押すと、根拠ありになります。
                     </p>
                   )}
                   {grounded && (
                     <p className="v2-task__ok" role="status">
-                      参照する資料はすべて採用済みです。根拠ありとして記録しました。
+                      もとになる資料はすべて貼ってあります。根拠ありとして記録しました。
                     </p>
                   )}
                 </section>
@@ -174,7 +176,7 @@ export function InformationDesk({ caseData, progress, onAction }: V2DeskProps) {
         );
       })}
       {progress.published && (
-        <p role="status">提出済みです。記録を修正するには取り下げてください。</p>
+        <p role="status">提出済みです。記録を直すには、いちど提出を取り下げてください。</p>
       )}
     </section>
   );

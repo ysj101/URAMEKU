@@ -112,7 +112,9 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
   const pending = [
     summary.remainingTasks > 0
       ? `読み取り あと ${summary.remainingTasks} 問${
-          summary.awaitingEvidence > 0 ? `（参照資料が未採用 ${summary.awaitingEvidence} 問）` : ''
+          summary.awaitingEvidence > 0
+            ? `（まだ貼っていない資料がある ${summary.awaitingEvidence} 問）`
+            : ''
         }`
       : null,
     summary.remainingLinks > 0 ? `関係 あと ${summary.remainingLinks} 件` : null,
@@ -145,7 +147,7 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
           </span>
         </button>
         <button type="button" className="v2-progress__tile" onClick={() => selectTab('board')}>
-          <span className="v2-progress__label">証拠に採用</span>
+          <span className="v2-progress__label">ボードに貼った</span>
           <span className="v2-progress__value">
             {summary.pinned}
             <small> 件</small>
@@ -164,7 +166,7 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
           {summary.remainingTasks > 0 && (
             <span className="v2-progress__todo">
               あと {summary.remainingTasks} 問
-              {summary.awaitingEvidence > 0 && `・資料未採用 ${summary.awaitingEvidence}`}
+              {summary.awaitingEvidence > 0 && `・資料が未貼付 ${summary.awaitingEvidence}`}
             </span>
           )}
         </button>
@@ -187,14 +189,14 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
       <details className="v2-guide">
         <summary>このステップの進め方</summary>
         <p>
-          主張の範囲・出典・欠けている情報を読み、仮説を根拠で支えます。反対の資料にも目を向け、
-          分からない点は残したまま整理できます。予算が足りないときは最初から調査し直せます。
+          資料を読んで、主張がどこまで当てはまるか、どこから出た情報か、何が足りないかを確かめ、仮説を根拠で支えます。
+          反対のことを言う資料にも目を向けましょう。分からない点は、分からないままにして整理できます。予算が足りなくなったら、最初から調査し直せます。
         </p>
       </details>
 
       {isDeadEnd(current, progress) && (
         <p className="notice" role="status">
-          必要な資料を開く調査予算が残っていません。この事件を最初から調査し直せます。
+          資料を開くための調査予算が残っていません。この事件を最初から調査し直せます。
           <button type="button" className="btn ghost" onClick={() => setConfirmReset(true)}>
             この事件を最初からやり直す
           </button>
@@ -207,7 +209,7 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
             <ExperimentDesk key={resetEpoch} {...props} />
           </section>
           <p className="notice">
-            まず最初の表示に対する判断を記録します。その後に調査資料を開けます。保留を選んでも構いません。
+            まず、最初に見えている情報だけで判断を記録します。記録すると、調査資料を開けるようになります。保留を選んでもかまいません。
           </p>
         </>
       ) : (
@@ -271,8 +273,8 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
       <div className="stage-switch v2-actions">
         <span className="v2-actions__status">
           {pending.length
-            ? `報告の前に：${pending.join('・')}（記録せずに進むこともできます）`
-            : '記録はそろっています。報告へ進めます。'}
+            ? `報告の前に：${pending.join('・')}（記録しなくても進めます）`
+            : '記録はそろいました。報告へ進めます。'}
         </span>
         <button type="button" className="btn ghost" onClick={() => setConfirmReset(true)}>
           この事件を最初から

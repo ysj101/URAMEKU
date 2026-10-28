@@ -50,6 +50,7 @@ jobs:
         run: |
           npm run validate:cases
           npm run lint:content
+          npm run lint:wording
           npm run analyze:dead-ends -- --check
           npm run walkthrough -- --check
 
