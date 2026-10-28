@@ -108,3 +108,37 @@
     padding: 0.5rem;
   }
 }
+
+/* --- 調査報告: 記録から組み立てた骨子と任意の補足 --- */
+.v2-report-digest {
+  margin-block: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: var(--border-width-thin) dashed var(--color-border-dashed);
+  background: var(--color-surface-note);
+}
+.v2-report-digest h3 {
+  margin: var(--space-2) 0 var(--space-1);
+  font-size: var(--font-size-base);
+}
+.v2-report-digest ol,
+.v2-report-digest ul {
+  margin: 0;
+  padding-left: 1.4em;
+}
+.v2-report-digest li {
+  margin-block: var(--space-1);
+}
+.v2-report-digest li p {
+  margin: 0;
+}
+.v2-report-digest small {
+  color: var(--color-quiet);
+}
+.v2-report-notes summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--color-info);
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}

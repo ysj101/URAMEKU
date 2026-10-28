@@ -9,30 +9,36 @@ it('renders choices and adopted sources without leaking facts or reasons', () =>
   render(<InformationDesk caseData={data} progress={progress} onAction={onAction} />);
   const choice = screen.getByRole('radio', { name: '調査対象外は未確認' });
   fireEvent.click(choice);
+  // 根拠は答えが参照する資料（JSON 定義）をそのまま記録し、手動では選ばせない
   expect(onAction).toHaveBeenCalledWith({
-    type: 'v2-decode',
-    taskId: 'scope',
-    optionId: 'open',
-    evidence: [],
-    note: undefined,
-  });
-  expect(screen.queryByText('対象外を示す資料がない。')).not.toBeInTheDocument();
-  expect(screen.getByRole('checkbox', { name: '資料A' })).toBeDisabled();
-});
-
-it('allows revising sources and notes, with native keyboard-accessible controls', () => {
-  const onAction = vi.fn();
-  const progress = makeV2Progress();
-  progress.v2!.decoding.scope = { optionId: 'open', evidence: ['a'] };
-  render(<InformationDesk caseData={makeV2Case()} progress={progress} onAction={onAction} />);
-  fireEvent.click(screen.getByRole('checkbox', { name: '資料B' }));
-  expect(onAction).toHaveBeenLastCalledWith({
     type: 'v2-decode',
     taskId: 'scope',
     optionId: 'open',
     evidence: ['a', 'b'],
     note: undefined,
   });
+  expect(screen.queryByText('対象外を示す資料がない。')).not.toBeInTheDocument();
+  expect(screen.queryByRole('checkbox')).not.toBeInTheDocument();
+});
+
+it('lists the referenced sources with their adoption state and no manual picking', () => {
+  const progress = makeV2Progress();
+  progress.v2!.decoding.scope = { optionId: 'open', evidence: ['a', 'b'] };
+  progress.pinned = ['a'];
+  render(<InformationDesk caseData={makeV2Case()} progress={progress} onAction={vi.fn()} />);
+  const refs = screen.getByRole('region', { name: 'この読み取りが参照する資料' });
+  expect(refs).toHaveTextContent('資料A採用済み');
+  expect(refs).toHaveTextContent('資料B未採用');
+  expect(screen.getByRole('status')).toHaveTextContent('未採用の資料があります');
+  expect(screen.getByText('問 1 ・ 回答済み ・ 参照資料が未採用 1 件')).toBeInTheDocument();
+});
+
+it('allows revising notes, with native keyboard-accessible controls', () => {
+  const onAction = vi.fn();
+  const progress = makeV2Progress();
+  progress.v2!.decoding.scope = { optionId: 'open', evidence: ['a'] };
+  render(<InformationDesk caseData={makeV2Case()} progress={progress} onAction={onAction} />);
+  expect(screen.getByText('問 1 ・ 回答済み ・ 根拠 2 件')).toBeInTheDocument();
   fireEvent.change(screen.getByRole('textbox', { name: '補足メモ（任意）' }), {
     target: { value: '期間が異なる' },
   });
@@ -40,7 +46,7 @@ it('allows revising sources and notes, with native keyboard-accessible controls'
     type: 'v2-decode',
     taskId: 'scope',
     optionId: 'open',
-    evidence: ['a'],
+    evidence: ['a', 'b'],
     note: '期間が異なる',
   });
 });

@@ -18,13 +18,19 @@ function Harness() {
 it('adds, changes roles and removes multiple links without showing correctness', async () => {
   const user = userEvent.setup();
   render(<Harness />);
-  const from = screen.getByRole('combobox', { name: '起点となる資料' });
+  const from = screen.getByRole('combobox', { name: /起点となる資料/ });
   await user.selectOptions(from, 'a');
-  await user.selectOptions(screen.getByRole('combobox', { name: '結び付ける資料' }), 'b');
-  await user.selectOptions(screen.getByRole('combobox', { name: '関係の役割' }), 'qualifies');
+  await user.selectOptions(screen.getByRole('combobox', { name: /結び付ける資料/ }), 'b');
+  await user.selectOptions(screen.getByRole('combobox', { name: /関係の役割/ }), 'qualifies');
+  // 追加前に「A は B の…」の 1 文で確認できる
+  expect(screen.getByTestId('link-preview')).toHaveTextContent(
+    '「資料A」 は 「資料B」 の適用範囲・条件を補う',
+  );
   await user.click(screen.getByRole('button', { name: '関係を追加' }));
-  expect(screen.getByRole('list', { name: '記録した関係' })).toHaveTextContent('資料A → 資料B');
-  await user.selectOptions(screen.getByRole('combobox', { name: '結び付ける資料' }), 'c');
+  expect(screen.getByRole('list', { name: '記録した関係' })).toHaveTextContent(
+    '「資料A」 は 「資料B」 の適用範囲・条件を補う',
+  );
+  await user.selectOptions(screen.getByRole('combobox', { name: /結び付ける資料/ }), 'c');
   await user.click(screen.getByRole('button', { name: '関係を追加' }));
   expect(
     within(screen.getByRole('list', { name: '記録した関係' })).getAllByRole('listitem'),
@@ -45,8 +51,8 @@ it('supports keyboard operation and source removal without dragging', async () =
   expect(screen.getByRole('button', { name: '資料A をボードから外す' })).toHaveFocus();
   await user.keyboard('{Enter}');
   expect(screen.queryByRole('button', { name: '資料A をボードから外す' })).not.toBeInTheDocument();
-  fireEvent.change(screen.getByRole('combobox', { name: '起点となる資料' }), {
+  fireEvent.change(screen.getByRole('combobox', { name: /起点となる資料/ }), {
     target: { value: 'b' },
   });
-  expect(screen.getByRole('combobox', { name: '結び付ける資料' })).not.toHaveTextContent('資料B');
+  expect(screen.getByRole('combobox', { name: /結び付ける資料/ })).not.toHaveTextContent('資料B');
 });

@@ -75,7 +75,16 @@ export async function goToArticle(page: Page) {
   await page.getByRole('button', { name: '調査報告をまとめる →' }).click();
   await expect(page.getByText('STEP 02 / 調査報告をまとめる', { exact: true })).toBeVisible();
 }
+/** 任意の補足欄は <details> に畳まれているので、閉じていれば開いてから書く */
+export async function openReportNotes(page: Page) {
+  const claim = page.getByRole('textbox', { name: '確認できたこと・採る方針' });
+  if (!(await claim.isVisible())) {
+    await page.getByText('自分の言葉で補足する（任意）', { exact: true }).click();
+  }
+  await expect(claim).toBeVisible();
+}
 export async function fillReport(page: Page, claim = '確認した資料の対象範囲を限定して報告する。') {
+  await openReportNotes(page);
   await page.getByRole('textbox', { name: '確認できたこと・採る方針' }).fill(claim);
   await page
     .getByRole('textbox', { name: '未確認の点・判断の前提や留保' })
@@ -172,14 +181,16 @@ export async function prepareV2Case(
   for (const { task, option } of selections) {
     const group = await openTask(page, task.prompt);
     await group.getByRole('radio', { name: option.text, exact: true }).check();
-    for (const id of option.evidence)
-      await group.getByRole('checkbox', { name: title(id), exact: true }).check();
+    // 根拠は参照資料の採用状況から自動判定される（事前に openAndPin 済み）
+    await expect(group.getByRole('status')).toContainText('根拠ありとして記録しました');
   }
   await showDesk(page, '証拠ボード');
   for (const link of path) {
-    await page.getByLabel('起点となる資料', { exact: true }).selectOption(link.from);
-    await page.getByLabel('関係の役割', { exact: true }).selectOption(link.relation);
-    await page.getByLabel('結び付ける資料', { exact: true }).selectOption(link.to);
+    await page.getByLabel('A：起点となる資料', { exact: true }).selectOption(link.from);
+    await page
+      .getByLabel('A は B に対して…（関係の役割）', { exact: true })
+      .selectOption(link.relation);
+    await page.getByLabel('B：結び付ける資料', { exact: true }).selectOption(link.to);
     await page.getByRole('button', { name: '関係を追加', exact: true }).click();
   }
   await goToArticle(page);

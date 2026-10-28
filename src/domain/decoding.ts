@@ -23,11 +23,11 @@ export function reviewDecodingTask(task: V2DecodingTask, progress: CaseProgress)
       evidence: [],
     };
   }
-  const evidence = [...new Set(record.evidence)];
+  // 根拠は手動で選ばせず、選んだ答えが参照する資料（JSON 定義）を
+  // すべて開いて証拠ボードに採用していれば「根拠あり」と自動判定する。
   const grounded =
-    evidence.length > 0 &&
-    evidence.every((id) => progress.opened.includes(id) && progress.pinned.includes(id)) &&
-    option.evidence.every((id) => evidence.includes(id));
+    option.evidence.length > 0 &&
+    option.evidence.every((id) => progress.opened.includes(id) && progress.pinned.includes(id));
   return {
     taskId: task.id,
     recorded: true,

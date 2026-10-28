@@ -16,7 +16,8 @@ describe('information decoding', () => {
     expect(progress.opened).toEqual(['a', 'b', 'c']);
     expect(completedDecodingCount(data, { ...progress, opened: ['a'] })).toBe(0);
     expect(completedDecodingCount(data, { ...progress, pinned: ['a'] })).toBe(0);
-    expect(completedDecodingCount(data, record('limited', ['a']))).toBe(0);
+    // 根拠は記録ではなく、答えが参照する資料の採用状況から自動判定する
+    expect(completedDecodingCount(data, record('limited', []))).toBe(1);
   });
   it('distinguishes an unknown scope from a factually contradicted generalisation', () => {
     expect(decodingReviews(data, record('open'))[0]).toMatchObject({
@@ -28,9 +29,8 @@ describe('information decoding', () => {
       factuallyConsistent: false,
     });
   });
-  it('rejects unknown choices and empty or fabricated evidence', () => {
+  it('rejects unknown choices and ignores stray evidence ids in the record', () => {
     expect(completedDecodingCount(data, record('missing'))).toBe(0);
-    expect(completedDecodingCount(data, record('limited', []))).toBe(0);
-    expect(completedDecodingCount(data, record('limited', ['a', 'b', 'fake']))).toBe(0);
+    expect(completedDecodingCount(data, record('limited', ['a', 'b', 'fake']))).toBe(1);
   });
 });

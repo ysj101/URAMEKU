@@ -82,14 +82,23 @@ describe('V2 state transitions', () => {
     expect(normalizeProgress(JSON.parse(JSON.stringify(p)))).toEqual(p);
     expect(p.v2?.history.map((e) => e.sequence)).toEqual([1, 2, 3, 4, 5, 6, 7]);
   });
-  it('rejects unknown IDs, unread/unpinned evidence, invalid resources and duplicate submissions', () => {
+  it('rejects unknown IDs, invalid resources and duplicate submissions', () => {
     const initial = createProgress(c);
+    // 答えは資料を採用する前でも記録できる（根拠の有無は評価時に自動判定）。未知の資料 ID は拒否する。
     expect(
       reduceProgress(c, initial, {
         type: 'v2-decode',
         taskId: 'scope',
         optionId: 'limited',
         evidence: ['a'],
+      }).v2?.decoding.scope,
+    ).toEqual({ optionId: 'limited', evidence: ['a'] });
+    expect(
+      reduceProgress(c, initial, {
+        type: 'v2-decode',
+        taskId: 'scope',
+        optionId: 'limited',
+        evidence: ['nope'],
       }),
     ).toBe(initial);
     let p = readAndPin(initial);

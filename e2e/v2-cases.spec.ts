@@ -282,22 +282,24 @@ test('マウスとドラッグを使わずTab・矢印・Space・EnterでCASE01�
     await page.keyboard.press('Space');
     for (let current = 0; current < index; current += 1) await page.keyboard.press('ArrowDown');
     await expect(group.getByRole('radio', { name: option.text, exact: true })).toBeChecked();
-    for (const document of c.documents.filter((item) => option.evidence.includes(item.id))) {
-      const checkbox = group.getByRole('checkbox', { name: document.title, exact: true });
-      await tabTo(page, checkbox);
-      await page.keyboard.press('Space');
-      await expect(checkbox).toBeChecked();
-    }
+    await expect(group.getByRole('status')).toContainText('根拠ありとして記録しました');
   }
   await keyboardShowDesk(page, '証拠ボード');
   for (const link of path) {
-    await keyboardSelect(page, page.getByLabel('起点となる資料', { exact: true }), link.from);
-    await keyboardSelect(page, page.getByLabel('関係の役割', { exact: true }), link.relation);
-    await keyboardSelect(page, page.getByLabel('結び付ける資料', { exact: true }), link.to);
+    await keyboardSelect(page, page.getByLabel('A：起点となる資料', { exact: true }), link.from);
+    await keyboardSelect(
+      page,
+      page.getByLabel('A は B に対して…（関係の役割）', { exact: true }),
+      link.relation,
+    );
+    await keyboardSelect(page, page.getByLabel('B：結び付ける資料', { exact: true }), link.to);
     await tabTo(page, page.getByRole('button', { name: '関係を追加', exact: true }));
     await page.keyboard.press('Enter');
   }
   await tabTo(page, page.getByRole('button', { name: '調査報告をまとめる →', exact: true }));
+  await page.keyboard.press('Enter');
+  // 任意の補足欄は畳まれているので、summary を Tab と Enter で開く
+  await tabTo(page, page.getByText('自分の言葉で補足する（任意）', { exact: true }));
   await page.keyboard.press('Enter');
   await tabTo(page, page.getByRole('textbox', { name: '確認できたこと・採る方針', exact: true }));
   await page.keyboard.type('確認した対象範囲を限定して報告する。');

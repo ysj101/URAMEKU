@@ -103,12 +103,8 @@ export function publishVerdict(caseData: CaseData, progress: CaseProgress): Publ
 
 /** 提出操作が可能か（評価の合否とは別。3 断片が揃っていれば提出できる） */
 export function canSubmitArticle(progress: CaseProgress): boolean {
-  if (progress.v2)
-    return (
-      !!progress.v2.report.claim.trim() &&
-      !!progress.v2.report.uncertainty.trim() &&
-      !progress.published
-    );
+  // V2 の報告は記録から自動で組み立てるため、自由文の有無では提出を止めない
+  if (progress.v2) return !progress.published;
   return isArticleComplete(progress) && !progress.published;
 }
 
