@@ -73,8 +73,9 @@ export interface VisualGuide {
   intro: string;
   image: string;
   imageAlt: string;
-  steps: { label: string; count: number; note: string; evidence: string[] }[];
-  comparisons: {
+  panels?: { title: string; body: string; evidence: string[] }[];
+  steps?: { label: string; count: number; note: string; evidence: string[] }[];
+  comparisons?: {
     label: string;
     numerator: number;
     denominator: number;
