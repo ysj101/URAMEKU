@@ -528,3 +528,9 @@
   white-space: nowrap;
   border: 0;
 }
+
+/* 予算不足などの理由（role="status"）。旧グリッド向けの負のマージンを打ち消し、行の下に出す */
+.v2-docs .desk-status {
+  margin: 0;
+  border-top: var(--border-width-thin) solid var(--color-border);
+}
