@@ -7,7 +7,7 @@
     "documents": 30,
     "analysis_tasks": 10
   },
-  "asset_count": 538,
+  "asset_count": 543,
   "assets": [
     {
       "path": "public/assets/achievements/first-evidence.png",
@@ -7029,6 +7029,81 @@
       "exists": true,
       "sha256": "686bb53f3b3d8da6b5128bf65b1ffb4f0fa8a8d95e13d1a788af8fd5499bf5d3",
       "source": "locally-created-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-01/debrief/framing-mechanism.png",
+      "category": "cases",
+      "bytes": 2566433,
+      "format": "png",
+      "exists": true,
+      "sha256": "dc34a82a2f8d463153b0652a20daf60ed3c49c59ced15eca2c1e222271636bfa",
+      "size": [
+        1536,
+        1024
+      ],
+      "alpha": false,
+      "source": "built-in-imagegen-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-02/debrief/anchoring-mechanism.png",
+      "category": "cases",
+      "bytes": 2626720,
+      "format": "png",
+      "exists": true,
+      "sha256": "2aae68eb14ca8e9628ca5cdf936aa5ed28b101a402283e5300e83e27790c0906",
+      "size": [
+        1536,
+        1024
+      ],
+      "alpha": false,
+      "source": "built-in-imagegen-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-03/debrief/social-proof-mechanism.png",
+      "category": "cases",
+      "bytes": 2961555,
+      "format": "png",
+      "exists": true,
+      "sha256": "27ea91b3e60c00e83a2cef6f1236d421a2f4e821cba4bfb89364f4648bc5ce7b",
+      "size": [
+        1536,
+        1024
+      ],
+      "alpha": false,
+      "source": "built-in-imagegen-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-04/debrief/sunk-cost-mechanism.png",
+      "category": "cases",
+      "bytes": 2677618,
+      "format": "png",
+      "exists": true,
+      "sha256": "8fda3747696d26513e95cd304485cd3a79111e3a169ff3084f78444ca4bc45a9",
+      "size": [
+        1536,
+        1024
+      ],
+      "alpha": false,
+      "source": "built-in-imagegen-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-05/debrief/axis-framing-mechanism.png",
+      "category": "cases",
+      "bytes": 2649087,
+      "format": "png",
+      "exists": true,
+      "sha256": "7a4fc4bd63f30faa93779ce47d7cb7fb3963668ff8d27534e382f3673eab3450",
+      "size": [
+        1536,
+        1024
+      ],
+      "alpha": false,
+      "source": "built-in-imagegen-for-urameku",
       "art_review": "REQUIRED"
     }
   ]
