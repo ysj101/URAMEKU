@@ -13,9 +13,7 @@ export function DecisionDesk({ caseData, progress, onAction }: V2DeskProps) {
   const [evidence, setEvidence] = useState<string[]>([]);
   const [counterEvidence, setCounterEvidence] = useState<string[]>([]);
   if (!definition) return null;
-  const documents = caseData.documents.filter(
-    (document) => progress.opened.includes(document.id) && progress.pinned.includes(document.id),
-  );
+  const documents = caseData.documents.filter((document) => progress.opened.includes(document.id));
   const comparisonAvailable = decisionComparisonAvailable(caseData, progress);
   const waiting = records.length > 0 && !comparisonAvailable;
   const outcome = decisionOutcome(caseData, progress);
@@ -155,9 +153,7 @@ export function DecisionDesk({ caseData, progress, onAction }: V2DeskProps) {
                 ))}
               </fieldset>
             </div>
-            {documents.length < 2 && (
-              <p>ちがう資料を 2 件以上読んで、証拠ボードに貼ってください。</p>
-            )}
+            {documents.length < 2 && <p>ちがう資料を 2 件以上読んでください。</p>}
             <label htmlFor="decision-assumptions">この判断が成り立つ前提・不確実な点</label>
             <textarea
               id="decision-assumptions"

@@ -19,10 +19,8 @@ export function completeV2Case(
   const step = (action: GameAction) => {
     p = reduceProgress(c, p, action);
   };
-  const pin = (documentId: string) => {
-    step({ type: 'open-document', documentId });
-    if (!p.pinned.includes(documentId)) step({ type: 'toggle-pin', documentId });
-  };
+  // 開いた資料はそのまま根拠候補になる（貼る操作はない）
+  const pin = (documentId: string) => step({ type: 'open-document', documentId });
   // The opening document is available before any conditional reveal.
   const initial = c.documents.find((d) => d.cost === 0)!;
   pin(initial.id);

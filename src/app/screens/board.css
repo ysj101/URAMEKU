@@ -150,29 +150,6 @@
 }
 
 /* 「外す」は常時表示（ホバー非依存） */
-.evidence-card__remove {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-1);
-  min-height: var(--tap-target-min);
-  padding: var(--space-1) var(--space-2);
-  font-size: var(--font-size-xs);
-  font-weight: 700;
-  white-space: nowrap;
-  color: var(--color-ink);
-  background: var(--color-surface-aged);
-  border: var(--border-width-thin) solid var(--color-ink);
-  cursor: pointer;
-}
-.evidence-card__remove img {
-  width: 16px;
-  height: 16px;
-}
-.evidence-card__remove[aria-disabled='true'] {
-  opacity: var(--opacity-disabled);
-  cursor: not-allowed;
-}
 
 /* マウス環境だけの軽い持ち上げ。情報の増減は無い。 */
 @media (hover: hover) and (pointer: fine) {

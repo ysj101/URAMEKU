@@ -67,8 +67,7 @@ function DocumentSourceMock({ callout }: { callout: string }) {
         </dl>
         <Lines widths={['92%', '84%', '60%']} />
         <div className="ts-row">
-          <span className="ts-btn ts-btn-primary">証拠ボードに貼る</span>
-          <span className="ts-btn">閉じる</span>
+          <span className="ts-btn ts-btn-primary">戻る</span>
         </div>
       </div>
     </div>
@@ -212,7 +211,7 @@ function ReportMock({ callout }: { callout: string }) {
     <div className="ts-paper">
       <div className="ts-meter">
         <span>STEP 02 / 調査報告をまとめる</span>
-        <span>ボードに貼った資料 3 件</span>
+        <span>読んだ資料 3 件</span>
       </div>
       <span className="ts-section">根拠と、まだ決めきれないことを添えた報告</span>
       <div className="ts-form ts-target">

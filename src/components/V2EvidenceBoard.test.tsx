@@ -44,13 +44,13 @@ it('adds, changes roles and removes multiple links without showing correctness',
   expect(screen.queryByText(/正解|不正解|一致しました/)).not.toBeInTheDocument();
 });
 
-it('supports keyboard operation and source removal without dragging', async () => {
+it('supports keyboard operation without dragging and lists every read source', async () => {
   const user = userEvent.setup();
   render(<Harness />);
+  expect(screen.queryByRole('button', { name: /をボードから外す/ })).not.toBeInTheDocument();
+  expect(screen.getByText('読んだ資料 3 件から選べます。')).toBeInTheDocument();
   await user.tab();
-  expect(screen.getByRole('button', { name: '資料A をボードから外す' })).toHaveFocus();
-  await user.keyboard('{Enter}');
-  expect(screen.queryByRole('button', { name: '資料A をボードから外す' })).not.toBeInTheDocument();
+  expect(screen.getByRole('combobox', { name: /起点となる資料/ })).toHaveFocus();
   fireEvent.change(screen.getByRole('combobox', { name: /起点となる資料/ }), {
     target: { value: 'b' },
   });

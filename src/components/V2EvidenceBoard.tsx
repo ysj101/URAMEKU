@@ -40,9 +40,7 @@ export function V2EvidenceBoard({ caseData, progress, onAction }: V2DeskProps) {
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
   const [relation, setRelation] = useState<V2Relation>('supports');
-  const documents = caseData.documents.filter(
-    (document) => progress.pinned.includes(document.id) && progress.opened.includes(document.id),
-  );
+  const documents = caseData.documents.filter((document) => progress.opened.includes(document.id));
   const links = [...(progress.v2?.links ?? [])].sort(
     (a, b) =>
       a.from.localeCompare(b.from) ||
@@ -103,25 +101,11 @@ export function V2EvidenceBoard({ caseData, progress, onAction }: V2DeskProps) {
         同じ 2
         つの資料に、別の役割を付けてもかまいません。どの関係が合っているかは、調査中には表示しません。
       </p>
-      <ul aria-label="ボードに貼った資料">
-        {documents.map((document) => (
-          <li key={document.id}>
-            {document.title}{' '}
-            <button
-              type="button"
-              className="btn ghost"
-              disabled={progress.published}
-              onClick={() => onAction({ type: 'toggle-pin', documentId: document.id })}
-              aria-label={`${document.title} をボードから外す`}
-            >
-              外す
-            </button>
-          </li>
-        ))}
-      </ul>
-      {documents.length < 2 && (
-        <p>資料を 2 件以上読んで証拠ボードに貼ると、関係を記録できるようになります。</p>
-      )}
+      <p aria-live="polite">
+        {documents.length < 2
+          ? '資料を 2 件以上読むと、関係を記録できるようになります。'
+          : `読んだ資料 ${documents.length} 件から選べます。`}
+      </p>
       <form
         onSubmit={(event) => {
           event.preventDefault();

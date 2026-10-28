@@ -93,7 +93,6 @@ describe('unlockDelta', () => {
     };
     for (const id of new Set([...c.required_evidence, ...c.required_link])) {
       expect(step(reduceProgress(c, p, { type: 'open-document', documentId: id }))).toEqual([]);
-      expect(step(reduceProgress(c, p, { type: 'toggle-pin', documentId: id }))).toEqual([]);
     }
     for (const id of c.required_link) {
       expect(step(reduceProgress(c, p, { type: 'toggle-link', documentId: id }))).toEqual([]);
@@ -131,30 +130,26 @@ describe('evaluateAchievements', () => {
     for (const id of ACHIEVEMENT_IDS) expect(achievementConditions(state())[id]).toBe(false);
   });
 
-  describe('first-evidence（最初の証拠ピン留め）', () => {
-    it('ピン留め 1 件で成立。閲覧だけでは不成立', () => {
+  describe('first-evidence（最初の資料を読む）', () => {
+    it('資料を 1 件開いて読むと成立する', () => {
       const opened = state({ progress: { 'case-01': makeProgress({ opened: ['a'] }) } });
-      expect(achievementConditions(opened)['first-evidence']).toBe(false);
-      const pinned = state({
-        progress: { 'case-01': makeProgress({ opened: ['a'], pinned: ['a'] }) },
-      });
-      expect(achievementConditions(pinned)['first-evidence']).toBe(true);
-      expect(evaluateAchievements(pinned).newlyEarned).toEqual(['first-evidence']);
+      expect(achievementConditions(opened)['first-evidence']).toBe(true);
+      expect(evaluateAchievements(opened).newlyEarned).toEqual(['first-evidence']);
     });
   });
 
   describe('first-link（2 件を正しく照合）', () => {
     it('required_link と一致したときだけ成立', () => {
       const wrong = state({
-        progress: { 'case-01': makeProgress({ pinned: ['a', 'b'], chosenLink: ['a', 'b'] }) },
+        progress: { 'case-01': makeProgress({ opened: ['a', 'b'], chosenLink: ['a', 'b'] }) },
       });
       expect(achievementConditions(wrong)['first-link']).toBe(false);
       const one = state({
-        progress: { 'case-01': makeProgress({ pinned: ['a', 'c'], chosenLink: ['a'] }) },
+        progress: { 'case-01': makeProgress({ opened: ['a', 'c'], chosenLink: ['a'] }) },
       });
       expect(achievementConditions(one)['first-link']).toBe(false);
       const right = state({
-        progress: { 'case-01': makeProgress({ pinned: ['a', 'c'], chosenLink: ['c', 'a'] }) },
+        progress: { 'case-01': makeProgress({ opened: ['a', 'c'], chosenLink: ['c', 'a'] }) },
       });
       expect(achievementConditions(right)['first-link']).toBe(true);
     });
@@ -244,7 +239,7 @@ describe('evaluateAchievements', () => {
   describe('既得の維持', () => {
     it('条件が崩れても earned から消えず、取得時刻も変わらない', () => {
       const first = evaluateAchievements(
-        state({ progress: { 'case-01': makeProgress({ opened: ['a'], pinned: ['a'] }) } }),
+        state({ progress: { 'case-01': makeProgress({ opened: ['a'] }) } }),
       );
       expect(first.earned).toEqual({ 'first-evidence': now() });
       const later = evaluateAchievements(
@@ -258,7 +253,7 @@ describe('evaluateAchievements', () => {
       expect(later.newlyEarned).toEqual([]);
     });
     it('既得は newlyEarned に再度含めない（二重加算しない）', () => {
-      const s = state({ progress: { 'case-01': makeProgress({ opened: ['a'], pinned: ['a'] }) } });
+      const s = state({ progress: { 'case-01': makeProgress({ opened: ['a'] }) } });
       const first = evaluateAchievements(s);
       const second = evaluateAchievements({ ...s, earned: first.earned });
       expect(second.newlyEarned).toEqual([]);
@@ -267,7 +262,7 @@ describe('evaluateAchievements', () => {
     it('入力の earned を変更しない', () => {
       const earned = { 'first-evidence': '2020-01-01T00:00:00.000Z' };
       const s = state({
-        progress: { 'case-01': makeProgress({ pinned: ['a', 'c'], chosenLink: ['a', 'c'] }) },
+        progress: { 'case-01': makeProgress({ opened: ['a', 'c'], chosenLink: ['a', 'c'] }) },
         earned,
       });
       const r = evaluateAchievements(s);
@@ -296,7 +291,7 @@ describe('evaluateAchievements', () => {
   it('now を省略すると ISO 8601 の現在時刻', () => {
     const r = evaluateAchievements({
       cases,
-      progress: { 'case-01': makeProgress({ opened: ['a'], pinned: ['a'] }) },
+      progress: { 'case-01': makeProgress({ opened: ['a'] }) },
       finished: {},
     });
     expect(() => new Date(r.earned['first-evidence']!).toISOString()).not.toThrow();

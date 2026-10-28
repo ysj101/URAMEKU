@@ -7,12 +7,6 @@ import {
   type MouseEvent,
   type SyntheticEvent,
 } from 'react';
-import {
-  canPinDocument,
-  canUnpinDocument,
-  type PinRejectReason,
-  type UnpinRejectReason,
-} from '../domain/evidence';
 import type { CaseData, CaseProgress } from '../domain/types';
 
 interface Props {
@@ -20,7 +14,6 @@ interface Props {
   progress: CaseProgress;
   /** 開いている資料 ID。null なら閉じる */
   documentId: string | null;
-  onTogglePin: (documentId: string) => void;
   onClose: () => void;
 }
 
@@ -29,22 +22,15 @@ export interface DocumentHistoryState {
   doc: string;
 }
 
-const PIN_REASON: Record<PinRejectReason | UnpinRejectReason, string> = {
-  published: '記事を提出済みのため、ボードは変更できません。取り下げると編集できます。',
-  'not-opened': '閲覧していない資料は採用できません。',
-  'already-pinned': 'この資料はすでにボードに貼られています。',
-  'not-pinned': 'この資料はボードに貼られていません。',
-  'unknown-document': 'この事件には存在しない資料です。',
-};
-
 /**
  * 資料の全文を表示するモーダル（MVP-022）。
+ * 開いた資料はそのまま根拠候補になるので、ここに「貼る」操作はない。
  *
  * 閉じ方は 3 通り: 背景タップ、Esc（`cancel`）、ブラウザの戻る（`popstate`）。
  * 開くときに `history.pushState({ doc }, '')` を積み、閉じるボタン等では `history.back()` で
  * 状態を整合させる。ハッシュは変えないので `navigation.ts` のハッシュルートとは干渉しない。
  */
-export function DocumentDialog({ caseData, progress, documentId, onTogglePin, onClose }: Props) {
+export function DocumentDialog({ caseData, progress, documentId, onClose }: Props) {
   const ref = useRef<HTMLDialogElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   /** 自分が history に状態を積んでいるか（二重に戻らないためのガード） */
@@ -57,12 +43,7 @@ export function DocumentDialog({ caseData, progress, documentId, onTogglePin, on
   }, [onClose]);
 
   const doc = documentId ? (caseData.documents.find((d) => d.id === documentId) ?? null) : null;
-  const pinned = documentId ? progress.pinned.includes(documentId) : false;
-  const check = documentId
-    ? pinned
-      ? canUnpinDocument(caseData, progress, documentId)
-      : canPinDocument(caseData, progress, documentId)
-    : null;
+  const read = documentId ? progress.opened.includes(documentId) : false;
 
   /** 閉じる操作（ボタン・Esc・背景）。積んだ履歴を戻してから親に通知する */
   const requestClose = useCallback(() => {
@@ -180,26 +161,10 @@ export function DocumentDialog({ caseData, progress, documentId, onTogglePin, on
           {doc?.content}
         </div>
         <div className="popup-foot">
-          <div className="popup-pin">
-            <button
-              type="button"
-              className="btn primary"
-              aria-disabled={check && !check.ok ? true : undefined}
-              aria-describedby={check && !check.ok ? 'dialog-pin-reason' : undefined}
-              onClick={() => {
-                if (!documentId || !check?.ok) return;
-                onTogglePin(documentId);
-              }}
-            >
-              {pinned ? 'ボードから外す' : '証拠ボードに貼る'}
-            </button>
-            {check && !check.ok && (
-              <span id="dialog-pin-reason" className="disabled-copy">
-                {PIN_REASON[check.reason]}
-              </span>
-            )}
-          </div>
-          <button type="button" className="btn ghost" onClick={requestClose}>
+          <p className="popup-read" role="status">
+            {read ? 'この資料は読んだので、記録の根拠として使えます。' : ''}
+          </p>
+          <button type="button" className="btn primary" onClick={requestClose}>
             戻る
           </button>
         </div>

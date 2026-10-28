@@ -11,7 +11,7 @@
 | V2-A03 | 実験の初回前情報遮断・条件固定・判断維持/更新 | v2Progress / experiment / E2E | 未確認 |
 | V2-A04 | 目的・制約・反証・別方針・保留、結果と判断の分離 | decision / evaluation / E2E | 未確認 |
 | V2-A05 | 事実誤認・根拠不足・未確認と価値判断の区別 | evaluation / Result / E2E | 未確認 |
-| V2-A06 | 予算超過・未読採用・自己リンク禁止、再読無料、回復 | budget / evidence / link / deadEnd | 未確認 |
+| V2-A06 | 予算超過・未読資料の根拠化・自己リンク禁止、再読無料、回復 | budget / evidence / link / deadEnd | 未確認 |
 | V2-A07 | 保存v0〜v3退避、v4途中再開・競合・未来形式保護 | v2Persistence / saveCoordinator | 実機未実施 |
 | V2-A08 | 個別/全履歴削除と他サイトのキー保護 | wipe / E2E | 実機未実施 |
 | V2-A09 | 320/375/390/430px・文字200%・タップ/キーボード | UI / browser tests | 実機/読み上げ未実施 |

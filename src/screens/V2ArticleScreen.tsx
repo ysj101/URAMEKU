@@ -15,7 +15,7 @@ export function V2ArticleScreen({ game }: { game: GameApi }) {
   const report = progress.v2?.report ?? { claim: '', uncertainty: '' };
   const canSubmit = !progress.published;
   const doc = (id: string) => current.documents.find((d) => d.id === id)?.title ?? id;
-  const adopted = (id: string) => progress.opened.includes(id) && progress.pinned.includes(id);
+  const read = (id: string) => progress.opened.includes(id);
   const tasks = current.v2?.decoding ?? [];
   const links = validV2Links(current, progress);
   const decision = progress.v2?.decisions.at(-1);
@@ -26,7 +26,7 @@ export function V2ArticleScreen({ game }: { game: GameApi }) {
         <span data-focus-target tabIndex={-1}>
           STEP 02 / 調査報告をまとめる
         </span>
-        <span>ボードに貼った資料 {progress.pinned.length} 件</span>
+        <span>読んだ資料 {progress.opened.length} 件</span>
       </div>
       <section className="v2-panel" aria-labelledby="v2-report-title">
         <h2 id="v2-report-title">調査記録から報告をまとめる</h2>
@@ -53,8 +53,7 @@ export function V2ArticleScreen({ game }: { game: GameApi }) {
                           もとになる資料：
                           {chosen.evidence
                             .map(
-                              (id) =>
-                                `${doc(id)}（${adopted(id) ? 'ボードに貼った' : 'まだ貼っていない'}）`,
+                              (id) => `${doc(id)}（${read(id) ? '読んだ' : 'まだ読んでいない'}）`,
                             )
                             .join('、')}
                         </small>

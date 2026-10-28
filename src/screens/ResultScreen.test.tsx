@@ -105,7 +105,7 @@ describe('ResultScreen（合格時）', () => {
 describe('ResultScreen（差し戻し時）', () => {
   const rejected = (): CaseProgress => ({
     ...clearedProgress(),
-    pinned: ['a', 'b'],
+    opened: ['a', 'b'],
     chosenLink: ['a', 'b'],
   });
 

@@ -25,7 +25,7 @@ describe('breakdown', () => {
   const cases = [
     makeProgress(),
     makeProgress({ article: ['f0', 'f1', 'f2'] }),
-    makeProgress({ opened: ['a'], pinned: ['a'], calculations: { t1: '45' } }),
+    makeProgress({ opened: ['a'], calculations: { t1: '45' } }),
     clearedProgress(),
   ];
   it.each(cases.map((p, i) => [i, p] as const))(
@@ -54,7 +54,7 @@ describe('failureReasons', () => {
   });
 
   it('証拠だけ不足 → evidence の理由のみ（件数を示し、資料名は出さない）', () => {
-    const reasons = failureReasons(c, { ...base, pinned: ['a', 'c'] });
+    const reasons = failureReasons(c, { ...base, opened: ['a', 'c'] });
     expect(reasons.map((r) => r.track)).toEqual(['evidence']);
     expect(reasons[0]!.message).toContain('1 件');
     expect(reasons[0]!.message).not.toContain('資料B');

@@ -12,13 +12,7 @@ const caseData = makeCase({
 });
 
 /** 親画面の最小再現: タイルで開き、onClose で閉じる */
-function Harness({
-  progress,
-  onTogglePin,
-}: {
-  progress: CaseProgress;
-  onTogglePin?: (id: string) => void;
-}) {
+function Harness({ progress }: { progress: CaseProgress }) {
   const [openId, setOpenId] = useState<string | null>(null);
   return (
     <>
@@ -29,10 +23,6 @@ function Harness({
         caseData={caseData}
         progress={progress}
         documentId={openId}
-        onTogglePin={(id) => {
-          onTogglePin?.(id);
-          setOpenId(null);
-        }}
         onClose={() => setOpenId(null)}
       />
     </>
@@ -124,43 +114,16 @@ describe('DocumentDialog', () => {
     expect(back).not.toHaveBeenCalled();
   });
 
-  it('ピン操作で onTogglePin が呼ばれる（閲覧済み）', () => {
-    const onTogglePin = vi.fn();
-    render(<Harness progress={makeProgress({ opened: ['a'] })} onTogglePin={onTogglePin} />);
+  it('貼る操作はなく、読んだ資料はその旨を示して「戻る」で閉じる', () => {
+    render(<Harness progress={makeProgress({ opened: ['a'] })} />);
     openA();
-    const pin = screen.getByRole('button', { name: '証拠ボードに貼る' });
-    expect(pin).not.toHaveAttribute('aria-disabled');
-    fireEvent.click(pin);
-    expect(onTogglePin).toHaveBeenCalledWith('a');
+    expect(
+      screen.queryByRole('button', { name: /証拠ボードに貼る|ボードから外す/ }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'この資料は読んだので、記録の根拠として使えます。',
+    );
+    fireEvent.click(screen.getByRole('button', { name: '戻る' }));
     expect(dialogEl().open).toBe(false);
-  });
-
-  it('採用済みなら「外す」になる', () => {
-    const onTogglePin = vi.fn();
-    render(
-      <Harness
-        progress={makeProgress({ opened: ['a'], pinned: ['a'] })}
-        onTogglePin={onTogglePin}
-      />,
-    );
-    openA();
-    fireEvent.click(screen.getByRole('button', { name: 'ボードから外す' }));
-    expect(onTogglePin).toHaveBeenCalledWith('a');
-  });
-
-  it('提出済みはピン操作を無効化し理由を表示する', () => {
-    const onTogglePin = vi.fn();
-    render(
-      <Harness
-        progress={makeProgress({ opened: ['a'], pinned: ['a'], published: true })}
-        onTogglePin={onTogglePin}
-      />,
-    );
-    openA();
-    const pin = screen.getByRole('button', { name: 'ボードから外す' });
-    expect(pin).toHaveAttribute('aria-disabled', 'true');
-    expect(pin).toHaveAccessibleDescription(/提出済み/);
-    fireEvent.click(pin);
-    expect(onTogglePin).not.toHaveBeenCalled();
   });
 });

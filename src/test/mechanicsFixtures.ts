@@ -56,7 +56,6 @@ export function makeV2Case(overrides: Partial<CaseData> = {}): CaseData {
 export function makeV2Progress(overrides: Partial<CaseProgress> = {}): CaseProgress {
   return makeProgress({
     opened: ['a', 'b', 'c'],
-    pinned: ['a', 'b', 'c'],
     v2: {
       decoding: {},
       links: [],

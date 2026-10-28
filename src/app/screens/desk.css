@@ -79,9 +79,6 @@
 }
 
 /* 状態は文字とアイコンで示し、色は補助（MVP_SPEC 12 章） */
-.desk-grid .doc-tile--pinned {
-  background: var(--color-surface-note);
-}
 .desk-grid .doc-tile--opened {
   background: var(--color-surface-aged);
 }
@@ -129,12 +126,11 @@
   flex-wrap: wrap;
   align-items: flex-start;
 }
-.document-dialog .popup-pin {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
+.document-dialog .popup-read {
+  margin: 0;
   min-width: 0;
   flex: 1 1 200px;
+  font-size: var(--font-size-sm);
 }
 .document-dialog .btn[aria-disabled='true'] {
   cursor: not-allowed;

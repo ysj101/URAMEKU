@@ -15,7 +15,6 @@ export function hintFor(caseData: CaseData, progress: CaseProgress, stage: Stage
     if (caseData.v2.experiment && progress.v2?.experiment?.stage !== 'complete')
       return 'v2Experiment';
     if (!progress.opened.length) return 'open';
-    if (!progress.pinned.length) return 'pin';
     if (caseData.v2.decoding.some((t) => !progress.v2?.decoding[t.id])) return 'v2Decode';
     if (!progress.v2?.links.length) return 'v2Graph';
     if (caseData.v2.decision && (progress.v2?.decisions.length ?? 0) < 2) return 'v2Decision';
@@ -25,8 +24,7 @@ export function hintFor(caseData: CaseData, progress: CaseProgress, stage: Stage
     return progress.article.length < ARTICLE_LENGTH ? 'fragments' : 'submit';
   }
   if (progress.opened.length === 0) return 'open';
-  if (progress.pinned.length === 0) return 'pin';
-  if (progress.pinned.length < LINK_SIZE) return 'pinMore';
+  if (progress.opened.length < LINK_SIZE) return 'openMore';
   if (progress.chosenLink.length < LINK_SIZE) return 'link';
   const unanswered = caseData.analysis_tasks.some(
     (task) => (progress.calculations[task.id] ?? '').trim() === '',

@@ -8,8 +8,8 @@
 | 事件選択 | `cases/case-01〜05/cover.png, ui/frames/case-card.svg, ui/states/{new,clear,locked}.svg` | 一覧/解放済み/未解放/読み込みエラー |
 | 事件導入 | `backgrounds/scene-office.svg, characters/harada/poses/idle.png, tutorial/step-01.png` | 説明/開始/スキップ |
 | 調査デスク | `backgrounds/scene-office.svg, cases/<id>/documents/<docid>.png, ui/icons/{inspect,pin,budget}.svg` | 未読/既読/調査コスト不足/ドキュメント破損 |
-| 資料閲覧 | `ui/frames/newspaper.svg, ui/stamps/confidential.svg, props/*.svg` | ズーム/スクロール/採用/戻る |
-| 証拠ボード | `backgrounds/scene-caseboard.svg, ui/frames/evidence-pin.svg, ui/icons/{link,pin,trash}.svg` | 0枚/2枚/採用済み/矛盾/リセット |
+| 資料閲覧 | `ui/frames/newspaper.svg, ui/stamps/confidential.svg, props/*.svg` | ズーム/スクロール/戻る |
+| 証拠ボード | `backgrounds/scene-caseboard.svg, ui/frames/evidence-pin.svg, ui/icons/{link,pin,trash}.svg` | 0枚/2枚/矛盾/リセット |
 | 計算デスク | `ui/icons/calculate.svg, ui/states/verified.svg` | 空欄/数値不正/再計算/正解 |
 | 記事作成 | `ui/frames/clipping.svg, ui/icons/edit.svg, ui/stamps/draft.svg` | 断片未選択/並び替え/記事プレビュー |
 | 結果・種明かし | `ui/grades/*.svg, ui/stamps/{accepted,rejected}.svg, effects/reactions/*.svg` | 成功/失敗/次へ/再挑戦 |

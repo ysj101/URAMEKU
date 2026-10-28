@@ -19,7 +19,7 @@
 | `menu-open`     | メニュー・ダイアログを開く                       | 同上                     |
 | `paper-flip`    | 調査資料を開く（`tryOpenDocument` 成功時）       | 資料画面の Issue         |
 | `paper-place`   | 資料を机・ボードに配置する                       | 証拠ボードの Issue       |
-| `evidence-pin`  | 証拠をピン留めする（`canPinDocument` 成功時）    | 証拠ボードの Issue       |
+| `evidence-pin`  | （未使用。貼る操作の廃止で発火箇所なし。素材は残置） | 証拠ボードの Issue       |
 | `evidence-link` | 2 つの証拠を照合する（`linkStatus` が揃った時） | 証拠ボードの Issue       |
 | `discovery`     | 新しい事実の発見・ヒント開示                     | 資料/ヒントの Issue      |
 | `stamp`         | 記事を提出する（`publishVerdict` 直前）          | 記事提出の Issue         |

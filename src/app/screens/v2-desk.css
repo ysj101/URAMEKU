@@ -203,8 +203,7 @@
 .v2-docs .desk-grid .doc-tile:last-child {
   border-bottom: 0;
 }
-.v2-docs .desk-grid .doc-tile::before,
-.v2-docs .desk-grid .doc-tile--pinned::after {
+.v2-docs .desk-grid .doc-tile::before {
   display: none;
 }
 .v2-docs .desk-grid .doc-tile:hover:not([aria-disabled='true']) {
@@ -262,14 +261,6 @@
 }
 .v2-docs .desk-grid .doc-tile--opened {
   background: var(--color-surface-aged);
-}
-.v2-docs .desk-grid .doc-tile--pinned {
-  background: var(--color-surface-note);
-  border-left-color: var(--color-accent);
-}
-.v2-docs .desk-grid .doc-tile--pinned .doc-tile__status {
-  background: var(--color-ink);
-  color: var(--color-ink-inverse);
 }
 .v2-docs .desk-grid .doc-tile[data-visual='advert'] {
   border-left-color: var(--color-accent);

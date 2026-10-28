@@ -19,7 +19,7 @@ export function caseStatus(
   )
     return 'investigating';
   if (progress.article.length > 0) return 'draft';
-  if (progress.opened.length > 0 || progress.pinned.length > 0) return 'investigating';
+  if (progress.opened.length > 0) return 'investigating';
   return 'new';
 }
 
