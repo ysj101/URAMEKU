@@ -248,7 +248,7 @@ describe('article: 編集操作（MVP-025）', () => {
     expect(moveFragment(two, 1, 0).article).toEqual(['f1', 'f0']);
   });
   it('clearArticle は 3 スロットを空にし、他の進行は保つ', () => {
-    const p = makeProgress({ article: ['f0', 'f1'], pinned: ['a'] });
+    const p = makeProgress({ article: ['f0', 'f1'], opened: ['a'] });
     expect(clearArticle(p)).toEqual({ ...p, article: [] });
     const empty = makeProgress();
     expect(clearArticle(empty)).toBe(empty);

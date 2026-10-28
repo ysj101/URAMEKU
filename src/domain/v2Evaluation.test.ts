@@ -57,7 +57,7 @@ describe('V2 evaluation', () => {
         .join(' '),
     ).not.toMatch(/資料A|資料B|対象範囲を超えて/);
     progress.v2!.decoding.scope!.optionId = 'limited';
-    progress.pinned = ['a'];
+    progress.opened = ['a'];
     expect(evaluateV2Case(makeV2Case(), progress).factualErrors).toEqual([]);
     expect(evaluateV2Case(makeV2Case(), progress).completed).toBe(false);
   });
@@ -169,7 +169,6 @@ describe('V2 evaluation', () => {
     expect(caseStatus(data.id, progress, {})).toBe('draft');
     progress.v2!.report = { claim: '', uncertainty: '' };
     progress.opened = [];
-    progress.pinned = [];
     expect(caseStatus(data.id, progress, {})).toBe('investigating');
   });
 });
@@ -192,7 +191,7 @@ it('records an unchanged policy once after disclosure, then ignores duplicate re
     evidence: ['a'],
     counterEvidence: ['b'],
   };
-  let progress = makeV2Progress({ opened: ['a', 'b'], pinned: ['a', 'b'] });
+  let progress = makeV2Progress({ opened: ['a', 'b'] });
   progress = reduceProgress(data, progress, { type: 'v2-decision', record });
   expect(progress.v2!.decisions).toHaveLength(1);
   expect(reduceProgress(data, progress, { type: 'v2-decision', record })).toBe(progress);

@@ -13,11 +13,9 @@ describe('実データ（data/cases）', () => {
       let p = createProgress();
       for (const id of c.required_evidence) {
         p = reduceProgress(c, p, { type: 'open-document', documentId: id });
-        p = reduceProgress(c, p, { type: 'toggle-pin', documentId: id });
       }
       for (const id of c.required_link) {
         p = reduceProgress(c, p, { type: 'open-document', documentId: id });
-        if (!p.pinned.includes(id)) p = reduceProgress(c, p, { type: 'toggle-pin', documentId: id });
         p = reduceProgress(c, p, { type: 'toggle-link', documentId: id });
       }
       for (const t of c.analysis_tasks) {

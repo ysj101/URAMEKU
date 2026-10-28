@@ -55,17 +55,17 @@ function dialogEl(): HTMLDialogElement {
   return document.querySelector('dialog.document-dialog') as HTMLDialogElement;
 }
 
-/** 資料タイルを開く → 「証拠ボードに貼る」で採用。ダイアログは閉じ、フォーカスはタイルに戻る */
-async function openAndPin(titlePattern: RegExp) {
+/** 資料タイルを開いて読み、「戻る」で閉じる。フォーカスはタイルに戻る（開いた時点で根拠候補になる） */
+async function openAndRead(titlePattern: RegExp) {
   const tile = screen.getByRole('button', { name: titlePattern });
   await tabTo(tile);
   await pressEnter(`資料を開く ${titlePattern}`);
   expect(dialogEl()).toHaveAttribute('open');
   // 開いた直後のフォーカスはダイアログの見出し
   expect(active()).toBe(dialogEl().querySelector('#dialog-title'));
-  const pin = within(dialogEl()).getByRole('button', { name: '証拠ボードに貼る' });
-  await tabTo(pin, '証拠ボードに貼る');
-  await pressEnter('証拠ボードに貼る');
+  const back = within(dialogEl()).getByRole('button', { name: '戻る' });
+  await tabTo(back, '戻る');
+  await pressEnter('戻る');
   expect(dialogEl()).not.toHaveAttribute('open');
   expect(active()).toBe(tile);
 }
@@ -107,9 +107,9 @@ describe('V1互換UIをキーボードのみで完了できる（旧T13）', () 
     expect(active()).toBe(adTile);
 
     // --- 必要資料 3 枚を開いてピン留め
-    await openAndPin(/無料体験者の登録台帳/);
-    await openAndPin(/料金決済の集計/);
-    await openAndPin(/翌月の継続状況/);
+    await openAndRead(/無料体験者の登録台帳/);
+    await openAndRead(/料金決済の集計/);
+    await openAndRead(/翌月の継続状況/);
     expect(screen.getByText(/調査予算：残り 1 \/ 4/)).toBeInTheDocument();
 
     // --- 証拠ボードで 2 枚選択（A → B）

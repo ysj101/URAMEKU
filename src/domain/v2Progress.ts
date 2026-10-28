@@ -136,10 +136,7 @@ export function reduceV2Progress(
   const validEvidence = (ids: string[]) =>
     Array.isArray(ids) &&
     ids.every(
-      (id) =>
-        caseData.documents.some((d) => d.id === id) &&
-        progress.opened.includes(id) &&
-        progress.pinned.includes(id),
+      (id) => caseData.documents.some((d) => d.id === id) && progress.opened.includes(id),
     ) &&
     new Set(ids).size === ids.length;
   const compared = (ids: string[]) => ids.every((id) => progress.opened.includes(id));

@@ -10,13 +10,12 @@ const record = (optionId: string, evidence = ['a', 'b']) => {
 };
 
 describe('information decoding', () => {
-  it('requires reading and adopting every piece of evidence, without charging twice', () => {
+  it('requires reading every piece of evidence, without charging twice', () => {
     const progress = record('limited');
     expect(completedDecodingCount(data, progress)).toBe(1);
     expect(progress.opened).toEqual(['a', 'b', 'c']);
     expect(completedDecodingCount(data, { ...progress, opened: ['a'] })).toBe(0);
-    expect(completedDecodingCount(data, { ...progress, pinned: ['a'] })).toBe(0);
-    // 根拠は記録ではなく、答えが参照する資料の採用状況から自動判定する
+    // 根拠は記録ではなく、答えが参照する資料を読んだかどうかから自動判定する
     expect(completedDecodingCount(data, record('limited', []))).toBe(1);
   });
   it('distinguishes an unknown scope from a factually contradicted generalisation', () => {

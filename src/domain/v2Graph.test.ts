@@ -17,16 +17,14 @@ describe('role-labelled evidence routes', () => {
     progress.v2!.links = [{ from: 'a', to: 'b', relation: 'supports' }];
     expect(v2GraphProgress(data, progress)).toEqual({ done: 0, total: 1 });
   });
-  it('requires adopted, read and existing sources and removes links when a source is unpinned', () => {
+  it('requires read and existing sources', () => {
     let progress = makeV2Progress();
     progress = reduceProgress(data, progress, {
       type: 'v2-link',
       link: { from: 'a', to: 'b', relation: 'qualifies' },
     });
     expect(v2GraphComplete(data, progress)).toBe(true);
-    expect(v2GraphComplete(data, { ...progress, pinned: ['a'] })).toBe(false);
-    progress = reduceProgress(data, progress, { type: 'toggle-pin', documentId: 'a' });
-    expect(progress.v2!.links).toEqual([]);
+    expect(v2GraphComplete(data, { ...progress, opened: ['a'] })).toBe(false);
   });
   it('toggles an exact edge without allowing self-reference, duplication or unknown sources', () => {
     let progress = makeV2Progress();
@@ -44,7 +42,7 @@ describe('role-labelled evidence routes', () => {
   });
 });
 
-it('removes unpinned sources from editable decoding while preserving historical decisions', () => {
+it('keeps decoding editable while preserving historical decisions', () => {
   const data = makeV2Case();
   let progress = makeV2Progress();
   progress.v2!.decoding.scope = {
@@ -61,13 +59,6 @@ it('removes unpinned sources from editable decoding while preserving historical 
     counterEvidence: ['b'],
   };
   progress.v2!.decisions = [historical];
-  progress = reduceProgress(data, progress, { type: 'toggle-pin', documentId: 'a' });
-  expect(progress.v2!.decoding.scope).toEqual({
-    optionId: 'limited',
-    evidence: ['b'],
-    note: '対象範囲の記録',
-  });
-  expect(progress.v2!.decisions).toEqual([historical]);
   progress = reduceProgress(data, progress, {
     type: 'v2-decode',
     taskId: 'scope',

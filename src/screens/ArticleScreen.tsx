@@ -35,11 +35,11 @@ export function ArticleScreen({ game }: { game: GameApi }) {
           STEP 02 / 記事を組み立てる
         </span>
         <span>
-          採用証拠 {progress.pinned.length} 件 / 検証メモ {filledCalcs} 件
+          読んだ資料 {progress.opened.length} 件 / 検証メモ {filledCalcs} 件
         </span>
       </div>
       <div className="article-top">
-        事件を裏付ける資料を証拠ボードに貼り、2枚の照合関係を示したうえで記事を提出します。下の断片8個から、
+        事件を裏付ける資料を読み、2枚の照合関係を示したうえで記事を提出します。下の断片8個から、
         <strong>正確な見出しを構成する3つ</strong>
         を順番に選びます。スロットをタップすると差し替え、↑↓で順序の入れ替え、「外す」で撤回できます。差し戻された記事は直前の見出しが残るので、何度でも組み直せます。
       </div>

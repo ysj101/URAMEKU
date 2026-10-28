@@ -29,23 +29,20 @@ function Harness({ initial }: { initial: CaseProgress }) {
       caseData={caseData}
       progress={progress}
       onToggleLink={(documentId) => dispatch({ type: 'toggle-link', documentId })}
-      onUnpin={(documentId) => dispatch({ type: 'toggle-pin', documentId })}
     />
   );
 }
 
-const pinnedThree = () => makeProgress({ opened: ['a', 'b', 'c'], pinned: ['a', 'b', 'c'] });
+const readThree = () => makeProgress({ opened: ['a', 'b', 'c'] });
 
 const card = (title: string) => screen.getByRole('button', { name: new RegExp(`^${title}、`) });
-const removeButton = (title: string) =>
-  screen.getByRole('button', { name: `${title} をボードから外す` });
 const statusText = () => screen.getByTestId('link-status').textContent ?? '';
 
 beforeEach(() => playMock.mockClear());
 
 describe('EvidenceBoard: タップ照合', () => {
-  it('採用済みの資料がピンカードとして並び、ボードはグループとして読み上げられる', () => {
-    render(<Harness initial={pinnedThree()} />);
+  it('読んだ資料がピンカードとして並び、ボードはグループとして読み上げられる', () => {
+    render(<Harness initial={readThree()} />);
     const board = screen.getByRole('group', { name: '証拠ボード' });
     expect(within(board).getAllByRole('listitem')).toHaveLength(3);
     expect(card('資料A')).toHaveAttribute('aria-pressed', 'false');
@@ -57,14 +54,14 @@ describe('EvidenceBoard: タップ照合', () => {
     expect(screen.getByTestId('link-prompt')).toHaveTextContent(caseData.link_prompt);
   });
 
-  it('未採用なら案内文だけを出す', () => {
+  it('何も読んでいなければ案内文だけを出す', () => {
     render(<Harness initial={makeProgress()} />);
-    expect(screen.getByText(/「証拠ボードに貼る」を押すとここに追加されます/)).toBeInTheDocument();
+    expect(screen.getByText(/資料を開いて読むと、ここに追加されます/)).toBeInTheDocument();
     expect(screen.queryAllByRole('listitem')).toHaveLength(0);
   });
 
   it('1 枚押すと選択中（A）、2 枚目で照合候補（A ↔ B）になり線で結ばれる', () => {
-    render(<Harness initial={pinnedThree()} />);
+    render(<Harness initial={readThree()} />);
     expect(screen.queryByTestId('link-thread')).not.toBeInTheDocument();
 
     fireEvent.click(card('資料A'));
@@ -82,7 +79,7 @@ describe('EvidenceBoard: タップ照合', () => {
   });
 
   it('3 枚目を押すとその 1 枚から選び直す', () => {
-    render(<Harness initial={pinnedThree()} />);
+    render(<Harness initial={readThree()} />);
     fireEvent.click(card('資料A'));
     fireEvent.click(card('資料B'));
     fireEvent.click(card('資料C'));
@@ -94,53 +91,38 @@ describe('EvidenceBoard: タップ照合', () => {
   });
 
   it('同じカードを再び押すと解除される', () => {
-    render(<Harness initial={pinnedThree()} />);
+    render(<Harness initial={readThree()} />);
     fireEvent.click(card('資料A'));
     fireEvent.click(card('資料A'));
     expect(card('資料A')).toHaveAttribute('aria-pressed', 'false');
     expect(statusText()).toContain('カードを 2 枚順に押して照合します');
   });
 
-  it('ボードから外すとカードが消え、照合の選択も解除される', () => {
-    render(<Harness initial={pinnedThree()} />);
-    fireEvent.click(card('資料A'));
-    fireEvent.click(card('資料B'));
-    fireEvent.click(removeButton('資料A'));
-    expect(screen.queryByRole('button', { name: /^資料A、/ })).not.toBeInTheDocument();
-    expect(screen.getAllByRole('listitem')).toHaveLength(2);
-    // 残った B が繰り上がって A になり、2 枚目は空になる
-    expect(card('資料B')).toHaveAccessibleName('資料B、選択中（A）');
-    expect(statusText()).toContain('資料B ↔ ［資料Bを選択］');
-    expect(screen.queryByTestId('link-thread')).not.toBeInTheDocument();
+  it('ボードから外す操作はない', () => {
+    render(<Harness initial={readThree()} />);
+    expect(screen.queryByRole('button', { name: /をボードから外す/ })).not.toBeInTheDocument();
   });
 
-  it('提出済みなら選択も外すこともできず、理由を表示する', () => {
+  it('提出済みなら選択できず、理由を表示する', () => {
     const onToggleLink = vi.fn();
-    const onUnpin = vi.fn();
     render(
       <EvidenceBoard
         caseData={caseData}
         progress={makeProgress({
           opened: ['a', 'b', 'c'],
-          pinned: ['a', 'b', 'c'],
           chosenLink: ['a', 'c'],
           published: true,
         })}
         onToggleLink={onToggleLink}
-        onUnpin={onUnpin}
       />,
     );
     const a = card('資料A');
     expect(a).toHaveAttribute('aria-disabled', 'true');
     fireEvent.click(a);
     fireEvent.click(card('資料B'));
-    fireEvent.click(removeButton('資料A'));
-    fireEvent.keyDown(a, { key: 'Delete' });
     expect(onToggleLink).not.toHaveBeenCalled();
-    expect(onUnpin).not.toHaveBeenCalled();
     expect(playMock).not.toHaveBeenCalled();
     expect(screen.getAllByText(/提出済みのため照合を変更できません/)).toHaveLength(3);
-    expect(removeButton('資料A')).toHaveAttribute('aria-disabled', 'true');
     // 提出済みでも選択中の 2 枚は表示され続ける
     expect(a).toHaveAttribute('aria-pressed', 'true');
     expect(card('資料C')).toHaveAttribute('aria-pressed', 'true');
@@ -150,27 +132,17 @@ describe('EvidenceBoard: タップ照合', () => {
 describe('EvidenceBoard: キーボード操作', () => {
   it('Tab でカードを移動し、Enter / Space で選択できる', async () => {
     const user = userEvent.setup();
-    render(<Harness initial={pinnedThree()} />);
+    render(<Harness initial={readThree()} />);
     await user.tab();
     expect(card('資料A')).toHaveFocus();
     await user.keyboard('{Enter}');
     expect(card('資料A')).toHaveAttribute('aria-pressed', 'true');
 
-    await user.tab(); // 資料A の「外す」
     await user.tab(); // 資料B
     expect(card('資料B')).toHaveFocus();
     await user.keyboard(' ');
     expect(card('資料B')).toHaveAttribute('aria-pressed', 'true');
     expect(statusText()).toContain('照合候補（A ↔ B）：資料A ↔ 資料B');
-  });
-
-  it('Delete で確認なしにボードから外す', async () => {
-    const user = userEvent.setup();
-    render(<Harness initial={pinnedThree()} />);
-    await user.tab();
-    await user.keyboard('{Delete}');
-    expect(screen.queryByRole('button', { name: /^資料A、/ })).not.toBeInTheDocument();
-    expect(screen.getAllByRole('listitem')).toHaveLength(2);
   });
 });
 
@@ -182,9 +154,8 @@ describe('EvidenceBoard: ネタバレ防止', () => {
     const { container } = render(
       <EvidenceBoard
         caseData={caseData}
-        progress={makeProgress({ opened: ['a', 'b', 'c'], pinned: ['a', 'b', 'c'], chosenLink })}
+        progress={makeProgress({ opened: ['a', 'b', 'c'], chosenLink })}
         onToggleLink={vi.fn()}
-        onUnpin={vi.fn()}
       />,
     );
     const html = container.innerHTML;
@@ -199,9 +170,8 @@ describe('EvidenceBoard: ネタバレ防止', () => {
       const { container, unmount } = render(
         <EvidenceBoard
           caseData={caseData}
-          progress={makeProgress({ opened: ['a', 'b', 'c'], pinned: ['a', 'b', 'c'], chosenLink })}
+          progress={makeProgress({ opened: ['a', 'b', 'c'], chosenLink })}
           onToggleLink={vi.fn()}
-          onUnpin={vi.fn()}
         />,
       );
       const sig = Array.from(container.querySelectorAll('*'))

@@ -63,7 +63,6 @@ it('resumes experiment condition and both decision records without rerolling', (
   const first = renderHook(() => useGame({ storage: s }));
   for (const documentId of ['a', 'b']) {
     act(() => first.result.current.dispatch({ type: 'open-document', documentId }));
-    act(() => first.result.current.dispatch({ type: 'toggle-pin', documentId }));
   }
   act(() => first.result.current.dispatch({ type: 'v2-experiment-initial', choiceId: 'buy' }));
   const record = {
@@ -80,7 +79,6 @@ it('resumes experiment condition and both decision records without rerolling', (
   expect(mid.result.current.progress.v2?.experiment?.initialChoice).toBe('buy');
   expect(mid.result.current.progress.v2?.decisions).toEqual([record]);
   act(() => mid.result.current.dispatch({ type: 'open-document', documentId: 'c' }));
-  act(() => mid.result.current.dispatch({ type: 'toggle-pin', documentId: 'c' }));
   act(() =>
     mid.result.current.dispatch({
       type: 'v2-experiment-update',
@@ -149,13 +147,11 @@ it('normalizes bad phases, IDs and hidden documents when restoring the same revi
   const raw = {
     ...createProgress(c),
     opened: ['a', 'c', 'missing'],
-    pinned: ['a', 'c', 'missing'],
   };
   raw.v2!.experiment!.initialChoice = 'invalid';
   const restored = restoreProgress(c, raw);
   expect(restored.opened).toEqual(['a']);
   expect(restored.v2?.experiment?.stage).toBe('initial');
-  expect(restored.pinned).toEqual(['a']);
 });
 
 it('individual reset removes old and V2 histories only for that case', () => {
@@ -177,11 +173,10 @@ it('individual reset removes old and V2 histories only for that case', () => {
   expect(reset.caseRevisions).toEqual({ other: 1 });
 });
 
-it('preserves initial decision history after old evidence is unpinned', () => {
+it('preserves initial decision history when restoring the same revision', () => {
   let p = createProgress(c);
   for (const documentId of ['a', 'b']) {
     p = reduceProgress(c, p, { type: 'open-document', documentId });
-    p = reduceProgress(c, p, { type: 'toggle-pin', documentId });
   }
   p = reduceProgress(c, p, {
     type: 'v2-decision',
@@ -194,6 +189,5 @@ it('preserves initial decision history after old evidence is unpinned', () => {
       counterEvidence: ['b'],
     },
   });
-  p = reduceProgress(c, p, { type: 'toggle-pin', documentId: 'a' });
   expect(restoreProgress(c, p).v2?.decisions).toEqual(p.v2?.decisions);
 });

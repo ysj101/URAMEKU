@@ -9,7 +9,6 @@ const c = makeV2Case(['decoding', 'experiment', 'decision']);
 function readAndPin(progress: CaseProgress, ids = ['a', 'b']) {
   for (const documentId of ids) {
     progress = reduceProgress(c, progress, { type: 'open-document', documentId });
-    progress = reduceProgress(c, progress, { type: 'toggle-pin', documentId });
   }
   return progress;
 }

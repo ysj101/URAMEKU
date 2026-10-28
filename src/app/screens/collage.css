@@ -557,18 +557,6 @@ body:has(.home) {
   border-color: var(--color-surface);
   background: var(--color-surface-smudge);
 }
-.desk-grid .doc-tile--pinned::after {
-  content: '採用';
-  position: absolute;
-  right: 8px;
-  top: 45px;
-  border: 3px double var(--color-accent);
-  color: var(--color-accent);
-  background: var(--color-surface);
-  padding: 4px;
-  font-weight: 900;
-  transform: rotate(12deg);
-}
 /* Detail reading uses HTML text on quiet paper; no image contains required facts. */
 .document-dialog {
   border: 1px solid var(--color-ink);
@@ -877,9 +865,6 @@ body:has(.home) {
   .evidence-card__prop {
     width: 68px;
     height: 75px;
-  }
-  .evidence-card__remove {
-    white-space: normal;
   }
   .stage-switch {
     flex-wrap: wrap;
