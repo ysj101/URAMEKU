@@ -13,10 +13,10 @@ const V2_RELATION_LABEL: Record<V2Relation, string> = {
 
 /** 役割ごとの意味。A = 起点の資料、B = 結び付ける資料 */
 const V2_RELATION_HELP: Record<V2Relation, string> = {
-  supports: 'A の内容が、B の数字や主張の裏付けになる',
-  contradicts: 'A の内容が、B の数字や主張と食い違う',
-  qualifies: 'A が、B の成り立つ範囲・前提・条件を限定する',
-  sequence: 'A のあとに B が起きた、または A が B の前段になる',
+  supports: 'A に書いてあることが、B の数字や主張を支える',
+  contradicts: 'A に書いてあることが、B の数字や主張と食い違う',
+  qualifies: 'A が、B が成り立つ範囲・前提・条件をしぼる',
+  sequence: 'A のあとに B が起きた、または A が B の前の段階になる',
 };
 
 /** 「A は B を〜」の形で読める 1 文にする */
@@ -77,7 +77,7 @@ export function V2EvidenceBoard({ caseData, progress, onAction }: V2DeskProps) {
     ? describeLink(title(from), title(to), relation)
     : from && !to
       ? `「${title(from)}」 は …（結び付ける資料を選んでください）`
-      : '資料を 2 つ選ぶと、ここに関係が 1 文で表示されます。';
+      : '資料を 2 つ選ぶと、その関係がここに 1 文で表示されます。';
   return (
     <section className="v2-desk evidence-board" role="group" aria-label="証拠ボード">
       <h2 className="section-title">
@@ -99,10 +99,11 @@ export function V2EvidenceBoard({ caseData, progress, onAction }: V2DeskProps) {
         </li>
       </ol>
       <p className="v2-desk__lead">
-        {target > 0 && `この事件では ${target} 件以上の関係を残すのが目安です。`}
-        同じ 2 資料に別の役割を付けても構いません。調査中に正答は表示しません。
+        {target > 0 && `この事件では、関係を ${target} 件以上残すのが目安です。`}
+        同じ 2
+        つの資料に、別の役割を付けてもかまいません。どの関係が合っているかは、調査中には表示しません。
       </p>
-      <ul aria-label="採用した資料">
+      <ul aria-label="ボードに貼った資料">
         {documents.map((document) => (
           <li key={document.id}>
             {document.title}{' '}
@@ -119,7 +120,7 @@ export function V2EvidenceBoard({ caseData, progress, onAction }: V2DeskProps) {
         ))}
       </ul>
       {documents.length < 2 && (
-        <p>資料を少なくとも2件読み、証拠ボードに採用すると関係を記録できます。</p>
+        <p>資料を 2 件以上読んで証拠ボードに貼ると、関係を記録できるようになります。</p>
       )}
       <form
         onSubmit={(event) => {

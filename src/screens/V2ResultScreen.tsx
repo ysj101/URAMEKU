@@ -44,7 +44,7 @@ export function V2ResultScreen({ game, nav }: { game: GameApi; nav: Navigation }
           {result.completed ? '根拠と判断の記録をまとめました' : 'まだ確認できる点があります'}
         </h2>
         <p>
-          選んだ方針や反応の違いに、一律の正解は付けません。確認した事実・根拠・不確実な点を見直します。
+          選んだ方針や反応の違いに、決まった正解は付けません。ここでは、確認した事実・根拠・まだはっきりしない点を見直します。
         </p>
         <dl className="v2-summary">
           {Object.entries(result.tracks)
@@ -73,7 +73,7 @@ export function V2ResultScreen({ game, nav }: { game: GameApi; nav: Navigation }
         )}
         {state.report.uncertainty.trim() && (
           <>
-            <h3>未確認の点・前提や留保</h3>
+            <h3>未確認の点・前提・まだ決めきれないこと</h3>
             <p>{state.report.uncertainty}</p>
           </>
         )}
@@ -84,7 +84,7 @@ export function V2ResultScreen({ game, nav }: { game: GameApi; nav: Navigation }
             <p>最初の判断：{experiment.initial ?? '未記録'}</p>
             <p>比較後の判断：{experiment.updated ?? '未記録'}</p>
             <p>維持・変更した理由：{experiment.reason || '未記録'}</p>
-            <p>一回の反応から個人の特性は判断できません。</p>
+            <p>一回の反応だけでは、その人の特徴は判断できません。</p>
           </section>
         )}
         {state.decisions.length > 0 && (
@@ -115,9 +115,13 @@ export function V2ResultScreen({ game, nav }: { game: GameApi; nav: Navigation }
             <h3>条件付きの結果</h3>
             <p>{outcome.option.outcome}</p>
             <p>{outcome.option.tradeoff}</p>
-            <p>結果の幸不幸だけでは、当時の判断の妥当性は決まりません。</p>
+            <p>
+              結果がよかったか悪かったかだけでは、そのときの判断がよかったかどうかは決まりません。
+            </p>
             <details>
-              <summary>選ばなかった方針の想定（反実仮想）</summary>
+              <summary>
+                ほかの方針を選んでいたらどうなっていたか（実際には起きていない想定）
+              </summary>
               {outcome.counterfactuals.map((option) => (
                 <p key={option.id}>
                   {option.text}：{option.outcome} {option.tradeoff}

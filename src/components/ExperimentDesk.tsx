@@ -53,7 +53,7 @@ export function ExperimentDesk({ caseData, progress, onAction }: V2DeskProps) {
           </p>
           {!canCompare && (
             <p role="status">
-              比較の段階です。新たに閲覧できる調査資料を読んでから、もう一度判断してください。
+              ここからは比べる段階です。新しく開けるようになった調査資料を読んでから、もう一度判断してください。
             </p>
           )}
           {canCompare && !finished && (
@@ -108,13 +108,15 @@ export function ExperimentDesk({ caseData, progress, onAction }: V2DeskProps) {
                 {compared?.updated}
               </p>
               <p>{record.reason}</p>
-              <p>最初と比較後の判断を記録しました。反応の違いに正誤は付けません。</p>
+              <p>
+                最初の判断と、比べたあとの判断を記録しました。反応の違いに、正解・不正解は付けません。
+              </p>
             </div>
           )}
         </>
       )}
       <p className="fine">
-        これは見え方を振り返るための小さな体験です。一度の反応を個人の特徴に一般化しません。記録はこの端末に保存します。
+        これは、情報の見え方をふり返るための小さな体験です。一度の反応だけで、その人の特徴を決めつけることはしません。記録はこの端末に保存します。
       </p>
     </section>
   );

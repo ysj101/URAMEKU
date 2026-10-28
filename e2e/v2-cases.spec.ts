@@ -53,9 +53,15 @@ for (const [caseIndex, policy] of [
     await expect(page.locator('.v2-history')).toContainText(text);
     await expect(page.getByRole('heading', { name: '条件付きの結果', exact: true })).toBeVisible();
     await expect(
-      page.getByText('結果の幸不幸だけでは、当時の判断の妥当性は決まりません。'),
+      page.getByText(
+        '結果がよかったか悪かったかだけでは、そのときの判断がよかったかどうかは決まりません。',
+      ),
     ).toBeVisible();
-    await page.getByText('選ばなかった方針の想定（反実仮想）', { exact: true }).click();
+    await page
+      .getByText('ほかの方針を選んでいたらどうなっていたか（実際には起きていない想定）', {
+        exact: true,
+      })
+      .click();
     const alternative = c.v2!.decision!.options.find((option) => option.id !== policy)!;
     await expect(
       page.getByText(`${alternative.text}：${alternative.outcome} ${alternative.tradeoff}`, {
@@ -305,7 +311,7 @@ test('マウスとドラッグを使わずTab・矢印・Space・EnterでCASE01�
   await page.keyboard.type('確認した対象範囲を限定して報告する。');
   await tabTo(
     page,
-    page.getByRole('textbox', { name: '未確認の点・判断の前提や留保', exact: true }),
+    page.getByRole('textbox', { name: '未確認の点・前提・まだ決めきれないこと', exact: true }),
   );
   await page.keyboard.type('調査の対象外と原因の説明は未確認である。');
   await tabTo(page, page.getByRole('button', { name: '報告を提出して振り返る', exact: true }));

@@ -87,7 +87,7 @@ export async function fillReport(page: Page, claim = '確認した資料の対�
   await openReportNotes(page);
   await page.getByRole('textbox', { name: '確認できたこと・採る方針' }).fill(claim);
   await page
-    .getByRole('textbox', { name: '未確認の点・判断の前提や留保' })
+    .getByRole('textbox', { name: '未確認の点・前提・まだ決めきれないこと' })
     .fill('資料だけでは原因や将来の結果は確定しない。');
 }
 export async function submitArticle(page: Page) {

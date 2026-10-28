@@ -180,7 +180,9 @@ function DecisionMock({ callout }: { callout: string }) {
         <span className="ts-legend">現在の情報での判断</span>
         <span className="ts-label">優先する目的</span>
         <span className="ts-select">解約の原因を確かめる</span>
-        <span className="ts-legend">方針（選択そのものに正誤は付けません）</span>
+        <span className="ts-legend">
+          方針（どれを選んでも、合っている・まちがっているは付けません）
+        </span>
         <span className="ts-radio ts-radio-on">解約者に聞き取りをする（必要資源 2）</span>
         <span className="ts-radio">広告を差し替える（必要資源 3）</span>
         <div className="ts-columns">
@@ -210,15 +212,15 @@ function ReportMock({ callout }: { callout: string }) {
     <div className="ts-paper">
       <div className="ts-meter">
         <span>STEP 02 / 調査報告をまとめる</span>
-        <span>採用証拠 3 件</span>
+        <span>ボードに貼った資料 3 件</span>
       </div>
-      <span className="ts-section">根拠と留保を添えた報告</span>
+      <span className="ts-section">根拠と、まだ決めきれないことを添えた報告</span>
       <div className="ts-form ts-target">
         <span className="ts-label">確認できたこと・採る方針</span>
         <span className="ts-textarea">
           満足度 92% は回答者 25 人の数字。解約者の記録と食い違う。
         </span>
-        <span className="ts-label">未確認の点・判断の前提や留保</span>
+        <span className="ts-label">未確認の点・前提・まだ決めきれないこと</span>
         <span className="ts-textarea">未回答の 95 人の満足度は分からない。</span>
         <Callout text={callout} />
       </div>

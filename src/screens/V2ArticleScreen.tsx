@@ -26,13 +26,13 @@ export function V2ArticleScreen({ game }: { game: GameApi }) {
         <span data-focus-target tabIndex={-1}>
           STEP 02 / 調査報告をまとめる
         </span>
-        <span>採用証拠 {progress.pinned.length} 件</span>
+        <span>ボードに貼った資料 {progress.pinned.length} 件</span>
       </div>
       <section className="v2-panel" aria-labelledby="v2-report-title">
         <h2 id="v2-report-title">調査記録から報告をまとめる</h2>
         <p>{current.v2?.reportPrompt}</p>
         <p>
-          報告の骨子は、デスクで残した記録から自動でまとまります。足りない記録があれば「調査へ戻る」で追記できます。
+          報告の骨組みは、デスクで残した記録から自動でまとまります。足りない記録があれば、「調査へ戻る」で書き足せます。
         </p>
         <section className="v2-report-digest" aria-label="報告に含まれる記録">
           <h3>読み取りの記録</h3>
@@ -50,9 +50,12 @@ export function V2ArticleScreen({ game }: { game: GameApi }) {
                         → {chosen.text}
                         <br />
                         <small>
-                          参照資料：
+                          もとになる資料：
                           {chosen.evidence
-                            .map((id) => `${doc(id)}（${adopted(id) ? '採用済み' : '未採用'}）`)
+                            .map(
+                              (id) =>
+                                `${doc(id)}（${adopted(id) ? 'ボードに貼った' : 'まだ貼っていない'}）`,
+                            )
                             .join('、')}
                         </small>
                       </p>
@@ -99,7 +102,7 @@ export function V2ArticleScreen({ game }: { game: GameApi }) {
         </section>
         <details className="v2-report-notes" open={Boolean(report.claim || report.uncertainty)}>
           <summary>自分の言葉で補足する（任意）</summary>
-          <p>書かなくても提出できます。記録に残したいことがあれば自由に書いてください。</p>
+          <p>ここは書かなくても提出できます。記録に残したいことがあれば、自由に書いてください。</p>
           <label htmlFor="v2-report-claim">確認できたこと・採る方針</label>
           <textarea
             id="v2-report-claim"
@@ -113,7 +116,7 @@ export function V2ArticleScreen({ game }: { game: GameApi }) {
               })
             }
           />
-          <label htmlFor="v2-report-uncertainty">未確認の点・判断の前提や留保</label>
+          <label htmlFor="v2-report-uncertainty">未確認の点・前提・まだ決めきれないこと</label>
           <textarea
             id="v2-report-uncertainty"
             value={report.uncertainty}

@@ -41,7 +41,9 @@ export function DecisionDesk({ caseData, progress, onAction }: V2DeskProps) {
     <section className="v2-desk" aria-label="意思決定シミュレーション">
       <h2 className="section-title">意思決定シミュレーション</h2>
       <p>{definition.prompt}</p>
-      <p>行動に使える資源：{definition.resources}。調査予算とは別の制約です。</p>
+      <p>
+        行動に使える資源：{definition.resources}。これは、資料を開くための調査予算とは別の制限です。
+      </p>
       {records.length > 0 && (
         <ol className="v2-desk__history" aria-label="判断の履歴">
           {records.map((record, index) => (
@@ -61,7 +63,7 @@ export function DecisionDesk({ caseData, progress, onAction }: V2DeskProps) {
       )}
       {waiting && (
         <p role="status">
-          判断を記録しました。新たに閲覧できる資料を確認すると、方針を維持・変更できます。
+          判断を記録しました。新しく開けるようになった資料を確かめると、方針をそのままにするか変えるかを選べます。
         </p>
       )}
       {!waiting && (
@@ -102,7 +104,7 @@ export function DecisionDesk({ caseData, progress, onAction }: V2DeskProps) {
               ))}
             </select>
             <fieldset>
-              <legend>方針（選択そのものに正誤は付けません）</legend>
+              <legend>方針（どれを選んでも、合っている・まちがっているは付けません）</legend>
               {definition.options.map((option) => (
                 <label key={option.id}>
                   <input
@@ -154,7 +156,7 @@ export function DecisionDesk({ caseData, progress, onAction }: V2DeskProps) {
               </fieldset>
             </div>
             {documents.length < 2 && (
-              <p>異なる資料を少なくとも2件読み、証拠ボードに採用してください。</p>
+              <p>ちがう資料を 2 件以上読んで、証拠ボードに貼ってください。</p>
             )}
             <label htmlFor="decision-assumptions">この判断が成り立つ前提・不確実な点</label>
             <textarea
@@ -184,10 +186,10 @@ export function DecisionDesk({ caseData, progress, onAction }: V2DeskProps) {
           <p>{outcome.option.outcome}</p>
           <p>{outcome.option.tradeoff}</p>
           <p>
-            結果の良し悪しから、判断が正しかったかを逆算しません。当時分かっていた情報と前提を振り返ってください。
+            結果がよかったか悪かったかで、判断が正しかったかどうかを決めることはしません。判断したときに分かっていた情報と前提をふり返ってください。
           </p>
           <details>
-            <summary>選ばなかった方針の想定（反実仮想）</summary>
+            <summary>ほかの方針を選んでいたらどうなっていたか（実際には起きていない想定）</summary>
             {outcome.counterfactuals.map((option) => (
               <p key={option.id}>
                 <strong>{option.text}：</strong>

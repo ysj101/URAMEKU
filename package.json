@@ -25,6 +25,7 @@
     "check": "npm run lint && npm run typecheck && npm run format:check && npm run test",
     "analyze:dead-ends": "node scripts/analyze_dead_ends.mjs",
     "lint:content": "node scripts/lint_content.mjs",
+    "lint:wording": "node scripts/lint_wording.mjs",
     "walkthrough": "node scripts/generate_walkthrough.mjs",
     "smoke:dist": "node scripts/smoke_dist.mjs",
     "summarize:user-tests": "node scripts/summarize_user_tests.mjs",
