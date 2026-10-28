@@ -8,6 +8,7 @@ import { V2EvidenceBoard } from '../components/V2EvidenceBoard';
 import { canOpenDocument, remainingBudget } from '../domain/budget';
 import { isDeadEnd } from '../domain/deadEnd';
 import { decisionComplete } from '../domain/decision';
+import { decodingReviews } from '../domain/decoding';
 import { experimentComplete } from '../domain/experiment';
 import type { CaseData, CaseProgress } from '../domain/types';
 import type { GameApi } from '../state/useGame';
@@ -48,7 +49,10 @@ function storeTab(caseId: string, tab: DeskTab) {
 function summarize(caseData: CaseData, progress: CaseProgress) {
   const v2 = caseData.v2;
   const tasks = v2?.decoding ?? [];
-  const answered = tasks.filter((task) => progress.v2?.decoding[task.id]?.optionId).length;
+  const reviews = decodingReviews(caseData, progress);
+  // 「回答済み」は答えを選び、参照資料をすべて採用した問い。答えだけの問いは根拠待ちとして別に数える。
+  const answered = reviews.filter((review) => review.recorded && review.grounded).length;
+  const awaitingEvidence = reviews.filter((review) => review.recorded && !review.grounded).length;
   const links = progress.v2?.links.length ?? 0;
   const paths = v2?.graph.paths ?? [];
   const linkTarget = paths.length ? Math.min(...paths.map((path) => path.length)) : 0;
@@ -57,6 +61,7 @@ function summarize(caseData: CaseData, progress: CaseProgress) {
     total: caseData.documents.length,
     pinned: progress.pinned.length,
     answered,
+    awaitingEvidence,
     tasks: tasks.length,
     links,
     linkTarget,
@@ -105,7 +110,11 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
     });
   };
   const pending = [
-    summary.remainingTasks > 0 ? `読み取り あと ${summary.remainingTasks} 問` : null,
+    summary.remainingTasks > 0
+      ? `読み取り あと ${summary.remainingTasks} 問${
+          summary.awaitingEvidence > 0 ? `（参照資料が未採用 ${summary.awaitingEvidence} 問）` : ''
+        }`
+      : null,
     summary.remainingLinks > 0 ? `関係 あと ${summary.remainingLinks} 件` : null,
   ].filter(Boolean);
 
@@ -153,7 +162,10 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
             <small> / {summary.tasks}</small>
           </span>
           {summary.remainingTasks > 0 && (
-            <span className="v2-progress__todo">あと {summary.remainingTasks} 問</span>
+            <span className="v2-progress__todo">
+              あと {summary.remainingTasks} 問
+              {summary.awaitingEvidence > 0 && `・資料未採用 ${summary.awaitingEvidence}`}
+            </span>
           )}
         </button>
         <button

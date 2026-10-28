@@ -31,19 +31,23 @@ function Harness({ data }: { data: CaseData }) {
 }
 
 describe('V2プレイの統合', () => {
-  it('計算欄を要求せず報告と留保を編集して提出できる', () => {
+  it('自由文を書かなくても提出でき、任意の補足は保持される', () => {
     render(<Harness data={makeV2Case()} />);
     expect(screen.queryByRole('heading', { name: '数値検証メモ' })).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: '調査報告をまとめる →' }));
     const submit = screen.getByRole('button', { name: '報告を提出して振り返る' });
-    expect(submit).toHaveAttribute('aria-disabled', 'true');
+    expect(submit).not.toHaveAttribute('aria-disabled');
+    // 骨子は記録から自動で組み立てられ、未記録の問いもそのまま見える
+    expect(screen.getByRole('region', { name: '報告に含まれる記録' })).toHaveTextContent(
+      '主張の対象範囲を確認してください。',
+    );
+    expect(screen.getByText('まだ関係を記録していません。')).toBeInTheDocument();
     fireEvent.change(screen.getByRole('textbox', { name: '確認できたこと・採る方針' }), {
       target: { value: '対象を限定して報告する。' },
     });
     fireEvent.change(screen.getByRole('textbox', { name: '未確認の点・判断の前提や留保' }), {
       target: { value: '資料にない因果関係は保留する。' },
     });
-    expect(submit).not.toHaveAttribute('aria-disabled');
     fireEvent.click(screen.getByRole('button', { name: '← 調査へ戻る' }));
     fireEvent.click(screen.getByRole('button', { name: '調査報告をまとめる →' }));
     expect(screen.getByRole('textbox', { name: '確認できたこと・採る方針' })).toHaveValue(
@@ -64,12 +68,15 @@ describe('V2プレイの統合', () => {
     render(<Harness data={makeV2Case()} />);
     const group = screen.getByRole('group', { name: '主張の対象範囲を確認してください。' });
     fireEvent.click(screen.getByRole('radio', { name: '確認した対象に限られる' }));
-    expect(screen.getByText('問 1 ・ 回答済み ・ 根拠 0 件')).toBeInTheDocument();
+    // 答えだけでは完了にせず、参照資料の採用が必要なことを見出しで示す
+    expect(screen.getByText('問 1 ・ 回答済み ・ 参照資料が未採用 2 件')).toBeInTheDocument();
+    expect(screen.getByRole('status')).toHaveTextContent('未採用の資料があります');
     // 畳むと選択肢は消え、選んだ答えが見出しに残る
     fireEvent.click(screen.getByRole('button', { name: /閉じる/ }));
     expect(screen.queryByRole('radio')).not.toBeInTheDocument();
     expect(group).toHaveTextContent('→ 確認した対象に限られる');
-    fireEvent.click(screen.getByRole('button', { name: /変更する/ }));
+    // 参照資料が未採用のうちは「資料を確認」と促す
+    fireEvent.click(screen.getByRole('button', { name: /資料を確認/ }));
     expect(screen.getByRole('radio', { name: '確認した対象に限られる' })).toBeChecked();
   });
 

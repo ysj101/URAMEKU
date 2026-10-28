@@ -72,7 +72,7 @@ export function evaluateCase(caseData: CaseData, progress: CaseProgress): Evalua
       calculationsCorrect: 0,
       calculationsTotal: 0,
       fragmentsInPlace: 0,
-      articleCorrect: v2.tracks.report.done === v2.tracks.report.total,
+      articleCorrect: v2.tracks.report.done >= v2.tracks.report.total,
       remainingBudget: remainingBudget(caseData, progress),
       points: 0,
       cleared: v2.completed,

@@ -473,6 +473,118 @@
   margin: 0;
 }
 
+/* 根拠待ち（答えは選んだが支える資料が 0 件） */
+.v2-task--needs-evidence {
+  border-color: var(--color-accent);
+}
+.v2-task--needs-evidence .v2-task__mark {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+  color: var(--color-ink-inverse);
+}
+.v2-task--needs-evidence .v2-task__meta {
+  color: var(--color-accent);
+}
+.v2-task__step {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+}
+.v2-tabpanel .v2-desk .v2-task__evidence--needed {
+  border-style: solid;
+  border-color: var(--color-accent);
+}
+.v2-task__evidence-title {
+  margin: 0 0 var(--space-1);
+  font-size: var(--font-size-sm);
+}
+.v2-task__refs {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: var(--space-1);
+}
+.v2-task__ref {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-sm);
+}
+.v2-task__ref small {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+.v2-task__ref.is-adopted small {
+  color: var(--color-success);
+}
+.v2-tabpanel .v2-desk .v2-task__warning {
+  font-weight: 700;
+  color: var(--color-accent);
+}
+.v2-tabpanel .v2-desk .v2-task__ok {
+  color: var(--color-success);
+  font-weight: 700;
+}
+
+/* --- 証拠ボード: 手順・役割の意味・1 文プレビュー --- */
+.evidence-board__steps {
+  margin: 0 0 var(--space-2);
+  padding-left: 1.4em;
+  font-size: var(--font-size-sm);
+  line-height: 1.6;
+}
+.evidence-board__pair {
+  display: grid;
+  gap: var(--space-2) var(--space-3);
+}
+@media (min-width: 640px) {
+  .evidence-board__pair {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.evidence-board__roles {
+  display: grid;
+  gap: var(--space-1);
+  margin: var(--space-2) 0;
+  font-size: var(--font-size-sm);
+}
+.evidence-board__roles > div {
+  display: grid;
+  grid-template-columns: minmax(8em, auto) 1fr;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  border-left: 3px solid transparent;
+  color: var(--color-quiet);
+}
+.evidence-board__roles > div.is-current {
+  border-left-color: var(--color-info);
+  background: var(--color-surface-note);
+  color: var(--color-ink);
+}
+.evidence-board__roles dt {
+  font-weight: 700;
+}
+.evidence-board__roles dd {
+  margin: 0;
+}
+.evidence-board__preview {
+  margin: var(--space-2) 0;
+  padding: var(--space-2) var(--space-3);
+  border: var(--border-width-thin) dashed var(--color-border-dashed);
+  background: var(--color-surface-note);
+  font-weight: 700;
+}
+.evidence-board__preview-label {
+  display: block;
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  color: var(--color-quiet);
+}
+.evidence-board__links li {
+  margin-block: var(--space-2);
+}
+
 /* --- 下部の操作バー --- */
 .v2-actions {
   position: sticky;

@@ -21,7 +21,7 @@ export function V2ResultScreen({ game, nav }: { game: GameApi; nav: Navigation }
     graph: '根拠の関係',
     experiment: '提示条件の比較',
     decision: '判断と更新',
-    report: '報告と留保',
+    report: '自由文の補足',
   };
   const index = game.cases.findIndex((c) => c.id === current.id);
   const next = game.cases[index + 1];
@@ -65,10 +65,18 @@ export function V2ResultScreen({ game, nav }: { game: GameApi; nav: Navigation }
             ))}
           </ul>
         )}
-        <h3>報告に残したこと</h3>
-        <p>{state.report.claim}</p>
-        <h3>未確認の点・前提や留保</h3>
-        <p>{state.report.uncertainty}</p>
+        {state.report.claim.trim() && (
+          <>
+            <h3>報告に残したこと</h3>
+            <p>{state.report.claim}</p>
+          </>
+        )}
+        {state.report.uncertainty.trim() && (
+          <>
+            <h3>未確認の点・前提や留保</h3>
+            <p>{state.report.uncertainty}</p>
+          </>
+        )}
         {experiment && (
           <section aria-label="提示条件と反応の記録">
             <h3>提示条件と反応</h3>

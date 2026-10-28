@@ -17,36 +17,53 @@ function firstUnanswered(tasks: V2DecodingTask[], progress: CaseProgress): strin
 
 /**
  * 情報解読メモ。問いはアコーディオンで、開くのは常に 1 問。
- * 回答済みの問いは 1 行（✓ と選んだ答え）に畳む。
+ * 根拠は手動で選ばせない。選んだ答えが参照する資料を一覧し、
+ * すべて開いて証拠ボードに採用していれば ✓、未採用があれば「!」で促す。
  * Only the question and player's record are shown here; answer explanations stay in the debrief.
  */
 export function InformationDesk({ caseData, progress, onAction }: V2DeskProps) {
   const tasks = caseData.v2?.decoding ?? [];
   const [openId, setOpenId] = useState<string | null>(() => firstUnanswered(tasks, progress));
   if (!tasks.length) return null;
-  const documents = caseData.documents.filter(
-    (document) => progress.opened.includes(document.id) && progress.pinned.includes(document.id),
-  );
+  const title = (id: string) => caseData.documents.find((d) => d.id === id)?.title ?? id;
+  const adopted = (id: string) => progress.opened.includes(id) && progress.pinned.includes(id);
   return (
     <section className="v2-desk" aria-label="情報解読メモ">
       <h2 className="section-title">情報解読メモ</h2>
       <p className="v2-desk__lead">
-        資料の出典・対象・期間を比べ、言えることと言い切れないことを記録してください。回答済みの問いは畳まれます。
+        答えを選ぶと、その読み取りが参照する資料が並びます。参照する資料をすべて開いて証拠ボードに採用すると、根拠ありとして記録が完了します。
       </p>
       {tasks.map((task, index) => {
         const record = progress.v2?.decoding[task.id];
-        const answered = Boolean(record?.optionId);
-        const open = openId === task.id;
         const chosen = task.options.find((option) => option.id === record?.optionId);
+        const answered = Boolean(chosen);
+        const references = chosen?.evidence ?? [];
+        const missing = references.filter((id) => !adopted(id));
+        const grounded = answered && references.length > 0 && missing.length === 0;
+        const needsEvidence = answered && !grounded;
+        const open = openId === task.id;
         const next = tasks[index + 1];
         const promptId = `decode-prompt-${task.id}`;
         const bodyId = `decode-body-${task.id}`;
-        const update = (optionId: string, evidence: string[], note?: string) =>
-          onAction({ type: 'v2-decode', taskId: task.id, optionId, evidence, note });
+        const update = (optionId: string, note?: string) => {
+          const option = task.options.find((candidate) => candidate.id === optionId);
+          onAction({
+            type: 'v2-decode',
+            taskId: task.id,
+            optionId,
+            evidence: option?.evidence ?? [],
+            note,
+          });
+        };
+        const stateClass = grounded
+          ? 'v2-task--answered'
+          : needsEvidence
+            ? 'v2-task--needs-evidence'
+            : '';
         return (
           <fieldset
             key={task.id}
-            className={`v2-task ${answered ? 'v2-task--answered' : ''} ${open ? 'v2-task--open' : ''}`}
+            className={`v2-task ${stateClass} ${open ? 'v2-task--open' : ''}`}
             disabled={progress.published}
             aria-labelledby={promptId}
           >
@@ -58,12 +75,13 @@ export function InformationDesk({ caseData, progress, onAction }: V2DeskProps) {
               onClick={() => setOpenId(open ? null : task.id)}
             >
               <span className="v2-task__mark" aria-hidden="true">
-                {answered ? '✓' : index + 1}
+                {grounded ? '✓' : needsEvidence ? '!' : index + 1}
               </span>
               <span className="v2-task__text">
                 <span className="v2-task__meta">
                   問 {index + 1} ・ {answered ? '回答済み' : '未回答'}
-                  {answered && ` ・ 根拠 ${record?.evidence.length ?? 0} 件`}
+                  {grounded && ` ・ 根拠 ${references.length} 件`}
+                  {needsEvidence && ` ・ 参照資料が未採用 ${missing.length} 件`}
                 </span>
                 <span className="v2-task__prompt" id={promptId}>
                   {task.prompt}
@@ -71,7 +89,13 @@ export function InformationDesk({ caseData, progress, onAction }: V2DeskProps) {
                 {!open && chosen && <span className="v2-task__answer">→ {chosen.text}</span>}
               </span>
               <span className="v2-task__action">
-                {open ? '閉じる' : answered ? '変更する' : '回答する'}
+                {open
+                  ? '閉じる'
+                  : needsEvidence
+                    ? '資料を確認'
+                    : answered
+                      ? '変更する'
+                      : '回答する'}
               </span>
             </button>
             {open && (
@@ -83,35 +107,43 @@ export function InformationDesk({ caseData, progress, onAction }: V2DeskProps) {
                         type="radio"
                         name={`decode-${task.id}`}
                         checked={record?.optionId === option.id}
-                        onChange={() => update(option.id, record?.evidence ?? [], record?.note)}
+                        onChange={() => update(option.id, record?.note)}
                       />
                       {option.text}
                     </label>
                   ))}
                 </div>
-                <fieldset className="v2-task__evidence">
-                  <legend>この読み取りを支える資料</legend>
-                  {documents.length === 0 && <p>資料を読み、証拠ボードに採用すると選べます。</p>}
-                  <div className="v2-task__chips">
-                    {documents.map((document) => (
-                      <label key={document.id} className="v2-task__chip">
-                        <input
-                          type="checkbox"
-                          checked={record?.evidence.includes(document.id) ?? false}
-                          disabled={!record?.optionId}
-                          onChange={(event) => {
-                            if (!record) return;
-                            const evidence = event.target.checked
-                              ? [...record.evidence, document.id]
-                              : record.evidence.filter((id) => id !== document.id);
-                            update(record.optionId, evidence, record.note);
-                          }}
-                        />
-                        {document.title}
-                      </label>
-                    ))}
-                  </div>
-                </fieldset>
+                <section
+                  className={`v2-task__evidence ${needsEvidence ? 'v2-task__evidence--needed' : ''}`}
+                  aria-label="この読み取りが参照する資料"
+                >
+                  <h3 className="v2-task__evidence-title">この読み取りが参照する資料</h3>
+                  {!answered && <p>答えを選ぶと、参照する資料と採用状況がここに並びます。</p>}
+                  {answered && (
+                    <ul className="v2-task__refs">
+                      {references.map((id) => (
+                        <li
+                          key={id}
+                          className={adopted(id) ? 'v2-task__ref is-adopted' : 'v2-task__ref'}
+                        >
+                          <span aria-hidden="true">{adopted(id) ? '✓' : '○'}</span>
+                          {title(id)}
+                          <small>{adopted(id) ? '採用済み' : '未採用'}</small>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  {needsEvidence && (
+                    <p className="v2-task__warning" role="status">
+                      未採用の資料があります。左の調査資料から開き、「証拠ボードに貼る」で採用すると根拠ありになります。
+                    </p>
+                  )}
+                  {grounded && (
+                    <p className="v2-task__ok" role="status">
+                      参照する資料はすべて採用済みです。根拠ありとして記録しました。
+                    </p>
+                  )}
+                </section>
                 <details className="v2-task__note" open={Boolean(record?.note)}>
                   <summary>補足メモ（任意）</summary>
                   <label htmlFor={`decode-note-${task.id}`} className="visually-hidden">
@@ -123,7 +155,7 @@ export function InformationDesk({ caseData, progress, onAction }: V2DeskProps) {
                     maxLength={2000}
                     disabled={!record?.optionId}
                     onChange={(event) => {
-                      if (record) update(record.optionId, record.evidence, event.target.value);
+                      if (record) update(record.optionId, event.target.value);
                     }}
                   />
                 </details>

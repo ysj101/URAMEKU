@@ -157,7 +157,11 @@ export function reduceV2Progress(
   switch (action.type) {
     case 'v2-decode': {
       const task = config.decoding.find((t) => t.id === action.taskId);
-      if (!task?.options.some((o) => o.id === action.optionId) || !validEvidence(action.evidence))
+      // 根拠の有無は評価時に参照資料の採用状況から自動判定するため、
+      // ここでは資料 ID が事件に存在することだけを確かめる（未採用でも答えは記録できる）。
+      const knownDocuments = (ids: string[]) =>
+        Array.isArray(ids) && ids.every((id) => caseData.documents.some((d) => d.id === id));
+      if (!task?.options.some((o) => o.id === action.optionId) || !knownDocuments(action.evidence))
         return progress;
       const response = {
         optionId: action.optionId,

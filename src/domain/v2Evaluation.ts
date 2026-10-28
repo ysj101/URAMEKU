@@ -28,7 +28,7 @@ export const V2_TRACK_LABELS: Record<V2Track, string> = {
   graph: '資料の関係',
   experiment: '提示条件の比較',
   decision: '目的・前提・判断の記録',
-  report: '確認事項と未確認事項の報告',
+  report: '自由文の補足（任意）',
 };
 
 /** Completion measures documented work, never a value judgement, a reaction or outcome luck. */
@@ -82,11 +82,12 @@ export function evaluateV2Case(caseData: CaseData, progress: CaseProgress): V2Ev
         : 0,
       total: decisionTotal,
     },
+    // 自由文の補足は任意。書いた分だけ done に数え、完了の条件（total）にはしない。
     report: {
       done:
         Number(Boolean(progress.v2?.report.claim.trim())) +
         Number(Boolean(progress.v2?.report.uncertainty.trim())),
-      total: 2,
+      total: 0,
     },
   };
   const factualErrors = reviews

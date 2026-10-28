@@ -61,6 +61,15 @@ describe('V2 evaluation', () => {
     expect(evaluateV2Case(makeV2Case(), progress).factualErrors).toEqual([]);
     expect(evaluateV2Case(makeV2Case(), progress).completed).toBe(false);
   });
+  it('treats the free-text notes as optional: completion needs records, not prose', () => {
+    const data = makeV2Case();
+    const progress = complete();
+    progress.v2!.report = { claim: '', uncertainty: '' };
+    expect(canSubmitArticle(progress)).toBe(true);
+    expect(evaluateV2Case(data, progress).completed).toBe(true);
+    expect(evaluateV2Case(data, progress).tracks.report.total).toBe(0);
+    expect(evaluateV2Case(data, progress).missing).toEqual([]);
+  });
   it('never completes from an article guess or an empty legacy state', () => {
     const progress = makeV2Progress();
     progress.v2!.report = { claim: '結論だけ推測', uncertainty: '未確認' };
