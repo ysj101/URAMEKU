@@ -41,7 +41,6 @@ export function makeProgress(overrides: Partial<CaseProgress> = {}): CaseProgres
 export function clearedProgress(): CaseProgress {
   return makeProgress({
     opened: ['a', 'b', 'c'],
-    pinned: ['a', 'b', 'c'],
     chosenLink: ['c', 'a'],
     calculations: { t1: '45', t2: '200' },
     article: ['f0', 'f1', 'f2'],

@@ -8,7 +8,6 @@ describe('game reducer', () => {
     let p = createProgress();
     for (const id of ['a', 'b', 'c']) {
       p = reduceProgress(c, p, { type: 'open-document', documentId: id });
-      p = reduceProgress(c, p, { type: 'toggle-pin', documentId: id });
     }
     p = reduceProgress(c, p, { type: 'toggle-link', documentId: 'a' });
     p = reduceProgress(c, p, { type: 'toggle-link', documentId: 'c' });
@@ -30,28 +29,22 @@ describe('game reducer', () => {
   });
   it('normalizeProgress は壊れた値を初期化する', () => {
     expect(normalizeProgress(null)).toEqual(createProgress());
-    expect(normalizeProgress({ opened: 'x', pinned: [1, 'a'], calculations: { t1: 45 } })).toEqual({
+    expect(normalizeProgress({ opened: 'x', calculations: { t1: 45 } })).toEqual({
       ...createProgress(),
-      pinned: ['a'],
       calculations: { t1: '45' },
     });
   });
 });
 
 describe('game reducer: toggle-link', () => {
-  it('ボード未採用の資料は toggle-link で選べない', () => {
-    const p = reduceProgress(
-      c,
-      { ...createProgress(), opened: ['a'] },
-      { type: 'toggle-link', documentId: 'a' },
-    );
+  it('まだ読んでいない資料は toggle-link で選べない', () => {
+    const p = reduceProgress(c, createProgress(), { type: 'toggle-link', documentId: 'a' });
     expect(p.chosenLink).toEqual([]);
   });
   it('提出済みでは toggle-link が無視される', () => {
     const base = {
       ...createProgress(),
       opened: ['a', 'b', 'c'],
-      pinned: ['a', 'b', 'c'],
       chosenLink: ['a'],
       article: ['f0', 'f1', 'f2'],
       published: true,
@@ -60,7 +53,7 @@ describe('game reducer: toggle-link', () => {
     expect(reduceProgress(c, base, { type: 'toggle-link', documentId: 'a' })).toBe(base);
   });
   it('同じ資料を2回 toggle-link すると解除される', () => {
-    let p = { ...createProgress(), opened: ['a'], pinned: ['a'] };
+    let p = { ...createProgress(), opened: ['a'] };
     p = reduceProgress(c, p, { type: 'toggle-link', documentId: 'a' });
     expect(p.chosenLink).toEqual(['a']);
     p = reduceProgress(c, p, { type: 'toggle-link', documentId: 'a' });

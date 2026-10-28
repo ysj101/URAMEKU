@@ -44,7 +44,6 @@ describe('persistence', () => {
     const loaded = loadSaveData('case-01', s);
     expect(loaded.active).toBe('case-02');
     expect(loaded.progress['case-02']?.opened).toEqual(['a']);
-    expect(loaded.progress['case-02']?.pinned).toEqual([]);
     expect(loaded.finished['case-01']).toBe(true);
   });
   it('書き込みは常に最新バージョンで savedAt が付く', () => {

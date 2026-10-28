@@ -1,6 +1,7 @@
 /**
  * 事件進行の状態遷移をひとつの reducer にまとめる。
- * 個別のルールは budget / evidence / link / calculation / article / publish に分離。
+ * 個別のルールは budget / link / calculation / article / publish に分離。
+ * 資料は開いた時点で根拠候補になる（証拠ボードに「貼る」操作はない）。
  */
 import {
   addFragment,
@@ -11,7 +12,6 @@ import {
 } from './article';
 import { openDocument } from './budget';
 import { setCalculation } from './calculation';
-import { togglePin } from './evidence';
 import { toggleLinkSelection } from './link';
 import { revealAnswer, submitArticle, withdrawArticle } from './publish';
 import type { CaseData, CaseProgress, V2Action } from './types';
@@ -21,7 +21,6 @@ export function createProgress(caseData?: CaseData): CaseProgress {
   return {
     ...(caseData?.v2 ? { v2: createV2Progress(caseData) } : {}),
     opened: [],
-    pinned: [],
     chosenLink: [],
     calculations: {},
     article: [],
@@ -33,7 +32,6 @@ export function createProgress(caseData?: CaseData): CaseProgress {
 export type GameAction =
   | V2Action
   | { type: 'open-document'; documentId: string }
-  | { type: 'toggle-pin'; documentId: string }
   | { type: 'toggle-link'; documentId: string }
   | { type: 'set-calculation'; taskId: string; value: string }
   | { type: 'add-fragment'; fragmentId: string }
@@ -69,8 +67,6 @@ export function reduceProgress(
   switch (action.type) {
     case 'open-document':
       return openDocument(caseData, progress, action.documentId);
-    case 'toggle-pin':
-      return togglePin(caseData, progress, action.documentId);
     case 'toggle-link':
       return toggleLinkSelection(caseData, progress, action.documentId);
     case 'set-calculation':
@@ -113,7 +109,6 @@ export function normalizeProgress(raw: unknown): CaseProgress {
   return {
     ...(normalizeV2Progress(r.v2) ? { v2: normalizeV2Progress(r.v2) } : {}),
     opened: strArray(r.opened),
-    pinned: strArray(r.pinned),
     chosenLink: strArray(r.chosenLink).slice(0, 2),
     calculations,
     article: strArray(r.article).slice(0, 3),

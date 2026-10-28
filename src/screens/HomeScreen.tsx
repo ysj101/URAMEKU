@@ -128,7 +128,7 @@ export function HomeScreen({ game, nav }: { game: GameApi; nav: Navigation }) {
         </li>
         <li>
           <strong>証拠をつなぐ</strong>
-          <p>気になる資料をボードに貼り、2枚の関係を照合する。</p>
+          <p>読んだ資料どうしの関係を、証拠ボードで照合する。</p>
         </li>
         <li>
           <strong>記事にまとめる</strong>

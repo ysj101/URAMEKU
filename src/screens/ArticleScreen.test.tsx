@@ -38,9 +38,9 @@ describe('ArticleScreen', () => {
   });
 
   it('メーターと調査へ戻る導線を維持する', () => {
-    const game = makeGame(makeProgress({ pinned: ['a', 'b'], calculations: { t1: '45', t2: '' } }));
+    const game = makeGame(makeProgress({ opened: ['a', 'b'], calculations: { t1: '45', t2: '' } }));
     render(<ArticleScreen game={game} />);
-    expect(screen.getByText(/採用証拠 2 件 \/ 検証メモ 1 件/)).toBeInTheDocument();
+    expect(screen.getByText(/読んだ資料 2 件 \/ 検証メモ 1 件/)).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: '← 調査へ戻る' }));
     expect(game.setStage).toHaveBeenCalledWith('investigate');
   });

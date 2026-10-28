@@ -39,12 +39,12 @@ describe('InvestigationScreen の資料部分（MVP-022）', () => {
     expect((document.querySelector('dialog') as HTMLDialogElement).open).toBe(true);
   });
 
-  it('ダイアログのピン操作で toggle-pin を dispatch する', () => {
+  it('ダイアログに貼る操作はなく、「戻る」で閉じる', () => {
     const game = makeGame();
     render(<InvestigationScreen game={game} />);
-    fireEvent.click(screen.getByRole('button', { name: /資料A/ }));
-    fireEvent.click(screen.getByRole('button', { name: '証拠ボードに貼る' }));
-    expect(game.dispatch).toHaveBeenCalledWith({ type: 'toggle-pin', documentId: 'a' });
+    fireEvent.click(screen.getByRole('button', { name: /資料A、調査済み/ }));
+    expect(screen.queryByRole('button', { name: /証拠ボードに貼る/ })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: '戻る' }));
     expect((document.querySelector('dialog') as HTMLDialogElement).open).toBe(false);
   });
 });

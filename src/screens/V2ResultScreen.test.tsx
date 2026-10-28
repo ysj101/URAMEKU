@@ -10,7 +10,6 @@ function setup({ wrong = false, revealed = false } = {}) {
   const current = makeV2Case();
   const progress = createProgress(current);
   progress.opened = ['a', 'b'];
-  progress.pinned = ['a', 'b'];
   progress.published = true;
   progress.revealed = revealed;
   progress.v2!.decoding = { scope: { optionId: wrong ? 'all' : 'limited', evidence: ['a', 'b'] } };

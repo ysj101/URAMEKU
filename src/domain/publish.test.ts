@@ -14,19 +14,19 @@ const c = makeCase();
 
 /** 系統ごとの「満たす進行」を合成する部品 */
 const parts: Record<VerdictTrack, Partial<CaseProgress>> = {
-  evidence: { pinned: ['a', 'b', 'c'] },
-  link: { pinned: ['a', 'b', 'c'], chosenLink: ['c', 'a'] },
+  evidence: { opened: ['a', 'b', 'c'] },
+  link: { opened: ['a', 'b', 'c'], chosenLink: ['c', 'a'] },
   calculation: { calculations: { t1: '45', t2: '200' } },
   article: { article: ['f0', 'f1', 'f2'] },
 };
 
 function compose(tracks: VerdictTrack[]): CaseProgress {
-  // link は pinned を前提にするため、evidence 無しの link は pinned を照合対象のみに絞る
+  // link は閲覧済みを前提にするため、evidence 無しの link は opened を照合対象のみに絞る
   const p = makeProgress();
   const merged: CaseProgress = { ...p };
   for (const t of tracks) Object.assign(merged, parts[t]);
   if (tracks.includes('link') && !tracks.includes('evidence')) {
-    merged.pinned = ['a', 'c'];
+    merged.opened = ['a', 'c'];
   }
   return merged;
 }
@@ -83,7 +83,7 @@ describe('publishVerdict: 部分達成の detail', () => {
     const v = publishVerdict(
       c,
       makeProgress({
-        pinned: ['a', 'b'],
+        opened: ['a', 'b'],
         chosenLink: ['a', 'b'],
         calculations: { t1: '45', t2: '199' },
         article: ['f1', 'f0', 'f2'],
@@ -108,12 +108,11 @@ describe('publishVerdict: 部分達成の detail', () => {
 });
 
 describe('publishVerdict: UI 状態に依存しない', () => {
-  it('published / revealed / opened を変えても結果は同じ', () => {
+  it('published / revealed を変えても結果は同じ', () => {
     const base = clearedProgress();
     const variants: CaseProgress[] = [
       { ...base, published: false },
       { ...base, published: true, revealed: true },
-      { ...base, opened: [] },
     ];
     for (const p of variants) {
       expect(publishVerdict(c, p)).toEqual(publishVerdict(c, base));

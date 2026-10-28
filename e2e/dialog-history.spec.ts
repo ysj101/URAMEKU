@@ -26,12 +26,6 @@ async function expectClosedAndBackToList(page: Page) {
 
 const routes: Array<[string, (page: Page) => Promise<void>]> = [
   [
-    'ピン（証拠ボードに貼る）',
-    async (page) => {
-      await page.getByRole('dialog').getByRole('button', { name: '証拠ボードに貼る' }).click();
-    },
-  ],
-  [
     '戻るボタン',
     async (page) => {
       await page.getByRole('dialog').getByRole('button', { name: '戻る' }).click();

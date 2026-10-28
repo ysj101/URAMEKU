@@ -15,7 +15,6 @@ const v0 = {
   progress: {
     'case-01': {
       opened: ['d1', 'd2'],
-      pinned: ['d1'],
       chosenLink: ['d1', 'd2'],
       calculations: { t1: '12.5', t2: '' },
       article: ['h1', 'h2', 'h3'],
@@ -65,7 +64,6 @@ describe('migrate', () => {
     expect(r.data.legacyProgress?.['case-01']?.published).toBe(true);
     expect(r.data.legacyProgress?.['case-02']).toEqual({
       opened: ['d1'],
-      pinned: [],
       chosenLink: [],
       calculations: {},
       article: [],
@@ -157,7 +155,7 @@ describe('migrate', () => {
     expect(r.reset).toBe(false);
     expect(r.migratedFrom).toBe(99);
     expect(r.data.active).toBe('case-03');
-    expect(r.data.progress['case-01']?.pinned).toEqual(['d1']);
+    expect(r.data.progress['case-01']?.opened).toEqual(['d1', 'd2']);
     expect(r.data.finished).toEqual({ 'case-01': true });
     expect(r.data).not.toHaveProperty('extra');
   });
@@ -185,7 +183,6 @@ describe('migrate', () => {
     );
     const empty = {
       opened: [],
-      pinned: [],
       chosenLink: [],
       calculations: {},
       article: [],

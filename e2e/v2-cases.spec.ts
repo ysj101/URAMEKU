@@ -5,7 +5,7 @@ import {
   expectBudget,
   goToArticle,
   gotoCase,
-  openAndPin,
+  openAndRead,
   openTask,
   prepareV2Case,
   showDesk,
@@ -95,7 +95,7 @@ test('実験は初回表示を固定し、保留から判断を変えても途�
   await showDesk(page, '見え方のミニ実験');
   await expect(desk.getByText(`最初の判断：${initial.text}`, { exact: true })).toBeVisible();
   for (const id of definition.revealDocuments) {
-    await openAndPin(page, c.documents.find((document) => document.id === id)!.title);
+    await openAndRead(page, c.documents.find((document) => document.id === id)!.title);
   }
   await showDesk(page, '見え方のミニ実験');
   await desk.getByRole('radio', { name: updated.text, exact: true }).check();
@@ -270,7 +270,7 @@ test('マウスとドラッグを使わずTab・矢印・Space・EnterでCASE01�
     await page.keyboard.press('Enter');
     const dialog = page.getByRole('dialog');
     await expect(dialog).toBeVisible();
-    await tabTo(page, dialog.getByRole('button', { name: '証拠ボードに貼る', exact: true }));
+    await tabTo(page, dialog.getByRole('button', { name: '戻る', exact: true }));
     await page.keyboard.press('Space');
     await expect(dialog).toBeHidden();
   }

@@ -50,7 +50,7 @@ function summarize(caseData: CaseData, progress: CaseProgress) {
   const v2 = caseData.v2;
   const tasks = v2?.decoding ?? [];
   const reviews = decodingReviews(caseData, progress);
-  // 「回答済み」は答えを選び、参照資料をすべて採用した問い。答えだけの問いは根拠待ちとして別に数える。
+  // 「回答済み」は答えを選び、参照資料をすべて読んだ問い。答えだけの問いは根拠待ちとして別に数える。
   const answered = reviews.filter((review) => review.recorded && review.grounded).length;
   const awaitingEvidence = reviews.filter((review) => review.recorded && !review.grounded).length;
   const links = progress.v2?.links.length ?? 0;
@@ -59,7 +59,6 @@ function summarize(caseData: CaseData, progress: CaseProgress) {
   return {
     opened: progress.opened.length,
     total: caseData.documents.length,
-    pinned: progress.pinned.length,
     answered,
     awaitingEvidence,
     tasks: tasks.length,
@@ -113,7 +112,7 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
     summary.remainingTasks > 0
       ? `読み取り あと ${summary.remainingTasks} 問${
           summary.awaitingEvidence > 0
-            ? `（まだ貼っていない資料がある ${summary.awaitingEvidence} 問）`
+            ? `（まだ読んでいない資料がある ${summary.awaitingEvidence} 問）`
             : ''
         }`
       : null,
@@ -146,13 +145,6 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
             <small> / {summary.total}</small>
           </span>
         </button>
-        <button type="button" className="v2-progress__tile" onClick={() => selectTab('board')}>
-          <span className="v2-progress__label">ボードに貼った</span>
-          <span className="v2-progress__value">
-            {summary.pinned}
-            <small> 件</small>
-          </span>
-        </button>
         <button
           type="button"
           className={`v2-progress__tile ${tabDone.decoding ? '' : 'is-pending'}`}
@@ -166,7 +158,7 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
           {summary.remainingTasks > 0 && (
             <span className="v2-progress__todo">
               あと {summary.remainingTasks} 問
-              {summary.awaitingEvidence > 0 && `・資料が未貼付 ${summary.awaitingEvidence}`}
+              {summary.awaitingEvidence > 0 && `・未読の資料あり ${summary.awaitingEvidence}`}
             </span>
           )}
         </button>
@@ -312,10 +304,6 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
         caseData={current}
         progress={progress}
         documentId={openId}
-        onTogglePin={(documentId) => {
-          dispatch({ type: 'toggle-pin', documentId });
-          setOpenId(null);
-        }}
         onClose={() => setOpenId(null)}
       />
     </div>

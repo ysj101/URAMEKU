@@ -20,16 +20,13 @@ function memoryStorage(): StorageLike & { map: Map<string, string> } {
 const caseData = makeCase();
 
 describe('hintFor', () => {
-  it('調査段階: 未閲覧 → 閲覧済みピン 0 → ピン 1 → 照合未選択 → 計算未入力 → 記事へ', () => {
+  it('調査段階: 未閲覧 → 閲覧 1 件 → 照合未選択 → 計算未入力 → 記事へ', () => {
     expect(hintFor(caseData, makeProgress(), 'investigate')).toBe('open');
-    expect(hintFor(caseData, makeProgress({ opened: ['free'] }), 'investigate')).toBe('pin');
-    expect(
-      hintFor(caseData, makeProgress({ opened: ['free', 'a'], pinned: ['a'] }), 'investigate'),
-    ).toBe('pinMore');
-    const pinned2 = makeProgress({ opened: ['a', 'b'], pinned: ['a', 'b'] });
-    expect(hintFor(caseData, pinned2, 'investigate')).toBe('link');
-    expect(hintFor(caseData, { ...pinned2, chosenLink: ['a'] }, 'investigate')).toBe('link');
-    const linked = { ...pinned2, chosenLink: ['a', 'b'] };
+    expect(hintFor(caseData, makeProgress({ opened: ['free'] }), 'investigate')).toBe('openMore');
+    const read2 = makeProgress({ opened: ['a', 'b'] });
+    expect(hintFor(caseData, read2, 'investigate')).toBe('link');
+    expect(hintFor(caseData, { ...read2, chosenLink: ['a'] }, 'investigate')).toBe('link');
+    const linked = { ...read2, chosenLink: ['a', 'b'] };
     expect(hintFor(caseData, linked, 'investigate')).toBe('calculate');
     expect(hintFor(caseData, { ...linked, calculations: { t1: '1' } }, 'investigate')).toBe(
       'calculate',
@@ -77,7 +74,7 @@ describe('TutorialHint', () => {
         storage={storage}
       />,
     );
-    expect(screen.getByRole('status')).toHaveTextContent(UI.tutorial.hint.pin);
+    expect(screen.getByRole('status')).toHaveTextContent(UI.tutorial.hint.openMore);
     rerender(
       <TutorialHint
         caseData={caseData}

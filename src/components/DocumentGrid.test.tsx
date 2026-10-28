@@ -30,11 +30,11 @@ describe('DocumentGrid（調査デスク）', () => {
     expect(onOpen).toHaveBeenCalledWith('a');
   });
 
-  it('状態はテキストとアイコンで示す（未調査 / 調査済み / 採用済み）', () => {
+  it('状態はテキストとアイコンで示す（未調査 / 調査済み）', () => {
     render(
       <DocumentGrid
         caseData={caseData}
-        progress={makeProgress({ opened: ['a', 'b'], pinned: ['b'] })}
+        progress={makeProgress({ opened: ['a', 'b'] })}
         onOpen={vi.fn()}
       />,
     );
@@ -43,12 +43,12 @@ describe('DocumentGrid（調査デスク）', () => {
     const c = screen.getByRole('button', { name: /資料C/ });
     expect(a).toHaveTextContent('調査済み');
     expect(a).toHaveTextContent('再読は無料');
-    expect(b).toHaveTextContent('採用済み');
+    expect(b).toHaveTextContent('調査済み');
     expect(c).toHaveTextContent('未調査');
     expect(c).toHaveTextContent('調査コスト 1');
     expect(a.querySelector('.doc-tile__icon')).toHaveAttribute(
       'src',
-      expect.stringMatching(/investigate\.svg$/),
+      expect.stringMatching(/verified\.svg$/),
     );
     expect(b.querySelector('.doc-tile__icon')).toHaveAttribute(
       'src',

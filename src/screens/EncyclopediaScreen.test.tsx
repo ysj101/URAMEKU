@@ -145,7 +145,7 @@ describe('EncyclopediaScreen: 実績タブ', () => {
       <EncyclopediaScreen
         game={api({
           cases: LEGACY_CASES,
-          progressByCase: { 'case-01': { ...createProgress(), pinned: ['ad'] } },
+          progressByCase: { 'case-01': { ...createProgress(), opened: ['ad'] } },
         })}
         nav={nav}
       />,

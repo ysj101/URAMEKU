@@ -126,7 +126,7 @@ it('does not submit a stale source after it is removed from the evidence board',
   rerender(
     <DecisionDesk
       caseData={data}
-      progress={{ ...progress, pinned: ['b', 'c'] }}
+      progress={{ ...progress, opened: ['b', 'c'] }}
       onAction={onAction}
     />,
   );
