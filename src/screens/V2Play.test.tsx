@@ -72,8 +72,8 @@ describe('V2プレイの統合', () => {
     const group = screen.getByRole('group', { name: '主張の対象範囲を確認してください。' });
     fireEvent.click(screen.getByRole('radio', { name: '確認した対象に限られる' }));
     // 答えだけでは完了にせず、参照資料の採用が必要なことを見出しで示す
-    expect(screen.getByText('問 1 ・ 回答済み ・ まだ貼っていない資料 2 件')).toBeInTheDocument();
-    expect(screen.getByRole('status')).toHaveTextContent('まだ貼っていない資料があります');
+    expect(screen.getByText('問 1 ・ 回答済み ・ まだ読んでいない資料 2 件')).toBeInTheDocument();
+    expect(screen.getByRole('status')).toHaveTextContent('まだ読んでいない資料があります');
     // 畳むと選択肢は消え、選んだ答えが見出しに残る
     fireEvent.click(screen.getByRole('button', { name: /閉じる/ }));
     expect(screen.queryByRole('radio')).not.toBeInTheDocument();

@@ -4,7 +4,6 @@ import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { PinCard, type PinSlot } from './PinCard';
 import { c2HighresUrl, uiIcon } from '../data/assets';
 import { useSound } from '../audio/useSound';
-import { canUnpinDocument, type UnpinRejectReason } from '../domain/evidence';
 import {
   canSelectForLink,
   isLinkComplete,
@@ -17,7 +16,7 @@ import '../app/screens/board.css';
 /**
  * 証拠ボード（MVP-023）。タップ照合優先。
  *
- * - 採用済み資料をピンカードとして並べる。
+ * - 開いて読んだ資料をピンカードとして並べる（貼る操作はない）。
  * - カードを 1 枚押すと「選択中（A）」、2 枚目で「照合候補（A ↔ B）」。
  *   3 枚目を押すとその 1 枚から選び直し、同じカードを再び押すと解除する
  *   （状態遷移は domain/link.ts の toggleLinkSelection）。
@@ -28,19 +27,12 @@ interface Props {
   caseData: CaseData;
   progress: CaseProgress;
   onToggleLink: (documentId: string) => void;
-  onUnpin: (documentId: string) => void;
   onAction?: (action: GameAction) => void;
 }
 
 const SELECT_REASON: Record<LinkSelectReason, string> = {
   published: '提出済みのため照合を変更できません。記事を取り下げると編集できます。',
-  'not-pinned': 'ボードに採用されていない資料です。',
-  'unknown-document': 'この事件には含まれていない資料です。',
-};
-
-const UNPIN_REASON: Record<UnpinRejectReason, string> = {
-  published: '提出済みのためボードを変更できません。',
-  'not-pinned': 'ボードに採用されていない資料です。',
+  'not-opened': 'まだ読んでいない資料です。',
   'unknown-document': 'この事件には含まれていない資料です。',
 };
 
@@ -63,7 +55,7 @@ export function EvidenceBoard(props: Props) {
   return <LegacyEvidenceBoard {...props} />;
 }
 
-function LegacyEvidenceBoard({ caseData, progress, onToggleLink, onUnpin }: Props) {
+function LegacyEvidenceBoard({ caseData, progress, onToggleLink }: Props) {
   const play = useSound();
   const surfaceRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef(new Map<string, HTMLButtonElement>());
@@ -85,12 +77,6 @@ function LegacyEvidenceBoard({ caseData, progress, onToggleLink, onUnpin }: Prop
     const next = toggleLinkSelection(caseData, progress, id);
     play(isLinkComplete(next) ? 'evidence-link' : 'ui-tap');
     onToggleLink(id);
-  };
-
-  const handleRemove = (id: string) => {
-    if (!canUnpinDocument(caseData, progress, id).ok) return;
-    play('ui-tap');
-    onUnpin(id);
   };
 
   const setCardRef = useCallback((id: string, el: HTMLButtonElement | null) => {
@@ -121,7 +107,7 @@ function LegacyEvidenceBoard({ caseData, progress, onToggleLink, onUnpin }: Prop
     measure();
     window.addEventListener('resize', measure);
     return () => window.removeEventListener('resize', measure);
-  }, [first, second, progress.pinned]);
+  }, [first, second, progress.opened]);
 
   const status = complete
     ? `照合候補（A ↔ B）：${titleOf(first)} ↔ ${titleOf(second)}`
@@ -138,7 +124,7 @@ function LegacyEvidenceBoard({ caseData, progress, onToggleLink, onUnpin }: Prop
         <strong>この事件の照合：</strong>
         {caseData.link_prompt}
       </p>
-      <p className="board-caption">採用した資料を並べ、2枚のつながりを赤い糸で確認。</p>
+      <p className="board-caption">読んだ資料を並べ、2枚のつながりを赤い糸で確認。</p>
       <div
         ref={surfaceRef}
         className="evidence-board__surface"
@@ -149,17 +135,16 @@ function LegacyEvidenceBoard({ caseData, progress, onToggleLink, onUnpin }: Prop
             <line x1={thread.x1} y1={thread.y1} x2={thread.x2} y2={thread.y2} />
           </svg>
         )}
-        {progress.pinned.length === 0 ? (
+        {progress.opened.length === 0 ? (
           <p className="evidence-board__empty disabled-copy">
-            調査した資料の「証拠ボードに貼る」を押すとここに追加されます。
+            資料を開いて読むと、ここに追加されます。
           </p>
         ) : (
           <ul className="evidence-board__pins">
-            {progress.pinned.map((id, index) => {
+            {progress.opened.map((id, index) => {
               const doc = caseData.documents.find((d) => d.id === id);
               if (!doc) return null;
               const select = canSelectForLink(caseData, progress, id);
-              const unpin = canUnpinDocument(caseData, progress, id);
               return (
                 <PinCard
                   key={id}
@@ -168,9 +153,7 @@ function LegacyEvidenceBoard({ caseData, progress, onToggleLink, onUnpin }: Prop
                   index={index}
                   slot={slotOf(id)}
                   selectReason={select.ok ? null : SELECT_REASON[select.reason]}
-                  removeReason={unpin.ok ? null : UNPIN_REASON[unpin.reason]}
                   onSelect={() => handleSelect(id)}
-                  onRemove={() => handleRemove(id)}
                 />
               );
             })}

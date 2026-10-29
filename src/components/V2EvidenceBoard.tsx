@@ -1,229 +1,211 @@
-import { useLayoutEffect, useRef, useState } from 'react';
-import type { V2EvidenceLink, V2Relation } from '../domain/types';
-import { sameEvidenceLink } from '../domain/link';
+import { useState } from 'react';
+import type { V2BoardDisposition, V2BoardRecord, V2BoardTask } from '../domain/types';
+import { BOARD_DISPOSITIONS, boardReviews, boardStatement } from '../domain/board';
 import type { V2DeskProps } from './InformationDesk';
-import '../app/screens/v2.css';
+import { LegacyV2EvidenceBoard } from './LegacyV2EvidenceBoard';
 
-const V2_RELATION_LABEL: Record<V2Relation, string> = {
-  supports: '補強する',
-  contradicts: '反証する',
-  qualifies: '適用範囲・条件を補う',
-  sequence: '時系列でつながる',
-};
-
-/** 役割ごとの意味。A = 起点の資料、B = 結び付ける資料 */
-const V2_RELATION_HELP: Record<V2Relation, string> = {
-  supports: 'A に書いてあることが、B の数字や主張を支える',
-  contradicts: 'A に書いてあることが、B の数字や主張と食い違う',
-  qualifies: 'A が、B が成り立つ範囲・前提・条件をしぼる',
-  sequence: 'A のあとに B が起きた、または A が B の前の段階になる',
-};
-
-/** 「A は B を〜」の形で読める 1 文にする */
-export function describeLink(from: string, to: string, relation: V2Relation): string {
-  const a = `「${from}」`;
-  const b = `「${to}」`;
-  switch (relation) {
-    case 'supports':
-      return `${a} は ${b} を補強する`;
-    case 'contradicts':
-      return `${a} は ${b} を反証する`;
-    case 'qualifies':
-      return `${a} は ${b} の適用範囲・条件を補う`;
-    case 'sequence':
-      return `${a} から ${b} へ時系列でつながる`;
-  }
+export function V2EvidenceBoard(props: V2DeskProps) {
+  if (!props.caseData.v2?.board) return <LegacyV2EvidenceBoard {...props} />;
+  return <ClaimBoard {...props} />;
 }
 
-export function V2EvidenceBoard({ caseData, progress, onAction }: V2DeskProps) {
-  const pendingFocus = useRef<string | null>(null);
-  const [from, setFrom] = useState('');
-  const [to, setTo] = useState('');
-  const [relation, setRelation] = useState<V2Relation>('supports');
-  const documents = caseData.documents.filter(
-    (document) => progress.pinned.includes(document.id) && progress.opened.includes(document.id),
-  );
-  const links = [...(progress.v2?.links ?? [])].sort(
-    (a, b) =>
-      a.from.localeCompare(b.from) ||
-      a.to.localeCompare(b.to) ||
-      a.relation.localeCompare(b.relation),
-  );
-  const title = (id: string) =>
-    caseData.documents.find((document) => document.id === id)?.title ?? id;
-  const paths = caseData.v2?.graph.paths ?? [];
-  const target = paths.length ? Math.min(...paths.map((path) => path.length)) : 0;
-  useLayoutEffect(() => {
-    if (pendingFocus.current) document.getElementById(pendingFocus.current)?.focus();
-    pendingFocus.current = null;
-  }, [links]);
-  const current = { from, to, relation };
-  const exists = links.some((link) => sameEvidenceLink(link, current));
-  const valid =
-    from &&
-    to &&
-    from !== to &&
-    documents.some((document) => document.id === from) &&
-    documents.some((document) => document.id === to);
-  const updateRelation = (link: V2EvidenceLink, value: V2Relation, focusId: string) => {
-    pendingFocus.current = focusId;
-    if (link.relation === value) return;
-    onAction({ type: 'v2-link', link });
-    const updated = { ...link, relation: value };
-    if (!links.some((candidate) => sameEvidenceLink(candidate, updated)))
-      onAction({ type: 'v2-link', link: updated });
-  };
-  const preview = valid
-    ? describeLink(title(from), title(to), relation)
-    : from && !to
-      ? `「${title(from)}」 は …（結び付ける資料を選んでください）`
-      : '資料を 2 つ選ぶと、その関係がここに 1 文で表示されます。';
+function ClaimBoard({ caseData, progress, onAction }: V2DeskProps) {
+  const board = caseData.v2!.board!;
+  const [active, setActive] = useState(board.tasks[0]!.id);
+  const reviews = boardReviews(caseData, progress);
+  const task = board.tasks.find((entry) => entry.id === active) ?? board.tasks[0]!;
+  const recorded = reviews.filter((review) => review.recorded).length;
   return (
-    <section className="v2-desk evidence-board" role="group" aria-label="証拠ボード">
+    <section className="v2-desk evidence-board claim-board" role="group" aria-label="証拠ボード">
       <h2 className="section-title">
-        証拠ボード <small>資料どうしの関係を 1 文ずつ記録する</small>
+        証拠ボード <small>{board.title}</small>
       </h2>
-      <p data-testid="link-prompt">
-        <strong>この事件の照合：</strong>
-        {caseData.v2?.graph.prompt ?? caseData.link_prompt}
-      </p>
-      <ol className="evidence-board__steps" aria-label="関係の記録手順">
-        <li>
-          <strong>起点の資料 A</strong> を選ぶ
-        </li>
-        <li>
-          <strong>結び付ける資料 B</strong> を選ぶ
-        </li>
-        <li>
-          A が B に対して<strong>どんな役割か</strong>を選び、「関係を追加」
-        </li>
+      <p data-testid="link-prompt">{board.prompt}</p>
+      <ol className="evidence-board__steps" aria-label="証拠ボードの使い方">
+        <li>確かめたい文を選び、気になる部分を押す</li>
+        <li>読んだ資料から、根拠になる一節を添える</li>
+        <li>文を直すか、そのまま残すか、まだ判断できないかを記録する</li>
       </ol>
-      <p className="v2-desk__lead">
-        {target > 0 && `この事件では、関係を ${target} 件以上残すのが目安です。`}
-        同じ 2
-        つの資料に、別の役割を付けてもかまいません。どの関係が合っているかは、調査中には表示しません。
-      </p>
-      <ul aria-label="ボードに貼った資料">
-        {documents.map((document) => (
-          <li key={document.id}>
-            {document.title}{' '}
-            <button
-              type="button"
-              className="btn ghost"
-              disabled={progress.published}
-              onClick={() => onAction({ type: 'toggle-pin', documentId: document.id })}
-              aria-label={`${document.title} をボードから外す`}
-            >
-              外す
-            </button>
-          </li>
-        ))}
-      </ul>
-      {documents.length < 2 && (
-        <p>資料を 2 件以上読んで証拠ボードに貼ると、関係を記録できるようになります。</p>
-      )}
-      <form
-        onSubmit={(event) => {
-          event.preventDefault();
-          if (valid && !exists) onAction({ type: 'v2-link', link: current });
-        }}
-      >
-        <fieldset disabled={progress.published}>
-          <legend>新しい関係</legend>
-          <div className="evidence-board__pair">
-            <div>
-              <label htmlFor="v2-link-from">A：起点となる資料</label>
-              <select
-                id="v2-link-from"
-                value={from}
-                onChange={(event) => setFrom(event.target.value)}
-              >
-                <option value="">資料を選択</option>
-                {documents.map((document) => (
-                  <option key={document.id} value={document.id}>
-                    {document.title}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label htmlFor="v2-link-to">B：結び付ける資料</label>
-              <select id="v2-link-to" value={to} onChange={(event) => setTo(event.target.value)}>
-                <option value="">資料を選択</option>
-                {documents
-                  .filter((document) => document.id !== from)
-                  .map((document) => (
-                    <option key={document.id} value={document.id}>
-                      {document.title}
-                    </option>
-                  ))}
-              </select>
-            </div>
-          </div>
-          <label htmlFor="v2-link-relation">A は B に対して…（関係の役割）</label>
-          <select
-            id="v2-link-relation"
-            value={relation}
-            onChange={(event) => setRelation(event.target.value as V2Relation)}
+      <p>合っているかどうかは、報告を提出したあとに確かめます。</p>
+      <div className="claim-board__tasks" aria-label="確かめる文">
+        {board.tasks.map((entry) => (
+          <button
+            type="button"
+            key={entry.id}
+            aria-pressed={entry.id === task.id}
+            className="claim-board__task"
+            onClick={() => setActive(entry.id)}
           >
-            {Object.entries(V2_RELATION_LABEL).map(([id, label]) => (
-              <option key={id} value={id}>
-                {label}
-              </option>
-            ))}
-          </select>
-          <dl className="evidence-board__roles" aria-label="役割の意味">
-            {(Object.keys(V2_RELATION_LABEL) as V2Relation[]).map((id) => (
-              <div key={id} className={id === relation ? 'is-current' : ''}>
-                <dt>{V2_RELATION_LABEL[id]}</dt>
-                <dd>{V2_RELATION_HELP[id]}</dd>
-              </div>
-            ))}
-          </dl>
-          <p className="evidence-board__preview" data-testid="link-preview" aria-live="polite">
-            <span className="evidence-board__preview-label">追加される関係：</span>
-            {preview}
-          </p>
-          <button type="submit" className="btn primary" disabled={!valid || exists}>
-            {exists ? 'この関係は記録済み' : '関係を追加'}
+            <strong>{entry.title}</strong>
+            <span>{boardStatement(entry, progress.v2?.board?.[entry.id]?.values)}</span>
+            <small>
+              {reviews.find((review) => review.task.id === entry.id)?.recorded
+                ? '記録あり'
+                : '未記録'}
+            </small>
           </button>
-        </fieldset>
-      </form>
-      <ul aria-label="記録した関係" className="evidence-board__links">
-        {links.map((link, index) => (
-          <li key={`${link.from}:${link.to}:${link.relation}`}>
-            <strong>{describeLink(title(link.from), title(link.to), link.relation)}</strong>
-            <label htmlFor={`v2-role-${index}`}>関係 {index + 1} の役割</label>
-            <select
-              id={`v2-role-${index}`}
-              disabled={progress.published}
-              value={link.relation}
-              onChange={(event) =>
-                updateRelation(link, event.target.value as V2Relation, event.currentTarget.id)
-              }
-            >
-              {Object.entries(V2_RELATION_LABEL).map(([id, label]) => (
-                <option key={id} value={id}>
-                  {label}
-                </option>
-              ))}
-            </select>
-            <button
-              type="button"
-              className="btn ghost"
-              disabled={progress.published}
-              onClick={() => onAction({ type: 'v2-link', link })}
-              aria-label={`${title(link.from)} から ${title(link.to)} の関係を削除`}
-            >
-              関係を削除
-            </button>
-          </li>
         ))}
-      </ul>
-      <p aria-live="polite">
-        {links.length} 件の関係を記録済み
-        {target > 0 && links.length < target && `（目安まであと ${target - links.length} 件）`}
+      </div>
+      {board.tasks.map((entry) => (
+        <div key={entry.id} hidden={entry.id !== task.id}>
+          <BoardEditor task={entry} caseData={caseData} progress={progress} onAction={onAction} />
+        </div>
+      ))}
+      <p role="status">
+        文と証拠を記録済み {recorded} / {board.tasks.length} 件
       </p>
     </section>
+  );
+}
+
+function BoardEditor({ task, caseData, progress, onAction }: V2DeskProps & { task: V2BoardTask }) {
+  const board = caseData.v2!.board!;
+  const saved = progress.v2?.board?.[task.id];
+  const [values, setValues] = useState<Record<string, string>>(
+    () =>
+      saved?.values ?? Object.fromEntries(task.fields.map((field) => [field.id, field.original])),
+  );
+  const [evidence, setEvidence] = useState<string[]>(saved?.evidence ?? []);
+  const [disposition, setDisposition] = useState<V2BoardDisposition | ''>(saved?.disposition ?? '');
+  const [fieldId, setFieldId] = useState<string | null>(null);
+  const field = task.fields.find((entry) => entry.id === fieldId);
+  const record = { values, evidence, disposition };
+  const unchanged = Boolean(saved && JSON.stringify(saved) === JSON.stringify(record));
+  const dirty = saved
+    ? !unchanged
+    : evidence.length > 0 ||
+      Boolean(disposition) ||
+      task.fields.some((entry) => values[entry.id] !== entry.original);
+  const sources = caseData.documents.filter((entry) => progress.opened.includes(entry.id));
+  return (
+    <form
+      className="claim-board__editor"
+      onSubmit={(event) => {
+        event.preventDefault();
+        if (evidence.length && disposition)
+          onAction({ type: 'v2-board', taskId: task.id, record: record as V2BoardRecord });
+      }}
+    >
+      <fieldset disabled={progress.published}>
+        <legend>{task.title}</legend>
+        <p>{task.prompt}</p>
+        <p className="claim-board__sentence" aria-label="組み立てている文">
+          {task.parts.map((part, index) => {
+            if ('text' in part) return <span key={index}>{part.text}</span>;
+            const entry = task.fields.find((candidate) => candidate.id === part.field)!;
+            return (
+              <button
+                type="button"
+                key={index}
+                aria-label={`文の部分：${entry.label}`}
+                aria-expanded={fieldId === entry.id}
+                aria-controls={`board-field-${task.id}`}
+                onClick={() => setFieldId(fieldId === entry.id ? null : entry.id)}
+              >
+                {entry.options.find((option) => option.id === values[entry.id])?.text}
+              </button>
+            );
+          })}
+        </p>
+        <div id={`board-field-${task.id}`}>
+          {field ? (
+            <fieldset className="claim-board__pieces">
+              <legend>文の部品：{field.label}</legend>
+              {field.options.map((option) => (
+                <button
+                  type="button"
+                  key={option.id}
+                  aria-pressed={values[field.id] === option.id}
+                  onClick={() => setValues({ ...values, [field.id]: option.id })}
+                >
+                  {option.text}
+                </button>
+              ))}
+            </fieldset>
+          ) : (
+            <p>文の下線が付いた部分を押すと、内容を組み直せます。</p>
+          )}
+        </div>
+        <fieldset className="claim-board__sources">
+          <legend>この文に添える証拠</legend>
+          <p>
+            資料を開いて読むと、一節をここから選べます。選んだ一節はこの文の根拠として残ります。
+          </p>
+          {sources.length === 0 && <p>まず、調査資料を開いて読みましょう。</p>}
+          {sources.map((source) => (
+            <details key={source.id}>
+              <summary>{source.title}</summary>
+              {board.excerpts
+                .filter((entry) => entry.documentId === source.id)
+                .map((entry) => (
+                  <label key={entry.id} className="claim-board__excerpt">
+                    <input
+                      type="checkbox"
+                      checked={evidence.includes(entry.id)}
+                      onChange={(event) =>
+                        setEvidence(
+                          event.target.checked
+                            ? [...evidence, entry.id]
+                            : evidence.filter((id) => id !== entry.id),
+                        )
+                      }
+                    />
+                    <q>{entry.quote}</q>
+                  </label>
+                ))}
+            </details>
+          ))}
+        </fieldset>
+        {evidence.length > 0 && (
+          <section aria-label="この文に添えた証拠" className="claim-board__attached">
+            <h3>この文に添えた証拠</h3>
+            <ul>
+              {evidence.map((id) => {
+                const entry = board.excerpts.find((candidate) => candidate.id === id)!;
+                return (
+                  <li key={id}>
+                    <strong>
+                      {caseData.documents.find((source) => source.id === entry.documentId)?.title}
+                    </strong>
+                    <q>{entry.quote}</q>
+                    <button
+                      type="button"
+                      onClick={() => setEvidence(evidence.filter((candidate) => candidate !== id))}
+                      aria-label={`${entry.quote}を証拠から外す`}
+                    >
+                      外す
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        )}
+        <fieldset className="claim-board__disposition">
+          <legend>この文をどう扱うか</legend>
+          {Object.entries(BOARD_DISPOSITIONS).map(([id, label]) => (
+            <label key={id}>
+              <input
+                type="radio"
+                name={`board-disposition-${task.id}`}
+                checked={disposition === id}
+                onChange={() => setDisposition(id as V2BoardDisposition)}
+              />
+              {label}
+            </label>
+          ))}
+        </fieldset>
+        <button
+          type="submit"
+          className="btn primary"
+          disabled={!evidence.length || !disposition || unchanged}
+        >
+          {unchanged ? 'この文と証拠は記録済み' : '文と証拠を記録'}
+        </button>
+        {dirty && (
+          <p role="status">変更はまだ記録していません。「文と証拠を記録」を押してください。</p>
+        )}
+      </fieldset>
+    </form>
   );
 }

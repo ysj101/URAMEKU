@@ -24,10 +24,9 @@ export function reviewDecodingTask(task: V2DecodingTask, progress: CaseProgress)
     };
   }
   // 根拠は手動で選ばせず、選んだ答えが参照する資料（JSON 定義）を
-  // すべて開いて証拠ボードに採用していれば「根拠あり」と自動判定する。
+  // すべて開いて読んでいれば「根拠あり」と自動判定する。
   const grounded =
-    option.evidence.length > 0 &&
-    option.evidence.every((id) => progress.opened.includes(id) && progress.pinned.includes(id));
+    option.evidence.length > 0 && option.evidence.every((id) => progress.opened.includes(id));
   return {
     taskId: task.id,
     recorded: true,

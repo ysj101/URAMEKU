@@ -21,9 +21,7 @@ export function reviewDecisionRecord(
     new Set(sources).size === sources.length &&
     sources.every(
       (id) =>
-        caseData.documents.some((document) => document.id === id) &&
-        progress.opened.includes(id) &&
-        progress.pinned.includes(id),
+        caseData.documents.some((document) => document.id === id) && progress.opened.includes(id),
     );
   return {
     recorded,

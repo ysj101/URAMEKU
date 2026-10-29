@@ -67,8 +67,7 @@ function DocumentSourceMock({ callout }: { callout: string }) {
         </dl>
         <Lines widths={['92%', '84%', '60%']} />
         <div className="ts-row">
-          <span className="ts-btn ts-btn-primary">証拠ボードに貼る</span>
-          <span className="ts-btn">閉じる</span>
+          <span className="ts-btn ts-btn-primary">戻る</span>
         </div>
       </div>
     </div>
@@ -115,32 +114,31 @@ function DeskBudgetMock({ callout }: { callout: string }) {
   );
 }
 
-/** 3. 証拠ボード。起点・役割・結び付ける資料を選んで関係を追加 */
+/** 3. 証拠ボード。文の一部を組み直し、資料の一節を添える */
 function BoardLinkMock({ callout }: { callout: string }) {
   return (
     <div className="ts-paper">
       <span className="ts-section">
-        証拠ボード <small>根拠の関係を記録する</small>
+        証拠ボード <small>文に証拠を添える</small>
       </span>
       <div className="ts-pins">
         <span className="ts-chip">キャンペーン広告</span>
-        <span className="ts-chip">利用者アンケート 集計</span>
-        <span className="ts-chip">解約者の記録</span>
+        <span className="ts-chip">料金決済の集計</span>
+        <span className="ts-chip">翌月の継続状況</span>
       </div>
       <div className="ts-form ts-target">
-        <span className="ts-legend">新しい関係</span>
-        <span className="ts-label">起点となる資料</span>
-        <span className="ts-select">キャンペーン広告</span>
-        <span className="ts-label">関係の役割</span>
-        <span className="ts-select">反証する</span>
-        <span className="ts-label">結び付ける資料</span>
-        <span className="ts-select">解約者の記録</span>
-        <span className="ts-btn ts-btn-primary">関係を追加</span>
+        <span className="ts-legend">広告の対象</span>
+        <span className="ts-label">文の気になる部分を押す</span>
+        <span className="ts-select">誰についての数字か</span>
+        <span className="ts-label">この文に添える証拠</span>
+        <span className="ts-select">読んだ資料の一節を選ぶ</span>
+        <span className="ts-label">この文をどう扱うか</span>
+        <span className="ts-select">直す・残す・まだ判断できない</span>
+        <span className="ts-btn ts-btn-primary">文と証拠を記録</span>
         <Callout text={callout} />
       </div>
       <div className="ts-note">
-        <strong>記録した関係</strong> 利用者アンケート 集計 →
-        キャンペーン広告（適用範囲・条件を補う）
+        <strong>記録した内容</strong> 組み立てた文と、その根拠になる資料の一節
       </div>
     </div>
   );
@@ -212,7 +210,7 @@ function ReportMock({ callout }: { callout: string }) {
     <div className="ts-paper">
       <div className="ts-meter">
         <span>STEP 02 / 調査報告をまとめる</span>
-        <span>ボードに貼った資料 3 件</span>
+        <span>読んだ資料 3 件</span>
       </div>
       <span className="ts-section">根拠と、まだ決めきれないことを添えた報告</span>
       <div className="ts-form ts-target">

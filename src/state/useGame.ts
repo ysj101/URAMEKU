@@ -71,22 +71,39 @@ export function sanitize(loaded: SaveData): SaveData {
   const finished = { ...loaded.finished };
   const archivedProgress = { ...loaded.archivedProgress };
   let migrationNotice = loaded.migrationNotice;
+  const caseRevisions = { ...loaded.caseRevisions };
   for (const c of CASES) {
     if (!c.v2) continue;
-    if (progress[c.id] && (!progress[c.id]?.v2 || loaded.caseRevisions?.[c.id] !== c.v2.revision)) {
+    // Revision 2 adds a new board; preserve readings and first/updated judgments.
+    if (c.v2.board && c.v2.revision === 2 && caseRevisions[c.id] === 1 && progress[c.id]?.v2) {
+      const previous = progress[c.id]!;
+      archivedProgress[`${c.id}@1`] = previous;
+      progress[c.id] = {
+        ...previous,
+        published: false,
+        revealed: false,
+        v2: { ...previous.v2!, board: {} },
+      };
+      delete finished[c.id];
+      caseRevisions[c.id] = 2;
+      migrationNotice =
+        '証拠ボードが新しくなりました。読んだ資料と判断の記録は残っています。文と証拠を記録して、もう一度報告してください。';
+    }
+    if (progress[c.id] && (!progress[c.id]?.v2 || caseRevisions[c.id] !== c.v2.revision)) {
       archivedProgress[`${c.id}@${loaded.caseRevisions?.[c.id] ?? 'legacy'}`] = progress[c.id]!;
       delete progress[c.id];
       delete finished[c.id];
       migrationNotice =
         '事件の形式が変わったため、対応できない途中状態を履歴に保管して調査を再開します。';
     }
-    if (loaded.caseRevisions?.[c.id] !== c.v2.revision) delete finished[c.id];
+    if (caseRevisions[c.id] !== c.v2.revision) delete finished[c.id];
     if (progress[c.id]) progress[c.id] = restoreProgress(c, progress[c.id]!);
   }
   loaded = {
     ...loaded,
     progress,
     finished,
+    caseRevisions,
     ...(Object.keys(archivedProgress).length ? { archivedProgress } : {}),
     ...(migrationNotice ? { migrationNotice } : {}),
   };

@@ -20,7 +20,7 @@ export function validateV2(raw) {
   const choiceList = (v,path,extra=[]) => { const entries=list(v,path,2,20); const ids=[]; entries.forEach((x,i)=>{const p=`${path}[${i}]`;if(!keys(x,p,['id','text',...extra]))return;id(x.id,`${p}.id`);text(x.text,`${p}.text`);ids.push(x.id);}); unique(ids,path);return entries; };
   const v=raw?.v2;
   if (raw?.schemaVersion !== 2) { if ('v2' in (raw??{})) fail('schemaVersion','V2にはschemaVersion:2が必要です'); return errors; }
-  if(!keys(v,'v2',['revision','modes','decoding','graph','reportPrompt'],['experiment','decision']))return errors;
+  if(!keys(v,'v2',['revision','modes','decoding','graph','reportPrompt'],['experiment','decision','board']))return errors;
   if(!Number.isInteger(v.revision)||v.revision<1)fail('v2.revision','1以上の整数が必要です');
   const modes=list(v.modes,'v2.modes',1,3);unique(modes,'v2.modes');modes.forEach(m=>{if(!['decoding','experiment','decision'].includes(m))fail('v2.modes','未知の方式です');});
   text(v.reportPrompt,'v2.reportPrompt');
@@ -48,6 +48,44 @@ export function validateV2(raw) {
     });
   }
   if(modes.includes('experiment')&&!v.experiment)fail('v2.experiment','方式に必要な設定がありません');
+  if(v.board && keys(v.board,'v2.board',['title','prompt','excerpts','tasks'])) {
+    const b=v.board; text(b.title,'v2.board.title');text(b.prompt,'v2.board.prompt');
+    const excerpts=list(b.excerpts,'v2.board.excerpts'); const excerptIds=[];
+    excerpts.forEach((entry,i)=>{
+      const p=`v2.board.excerpts[${i}]`;if(!keys(entry,p,['id','documentId','quote']))return;
+      id(entry.id,`${p}.id`);excerptIds.push(entry.id);refs([entry.documentId],`${p}.documentId`);text(entry.quote,`${p}.quote`);
+      if(typeof entry.quote==='string' && !docs.get(entry.documentId)?.content?.includes(entry.quote))fail(`${p}.quote`,'資料本文に一致する一節が必要です');
+    });unique(excerptIds,'v2.board.excerpts');
+    const boardTaskIds=[];
+    list(b.tasks,'v2.board.tasks',1,20).forEach((task,i)=>{
+      const p=`v2.board.tasks[${i}]`;if(!keys(task,p,['id','title','prompt','parts','fields','rules','explanation']))return;
+      id(task.id,`${p}.id`);boardTaskIds.push(task.id);['title','prompt','explanation'].forEach(k=>text(task[k],`${p}.${k}`));
+      const fields=list(task.fields,`${p}.fields`,1,20),fieldIds=[];
+      fields.forEach((field,j)=>{
+        const fp=`${p}.fields[${j}]`;if(!keys(field,fp,['id','label','original','options']))return;
+        id(field.id,`${fp}.id`);fieldIds.push(field.id);text(field.label,`${fp}.label`);
+        const options=choiceList(field.options,`${fp}.options`);
+        if(!options.some(o=>o?.id===field.original))fail(`${fp}.original`,'元の部品が存在しません');
+      });unique(fieldIds,`${p}.fields`);
+      const partIds=[];
+      list(task.parts,`${p}.parts`,1,40).forEach((part,j)=>{
+        const pp=`${p}.parts[${j}]`;if(!object(part))return fail(pp,'文章か部品が必要です');
+        if('text' in part){if(keys(part,pp,['text']))text(part.text,`${pp}.text`);}
+        else if(keys(part,pp,['field'])){partIds.push(part.field);if(!fieldIds.includes(part.field))fail(pp,'部品が存在しません');}
+      });
+      if(partIds.length!==fieldIds.length||fieldIds.some(x=>partIds.filter(y=>y===x).length!==1))fail(`${p}.parts`,'すべての部品を一度ずつ使う必要があります');
+      list(task.rules,`${p}.rules`,1,20).forEach((rule,j)=>{
+        const rp=`${p}.rules[${j}]`;if(!keys(rule,rp,['values','disposition','evidence','explanation']))return;
+        if(!['keep','revise','hold'].includes(rule.disposition))fail(`${rp}.disposition`,'未知の扱いです');
+        text(rule.explanation,`${rp}.explanation`);
+        if(!object(rule.values)||Object.keys(rule.values).length!==fields.length||fields.some(f=>!Array.isArray(f?.options)||!f.options.some(o=>o?.id===rule.values?.[f.id])))fail(`${rp}.values`,'各部品に存在する値が必要です');
+        const evidence=list(rule.evidence,`${rp}.evidence`);unique(evidence,`${rp}.evidence`);
+        evidence.forEach(x=>{const entry=excerpts.find(e=>e?.id===x);if(!entry)fail(`${rp}.evidence`,'証拠の一節が存在しません');else used.add(entry.documentId);});
+        const original=fields.every(f=>object(f)&&rule.values?.[f.id]===f.original);
+        if((rule.disposition==='keep'&&!original)||(rule.disposition==='revise'&&original))fail(`${rp}.disposition`,'文の変更と扱いが食い違います');
+      });
+    });unique(boardTaskIds,'v2.board.tasks');
+  }
   if(v.experiment){
     const e=v.experiment,p='v2.experiment';
     if(!modes.includes('experiment'))fail(p,'方式指定が必要です');

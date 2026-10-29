@@ -21,16 +21,16 @@ it('renders choices and adopted sources without leaking facts or reasons', () =>
   expect(screen.queryByRole('checkbox')).not.toBeInTheDocument();
 });
 
-it('lists the referenced sources with their adoption state and no manual picking', () => {
+it('lists the referenced sources with their read state and no manual picking', () => {
   const progress = makeV2Progress();
   progress.v2!.decoding.scope = { optionId: 'open', evidence: ['a', 'b'] };
-  progress.pinned = ['a'];
+  progress.opened = ['a'];
   render(<InformationDesk caseData={makeV2Case()} progress={progress} onAction={vi.fn()} />);
   const refs = screen.getByRole('region', { name: 'この答えのもとになる資料' });
-  expect(refs).toHaveTextContent('資料Aボードに貼った');
-  expect(refs).toHaveTextContent('資料Bまだ貼っていない');
-  expect(screen.getByRole('status')).toHaveTextContent('まだ貼っていない資料があります');
-  expect(screen.getByText('問 1 ・ 回答済み ・ まだ貼っていない資料 1 件')).toBeInTheDocument();
+  expect(refs).toHaveTextContent('資料A読んだ');
+  expect(refs).toHaveTextContent('資料Bまだ読んでいない');
+  expect(screen.getByRole('status')).toHaveTextContent('まだ読んでいない資料があります');
+  expect(screen.getByText('問 1 ・ 回答済み ・ まだ読んでいない資料 1 件')).toBeInTheDocument();
 });
 
 it('allows revising notes, with native keyboard-accessible controls', () => {

@@ -5,7 +5,7 @@ import {
   expectBudget,
   goToArticle,
   gotoCase,
-  openAndPin,
+  openAndRead,
   openTask,
   prepareV2Case,
   showDesk,
@@ -95,7 +95,7 @@ test('実験は初回表示を固定し、保留から判断を変えても途�
   await showDesk(page, '見え方のミニ実験');
   await expect(desk.getByText(`最初の判断：${initial.text}`, { exact: true })).toBeVisible();
   for (const id of definition.revealDocuments) {
-    await openAndPin(page, c.documents.find((document) => document.id === id)!.title);
+    await openAndRead(page, c.documents.find((document) => document.id === id)!.title);
   }
   await showDesk(page, '見え方のミニ実験');
   await desk.getByRole('radio', { name: updated.text, exact: true }).check();
@@ -227,31 +227,7 @@ async function keyboardShowDesk(page: Page, label: string) {
   await expect(tab).toHaveAttribute('aria-selected', 'true');
 }
 
-async function keyboardSelect(page: Page, select: Locator, value: string) {
-  const index = await select
-    .locator('option')
-    .evaluateAll(
-      (options, wanted) =>
-        options.findIndex((option) => (option as HTMLOptionElement).value === wanted),
-      value,
-    );
-  expect(index).toBeGreaterThanOrEqual(0);
-  await tabTo(page, select);
-  await expect(select).toBeFocused();
-  await page.keyboard.press('Space');
-  await expect(select).toBeFocused();
-  await page.keyboard.press('Home');
-  for (let current = 0; current < index; current += 1) await page.keyboard.press('ArrowDown');
-  await page.keyboard.press('Enter');
-  await expect(select).toBeFocused();
-  await expect(select).toHaveValue(value);
-}
-
 test('マウスとドラッグを使わずTab・矢印・Space・EnterでCASE01を完了する', async ({ page }) => {
-  test.skip(
-    process.platform === 'darwin',
-    'macOS headlessのネイティブselectは最小HTMLでも矢印入力を反映しないため、Linux CIで必須実行する。',
-  );
   test.setTimeout(120_000);
   const c = GAME_CASES[0]!;
   const v2 = c.v2!;
@@ -270,7 +246,7 @@ test('マウスとドラッグを使わずTab・矢印・Space・EnterでCASE01�
     await page.keyboard.press('Enter');
     const dialog = page.getByRole('dialog');
     await expect(dialog).toBeVisible();
-    await tabTo(page, dialog.getByRole('button', { name: '証拠ボードに貼る', exact: true }));
+    await tabTo(page, dialog.getByRole('button', { name: '戻る', exact: true }));
     await page.keyboard.press('Space');
     await expect(dialog).toBeHidden();
   }
@@ -291,15 +267,40 @@ test('マウスとドラッグを使わずTab・矢印・Space・EnterでCASE01�
     await expect(group.getByRole('status')).toContainText('根拠ありとして記録しました');
   }
   await keyboardShowDesk(page, '証拠ボード');
-  for (const link of path) {
-    await keyboardSelect(page, page.getByLabel('A：起点となる資料', { exact: true }), link.from);
-    await keyboardSelect(
-      page,
-      page.getByLabel('A は B に対して…（関係の役割）', { exact: true }),
-      link.relation,
-    );
-    await keyboardSelect(page, page.getByLabel('B：結び付ける資料', { exact: true }), link.to);
-    await tabTo(page, page.getByRole('button', { name: '関係を追加', exact: true }));
+  for (const task of v2.board!.tasks) {
+    const rule = task.rules[0]!;
+    await tabTo(page, page.getByRole('button', { name: new RegExp('^' + task.title) }));
+    await page.keyboard.press('Enter');
+    for (const field of task.fields) {
+      await tabTo(
+        page,
+        page.getByRole('button', { name: `文の部分：${field.label}`, exact: true }),
+      );
+      await page.keyboard.press('Enter');
+      await tabTo(
+        page,
+        page.getByRole('button', {
+          name: field.options.find((entry) => entry.id === rule.values[field.id])!.text,
+          exact: true,
+        }),
+      );
+      await page.keyboard.press('Enter');
+    }
+    for (const id of rule.evidence) {
+      const excerpt = v2.board!.excerpts.find((entry) => entry.id === id)!;
+      const title = c.documents.find((entry) => entry.id === excerpt.documentId)!.title;
+      const source = page
+        .getByRole('group', { name: 'この文に添える証拠', exact: true })
+        .locator('details')
+        .filter({ hasText: title });
+      await tabTo(page, source.locator('summary'));
+      await page.keyboard.press('Enter');
+      await tabTo(page, source.getByRole('checkbox', { name: excerpt.quote, exact: true }));
+      await page.keyboard.press('Space');
+    }
+    await tabTo(page, page.getByRole('radio', { name: 'そのまま残す', exact: true }));
+    await page.keyboard.press('ArrowDown');
+    await tabTo(page, page.getByRole('button', { name: '文と証拠を記録', exact: true }));
     await page.keyboard.press('Enter');
   }
   await tabTo(page, page.getByRole('button', { name: '調査報告をまとめる →', exact: true }));

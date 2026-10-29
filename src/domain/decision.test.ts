@@ -95,8 +95,6 @@ it('keeps an alternative evidence route affordable and detects an exhausted rout
   const data = makeV2Case();
   data.budget = 2;
   data.v2!.decoding[0]!.options[1]!.evidence = ['a', 'c'];
-  expect(deadEndReason(data, makeV2Progress({ opened: ['a', 'c'], pinned: [] })).deadEnd).toBe(
-    false,
-  );
-  expect(deadEndReason(data, makeV2Progress({ opened: ['d'], pinned: [] })).deadEnd).toBe(true);
+  expect(deadEndReason(data, makeV2Progress({ opened: ['a', 'c'] })).deadEnd).toBe(false);
+  expect(deadEndReason(data, makeV2Progress({ opened: ['d'] })).deadEnd).toBe(true);
 });

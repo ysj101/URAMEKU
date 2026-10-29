@@ -25,12 +25,6 @@ export function InvestigationScreen({ game }: { game: GameApi }) {
     setOpenId(documentId);
   };
 
-  const handleTogglePin = (documentId: string) => {
-    if (!progress.pinned.includes(documentId)) play('evidence-pin');
-    dispatch({ type: 'toggle-pin', documentId });
-    setOpenId(null);
-  };
-
   const handleRestart = () => {
     if (!window.confirm('この事件の調査途中の記録を最初からやり直しますか？')) return;
     dispatch({ type: 'reset' });
@@ -47,7 +41,7 @@ export function InvestigationScreen({ game }: { game: GameApi }) {
         </span>
       </div>
       <div className="notice">
-        最初に何を調べるかは自由です。重要な資料を見落とすと予算が足りなくなります。資料を開いて終わりではなく、ボードに証拠として採用してください。
+        最初に何を調べるかは自由です。重要な資料を見落とすと予算が足りなくなります。開いて読んだ資料が、そのまま証拠ボードに並びます。
       </div>
       {deadEnd && (
         <div className="notice" role="status">
@@ -64,14 +58,13 @@ export function InvestigationScreen({ game }: { game: GameApi }) {
         </small>
       </h2>
       <div className="investigation-papers">
-        <p className="desk-caption">資料をひらく → 事実を読む → 証拠ボードに貼る</p>
+        <p className="desk-caption">資料をひらく → 事実を読む → ボードで照合する</p>
         <DocumentGrid caseData={current} progress={progress} onOpen={handleOpen} />
       </div>
       <EvidenceBoard
         caseData={current}
         progress={progress}
         onToggleLink={(documentId) => dispatch({ type: 'toggle-link', documentId })}
-        onUnpin={(documentId) => dispatch({ type: 'toggle-pin', documentId })}
       />
       <CalculationDesk
         caseData={current}
@@ -90,7 +83,6 @@ export function InvestigationScreen({ game }: { game: GameApi }) {
         caseData={current}
         progress={progress}
         documentId={openId}
-        onTogglePin={handleTogglePin}
         onClose={() => setOpenId(null)}
       />
     </>

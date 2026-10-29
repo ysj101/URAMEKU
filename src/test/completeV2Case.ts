@@ -19,10 +19,8 @@ export function completeV2Case(
   const step = (action: GameAction) => {
     p = reduceProgress(c, p, action);
   };
-  const pin = (documentId: string) => {
-    step({ type: 'open-document', documentId });
-    if (!p.pinned.includes(documentId)) step({ type: 'toggle-pin', documentId });
-  };
+  // 開いた資料はそのまま根拠候補になる（貼る操作はない）
+  const pin = (documentId: string) => step({ type: 'open-document', documentId });
   // The opening document is available before any conditional reveal.
   const initial = c.documents.find((d) => d.cost === 0)!;
   pin(initial.id);
@@ -50,11 +48,24 @@ export function completeV2Case(
     ...path.flatMap((e) => [e.from, e.to]),
     ...(experiment?.revealDocuments ?? []),
     ...(decision?.revealDocuments ?? []),
+    ...(c.v2.board?.tasks.flatMap((task) =>
+      task.rules[options.alternative ? task.rules.length - 1 : 0]!.evidence.map(
+        (id) => c.v2!.board!.excerpts.find((entry) => entry.id === id)!.documentId,
+      ),
+    ) ?? []),
   ]);
   for (const id of mustOpen) pin(id);
   for (const { task, option } of selections)
     step({ type: 'v2-decode', taskId: task.id, optionId: option.id, evidence: option.evidence });
   for (const link of path) step({ type: 'v2-link', link });
+  for (const task of c.v2.board?.tasks ?? []) {
+    const rule = task.rules[options.alternative ? task.rules.length - 1 : 0]!;
+    step({
+      type: 'v2-board',
+      taskId: task.id,
+      record: { values: rule.values, evidence: rule.evidence, disposition: rule.disposition },
+    });
+  }
   if (experiment && experimentChoice)
     step({
       type: 'v2-experiment-update',

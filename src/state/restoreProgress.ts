@@ -1,6 +1,7 @@
 import { normalizeProgress } from '../domain/game';
 import { isDocumentSealed } from '../domain/budget';
 import { createV2Progress } from '../domain/v2Progress';
+import { validBoardRecord } from '../domain/board';
 import type { CaseData, CaseProgress } from '../domain/types';
 
 /** Restore only references belonging to this revision; malformed phases never unlock hidden data. */
@@ -8,7 +9,6 @@ export function restoreProgress(caseData: CaseData, raw: CaseProgress): CaseProg
   const progress = normalizeProgress(raw);
   const ids = new Set(caseData.documents.map((d) => d.id));
   progress.opened = [...new Set(progress.opened)].filter((id) => ids.has(id));
-  progress.pinned = [...new Set(progress.pinned)].filter((id) => progress.opened.includes(id));
   if (!caseData.v2) return progress;
   const config = caseData.v2;
   const v2 = progress.v2 ?? createV2Progress(caseData);
@@ -37,7 +37,7 @@ export function restoreProgress(caseData: CaseData, raw: CaseProgress): CaseProg
     };
   } else delete v2.experiment;
   const validEvidence = (evidence: string[]) =>
-    evidence.every((id) => progress.pinned.includes(id));
+    evidence.every((id) => progress.opened.includes(id));
   const knownHistory = (evidence: string[]) =>
     evidence.every((id) => ids.has(id) && progress.opened.includes(id));
   v2.decisions = config.decision
@@ -61,8 +61,15 @@ export function restoreProgress(caseData: CaseData, raw: CaseProgress): CaseProg
     v2.decisions = v2.decisions.slice(0, 1);
   progress.v2 = v2;
   progress.opened = progress.opened.filter((id) => !isDocumentSealed(caseData, progress, id));
-  progress.pinned = progress.pinned.filter((id) => progress.opened.includes(id));
   v2.links = v2.links.filter((link) => validEvidence([link.from, link.to]));
+  if (config.board) {
+    v2.board = Object.fromEntries(
+      Object.entries(v2.board ?? {}).filter(([id, record]) => {
+        const task = config.board!.tasks.find((entry) => entry.id === id);
+        return task && validBoardRecord(caseData, progress, task, record);
+      }),
+    );
+  } else delete v2.board;
   for (const [id, response] of Object.entries(v2.decoding)) {
     if (
       !config.decoding.some(

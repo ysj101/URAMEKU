@@ -27,7 +27,7 @@ export interface PublishVerdict {
   /** 揃っていない系統（VERDICT_TRACKS の順） */
   missing: VerdictTrack[];
   detail: {
-    /** 必要証拠（required_evidence）のうちボードに採用済みの数 */
+    /** 必要証拠（required_evidence）のうち読んだ数 */
     evidence: TrackDetail;
     /** 照合（required_link と一致していれば 1/1） */
     link: TrackDetail;
@@ -77,7 +77,7 @@ export function publishVerdict(caseData: CaseData, progress: CaseProgress): Publ
     return { approved: v2.completed, missing, detail, v2 };
   }
   const evidenceDone = caseData.required_evidence.filter((id) =>
-    progress.pinned.includes(id),
+    progress.opened.includes(id),
   ).length;
   const linkOk = isLinkCorrect(caseData, progress);
   const calcDone = countCorrectCalculations(caseData, progress);

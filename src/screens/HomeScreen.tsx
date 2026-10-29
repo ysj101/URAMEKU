@@ -134,8 +134,8 @@ export function HomeScreen({ game, nav }: { game: GameApi; nav: Navigation }) {
           <p>広告や台帳を開いて、見出しのウラにある事実を読む。</p>
         </li>
         <li>
-          <strong>証拠をつなぐ</strong>
-          <p>気になる資料をボードに貼り、2枚の関係を照合する。</p>
+          <strong>文に証拠を添える</strong>
+          <p>文の気になる部分を確かめ、資料の一節を添えて組み直す。</p>
         </li>
         <li>
           <strong>記事にまとめる</strong>

@@ -17,7 +17,7 @@
   - 44px: 表示中の `button, a, input, select, textarea, summary, [role=button], [role=tab]` の `getBoundingClientRect()` が幅・高さとも 44px 以上。`display: inline` のテキストリンク、`display: none`、画面外退避中（skip-link）は対象外。モーダル表示中は `dialog[open]` 内だけを対象にする。
   - はみ出し: レイアウト幅の右端を超える要素（`position: fixed / absolute` を除く）。
 - 画面状態: 調査〜結果は `localStorage`（`src/state/persistence.ts` の v3 形式）に進行状態を注入して再現する。
-  - `play-investigate`: 資料 2 件を開き 1 件採用
+  - `play-investigate`: 資料 2 件を開く（開いた資料はそのまま根拠候補）
   - `play-board`: 必要資料 3 件を採用、資料 A を選択中、検証メモ 1 件入力
   - `play-dialog`: 既読タイルを `eval` で click して資料ダイアログを開いた状態
   - `play-article`: 断片 2 つを配置

@@ -6,26 +6,23 @@ import { documentCost, type OpenDocumentOutcome } from '../domain/budget';
 import type { CaseDocument } from '../domain/types';
 
 /** タイルの表示状態。色だけに依存せずテキストとアイコンで区別する（MVP_SPEC 12 章） */
-type TileState = 'unseen' | 'locked' | 'opened' | 'pinned';
+type TileState = 'unseen' | 'locked' | 'opened';
 
 const STATE_ICON: Record<TileState, UiStateName> = {
   unseen: 'unseen',
   locked: 'locked',
-  opened: 'investigate',
-  pinned: 'verified',
+  opened: 'verified',
 };
 
 const STATE_LABEL: Record<TileState, string> = {
   unseen: '未調査',
   locked: '未調査',
   opened: '調査済み',
-  pinned: '採用済み',
 };
 
 const BUDGET_SHORT_TEXT = '予算不足';
 
-function tileState(opened: boolean, pinned: boolean, outcome: OpenDocumentOutcome): TileState {
-  if (pinned) return 'pinned';
+function tileState(opened: boolean, outcome: OpenDocumentOutcome): TileState {
   if (opened) return 'opened';
   if (outcome === 'insufficient-budget' || outcome === 'sealed') return 'locked';
   return 'unseen';
@@ -37,7 +34,6 @@ interface Props {
   index: number;
   document: CaseDocument;
   opened: boolean;
-  pinned: boolean;
   /** `tryOpenDocument` の結果。`insufficient-budget` のときは開かず理由を告げる */
   outcome: OpenDocumentOutcome;
   onOpen: (documentId: string) => void;
@@ -50,12 +46,11 @@ export function DocumentTile({
   index,
   document: doc,
   opened,
-  pinned,
   outcome,
   onOpen,
   onBlocked,
 }: Props) {
-  const state = tileState(opened, pinned, outcome);
+  const state = tileState(opened, outcome);
   const blocked = state === 'locked';
   const blockedText = outcome === 'sealed' ? '初回の判断を記録すると開示' : BUDGET_SHORT_TEXT;
   const cost = documentCost(doc);

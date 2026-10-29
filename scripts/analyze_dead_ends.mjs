@@ -57,9 +57,28 @@ export function requiredDocumentPaths(c) {
     ...(c.v2.experiment?.revealDocuments ?? []),
     ...(c.v2.decision?.revealDocuments ?? []),
   ];
-  let paths = c.v2.graph.paths.map((path) => [
-    ...new Set([...fixed, ...path.flatMap((edge) => [edge.from, edge.to])]),
-  ]);
+  let paths = c.v2.board
+    ? [[]]
+    : c.v2.graph.paths.map((path) => [
+        ...new Set([...fixed, ...path.flatMap((edge) => [edge.from, edge.to])]),
+      ]);
+  if (c.v2.board) {
+    const board = c.v2.board;
+    for (const task of board.tasks)
+      paths = minimalPaths(
+        paths.flatMap((path) =>
+          task.rules.map((rule) => [
+            ...new Set([
+              ...path,
+              ...rule.evidence.map(
+                (id) => board.excerpts.find((entry) => entry.id === id).documentId,
+              ),
+            ]),
+          ]),
+        ),
+      );
+    paths = paths.map((path) => [...new Set([...fixed, ...path])]);
+  }
   for (const task of c.v2.decoding) {
     paths = minimalPaths(
       paths.flatMap((path) =>
@@ -162,7 +181,7 @@ export function toMarkdown(rows) {
   }
   lines.push(
     '',
-    '予算のみの分析。V2は全解読タスクの妥当な根拠とグラフ経路・開示資料の組合せを列挙し、どの経路も予算に収まらないときだけ行き詰まりとする。段階ゲート・初回判断前の開示防止はドメイン/E2Eで別途検証する。',
+    '予算のみの分析。V2は全解読タスクの妥当な根拠と証拠ボードの経路・開示資料の組合せを列挙し、どの経路も予算に収まらないときだけ行き詰まりとする。段階ゲート・初回判断前の開示防止はドメイン/E2Eで別途検証する。',
     '高難易度や楽しさをこの数値だけで判定しない。',
   );
   return lines.join('\n');

@@ -11,20 +11,19 @@ import { makeCase, makeProgress } from '../test/fixtures';
 const c = makeCase();
 
 describe('link: 選択可否', () => {
-  it('ボード未採用の資料は選べない（not-pinned）', () => {
-    const p = makeProgress({ opened: ['a'] });
-    expect(canSelectForLink(c, p, 'a')).toEqual({ ok: false, reason: 'not-pinned' });
+  it('まだ読んでいない資料は選べない（not-opened）', () => {
+    const p = makeProgress();
+    expect(canSelectForLink(c, p, 'a')).toEqual({ ok: false, reason: 'not-opened' });
     expect(toggleLinkSelection(c, p, 'a')).toBe(p);
   });
   it('ケースに存在しない資料は選べない（unknown-document）', () => {
-    const p = makeProgress({ opened: ['zzz'], pinned: ['zzz'] });
+    const p = makeProgress({ opened: ['zzz'] });
     expect(canSelectForLink(c, p, 'zzz')).toEqual({ ok: false, reason: 'unknown-document' });
     expect(toggleLinkSelection(c, p, 'zzz')).toBe(p);
   });
   it('提出済みでは選択も解除もできない（published）', () => {
     const p = makeProgress({
       opened: ['a', 'b', 'c'],
-      pinned: ['a', 'b', 'c'],
       chosenLink: ['a'],
       published: true,
     });
@@ -33,15 +32,15 @@ describe('link: 選択可否', () => {
     expect(toggleLinkSelection(c, p, 'b')).toBe(p);
     expect(toggleLinkSelection(c, p, 'a')).toBe(p);
   });
-  it('採用済みで未提出なら選べる', () => {
-    const p = makeProgress({ opened: ['a'], pinned: ['a'] });
+  it('読んでいて未提出なら選べる', () => {
+    const p = makeProgress({ opened: ['a'] });
     expect(canSelectForLink(c, p, 'a')).toEqual({ ok: true });
   });
 });
 
 describe('link: 選択の切り替え', () => {
   it('2枚選ぶと照合が成立し、順序は問わない', () => {
-    const p = makeProgress({ opened: ['a', 'c'], pinned: ['a', 'c'] });
+    const p = makeProgress({ opened: ['a', 'c'] });
     const q = toggleLinkSelection(c, toggleLinkSelection(c, p, 'c'), 'a');
     expect(q.chosenLink).toEqual(['c', 'a']);
     expect(isLinkComplete(q)).toBe(true);
@@ -49,7 +48,7 @@ describe('link: 選択の切り替え', () => {
     expect(linkStatus(c, q)).toBe('correct');
   });
   it('同じ資料を2回押すと解除になり、自己照合にはならない', () => {
-    const p = makeProgress({ opened: ['a'], pinned: ['a'] });
+    const p = makeProgress({ opened: ['a'] });
     const once = toggleLinkSelection(c, p, 'a');
     expect(once.chosenLink).toEqual(['a']);
     const twice = toggleLinkSelection(c, once, 'a');
@@ -58,7 +57,7 @@ describe('link: 選択の切り替え', () => {
     expect(linkStatus(c, twice)).toBe('incomplete');
   });
   it('保存データ由来の重複選択も2枚として数えない（自己照合不可）', () => {
-    const p = makeProgress({ opened: ['a'], pinned: ['a'], chosenLink: ['a', 'a'] });
+    const p = makeProgress({ opened: ['a'], chosenLink: ['a', 'a'] });
     expect(isLinkComplete(p)).toBe(false);
     expect(isLinkCorrect(c, p)).toBe(false);
     expect(linkStatus(c, p)).toBe('incomplete');
@@ -66,7 +65,6 @@ describe('link: 選択の切り替え', () => {
   it('3枚目を押すと選び直しになる', () => {
     const p = makeProgress({
       opened: ['a', 'b', 'c'],
-      pinned: ['a', 'b', 'c'],
       chosenLink: ['a', 'b'],
     });
     expect(toggleLinkSelection(c, p, 'c').chosenLink).toEqual(['c']);
@@ -75,26 +73,26 @@ describe('link: 選択の切り替え', () => {
 
 describe('link: 正誤判定', () => {
   it('1枚だけでは incomplete', () => {
-    const p = makeProgress({ opened: ['a'], pinned: ['a'], chosenLink: ['a'] });
+    const p = makeProgress({ opened: ['a'], chosenLink: ['a'] });
     expect(linkStatus(c, p)).toBe('incomplete');
     expect(isLinkCorrect(c, p)).toBe(false);
   });
   it('誤った組み合わせは incorrect', () => {
-    const p = makeProgress({ opened: ['a', 'b'], pinned: ['a', 'b'], chosenLink: ['a', 'b'] });
+    const p = makeProgress({ opened: ['a', 'b'], chosenLink: ['a', 'b'] });
     expect(isLinkCorrect(c, p)).toBe(false);
     expect(linkStatus(c, p)).toBe('incorrect');
   });
   it('required_link が 2 要素でないケースは常に incorrect', () => {
-    const p = makeProgress({ opened: ['a', 'c'], pinned: ['a', 'c'], chosenLink: ['a', 'c'] });
+    const p = makeProgress({ opened: ['a', 'c'], chosenLink: ['a', 'c'] });
     expect(linkStatus(makeCase({ required_link: ['a'] }), p)).toBe('incorrect');
     expect(linkStatus(makeCase({ required_link: ['a', 'b', 'c'] }), p)).toBe('incorrect');
     expect(linkStatus(makeCase({ required_link: [] }), p)).toBe('incorrect');
   });
   it('required_link が同一要素のケースは常に incorrect（自己照合を正解にしない）', () => {
     const bad = makeCase({ required_link: ['a', 'a'] });
-    const p = makeProgress({ opened: ['a', 'c'], pinned: ['a', 'c'], chosenLink: ['a', 'c'] });
+    const p = makeProgress({ opened: ['a', 'c'], chosenLink: ['a', 'c'] });
     expect(linkStatus(bad, p)).toBe('incorrect');
-    const self = makeProgress({ opened: ['a'], pinned: ['a'], chosenLink: ['a', 'a'] });
+    const self = makeProgress({ opened: ['a'], chosenLink: ['a', 'a'] });
     expect(isLinkCorrect(bad, self)).toBe(false);
   });
 });
@@ -106,7 +104,7 @@ describe('link: V1互換fixtureとの整合', () => {
 
   /** 閲覧・採用・選択を reducer を通さず直接組み立てる */
   function progressWith(ids: string[]) {
-    return makeProgress({ opened: ids, pinned: ids, chosenLink: ids });
+    return makeProgress({ opened: ids, chosenLink: ids });
   }
 
   it.each(CASES.map((cs) => [cs.id, cs] as const))(
@@ -133,7 +131,7 @@ describe('link: V1互換fixtureとの整合', () => {
     '%s: toggle 操作で required_link の 2 枚を選ぶと correct',
     (_id, cs) => {
       const [x, y] = cs.required_link;
-      let p = makeProgress({ opened: [x, y], pinned: [x, y] });
+      let p = makeProgress({ opened: [x, y] });
       p = toggleLinkSelection(cs, p, y);
       p = toggleLinkSelection(cs, p, x);
       expect(linkStatus(cs, p)).toBe('correct');

@@ -1,14 +1,21 @@
-import { LINK_SIZE, type CaseData, type CaseProgress, type V2EvidenceLink } from './types';
+import {
+  LINK_SIZE,
+  type CaseData,
+  type CaseProgress,
+  type V2EvidenceLink,
+  type V2Relation,
+} from './types';
+import { boardReviews } from './board';
 
 /**
  * 2 資料照合のルール。
- * - 照合に使えるのは証拠ボードに採用した資料だけ
+ * - 照合に使えるのは開いて読んだ資料だけ
  * - 自己照合（同じ資料 2 枚）は成立しない
  * - 提出後は選択を変えられない
  * - 正誤は required_link との集合一致（順不同）
  */
 
-export type LinkSelectReason = 'not-pinned' | 'unknown-document' | 'published';
+export type LinkSelectReason = 'not-opened' | 'unknown-document' | 'published';
 
 export type LinkSelectResult = { ok: true } | { ok: false; reason: LinkSelectReason };
 
@@ -27,7 +34,7 @@ export function canSelectForLink(
   if (!caseData.documents.some((d) => d.id === documentId)) {
     return { ok: false, reason: 'unknown-document' };
   }
-  if (!progress.pinned.includes(documentId)) return { ok: false, reason: 'not-pinned' };
+  if (!progress.opened.includes(documentId)) return { ok: false, reason: 'not-opened' };
   return { ok: true };
 }
 
@@ -99,15 +106,17 @@ export function validV2Links(caseData: CaseData, progress: CaseProgress) {
       link.from !== link.to &&
       [link.from, link.to].every(
         (id) =>
-          caseData.documents.some((document) => document.id === id) &&
-          progress.opened.includes(id) &&
-          progress.pinned.includes(id),
+          caseData.documents.some((document) => document.id === id) && progress.opened.includes(id),
       ),
   );
 }
 
 /** Any full authored path is valid. Alternative paths are not forced into the first path. */
 export function v2GraphProgress(caseData: CaseData, progress: CaseProgress) {
+  if (caseData.v2?.board) {
+    const reviews = boardReviews(caseData, progress);
+    return { done: reviews.filter((review) => review.accepted).length, total: reviews.length };
+  }
   const links = validV2Links(caseData, progress);
   const paths = caseData.v2?.graph.paths ?? [];
   const counts = paths.map((path) => ({
@@ -123,4 +132,20 @@ export function v2GraphProgress(caseData: CaseData, progress: CaseProgress) {
 export function v2GraphComplete(caseData: CaseData, progress: CaseProgress): boolean {
   const count = v2GraphProgress(caseData, progress);
   return count.total > 0 && count.done === count.total;
+}
+
+/** 「A は B を〜」の形で読める 1 文にする */
+export function describeLink(from: string, to: string, relation: V2Relation): string {
+  const a = `「${from}」`;
+  const b = `「${to}」`;
+  switch (relation) {
+    case 'supports':
+      return `${a} は ${b} を補強する`;
+    case 'contradicts':
+      return `${a} は ${b} を反証する`;
+    case 'qualifies':
+      return `${a} は ${b} の適用範囲・条件を補う`;
+    case 'sequence':
+      return `${a} から ${b} へ時系列でつながる`;
+  }
 }

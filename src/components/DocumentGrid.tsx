@@ -27,7 +27,6 @@ export function DocumentGrid({ caseData, progress, onOpen }: Props) {
             index={index}
             document={d}
             opened={progress.opened.includes(d.id)}
-            pinned={progress.pinned.includes(d.id)}
             outcome={tryOpenDocument(caseData, progress, d.id).outcome}
             onOpen={(id) => {
               setBlocked(null);

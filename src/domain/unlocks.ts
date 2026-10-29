@@ -108,7 +108,7 @@ function progressOf(state: AchievementState, caseId: string): CaseProgress | und
  * 各実績が「現在の状態で」成立しているか。
  *
  * 判定の定義（data/achievements.json の `rule` に対応）:
- * - first-evidence: いずれかの事件で証拠ボードに 1 件以上ピン留めしている
+ * - first-evidence: いずれかの事件で資料を 1 件以上開いて読んでいる
  * - first-link: いずれかの事件で照合が正解（`isLinkCorrect`）
  * - number-check: 全事件を通じて、許容誤差内の数値検証メモが合計 2 問以上
  * - five-cases: 実在する事件のうち合格（`finished === true`）が 5 件以上
@@ -125,13 +125,13 @@ export function achievementConditions(state: AchievementState): Record<Achieveme
   const knownIds = new Set(state.cases.map((c) => c.id));
   const cleared = [...clearedCaseIds(state.finished)].filter((id) => knownIds.has(id));
 
-  let anyPinned = false;
+  let anyOpened = false;
   let anyLink = false;
   let correctCalcs = 0;
   for (const c of state.cases) {
     const p = progressOf(state, c.id);
     if (!p) continue;
-    if (Array.isArray(p.pinned) && p.pinned.length > 0) anyPinned = true;
+    if (Array.isArray(p.opened) && p.opened.length > 0) anyOpened = true;
     if (c.v2 ? v2GraphComplete(c, p) : isLinkCorrect(c, p)) anyLink = true;
     if (!c.v2) correctCalcs += countCorrectCalculations(c, p);
   }
@@ -139,7 +139,7 @@ export function achievementConditions(state: AchievementState): Record<Achieveme
   const noHint = cleared.some((id) => progressOf(state, id)?.revealed === false);
 
   return {
-    'first-evidence': anyPinned,
+    'first-evidence': anyOpened,
     'first-link': anyLink,
     'number-check': correctCalcs >= NUMBER_CHECK_TARGET,
     'five-cases': cleared.length >= FIVE_CASES_TARGET,

@@ -4,7 +4,7 @@ V2は既存React/TypeScript・静的JSON・純粋ドメイン・端末内保存�
 
 - `src/domain/v2Types.ts`: 3方式、根拠、判断、報告、履歴の契約。
 - `src/data/validateCase.ts` と `data/schema/case.schema.json`: 版別構造と参照の検証。
-- `src/domain/game.ts`: DOM非依存の状態遷移。未読採用、予算、重複、不正操作を拒否する。
+- `src/domain/game.ts`: DOM非依存の状態遷移。未読資料の照合、予算、重複、不正操作を拒否する。開いた資料はそのまま根拠候補になる。
 - 各方式の純粋関数と共通評価: 事実整合・根拠充足・操作完了・不確実性を分離する。
 - `src/components/` と `src/screens/`: JSON方式を描画し、事件別の答え分岐を持たない。
 - `src/state/`: 旧記録とV2記録を分離して移行。条件・初回判断・更新を再開し、未知版を黙って破壊しない。
@@ -26,7 +26,7 @@ V2は既存React/TypeScript・静的JSON・純粋ドメイン・端末内保存�
 ## フェーズ1：正式MVP
 
 - React + TypeScript + ViteへUI移行（データは静的JSON）。
-- `domain/game.ts`: 純粋関数の状態遷移（ケース開始、資料開封、証拠採用、照合、計算、記事、クリア）。
+- `domain/game.ts`: 純粋関数の状態遷移（ケース開始、資料開封、照合、計算、記事、クリア）。
 - `domain/scoring.ts`: 合格条件と採点をDOMから分離。
 - `state/persistence.ts`: 端末保存とバージョン移行。
 - `screens/`: Home, Cases, Desk, Document, EvidenceBoard, Calculator, Article, Result, Encyclopedia, Settings。

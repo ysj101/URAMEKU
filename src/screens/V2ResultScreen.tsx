@@ -5,6 +5,7 @@ import { experimentComparison } from '../domain/experiment';
 import { decisionOutcome } from '../domain/decision';
 import type { Navigation } from '../app/navigation';
 import type { GameApi } from '../state/useGame';
+import { boardReviews } from '../domain/board';
 import '../app/screens/v2-integration.css';
 
 export function V2ResultScreen({ game, nav }: { game: GameApi; nav: Navigation }) {
@@ -18,7 +19,7 @@ export function V2ResultScreen({ game, nav }: { game: GameApi; nav: Navigation }
   if (!config || !state) return null;
   const tracks = {
     decoding: '情報の読み取り',
-    graph: '根拠の関係',
+    graph: config.board ? '文と証拠の確認' : '根拠の関係',
     experiment: '提示条件の比較',
     decision: '判断と更新',
     report: '自由文の補足',
@@ -162,6 +163,24 @@ export function V2ResultScreen({ game, nav }: { game: GameApi; nav: Navigation }
       {progress.revealed && (
         <section className="v2-panel" aria-label="資料に沿った解説">
           <h2>資料に沿った解説</h2>
+          {config.board && (
+            <section aria-label="証拠ボードの振り返り">
+              <h3>文と証拠を見直す</h3>
+              <ul>
+                {boardReviews(current, progress).map((review) => (
+                  <li key={review.task.id}>
+                    <strong>{review.task.title}</strong>：
+                    {review.accepted
+                      ? '資料で確認できました。'
+                      : review.recorded
+                        ? '文と証拠を見直せます。'
+                        : 'まだ記録していません。'}
+                    <p>{review.explanation}</p>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
           {config.decoding.map((task) => (
             <section key={task.id}>
               <h3>{task.prompt}</h3>

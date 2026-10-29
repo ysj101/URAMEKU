@@ -68,7 +68,26 @@ export interface HeadlineFragment {
   evidence?: string[];
 }
 
+export interface VisualGuide {
+  title: string;
+  intro: string;
+  image: string;
+  imageAlt: string;
+  steps: { label: string; count: number; note: string; evidence: string[] }[];
+  comparisons: {
+    label: string;
+    numerator: number;
+    denominator: number;
+    percent: number;
+    evidence: string[];
+  }[];
+  conclusion: string;
+  limit: string;
+  takeaway: string;
+}
+
 export interface Debrief {
+  visualGuide?: VisualGuide;
   explanation: string;
   takeaway: string;
 }
@@ -98,10 +117,8 @@ export interface CaseData {
 /** 1 事件ぶんの進行状態。保存対象。 */
 export interface CaseProgress {
   v2?: V2Progress;
-  /** 閲覧済み資料 ID（閲覧順） */
+  /** 閲覧済み資料 ID（閲覧順）。開いた資料がそのまま根拠候補になる（別途「貼る」操作はない） */
   opened: string[];
-  /** 証拠ボードに採用した資料 ID */
-  pinned: string[];
   /** 照合のために選択中の資料 ID（最大 2） */
   chosenLink: string[];
   /** 数値検証メモの入力値（文字列のまま保持し、評価時に解釈する） */

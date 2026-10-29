@@ -18,7 +18,7 @@ function firstUnanswered(tasks: V2DecodingTask[], progress: CaseProgress): strin
 /**
  * 情報解読メモ。問いはアコーディオンで、開くのは常に 1 問。
  * 根拠は手動で選ばせない。選んだ答えが参照する資料を一覧し、
- * すべて開いて証拠ボードに採用していれば ✓、未採用があれば「!」で促す。
+ * すべて開いて読んでいれば ✓、未読があれば「!」で促す。
  * Only the question and player's record are shown here; answer explanations stay in the debrief.
  */
 export function InformationDesk({ caseData, progress, onAction }: V2DeskProps) {
@@ -26,19 +26,19 @@ export function InformationDesk({ caseData, progress, onAction }: V2DeskProps) {
   const [openId, setOpenId] = useState<string | null>(() => firstUnanswered(tasks, progress));
   if (!tasks.length) return null;
   const title = (id: string) => caseData.documents.find((d) => d.id === id)?.title ?? id;
-  const adopted = (id: string) => progress.opened.includes(id) && progress.pinned.includes(id);
+  const read = (id: string) => progress.opened.includes(id);
   return (
     <section className="v2-desk" aria-label="情報解読メモ">
       <h2 className="section-title">情報解読メモ</h2>
       <p className="v2-desk__lead">
-        答えを選ぶと、その答えのもとになる資料が下に並びます。並んだ資料をすべて開いて証拠ボードに貼ると「根拠あり」になり、この問いの記録が完了します。
+        答えを選ぶと、その答えのもとになる資料が下に並びます。並んだ資料をすべて開いて読むと「根拠あり」になり、この問いの記録が完了します。
       </p>
       {tasks.map((task, index) => {
         const record = progress.v2?.decoding[task.id];
         const chosen = task.options.find((option) => option.id === record?.optionId);
         const answered = Boolean(chosen);
         const references = chosen?.evidence ?? [];
-        const missing = references.filter((id) => !adopted(id));
+        const missing = references.filter((id) => !read(id));
         const grounded = answered && references.length > 0 && missing.length === 0;
         const needsEvidence = answered && !grounded;
         const open = openId === task.id;
@@ -81,7 +81,7 @@ export function InformationDesk({ caseData, progress, onAction }: V2DeskProps) {
                 <span className="v2-task__meta">
                   問 {index + 1} ・ {answered ? '回答済み' : '未回答'}
                   {grounded && ` ・ 根拠 ${references.length} 件`}
-                  {needsEvidence && ` ・ まだ貼っていない資料 ${missing.length} 件`}
+                  {needsEvidence && ` ・ まだ読んでいない資料 ${missing.length} 件`}
                 </span>
                 <span className="v2-task__prompt" id={promptId}>
                   {task.prompt}
@@ -119,30 +119,30 @@ export function InformationDesk({ caseData, progress, onAction }: V2DeskProps) {
                 >
                   <h3 className="v2-task__evidence-title">この答えのもとになる資料</h3>
                   {!answered && (
-                    <p>答えを選ぶと、もとになる資料と、貼ったかどうかがここに並びます。</p>
+                    <p>答えを選ぶと、もとになる資料と、読んだかどうかがここに並びます。</p>
                   )}
                   {answered && (
                     <ul className="v2-task__refs">
                       {references.map((id) => (
                         <li
                           key={id}
-                          className={adopted(id) ? 'v2-task__ref is-adopted' : 'v2-task__ref'}
+                          className={read(id) ? 'v2-task__ref is-adopted' : 'v2-task__ref'}
                         >
-                          <span aria-hidden="true">{adopted(id) ? '✓' : '○'}</span>
+                          <span aria-hidden="true">{read(id) ? '✓' : '○'}</span>
                           {title(id)}
-                          <small>{adopted(id) ? 'ボードに貼った' : 'まだ貼っていない'}</small>
+                          <small>{read(id) ? '読んだ' : 'まだ読んでいない'}</small>
                         </li>
                       ))}
                     </ul>
                   )}
                   {needsEvidence && (
                     <p className="v2-task__warning" role="status">
-                      まだ貼っていない資料があります。左の調査資料から開いて「証拠ボードに貼る」を押すと、根拠ありになります。
+                      まだ読んでいない資料があります。左の調査資料から開いて読むと、根拠ありになります。
                     </p>
                   )}
                   {grounded && (
                     <p className="v2-task__ok" role="status">
-                      もとになる資料はすべて貼ってあります。根拠ありとして記録しました。
+                      もとになる資料はすべて読んでいます。根拠ありとして記録しました。
                     </p>
                   )}
                 </section>

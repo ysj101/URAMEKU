@@ -47,13 +47,12 @@ export async function openDoc(page: Page, title: string): Promise<Locator> {
   await expect(dialog.getByRole('heading', { name: title, exact: true })).toBeVisible();
   return dialog;
 }
-export async function openAndPin(page: Page, title: string) {
+/** 資料を開いて読み、「戻る」で閉じる。開いた時点で根拠候補になる（貼る操作はない） */
+export async function openAndRead(page: Page, title: string) {
   const dialog = await openDoc(page, title);
-  const button = dialog.getByRole('button', { name: '証拠ボードに貼る' });
-  if (await button.count()) await button.click();
-  else await dialog.getByRole('button', { name: '戻る', exact: true }).click();
+  await dialog.getByRole('button', { name: '戻る', exact: true }).click();
   await expect(dialog).toBeHidden();
-  await expect(docTile(page, title)).toHaveAccessibleName(/採用済み/);
+  await expect(docTile(page, title)).toHaveAccessibleName(/調査済み/);
 }
 /** 右側デスクのタブを切り替える（既に選択中なら何もしない） */
 export async function showDesk(page: Page, label: string) {
@@ -122,7 +121,7 @@ async function recordDecision(page: Page, c: CaseData, sources: string[], option
   await desk.getByRole('button', { name: '判断を記録', exact: true }).click();
 }
 
-/** Real UI walkthrough: all evidence is read/pinned, never injected into localStorage. */
+/** Real UI walkthrough: all evidence is read through the UI, never injected into localStorage. */
 export async function prepareV2Case(
   page: Page,
   c: CaseData,
@@ -146,16 +145,21 @@ export async function prepareV2Case(
     ...new Set([
       ...selections.flatMap(({ option }) => option.evidence),
       ...path.flatMap((link) => [link.from, link.to]),
+      ...(v.board?.tasks.flatMap((task) =>
+        task.rules[options.alternative ? task.rules.length - 1 : 0]!.evidence.map(
+          (id) => v.board!.excerpts.find((entry) => entry.id === id)!.documentId,
+        ),
+      ) ?? []),
       ...(v.experiment?.revealDocuments ?? []),
       ...(v.decision?.revealDocuments ?? []),
     ]),
   ];
   const initialSources = needed.filter((id) => !v.decision?.revealDocuments.includes(id));
-  for (const id of initialSources) await openAndPin(page, title(id));
+  for (const id of initialSources) await openAndRead(page, title(id));
   if (v.decision) {
     // The initial judgement uses only sources that precede the new information.
     await recordDecision(page, c, initialSources, options.decisionChoice);
-    for (const id of v.decision.revealDocuments) await openAndPin(page, title(id));
+    for (const id of v.decision.revealDocuments) await openAndRead(page, title(id));
     await recordDecision(
       page,
       c,
@@ -181,18 +185,52 @@ export async function prepareV2Case(
   for (const { task, option } of selections) {
     const group = await openTask(page, task.prompt);
     await group.getByRole('radio', { name: option.text, exact: true }).check();
-    // 根拠は参照資料の採用状況から自動判定される（事前に openAndPin 済み）
+    // 根拠は参照資料を読んだかどうかから自動判定される（事前に openAndRead 済み）
     await expect(group.getByRole('status')).toContainText('根拠ありとして記録しました');
   }
   await showDesk(page, '証拠ボード');
-  for (const link of path) {
-    await page.getByLabel('A：起点となる資料', { exact: true }).selectOption(link.from);
-    await page
-      .getByLabel('A は B に対して…（関係の役割）', { exact: true })
-      .selectOption(link.relation);
-    await page.getByLabel('B：結び付ける資料', { exact: true }).selectOption(link.to);
-    await page.getByRole('button', { name: '関係を追加', exact: true }).click();
-  }
+  if (v.board) {
+    for (const task of v.board.tasks) {
+      const rule = task.rules[options.alternative ? task.rules.length - 1 : 0]!;
+      await page.getByRole('button', { name: new RegExp('^' + task.title) }).click();
+      for (const field of task.fields) {
+        await page.getByRole('button', { name: `文の部分：${field.label}`, exact: true }).click();
+        await page
+          .getByRole('button', {
+            name: field.options.find((entry) => entry.id === rule.values[field.id])!.text,
+            exact: true,
+          })
+          .click();
+      }
+      for (const id of rule.evidence) {
+        const excerpt = v.board.excerpts.find((entry) => entry.id === id)!;
+        const source = page
+          .getByRole('group', { name: 'この文に添える証拠', exact: true })
+          .locator('details')
+          .filter({ hasText: title(excerpt.documentId) });
+        const checkbox = source.getByRole('checkbox', { name: excerpt.quote, exact: true });
+        if (!(await checkbox.isVisible())) await source.locator('summary').click();
+        await checkbox.check();
+      }
+      await page
+        .getByRole('radio', {
+          name: { keep: 'そのまま残す', revise: '内容を直す', hold: 'まだ判断できない' }[
+            rule.disposition
+          ],
+          exact: true,
+        })
+        .check();
+      await page.getByRole('button', { name: '文と証拠を記録', exact: true }).click();
+    }
+  } else
+    for (const link of path) {
+      await page.getByLabel('A：起点となる資料', { exact: true }).selectOption(link.from);
+      await page
+        .getByLabel('A は B に対して…（関係の役割）', { exact: true })
+        .selectOption(link.relation);
+      await page.getByLabel('B：結び付ける資料', { exact: true }).selectOption(link.to);
+      await page.getByRole('button', { name: '関係を追加', exact: true }).click();
+    }
   await goToArticle(page);
   await fillReport(page, selections.map(({ option }) => option.text).join(' '));
 }

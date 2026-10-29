@@ -6,13 +6,13 @@ import {
   fillReport,
   goToArticle,
   gotoCase01,
-  openAndPin,
+  openAndRead,
 } from './helpers';
 const STORAGE_KEY = 'urameku-mvp-v1';
 test('V2報告と段階を復元し、端末の記録をすべて削除できる', async ({ page }) => {
   await gotoCase01(page);
-  await openAndPin(page, CASE01.docs.trial);
-  await openAndPin(page, CASE01.docs.retained);
+  await openAndRead(page, CASE01.docs.trial);
+  await openAndRead(page, CASE01.docs.retained);
   await goToArticle(page);
   await fillReport(page, '復元する調査報告');
   await expect
@@ -24,7 +24,7 @@ test('V2報告と段階を復元し、端末の記録をすべて削除できる
   );
   await page.getByRole('button', { name: '← 調査へ戻る' }).click();
   await expectBudget(page, 2);
-  await expect(docTile(page, CASE01.docs.trial)).toHaveAccessibleName(/採用済み/);
+  await expect(docTile(page, CASE01.docs.trial)).toHaveAccessibleName(/調査済み/);
   await page.goto('/#/');
   await expect(page.getByRole('button', { name: '前回の続き' })).toBeVisible();
   await page.getByRole('button', { name: '設定' }).click();

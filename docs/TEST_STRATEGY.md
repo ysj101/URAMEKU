@@ -8,7 +8,7 @@
 | --- | --- | --- |
 | 静的解析 | lint・型・整形 | `npm run check`、PRのCI |
 | JSON契約 | 3方式、旧形式、未知版、参照、資源、分岐 | `npm run validate:cases`、`src/data/v2Validation.test.ts` |
-| 状態 | 予算、未読採用、実験条件、初回/更新、二重操作、封印 | `src/domain/v2Progress.test.ts` と方式別テスト |
+| 状態 | 予算、未読資料の根拠化、実験条件、初回/更新、二重操作、封印 | `src/domain/v2Progress.test.ts` と方式別テスト |
 | 解読・根拠 | 主張の範囲、反証、別の妥当な経路、不足 | decoding/link/evaluationの単体テスト |
 | 意思決定 | 複数目的・方針・保留・前提・支持/反証・更新 | decision/evaluationのテスト。結果の幸不幸を正誤にしない |
 | 保存 | v0〜v3退避、v4再開、改訂不整合、未来形式の原文保護 | `src/state/v2Persistence.test.tsx`、既存保存/競合/削除テスト |

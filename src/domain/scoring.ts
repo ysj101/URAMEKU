@@ -46,7 +46,7 @@ export interface FailureReason {
 
 export interface Evaluation {
   v2?: V2Evaluation;
-  /** 採用済みの必要証拠 ID */
+  /** 読んだ必要証拠 ID */
   requiredFound: string[];
   requiredTotal: number;
   linkCorrect: boolean;
@@ -66,7 +66,7 @@ export function evaluateCase(caseData: CaseData, progress: CaseProgress): Evalua
     const v2 = evaluateV2Case(caseData, progress);
     return {
       v2,
-      requiredFound: progress.pinned.filter((id) => progress.opened.includes(id)),
+      requiredFound: [...progress.opened],
       requiredTotal: caseData.documents.length,
       linkCorrect: v2.tracks.graph.done === v2.tracks.graph.total,
       calculationsCorrect: 0,
@@ -79,7 +79,7 @@ export function evaluateCase(caseData: CaseData, progress: CaseProgress): Evalua
       breakdown: [],
     };
   }
-  const requiredFound = caseData.required_evidence.filter((id) => progress.pinned.includes(id));
+  const requiredFound = caseData.required_evidence.filter((id) => progress.opened.includes(id));
   const linkCorrect = isLinkCorrect(caseData, progress);
   const calculationsCorrect = countCorrectCalculations(caseData, progress);
   const fragmentsInPlace = countFragmentsInPlace(caseData, progress);
