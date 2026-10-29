@@ -810,6 +810,222 @@
           "type": "string",
           "minLength": 1,
           "maxLength": 5000
+        },
+        "board": {
+          "type": "object",
+          "required": [
+            "title",
+            "prompt",
+            "excerpts",
+            "tasks"
+          ],
+          "properties": {
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 5000
+            },
+            "prompt": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 5000
+            },
+            "excerpts": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "documentId",
+                  "quote"
+                ],
+                "properties": {
+                  "id": {
+                    "$ref": "#/$defs/taskId"
+                  },
+                  "documentId": {
+                    "$ref": "#/$defs/documentId"
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 5000
+                  }
+                },
+                "additionalProperties": false
+              },
+              "minItems": 1,
+              "maxItems": 100
+            },
+            "tasks": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "title",
+                  "prompt",
+                  "parts",
+                  "fields",
+                  "rules",
+                  "explanation"
+                ],
+                "properties": {
+                  "id": {
+                    "$ref": "#/$defs/taskId"
+                  },
+                  "title": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 5000
+                  },
+                  "prompt": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 5000
+                  },
+                  "parts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "text": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 5000
+                        },
+                        "field": {
+                          "$ref": "#/$defs/taskId"
+                        }
+                      },
+                      "additionalProperties": false,
+                      "if": {
+                        "required": [
+                          "text"
+                        ]
+                      },
+                      "then": {
+                        "required": [
+                          "text"
+                        ]
+                      },
+                      "else": {
+                        "required": [
+                          "field"
+                        ]
+                      }
+                    },
+                    "minItems": 1,
+                    "maxItems": 40
+                  },
+                  "fields": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "id",
+                        "label",
+                        "original",
+                        "options"
+                      ],
+                      "properties": {
+                        "id": {
+                          "$ref": "#/$defs/taskId"
+                        },
+                        "label": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 5000
+                        },
+                        "original": {
+                          "$ref": "#/$defs/taskId"
+                        },
+                        "options": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "required": [
+                              "id",
+                              "text"
+                            ],
+                            "properties": {
+                              "id": {
+                                "$ref": "#/$defs/taskId"
+                              },
+                              "text": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 5000
+                              }
+                            },
+                            "additionalProperties": false
+                          },
+                          "minItems": 2,
+                          "maxItems": 20
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "minItems": 1,
+                    "maxItems": 20
+                  },
+                  "rules": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "values",
+                        "evidence",
+                        "disposition",
+                        "explanation"
+                      ],
+                      "properties": {
+                        "values": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "$ref": "#/$defs/taskId"
+                          }
+                        },
+                        "evidence": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/$defs/taskId"
+                          },
+                          "minItems": 1,
+                          "maxItems": 100,
+                          "uniqueItems": true
+                        },
+                        "disposition": {
+                          "enum": [
+                            "keep",
+                            "revise",
+                            "hold"
+                          ]
+                        },
+                        "explanation": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 5000
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "minItems": 1,
+                    "maxItems": 20
+                  },
+                  "explanation": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 5000
+                  }
+                },
+                "additionalProperties": false
+              },
+              "minItems": 1,
+              "maxItems": 20
+            }
+          },
+          "additionalProperties": false
         }
       },
       "additionalProperties": false

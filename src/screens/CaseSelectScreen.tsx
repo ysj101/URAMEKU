@@ -1,4 +1,4 @@
-import { assetUrl, caseCover, propUrl, type PropName } from '../data/assets';
+import { assetUrl, caseCover } from '../data/assets';
 import { UI } from '../data/ui';
 import {
   CASE_STATUS_LABEL,
@@ -8,8 +8,6 @@ import {
 } from '../domain/caseStatus';
 import type { Navigation } from '../app/navigation';
 import type { GameApi } from '../state/useGame';
-
-const CASE_MOTIFS: PropName[] = ['ledger', 'advert', 'news', 'photo', 'report'];
 
 export function CaseSelectScreen({ game, nav }: { game: GameApi; nav: Navigation }) {
   return (
@@ -44,11 +42,6 @@ export function CaseSelectScreen({ game, nav }: { game: GameApi; nav: Navigation
               >
                 <span className="case-card-art" aria-hidden="true">
                   <img className="case-card-cover" src={caseCover(c.id)} alt="" />
-                  <img
-                    className="case-card-prop"
-                    src={propUrl(CASE_MOTIFS[i] ?? 'clipping')}
-                    alt=""
-                  />
                 </span>
                 <img
                   className="case-card-state"

@@ -282,18 +282,49 @@ function renderV2(c) {
       );
     L.push('');
   }
-  L.push('### 根拠グラフと代替経路', '', v2.graph.prompt, '');
-  v2.graph.paths.forEach((path, i) =>
-    L.push(
-      `${i + 1}. ${path.map((edge) => `${edge.from} → ${edge.to} (${edge.relation})`).join(' / ')}`,
-    ),
-  );
+  if (v2.board) {
+    L.push('### 文と証拠の組み立て・代替経路', '', v2.board.prompt, '');
+    for (const task of v2.board.tasks) {
+      L.push(`#### ${task.title}`, '', task.prompt, '');
+      for (const rule of task.rules) {
+        const sentence = task.parts
+          .map((part) =>
+            'text' in part
+              ? part.text
+              : task.fields
+                  .find((field) => field.id === part.field)
+                  .options.find((option) => option.id === rule.values[part.field]).text,
+          )
+          .join('');
+        L.push(
+          `- ${sentence}（${rule.disposition}）`,
+          `  - 証拠: ${rule.evidence
+            .map((id) => {
+              const e = v2.board.excerpts.find((entry) => entry.id === id);
+              return `${e.documentId}「${e.quote}」`;
+            })
+            .join(' / ')}`,
+          `  - 説明: ${rule.explanation}`,
+        );
+      }
+      L.push('');
+    }
+  } else {
+    L.push('### 根拠グラフと代替経路', '', v2.graph.prompt, '');
+    v2.graph.paths.forEach((path, i) =>
+      L.push(
+        `${i + 1}. ${path.map((edge) => `${edge.from} → ${edge.to} (${edge.relation})`).join(' / ')}`,
+      ),
+    );
+  }
   const paths = requiredDocumentPaths(c);
   L.push(
     '',
     '### 予算内で到達する資料集合',
     '',
-    '| 経路 | 必要資料（解読・グラフ・開示） | コスト | 残予算 |',
+    v2.board
+      ? '| 経路 | 必要資料（解読・文と証拠・開示） | コスト | 残予算 |'
+      : '| 経路 | 必要資料（解読・グラフ・開示） | コスト | 残予算 |',
     '| --- | --- | ---: | ---: |',
   );
   paths.forEach((path, i) => {
@@ -302,7 +333,7 @@ function renderV2(c) {
   });
   L.push(
     '',
-    '資料は開いたあと証拠として採用する。最安経路だけを唯一の正解にしない。初回反応・方針の記録前は追加資料が封じられるため、先に公開資料から初回判断を記録する。',
+    '資料は開いて読み、証拠ボードでは根拠となる一節を文に添える。最安経路だけを唯一の正解にしない。初回反応・方針の記録前は追加資料が封じられるため、先に公開資料から初回判断を記録する。',
   );
   if (v2.experiment) {
     const e = v2.experiment;

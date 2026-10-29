@@ -184,7 +184,7 @@
   "disclaimer": "登場人物・企業・統計・広告はすべて架空です。",
   "analysis_tasks": [],
   "v2": {
-    "revision": 1,
+    "revision": 2,
     "modes": [
       "decoding",
       "decision"
@@ -388,7 +388,194 @@
       ],
       "updatePrompt": "監査の開示前後で、目的と方針を維持するか更新するか。支持資料・反対材料・まだ仮定している点を添えて記録してください。"
     },
-    "reportPrompt": "過去費用、将来の見積り、残るリスク、選んだ目的と方針を区別して報告してください。実現していない便益を事実として書かないでください。"
+    "reportPrompt": "過去費用、将来の見積り、残るリスク、選んだ目的と方針を区別して報告してください。実現していない便益を事実として書かないでください。",
+    "board": {
+      "title": "判断の前に費用と見込みを分ける",
+      "prompt": "過去の支払い、今後の費用、まだ確定していない見込みを整理しましょう。",
+      "tasks": [
+        {
+          "id": "past",
+          "title": "会議の判断メモ",
+          "prompt": "支払った費用が今後の案を選ぶことでどう変わるか確かめましょう。",
+          "parts": [
+            {
+              "text": "支払済みの300万円は"
+            },
+            {
+              "field": "past"
+            },
+            {
+              "text": "。今後の費用とは分けて考える。"
+            }
+          ],
+          "fields": [
+            {
+              "id": "past",
+              "label": "過去の費用の扱い",
+              "original": "recover",
+              "options": [
+                {
+                  "id": "recover",
+                  "text": "継続すれば返金される"
+                },
+                {
+                  "id": "sunk",
+                  "text": "どの案を選んでも返金されない"
+                },
+                {
+                  "id": "switch",
+                  "text": "代替案を選べば返金される"
+                }
+              ]
+            }
+          ],
+          "rules": [
+            {
+              "values": {
+                "past": "sunk"
+              },
+              "disposition": "revise",
+              "evidence": [
+                "minutes_fact",
+                "spent_fact"
+              ],
+              "explanation": "支払い明細では返金不可です。過去の支払いだけでは今後どの案に進むかは決まりません。"
+            }
+          ],
+          "explanation": "会議の主張と支払い明細を比べましょう。支払済みの300万円は今後の選択で返金される費用ではありません。"
+        },
+        {
+          "id": "future",
+          "title": "将来の比較メモ",
+          "prompt": "両案の今後の費用と、便益が確定しているかを分けましょう。",
+          "parts": [
+            {
+              "text": "今後の費用は、継続案が"
+            },
+            {
+              "field": "continue_cost"
+            },
+            {
+              "text": "、代替案が"
+            },
+            {
+              "field": "switch_cost"
+            },
+            {
+              "text": "。来期の便益は"
+            },
+            {
+              "field": "benefit"
+            },
+            {
+              "text": "。"
+            }
+          ],
+          "fields": [
+            {
+              "id": "continue_cost",
+              "label": "継続案の費用",
+              "original": "one_fifty",
+              "options": [
+                {
+                  "id": "one_fifty",
+                  "text": "150万円"
+                },
+                {
+                  "id": "four_fifty",
+                  "text": "450万円"
+                }
+              ]
+            },
+            {
+              "id": "switch_cost",
+              "label": "代替案の費用",
+              "original": "eighty",
+              "options": [
+                {
+                  "id": "eighty",
+                  "text": "80万円"
+                },
+                {
+                  "id": "three_eighty",
+                  "text": "380万円"
+                }
+              ]
+            },
+            {
+              "id": "benefit",
+              "label": "便益の確かさ",
+              "original": "guaranteed",
+              "options": [
+                {
+                  "id": "guaranteed",
+                  "text": "保証された金額である"
+                },
+                {
+                  "id": "estimate",
+                  "text": "見積りであり、両案にリスクがある"
+                }
+              ]
+            }
+          ],
+          "rules": [
+            {
+              "values": {
+                "continue_cost": "one_fifty",
+                "switch_cost": "eighty",
+                "benefit": "estimate"
+              },
+              "disposition": "revise",
+              "evidence": [
+                "finish_fact",
+                "switch_fact",
+                "risk_fact",
+                "risk_transfer"
+              ],
+              "explanation": "今後の費用は150万円と80万円です。便益は見積りで、技術リスクと移行リスクが残ります。"
+            }
+          ],
+          "explanation": "両案の見積りと監査メモを確認しましょう。過去の費用を今後の費用に足さず、便益を保証された金額にしないでください。"
+        }
+      ],
+      "excerpts": [
+        {
+          "id": "minutes_fact",
+          "documentId": "minutes",
+          "quote": "チームは「すでに300万円使ったのだから今さら止められない」と主張。"
+        },
+        {
+          "id": "spent_fact",
+          "documentId": "spent",
+          "quote": "過去の開発費300万円は支払済みで返金不可。今後の選択で回収額は変わらない。"
+        },
+        {
+          "id": "finish_fact",
+          "documentId": "finish",
+          "quote": "完成まで追加で120万円、保守に30万円。来期の期待便益は最大100万円相当という見積り。今後の費用欄の合計は150万円。"
+        },
+        {
+          "id": "switch_fact",
+          "documentId": "switch",
+          "quote": "既存サービス導入は追加60万円、保守20万円。来期の期待便益は120万円相当という見積り。今後の費用欄の合計は80万円。"
+        },
+        {
+          "id": "risk_fact",
+          "documentId": "risk",
+          "quote": "継続案は重大な技術リスクがあり"
+        },
+        {
+          "id": "team_fact",
+          "documentId": "team",
+          "quote": "「ここまで作ったのに」「苦労が無駄になる」。気持ちは重要だが将来の費用便益とは区別する。"
+        },
+        {
+          "id": "risk_transfer",
+          "documentId": "risk",
+          "quote": "代替案にも移行リスクはある。"
+        }
+      ]
+    }
   },
   "schemaVersion": 2
 }

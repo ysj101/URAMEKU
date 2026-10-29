@@ -133,5 +133,30 @@
       ],
       "productionApproval": "unchanged; not release-approved"
     }
+  },
+  "evidenceBoardVerification": {
+    "date": "2026-10-30",
+    "caseRevision": 2,
+    "status": "passed-on-Mac",
+    "report": "docs/qa/evidence-board-2026-10-30.md",
+    "unitTestFiles": 83,
+    "unitTestsPassed": 794,
+    "browserTestsPassed": 42,
+    "browserTestsSkipped": 0,
+    "browserScope": "e2e/v2-cases.spec.ts; chromium and mobile-chromium; keyboard and 320–430px text200 included",
+    "assetsChecked": 549,
+    "lintScope": "eslint . --ignore-pattern .claude/**; excludes another checkout and its generated files",
+    "productionApproval": "unchanged; not release-approved",
+    "mergeVerification": {
+      "base": "origin/main at 71b35c4",
+      "unitTestFiles": 82,
+      "unitTestsPassed": 786,
+      "browserTestsPassed": 70,
+      "browserTestsSkipped": 0,
+      "browserScope": "all e2e; chromium and mobile-chromium; isolated port 4187",
+      "assetsChecked": 539,
+      "lintScope": "npm run lint; no exclusion needed in isolated worktree",
+      "productionApproval": "unchanged; not release-approved"
+    }
   }
 }

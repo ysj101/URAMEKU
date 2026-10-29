@@ -186,7 +186,7 @@
   "disclaimer": "登場人物・企業・統計・広告はすべて架空です。",
   "analysis_tasks": [],
   "v2": {
-    "revision": 1,
+    "revision": 2,
     "modes": [
       "experiment",
       "decoding"
@@ -379,7 +379,154 @@
       "comparisonPrompt": "表示した事実は同じでも、どの価格が比較の起点に見えたか。履歴と実売記録を読んだ後の判断と理由を記録してください。",
       "explanation": "先に目立つ基準を置くと比較の出発点になることがある。ただし今回の一回の反応だけで、その効果や個人の特徴は確定できない。履歴開示後も判断を維持してよい。"
     },
-    "reportPrompt": "発売時と直近の比較基準、実売の裏付け、価格だけでは決まらない購入条件を分けて報告してください。"
+    "reportPrompt": "発売時と直近の比較基準、実売の裏付け、価格だけでは決まらない購入条件を分けて報告してください。",
+    "board": {
+      "title": "値札に比較の基準を添える",
+      "prompt": "発売時と最近の価格を分けて、値札の説明を整えましょう。",
+      "tasks": [
+        {
+          "id": "baseline",
+          "title": "半額の比較基準",
+          "prompt": "値札の半額表示がいつの価格と比べたものか確かめましょう。",
+          "parts": [
+            {
+              "text": "4,000円は"
+            },
+            {
+              "field": "baseline"
+            },
+            {
+              "text": "の8,000円と比べて半額。"
+            }
+          ],
+          "fields": [
+            {
+              "id": "baseline",
+              "label": "いつの価格",
+              "original": "recent",
+              "options": [
+                {
+                  "id": "recent",
+                  "text": "セール直前"
+                },
+                {
+                  "id": "launch",
+                  "text": "発売時"
+                },
+                {
+                  "id": "competitor",
+                  "text": "競合店"
+                }
+              ]
+            }
+          ],
+          "rules": [
+            {
+              "values": {
+                "baseline": "launch"
+              },
+              "disposition": "revise",
+              "evidence": [
+                "launch_fact",
+                "history_fact"
+              ],
+              "explanation": "8,000円は発売時の価格です。最近の主な価格は4,200円でした。"
+            },
+            {
+              "values": {
+                "baseline": "launch"
+              },
+              "disposition": "revise",
+              "evidence": [
+                "interview_fact",
+                "history_fact"
+              ],
+              "explanation": "担当者は発売時価格との比較と説明しています。最近の価格履歴も確かめられます。"
+            }
+          ],
+          "explanation": "半額の基準は発売時の8,000円です。最近の価格履歴と、発売時の記録か取材記録を組み合わせましょう。"
+        },
+        {
+          "id": "sales",
+          "title": "最近の販売の調査メモ",
+          "prompt": "価格履歴にある数字が実際に売れた価格なのかも確かめましょう。",
+          "parts": [
+            {
+              "text": "最近の主な価格は4,200円で、"
+            },
+            {
+              "field": "sales"
+            },
+            {
+              "text": "。"
+            }
+          ],
+          "fields": [
+            {
+              "id": "sales",
+              "label": "販売の裏付け",
+              "original": "confirmed",
+              "options": [
+                {
+                  "id": "confirmed",
+                  "text": "その価格で売れた記録もある"
+                },
+                {
+                  "id": "unconfirmed",
+                  "text": "値札だけで販売の記録はない"
+                }
+              ]
+            }
+          ],
+          "rules": [
+            {
+              "values": {
+                "sales": "confirmed"
+              },
+              "disposition": "keep",
+              "evidence": [
+                "history_fact",
+                "stock_fact"
+              ],
+              "explanation": "価格履歴の4,200円は、販売記録でも実際の取引が確認できます。"
+            }
+          ],
+          "explanation": "価格履歴と販売記録を組み合わせると、4,200円で実際に売れたことが確認できます。"
+        }
+      ],
+      "excerpts": [
+        {
+          "id": "poster_fact",
+          "documentId": "poster",
+          "quote": "新作スニーカー 8,000円 → 4,000円。「今だけ50%OFF」とある。"
+        },
+        {
+          "id": "launch_fact",
+          "documentId": "launch",
+          "quote": "発売初日に8,000円で販売された記録はある。ただし発売直後に価格が変更された。"
+        },
+        {
+          "id": "history_fact",
+          "documentId": "history",
+          "quote": "直近30日間の大半は4,200円で販売。セール当日4,000円。4,200円との差は200円（約4.8%）。"
+        },
+        {
+          "id": "stock_fact",
+          "documentId": "stock",
+          "quote": "直近30日間に4,200円で実際の販売があった。8,000円は発売時の短期間の価格。"
+        },
+        {
+          "id": "interview_fact",
+          "documentId": "interview",
+          "quote": "「半額」は発売時の8,000円を基準にした表現だと説明。直前価格との比較ではない。"
+        },
+        {
+          "id": "competitor_fact",
+          "documentId": "competitor",
+          "quote": "競合店の類似シューズは3,900〜7,000円（同一商品ではない）。対象商品の正しい割引率の直接証拠にはならない。"
+        }
+      ]
+    }
   },
   "schemaVersion": 2
 }

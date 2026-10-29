@@ -1,6 +1,6 @@
 import { useSound } from '../audio/useSound';
-import { describeLink } from '../components/V2EvidenceBoard';
-import { validV2Links } from '../domain/link';
+import { describeLink, validV2Links } from '../domain/link';
+import { BOARD_DISPOSITIONS, boardReviews, boardStatement } from '../domain/board';
 import type { GameApi } from '../state/useGame';
 import '../app/screens/article.css';
 import '../app/screens/v2-integration.css';
@@ -68,17 +68,54 @@ export function V2ArticleScreen({ game }: { game: GameApi }) {
               })}
             </ol>
           )}
-          <h3>資料の関係</h3>
-          {links.length === 0 ? (
-            <p>まだ関係を記録していません。</p>
+          {current.v2?.board ? (
+            <>
+              <h3>文と証拠の記録</h3>
+              <ul>
+                {boardReviews(current, progress).map(({ task, record, recorded }) => (
+                  <li key={task.id}>
+                    <strong>{task.title}</strong>
+                    {recorded && record ? (
+                      <>
+                        <p>
+                          {boardStatement(task, record.values)}（
+                          {BOARD_DISPOSITIONS[record.disposition]}）
+                        </p>
+                        <ul>
+                          {record.evidence.map((id) => {
+                            const excerpt = current.v2!.board!.excerpts.find(
+                              (entry) => entry.id === id,
+                            )!;
+                            return (
+                              <li key={id}>
+                                {doc(excerpt.documentId)}：<q>{excerpt.quote}</q>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      </>
+                    ) : (
+                      <p>まだ文と証拠を記録していません。</p>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </>
           ) : (
-            <ul>
-              {links.map((link) => (
-                <li key={`${link.from}:${link.to}:${link.relation}`}>
-                  {describeLink(doc(link.from), doc(link.to), link.relation)}
-                </li>
-              ))}
-            </ul>
+            <>
+              <h3>資料の関係</h3>
+              {links.length === 0 ? (
+                <p>まだ関係を記録していません。</p>
+              ) : (
+                <ul>
+                  {links.map((link) => (
+                    <li key={`${link.from}:${link.to}:${link.relation}`}>
+                      {describeLink(doc(link.from), doc(link.to), link.relation)}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </>
           )}
           {decisionDefinition && (
             <>

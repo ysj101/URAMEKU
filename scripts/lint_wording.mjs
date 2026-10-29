@@ -120,7 +120,9 @@ function scanJson(file) {
   for (const { path, value } of walkStrings(data)) {
     if (!JA.test(value)) continue;
     if (/\.id$|^id$|Id$|^schemaVersion$/.test(path)) continue;
-    const inWorld = /documents\[\d+\]\.(content|title)$/.test(path);
+    const inWorld = /documents\[\d+\]\.(content|title)$|v2\.board\.excerpts\[\d+\]\.quote$/.test(
+      path,
+    );
     hits.push(...checkText(value, `${rel}  ${path}`, { inWorld, key: '' }));
   }
   return hits;

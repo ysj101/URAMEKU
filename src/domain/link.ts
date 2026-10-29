@@ -1,4 +1,11 @@
-import { LINK_SIZE, type CaseData, type CaseProgress, type V2EvidenceLink } from './types';
+import {
+  LINK_SIZE,
+  type CaseData,
+  type CaseProgress,
+  type V2EvidenceLink,
+  type V2Relation,
+} from './types';
+import { boardReviews } from './board';
 
 /**
  * 2 資料照合のルール。
@@ -106,6 +113,10 @@ export function validV2Links(caseData: CaseData, progress: CaseProgress) {
 
 /** Any full authored path is valid. Alternative paths are not forced into the first path. */
 export function v2GraphProgress(caseData: CaseData, progress: CaseProgress) {
+  if (caseData.v2?.board) {
+    const reviews = boardReviews(caseData, progress);
+    return { done: reviews.filter((review) => review.accepted).length, total: reviews.length };
+  }
   const links = validV2Links(caseData, progress);
   const paths = caseData.v2?.graph.paths ?? [];
   const counts = paths.map((path) => ({
@@ -121,4 +132,20 @@ export function v2GraphProgress(caseData: CaseData, progress: CaseProgress) {
 export function v2GraphComplete(caseData: CaseData, progress: CaseProgress): boolean {
   const count = v2GraphProgress(caseData, progress);
   return count.total > 0 && count.done === count.total;
+}
+
+/** 「A は B を〜」の形で読める 1 文にする */
+export function describeLink(from: string, to: string, relation: V2Relation): string {
+  const a = `「${from}」`;
+  const b = `「${to}」`;
+  switch (relation) {
+    case 'supports':
+      return `${a} は ${b} を補強する`;
+    case 'contradicts':
+      return `${a} は ${b} を反証する`;
+    case 'qualifies':
+      return `${a} は ${b} の適用範囲・条件を補う`;
+    case 'sequence':
+      return `${a} から ${b} へ時系列でつながる`;
+  }
 }

@@ -1,6 +1,7 @@
 import type { UI } from '../data/ui';
 import { ARTICLE_LENGTH, LINK_SIZE, type CaseData, type CaseProgress } from '../domain/types';
 import type { Stage } from '../state/migrations';
+import { boardReviews } from '../domain/board';
 
 export type HintKey = keyof Omit<typeof UI.tutorial.hint, 'label' | 'dismiss' | 'dismissNote'>;
 
@@ -16,7 +17,12 @@ export function hintFor(caseData: CaseData, progress: CaseProgress, stage: Stage
       return 'v2Experiment';
     if (!progress.opened.length) return 'open';
     if (caseData.v2.decoding.some((t) => !progress.v2?.decoding[t.id])) return 'v2Decode';
-    if (!progress.v2?.links.length) return 'v2Graph';
+    if (
+      caseData.v2.board
+        ? boardReviews(caseData, progress).some((review) => !review.recorded)
+        : !progress.v2?.links.length
+    )
+      return 'v2Graph';
     if (caseData.v2.decision && (progress.v2?.decisions.length ?? 0) < 2) return 'v2Decision';
     return 'v2Report';
   }

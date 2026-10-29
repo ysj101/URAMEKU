@@ -1,4 +1,5 @@
 import type { CaseData, CaseProgress, V2Action, V2EvidenceLink, V2Progress } from './types';
+import { validBoardRecord } from './board';
 
 export function createV2Progress(caseData: CaseData): V2Progress {
   const experiment = caseData.v2?.experiment;
@@ -8,6 +9,7 @@ export function createV2Progress(caseData: CaseData): V2Progress {
   return {
     decoding: {},
     links: [],
+    ...(caseData.v2?.board ? { board: {} } : {}),
     decisions: [],
     report: { claim: '', uncertainty: '' },
     history: [],
@@ -117,7 +119,38 @@ export function normalizeV2Progress(raw: unknown): V2Progress | undefined {
       stage,
     };
   }
-  return { decoding, links, decisions, report, history, ...(experiment ? { experiment } : {}) };
+  const board: NonNullable<V2Progress['board']> = {};
+  if (object(raw.board))
+    for (const [id, record] of Object.entries(raw.board).slice(0, 100)) {
+      if (
+        !/^[a-z][a-z0-9_]{0,31}$/.test(id) ||
+        !object(record) ||
+        !object(record.values) ||
+        !['keep', 'revise', 'hold'].includes(String(record.disposition))
+      )
+        continue;
+      const values = Object.fromEntries(
+        Object.entries(record.values)
+          .slice(0, 20)
+          .filter(
+            ([key, value]) => /^[a-z][a-z0-9_]{0,31}$/.test(key) && typeof value === 'string',
+          ),
+      ) as Record<string, string>;
+      board[id] = {
+        values,
+        evidence: strings(record.evidence),
+        disposition: record.disposition as 'keep' | 'revise' | 'hold',
+      };
+    }
+  return {
+    decoding,
+    links,
+    decisions,
+    report,
+    history,
+    ...(experiment ? { experiment } : {}),
+    ...(object(raw.board) ? { board } : {}),
+  };
 }
 
 export function sameLink(a: V2EvidenceLink, b: V2EvidenceLink): boolean {
@@ -152,6 +185,25 @@ export function reduceV2Progress(
     },
   });
   switch (action.type) {
+    case 'v2-board': {
+      const task = config.board?.tasks.find((entry) => entry.id === action.taskId);
+      if (!task || !validBoardRecord(caseData, progress, task, action.record)) return progress;
+      if (JSON.stringify(v2.board?.[task.id]) === JSON.stringify(action.record)) return progress;
+      return commit(
+        {
+          ...v2,
+          board: {
+            ...v2.board,
+            [task.id]: {
+              values: { ...action.record.values },
+              evidence: [...action.record.evidence],
+              disposition: action.record.disposition,
+            },
+          },
+        },
+        task.id,
+      );
+    }
     case 'v2-decode': {
       const task = config.decoding.find((t) => t.id === action.taskId);
       // 根拠の有無は評価時に参照資料の採用状況から自動判定するため、

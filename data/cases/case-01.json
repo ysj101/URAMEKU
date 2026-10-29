@@ -213,7 +213,7 @@
   "analysis_tasks": [],
   "schemaVersion": 2,
   "v2": {
-    "revision": 1,
+    "revision": 2,
     "modes": [
       "decoding"
     ],
@@ -365,6 +365,177 @@
         ]
       ]
     },
-    "reportPrompt": "広告について裏付けられた範囲と、調査しても確かめられなかった原因や意図を区別して報告してください。数値の再計算は不要です。"
+    "reportPrompt": "広告について裏付けられた範囲と、調査しても確かめられなかった原因や意図を区別して報告してください。数値の再計算は不要です。",
+    "board": {
+      "title": "広告の数字に説明を添える",
+      "prompt": "広告と調査メモを、資料から確かめられる内容に整えましょう。",
+      "tasks": [
+        {
+          "id": "scope",
+          "title": "広告の対象",
+          "prompt": "数字が誰についてのものか、資料を突き合わせて確かめましょう。",
+          "parts": [
+            {
+              "field": "subject"
+            },
+            {
+              "text": "の90%が"
+            },
+            {
+              "field": "measure"
+            },
+            {
+              "text": "。"
+            }
+          ],
+          "fields": [
+            {
+              "id": "subject",
+              "label": "誰について",
+              "original": "all",
+              "options": [
+                {
+                  "id": "all",
+                  "text": "利用者全体"
+                },
+                {
+                  "id": "paid",
+                  "text": "有料契約へ移った人"
+                },
+                {
+                  "id": "trial",
+                  "text": "無料体験に登録した人"
+                }
+              ]
+            },
+            {
+              "id": "measure",
+              "label": "何を表す",
+              "original": "retained",
+              "options": [
+                {
+                  "id": "retained",
+                  "text": "翌月も契約を続けた"
+                },
+                {
+                  "id": "satisfied",
+                  "text": "サービスに満足した"
+                }
+              ]
+            }
+          ],
+          "rules": [
+            {
+              "values": {
+                "subject": "paid",
+                "measure": "retained"
+              },
+              "disposition": "revise",
+              "evidence": [
+                "paid_fact",
+                "retained_fact"
+              ],
+              "explanation": "有料契約へ移った50人のうち、翌月も契約を続けたのは45人です。"
+            },
+            {
+              "values": {
+                "subject": "paid",
+                "measure": "retained"
+              },
+              "disposition": "revise",
+              "evidence": [
+                "memo_fact",
+                "retained_fact"
+              ],
+              "explanation": "担当者の説明と翌月の記録は、有料契約へ移った人を対象にしています。"
+            }
+          ],
+          "explanation": "90%は有料契約へ移った人の継続を表します。満足度や登録者全体の割合とは区別しましょう。"
+        },
+        {
+          "id": "registration",
+          "title": "登録者全体の調査メモ",
+          "prompt": "広告とは別に、無料体験を含む集団も確かめましょう。",
+          "parts": [
+            {
+              "text": "無料体験に登録した人全体では、翌月の契約継続率は"
+            },
+            {
+              "field": "rate"
+            },
+            {
+              "text": "。"
+            }
+          ],
+          "fields": [
+            {
+              "id": "rate",
+              "label": "登録者全体の割合",
+              "original": "ninety",
+              "options": [
+                {
+                  "id": "ninety",
+                  "text": "90%"
+                },
+                {
+                  "id": "forty_five",
+                  "text": "45%"
+                },
+                {
+                  "id": "unknown",
+                  "text": "まだ分からない"
+                }
+              ]
+            }
+          ],
+          "rules": [
+            {
+              "values": {
+                "rate": "forty_five"
+              },
+              "disposition": "revise",
+              "evidence": [
+                "trial_fact",
+                "retained_fact"
+              ],
+              "explanation": "台帳の登録者全体を起点にした契約継続率は、翌月の記録に45%とあります。"
+            }
+          ],
+          "explanation": "登録者全体と有料契約へ移った人では、集計する範囲が違います。台帳と翌月の記録を見直しましょう。"
+        }
+      ],
+      "excerpts": [
+        {
+          "id": "ad_fact",
+          "documentId": "ad",
+          "quote": "「利用者の90%が翌月も利用！」と大書されている。何を「利用者」と数えるかの脚注はない。"
+        },
+        {
+          "id": "trial_fact",
+          "documentId": "trial",
+          "quote": "同じ月に無料体験に登録した新規利用者は100人。これを集計の起点とする。"
+        },
+        {
+          "id": "paid_fact",
+          "documentId": "paid",
+          "quote": "無料体験の登録者のうち、50人が有料契約へ移行した。残りは有料契約へ移らず、無料体験のまま終わった。"
+        },
+        {
+          "id": "retained_fact",
+          "documentId": "retained",
+          "quote": "有料契約へ移行した人のうち、翌月も契約を継続したのは45人。無料体験のまま終わった人は、この集計の対象に入っていない。体験登録者全体を起点にした翌月の契約継続率の欄には45%と記載されている。"
+        },
+        {
+          "id": "memo_fact",
+          "documentId": "memo",
+          "quote": "社内では「有料契約へ移った人を母数にしている」と説明する予定だったが、紙面用の脚注が落ちた。"
+        },
+        {
+          "id": "reviews_fact",
+          "documentId": "reviews",
+          "quote": "「便利」「難しい」などさまざまな口コミ。何人が継続したかはこの資料だけでは分からない。"
+        }
+      ]
+    }
   }
 }

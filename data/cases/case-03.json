@@ -187,7 +187,7 @@
   "disclaimer": "登場人物・企業・統計・広告はすべて架空です。",
   "analysis_tasks": [],
   "v2": {
-    "revision": 1,
+    "revision": 2,
     "modes": [
       "experiment",
       "decoding"
@@ -381,7 +381,144 @@
       "comparisonPrompt": "募集方法を知った後、サービスへの判断と、80%という表現が言える範囲をそれぞれどう考えるか記録してください。",
       "explanation": "多数派を示す表現が判断の手がかりになることはあるが、一回の反応からその影響や個人の特徴は決められない。支持したままでも、支持の適用範囲を慎重に扱うことはできる。"
     },
-    "reportPrompt": "回答者内の結果、募集方法の制約、未回答者について分からないことを区別して報告してください。自分の支持判断はそのままでも更新してもかまいません。"
+    "reportPrompt": "回答者内の結果、募集方法の制約、未回答者について分からないことを区別して報告してください。自分の支持判断はそのままでも更新してもかまいません。",
+    "board": {
+      "title": "速報の見出しを確かめる",
+      "prompt": "回答した人の結果と、利用者全体について分からないことを分けましょう。",
+      "tasks": [
+        {
+          "id": "respondents",
+          "title": "見出しの対象",
+          "prompt": "80%という数字が指す人たちを、集計と募集方法から確かめましょう。",
+          "parts": [
+            {
+              "field": "subject"
+            },
+            {
+              "text": "の80%が新サービスを支持。"
+            }
+          ],
+          "fields": [
+            {
+              "id": "subject",
+              "label": "誰について",
+              "original": "all",
+              "options": [
+                {
+                  "id": "all",
+                  "text": "利用者全体"
+                },
+                {
+                  "id": "respondents",
+                  "text": "ファンコミュニティ経由で任意に回答した200人"
+                },
+                {
+                  "id": "random",
+                  "text": "無作為に選ばれた200人"
+                }
+              ]
+            }
+          ],
+          "rules": [
+            {
+              "values": {
+                "subject": "respondents"
+              },
+              "disposition": "revise",
+              "evidence": [
+                "count_fact",
+                "invite_fact"
+              ],
+              "explanation": "任意に回答した200人中160人の支持です。募集先は公式ファンコミュニティです。"
+            }
+          ],
+          "explanation": "集計表と募集方法を確認しましょう。回答者200人の結果を利用者全体へ広げることはできません。"
+        },
+        {
+          "id": "population",
+          "title": "利用者全体の調査メモ",
+          "prompt": "回答していない人も含めた割合を、この投票だけで決められるでしょうか。",
+          "parts": [
+            {
+              "text": "利用者全体の支持率は、"
+            },
+            {
+              "field": "scope"
+            },
+            {
+              "text": "。"
+            }
+          ],
+          "fields": [
+            {
+              "id": "scope",
+              "label": "全体について言えること",
+              "original": "eighty",
+              "options": [
+                {
+                  "id": "eighty",
+                  "text": "80%と確認できる"
+                },
+                {
+                  "id": "unknown",
+                  "text": "この投票だけでは分からない"
+                },
+                {
+                  "id": "low",
+                  "text": "80%より低いと確認できる"
+                }
+              ]
+            }
+          ],
+          "rules": [
+            {
+              "values": {
+                "scope": "unknown"
+              },
+              "disposition": "hold",
+              "evidence": [
+                "invite_fact",
+                "population_fact"
+              ],
+              "explanation": "募集先が限られた任意回答です。利用者全体を代表する選び方だった証拠はありません。"
+            }
+          ],
+          "explanation": "募集方法と利用者全体の資料を見直しましょう。全体の割合が高いか低いかも、この投票だけでは決められません。"
+        }
+      ],
+      "excerpts": [
+        {
+          "id": "headline_fact",
+          "documentId": "headline",
+          "quote": "「利用者の80%が新サービスを支持！」。調査概要へのリンクがない。"
+        },
+        {
+          "id": "count_fact",
+          "documentId": "count",
+          "quote": "回答した200人中160人が「支持」。この回答者内の割合は80%。"
+        },
+        {
+          "id": "invite_fact",
+          "documentId": "invite",
+          "quote": "新サービスの公式ファンコミュニティにのみアンケートリンクを投稿。任意回答。"
+        },
+        {
+          "id": "population_fact",
+          "documentId": "population",
+          "quote": "投票した200人が母集団を代表するよう抽出された証拠はない。"
+        },
+        {
+          "id": "other_fact",
+          "documentId": "other",
+          "quote": "無作為抽出を目指した別調査では1,000人中540人が支持。ただし対象時点や質問の違いもある。"
+        },
+        {
+          "id": "comments_fact",
+          "documentId": "comments",
+          "quote": "支持・反対双方の投稿がある。投稿量から実際の支持率を確定することはできない。"
+        }
+      ]
+    }
   },
   "schemaVersion": 2
 }
