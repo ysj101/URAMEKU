@@ -27,8 +27,9 @@ export function documentThumbnail(caseId: string, documentId: string): string {
   return assetUrl(`cases/${caseId}/documents/${documentId}.png`);
 }
 
-export function caseCover(caseId: string, format: ImageFormat = 'png'): string {
-  return assetUrl(`cases/${caseId}/cover.${format}`);
+/** Default to the lightweight illustration; explicit formats retain source/legacy access. */
+export function caseCover(caseId: string, format?: ImageFormat): string {
+  return assetUrl(`cases/${caseId}/cover.${format ?? 'webp'}`);
 }
 
 // ---------------------------------------------------------------------------

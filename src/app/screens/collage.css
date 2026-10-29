@@ -326,15 +326,6 @@ body:has(.home) {
   position: relative;
   isolation: isolate;
 }
-.case-card:nth-child(2) .case-card-art {
-  background-image: url('/assets/textures/blueprint.svg');
-}
-.case-card:nth-child(4) .case-card-art {
-  background-image: url('/assets/textures/newsprint.svg');
-}
-.case-card:nth-child(3) .case-card-art {
-  clip-path: polygon(0 3%, 98% 0, 100% 96%, 3% 100%);
-}
 .case-card::before {
   content: '';
   position: absolute;
@@ -369,27 +360,13 @@ body:has(.home) {
   grid-area: art;
   display: block;
   position: relative;
-  height: 145px;
+  aspect-ratio: 3 / 2;
   margin: 4px 0 8px;
-  background: var(--color-surface-aged) url('/assets/textures/halftone.svg') center / 250px;
 }
 .case-card-cover {
-  width: 90%;
+  width: 100%;
   height: 100%;
   object-fit: contain;
-  transform: rotate(-5deg);
-}
-.case-card-prop {
-  position: absolute;
-  right: -2px;
-  bottom: -10px;
-  width: 42%;
-  height: 125px;
-  object-fit: contain;
-  transform: rotate(9deg);
-}
-.case-card:nth-child(even) .case-card-cover {
-  transform: rotate(3deg);
 }
 .case-card-state {
   display: none;
@@ -798,16 +775,10 @@ body:has(.home) {
     gap: 10px 16px;
   }
   .case-card-art {
-    height: 120px;
     align-self: center;
   }
   .case-card-cover {
     width: 100%;
-  }
-  .case-card-prop {
-    width: 70%;
-    height: 80px;
-    right: -12px;
   }
   .case-card-title {
     font-size: 1.15rem;

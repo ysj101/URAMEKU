@@ -2703,6 +2703,106 @@
         ],
         "diff_in_badge_zone": true
       }
+    },
+    {
+      "path": "public/assets/cases/case-01/cover.png",
+      "kind": "case-cover",
+      "status": "pending",
+      "reviewer": null,
+      "reviewed_at": null,
+      "reason": "Replacement illustration generated 2026-10-30; human art and rights approval pending.",
+      "visual_flag": "needs_check",
+      "visual_note": "New text-free cut-paper illustration. AI visual inspection is not release approval."
+    },
+    {
+      "path": "public/assets/cases/case-02/cover.png",
+      "kind": "case-cover",
+      "status": "pending",
+      "reviewer": null,
+      "reviewed_at": null,
+      "reason": "Replacement illustration generated 2026-10-30; human art and rights approval pending.",
+      "visual_flag": "needs_check",
+      "visual_note": "New text-free cut-paper illustration. AI visual inspection is not release approval."
+    },
+    {
+      "path": "public/assets/cases/case-03/cover.png",
+      "kind": "case-cover",
+      "status": "pending",
+      "reviewer": null,
+      "reviewed_at": null,
+      "reason": "Replacement illustration generated 2026-10-30; human art and rights approval pending.",
+      "visual_flag": "needs_check",
+      "visual_note": "New text-free cut-paper illustration. AI visual inspection is not release approval."
+    },
+    {
+      "path": "public/assets/cases/case-04/cover.png",
+      "kind": "case-cover",
+      "status": "pending",
+      "reviewer": null,
+      "reviewed_at": null,
+      "reason": "Replacement illustration generated 2026-10-30; human art and rights approval pending.",
+      "visual_flag": "needs_check",
+      "visual_note": "New text-free cut-paper illustration. AI visual inspection is not release approval."
+    },
+    {
+      "path": "public/assets/cases/case-05/cover.png",
+      "kind": "case-cover",
+      "status": "pending",
+      "reviewer": null,
+      "reviewed_at": null,
+      "reason": "Replacement illustration generated 2026-10-30; human art and rights approval pending.",
+      "visual_flag": "needs_check",
+      "visual_note": "New text-free cut-paper illustration. AI visual inspection is not release approval."
+    },
+    {
+      "path": "public/assets/cases/case-01/cover.webp",
+      "kind": "case-cover",
+      "status": "pending",
+      "reviewer": null,
+      "reviewed_at": null,
+      "reason": "Replacement illustration generated 2026-10-30; human art and rights approval pending.",
+      "visual_flag": "needs_check",
+      "visual_note": "New text-free cut-paper illustration. AI visual inspection is not release approval."
+    },
+    {
+      "path": "public/assets/cases/case-02/cover.webp",
+      "kind": "case-cover",
+      "status": "pending",
+      "reviewer": null,
+      "reviewed_at": null,
+      "reason": "Replacement illustration generated 2026-10-30; human art and rights approval pending.",
+      "visual_flag": "needs_check",
+      "visual_note": "New text-free cut-paper illustration. AI visual inspection is not release approval."
+    },
+    {
+      "path": "public/assets/cases/case-03/cover.webp",
+      "kind": "case-cover",
+      "status": "pending",
+      "reviewer": null,
+      "reviewed_at": null,
+      "reason": "Replacement illustration generated 2026-10-30; human art and rights approval pending.",
+      "visual_flag": "needs_check",
+      "visual_note": "New text-free cut-paper illustration. AI visual inspection is not release approval."
+    },
+    {
+      "path": "public/assets/cases/case-04/cover.webp",
+      "kind": "case-cover",
+      "status": "pending",
+      "reviewer": null,
+      "reviewed_at": null,
+      "reason": "Replacement illustration generated 2026-10-30; human art and rights approval pending.",
+      "visual_flag": "needs_check",
+      "visual_note": "New text-free cut-paper illustration. AI visual inspection is not release approval."
+    },
+    {
+      "path": "public/assets/cases/case-05/cover.webp",
+      "kind": "case-cover",
+      "status": "pending",
+      "reviewer": null,
+      "reviewed_at": null,
+      "reason": "Replacement illustration generated 2026-10-30; human art and rights approval pending.",
+      "visual_flag": "needs_check",
+      "visual_note": "New text-free cut-paper illustration. AI visual inspection is not release approval."
     }
   ],
   "summary": {
