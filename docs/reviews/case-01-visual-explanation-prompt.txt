@@ -1,0 +1,14 @@
+Use case: infographic-diagram
+Asset type: A Japanese educational infographic inside the investigation game ウラメク, explaining the behavioral economics mechanism behind case-01. This must be a finished explanatory diagram, NOT a desk still life.
+Audience: junior-high students with no specialist knowledge.
+Theme: framing effect — the same outcome can give different impressions depending on which starting group the presentation highlights. Do not imply that everyone is fooled or claim the advertiser acted intentionally.
+Style: beautiful clear 2D editorial ink-and-gouache illustration, cream paper, dark ink, muted teal, small red pencil annotations, evidence-board and newspaper editorial atmosphere. Strong readable Japanese typography, ample whitespace. Landscape 1536x1024. No characters, faces, logos, watermarks.
+Layout: Large title and short subtitle across the top. Middle: a VERY clear left-to-right flow of three papers connected with arrows, labeled with these exact texts: left "無料体験に登録" and large "100人"; middle "有料契約へ移行" and large "50人"; right "翌月も契約を継続" and large "45人". Under the first arrow small note "50人は体験で終了"; under the second arrow "5人は翌月の契約を継続せず".
+Below that, two side-by-side comparison frames. Left frame is a red editorial crop around just the paid group, with a small ad-style clipping "継続率90%" and calculation "45人 ÷ 50人 = 90%". Caption "有料契約へ移った人だけを見る". Right frame shows a wide teal frame encompassing the whole starting group, calculation "45人 ÷ 100人 = 45%". Caption "体験に登録した全員を見る". Visually show that the right-side 45-person outcome is the SAME in both views, with a clear connecting annotation "続けた45人は同じ".
+Title exact: "同じ45人でも、見せ方で印象が変わる"
+Subtitle exact: "フレーミング効果：どこに注目させるかで、受け取り方が変わることがある。"
+Bottom conclusion on a quiet cream strip, exact: "「90%」に目が向くと、「誰のうち？」を見落としやすい。"
+Bottom question in teal, exact: "何%？ と一緒に、何人のうち？"
+Avoid extra prose or invented facts, misleading causal arrows to human behavior, personality diagnosis, claims of proven intent, clutter, decorative illegible writing. Numbers must remain exactly 100, 50, 45; 90% uses denominator 50 and 45% uses denominator 100. Favor the educational diagram over decoration.
+
+Edit instruction: Remove all tiny repeated human pictogram arrays from all five panels because they do not count correctly. Leave cream paper in those areas. Preserve every Japanese label, calculation, exact numerical count, frame and arrow. Do not replace pictograms with other countable marks.

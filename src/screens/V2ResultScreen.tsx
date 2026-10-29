@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { Debrief } from '../components/Debrief';
+import { VisualCaseGuide } from '../components/VisualCaseGuide';
 import { evaluateV2Case } from '../domain/v2Evaluation';
 import { experimentComparison } from '../domain/experiment';
 import { decisionOutcome } from '../domain/decision';
 import type { Navigation } from '../app/navigation';
 import type { GameApi } from '../state/useGame';
+import type { CaseData } from '../domain/types';
 import { boardReviews } from '../domain/board';
 import '../app/screens/v2-integration.css';
 
@@ -163,6 +165,17 @@ export function V2ResultScreen({ game, nav }: { game: GameApi; nav: Navigation }
       {progress.revealed && (
         <section className="v2-panel" aria-label="資料に沿った解説">
           <h2>資料に沿った解説</h2>
+          {current.debrief.visualGuide ? (
+            <>
+              <VisualCaseGuide caseData={current} />
+              <details className="case-guide-details">
+                <summary>問いごとの解説と根拠を読む</summary>
+                <DecodingExplanation caseData={current} />
+              </details>
+            </>
+          ) : (
+            <DecodingExplanation caseData={current} />
+          )}
           {config.board && (
             <section aria-label="証拠ボードの振り返り">
               <h3>文と証拠を見直す</h3>
@@ -181,22 +194,6 @@ export function V2ResultScreen({ game, nav }: { game: GameApi; nav: Navigation }
               </ul>
             </section>
           )}
-          {config.decoding.map((task) => (
-            <section key={task.id}>
-              <h3>{task.prompt}</h3>
-              {task.options
-                .filter((o) => o.accepted)
-                .map((option) => (
-                  <p key={option.id}>
-                    {option.text}
-                    <br />
-                    {option.reason}
-                    <br />
-                    根拠：{option.evidence.map(doc).join('、')}
-                  </p>
-                ))}
-            </section>
-          ))}
           {result.factualErrors.length > 0 && (
             <ul aria-label="読み取りの確認">
               {result.factualErrors.map((error) => (
@@ -207,7 +204,7 @@ export function V2ResultScreen({ game, nav }: { game: GameApi; nav: Navigation }
             </ul>
           )}
           {config.experiment && <p>{config.experiment.explanation}</p>}
-          <Debrief caseData={current} />
+          <Debrief caseData={current} collapsible={!!current.debrief.visualGuide} />
         </section>
       )}
       <div className="stage-switch">
@@ -241,5 +238,29 @@ export function V2ResultScreen({ game, nav }: { game: GameApi; nav: Navigation }
         </section>
       )}
     </div>
+  );
+}
+
+function DecodingExplanation({ caseData }: { caseData: CaseData }) {
+  const doc = (id: string) => caseData.documents.find((d) => d.id === id)?.title ?? id;
+  return (
+    <>
+      {caseData.v2?.decoding.map((task) => (
+        <section key={task.id}>
+          <h3>{task.prompt}</h3>
+          {task.options
+            .filter((option) => option.accepted)
+            .map((option) => (
+              <p key={option.id}>
+                {option.text}
+                <br />
+                {option.reason}
+                <br />
+                根拠：{option.evidence.map(doc).join('、')}
+              </p>
+            ))}
+        </section>
+      ))}
+    </>
   );
 }

@@ -1,5 +1,10 @@
 import { validateV2 } from './validateV2.mjs';
-import { FRAGMENT_KINDS, type CaseData, type Difficulty, type DocumentVisual } from '../domain/types';
+import {
+  FRAGMENT_KINDS,
+  type CaseData,
+  type Difficulty,
+  type DocumentVisual,
+} from '../domain/types';
 
 /**
  * 事件 JSON（data/cases/*.json）の検証。
@@ -71,7 +76,12 @@ class Checker {
   }
 
   /** 必須キーの存在と未知キーの不在を確認する（optional は在っても無くてもよい） */
-  keys(path: string, obj: Obj, required: readonly string[], optional: readonly string[] = []): void {
+  keys(
+    path: string,
+    obj: Obj,
+    required: readonly string[],
+    optional: readonly string[] = [],
+  ): void {
     for (const k of required) if (!(k in obj)) this.fail(`${path}.${k}`, '必須キーがありません');
     for (const k of Object.keys(obj)) {
       if (!required.includes(k) && !optional.includes(k)) {
@@ -262,20 +272,99 @@ function checkLinkPrompt(c: Checker, raw: unknown, documents: unknown): void {
   const prompt = raw as string;
   if (!Array.isArray(documents)) return;
   for (const d of documents) {
-    if (isObject(d) && typeof d.title === 'string' && d.title.length > 0 && prompt.includes(d.title)) {
+    if (
+      isObject(d) &&
+      typeof d.title === 'string' &&
+      d.title.length > 0 &&
+      prompt.includes(d.title)
+    ) {
       c.fail('link_prompt', `資料タイトル「${d.title}」を含んでいます（正解の名指しになります）`);
     }
   }
 }
 
-function checkDebrief(c: Checker, raw: unknown): void {
+function checkDebrief(c: Checker, raw: unknown, docIds: Set<string>): void {
   if (!isObject(raw)) {
     c.fail('debrief', 'オブジェクトではありません');
     return;
   }
-  c.keys('debrief', raw, DEBRIEF_KEYS);
+  c.keys('debrief', raw, DEBRIEF_KEYS, ['visualGuide']);
   c.string('debrief.explanation', raw.explanation, { minLength: 15 });
   c.string('debrief.takeaway', raw.takeaway, { minLength: 8 });
+  if (raw.visualGuide === undefined) return;
+  const guide = raw.visualGuide;
+  const path = 'debrief.visualGuide';
+  if (!isObject(guide)) {
+    c.fail(path, 'オブジェクトではありません');
+    return;
+  }
+  const texts = ['title', 'intro', 'image', 'imageAlt', 'conclusion', 'limit', 'takeaway'];
+  c.keys(path, guide, texts, ['steps', 'comparisons', 'panels']);
+  if (
+    guide.panels === undefined &&
+    (guide.steps === undefined || guide.comparisons === undefined)
+  ) {
+    c.fail(path, '解説の項目、または人数の流れと割合の比較が必要です');
+  }
+  texts.forEach((key) => c.string(`${path}.${key}`, guide[key], { minLength: 1 }));
+  c.string(`${path}.image`, guide.image, {
+    pattern: /^cases\/case-[0-9]{2}\/debrief\/[a-z0-9-]+\.png$/,
+  });
+  for (const key of ['steps', 'comparisons', 'panels']) {
+    const items = guide[key];
+    if (items === undefined) continue;
+    if (!Array.isArray(items) || items.length < 2) {
+      c.fail(`${path}.${key}`, '2件以上が必要です');
+      continue;
+    }
+    items.forEach((item: unknown, i: number) => {
+      const at = `${path}.${key}[${i}]`;
+      if (!isObject(item)) {
+        c.fail(at, 'オブジェクトではありません');
+        return;
+      }
+      const fields =
+        key === 'panels'
+          ? ['title', 'body', 'evidence']
+          : key === 'steps'
+            ? ['label', 'count', 'note', 'evidence']
+            : ['label', 'numerator', 'denominator', 'percent', 'evidence'];
+      c.keys(at, item, fields);
+      if (key === 'panels') {
+        c.string(`${at}.title`, item.title, { minLength: 1 });
+        c.string(`${at}.body`, item.body, { minLength: 1 });
+      } else {
+        c.string(`${at}.label`, item.label, { minLength: 1 });
+      }
+      if (key === 'steps') {
+        c.string(`${at}.note`, item.note, { minLength: 1 });
+        c.number(`${at}.count`, item.count, { integer: true, minimum: 0 });
+      } else if (key === 'comparisons') {
+        const n = c.number(`${at}.numerator`, item.numerator, { integer: true, minimum: 0 });
+        const d = c.number(`${at}.denominator`, item.denominator, { integer: true, minimum: 1 });
+        const p = c.number(`${at}.percent`, item.percent, { minimum: 0, maximum: 100 });
+        if (
+          n &&
+          d &&
+          p &&
+          (item.denominator as number) > 0 &&
+          Math.abs(
+            ((item.numerator as number) / (item.denominator as number)) * 100 -
+              (item.percent as number),
+          ) > 0.01
+        ) {
+          c.fail(at, '人数と割合が一致しません');
+        }
+      }
+      if (!Array.isArray(item.evidence) || item.evidence.length === 0)
+        c.fail(`${at}.evidence`, '根拠が必要です');
+      else
+        item.evidence.forEach((id: unknown) => {
+          if (typeof id !== 'string' || !docIds.has(id))
+            c.fail(`${at}.evidence`, '資料が存在しません');
+        });
+    });
+  }
 }
 
 /**
@@ -307,7 +396,7 @@ export function validateCase(raw: unknown): ValidationResult {
   checkTasks(c, raw.analysis_tasks, v2);
   const fragments = checkFragments(c, raw.headline_fragments, docIds, v2);
   const fragmentIds = fragments.ids;
-  checkDebrief(c, raw.debrief);
+  checkDebrief(c, raw.debrief, docIds);
 
   // --- 参照整合（JSON Schema では表現しにくい規則） ---
   const refDoc = (path: string, id: string) => {
@@ -316,7 +405,13 @@ export function validateCase(raw: unknown): ValidationResult {
     }
   };
 
-  if (c.array('required_evidence', raw.required_evidence, { minItems: v2 ? 0 : 3, maxItems: v2 ? 12 : 3, unique: true })) {
+  if (
+    c.array('required_evidence', raw.required_evidence, {
+      minItems: v2 ? 0 : 3,
+      maxItems: v2 ? 12 : 3,
+      unique: true,
+    })
+  ) {
     const ids = idList(c, 'required_evidence', raw.required_evidence, DOCUMENT_ID_PATTERN);
     ids.forEach((id, i) => refDoc(`required_evidence[${i}]`, id));
     if (budgetOk && docIds.size > 0 && ids.every((id) => docIds.has(id))) {
@@ -330,7 +425,9 @@ export function validateCase(raw: unknown): ValidationResult {
     }
   }
 
-  if (c.array('required_link', raw.required_link, { minItems: v2 ? 0 : 2, maxItems: v2 ? 12 : 2 })) {
+  if (
+    c.array('required_link', raw.required_link, { minItems: v2 ? 0 : 2, maxItems: v2 ? 12 : 2 })
+  ) {
     const ids = idList(c, 'required_link', raw.required_link, DOCUMENT_ID_PATTERN);
     ids.forEach((id, i) => refDoc(`required_link[${i}]`, id));
     if (ids.length === 2 && ids[0] === ids[1]) {
@@ -338,7 +435,13 @@ export function validateCase(raw: unknown): ValidationResult {
     }
   }
 
-  if (c.array('correct_fragments', raw.correct_fragments, { minItems: v2 ? 0 : 3, maxItems: v2 ? 12 : 3, unique: true })) {
+  if (
+    c.array('correct_fragments', raw.correct_fragments, {
+      minItems: v2 ? 0 : 3,
+      maxItems: v2 ? 12 : 3,
+      unique: true,
+    })
+  ) {
     const ids = idList(c, 'correct_fragments', raw.correct_fragments, FRAGMENT_ID_PATTERN);
     ids.forEach((id, i) => {
       if (fragmentIds.size > 0 && !fragmentIds.has(id)) {

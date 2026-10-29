@@ -7,10 +7,16 @@ import type { CaseData } from '../domain/types';
  * - 事件の `disclaimer`（架空注記）と、`UI.notices.notDiagnosis` の注記を必ず添える。
  * - 事件内の判断を扱うものであり、プレイヤー個人の評価には踏み込まない。
  */
-export function Debrief({ caseData }: { caseData: CaseData }) {
+export function Debrief({
+  caseData,
+  collapsible = false,
+}: {
+  caseData: CaseData;
+  collapsible?: boolean;
+}) {
   const headingId = `debrief-${caseData.id}`;
-  return (
-    <section className="debrief" aria-labelledby={headingId}>
+  const content = (
+    <>
       <h3 id={headingId} className="debrief-title">
         <span className="debrief-kicker">編集後記</span>
         {caseData.bias}
@@ -20,6 +26,18 @@ export function Debrief({ caseData }: { caseData: CaseData }) {
         <strong>持ち帰る視点：</strong>
         {caseData.debrief.takeaway}
       </p>
+    </>
+  );
+  return (
+    <section className="debrief" aria-labelledby={headingId}>
+      {collapsible ? (
+        <details className="case-guide-details">
+          <summary>編集後記を読む</summary>
+          {content}
+        </details>
+      ) : (
+        content
+      )}
       <p className="debrief-scope">
         この解説は事件の中での判断の流れを扱うものです。{UI.notices.notDiagnosis}
       </p>
