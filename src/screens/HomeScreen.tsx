@@ -1,4 +1,4 @@
-import { characterPose, propUrl } from '../data/assets';
+import { assetUrl, characterPose, propUrl } from '../data/assets';
 import { UI } from '../data/ui';
 import { continueCaseId } from '../domain/caseStatus';
 import type { Navigation } from '../app/navigation';
@@ -22,7 +22,14 @@ export function HomeScreen({ game, nav }: { game: GameApi; nav: Navigation }) {
           <span>調査と推理の体験紙 / 全5事件</span>
         </div>
         <h1 id="home-title" className="home-title">
-          ウラメク
+          <span className="visually-hidden">ウラメク</span>
+          <img
+            className="home-title-art"
+            src={assetUrl('branding/title-peeled.png')}
+            alt=""
+            width={2064}
+            height={762}
+          />
         </h1>
         <p className="home-tagline">{UI.home.subtitle}</p>
         <div className="home-frontpage">

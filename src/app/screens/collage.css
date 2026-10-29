@@ -122,6 +122,15 @@ body:has(.home) {
   text-align: center;
   border-bottom: 8px double var(--color-ink);
 }
+.home-title-art {
+  display: block;
+  width: 74%;
+  max-width: 920px;
+  height: auto;
+  aspect-ratio: 3.9;
+  object-fit: cover;
+  margin: 0 auto;
+}
 .home-tagline {
   width: fit-content;
   position: relative;
@@ -699,6 +708,9 @@ body:has(.home) {
   .home-title {
     font-size: clamp(3rem, 15vw, 6rem);
     padding-block: 8px;
+  }
+  .home-title-art {
+    width: 100%;
   }
   .home-tagline {
     font-size: 0.78rem;

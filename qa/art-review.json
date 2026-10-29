@@ -2803,11 +2803,22 @@
       "reason": "Replacement illustration generated 2026-10-30; human art and rights approval pending.",
       "visual_flag": "needs_check",
       "visual_note": "New text-free cut-paper illustration. AI visual inspection is not release approval."
+    },
+    {
+      "path": "public/assets/branding/title-peeled.png",
+      "kind": "title-logo",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "Selected paper-curl direction; generated asset still requires manual release review.",
+      "reference": "qa/title-peeled-detail.png"
     }
   ],
   "summary": {
-    "total": 107,
-    "pending": 107,
+    "total": 118,
+    "pending": 118,
     "approved": 0,
     "rejected": 0,
     "auto_check": 12
