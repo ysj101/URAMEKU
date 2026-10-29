@@ -57,4 +57,4 @@ Final prompt:
 
 ## Isolated PR verification
 
-Reapplied only the title changes onto origin/main (d7aa29f), preserving other local work in the original checkout. Recaptured desktop/detail/mobile evidence from this PR branch at port 5174; verified home-to-case-list navigation and return. Browser console errors: none. Build, the same 24 existing tests, wording lint, asset references, and asset validation (539 assets) all passed on the isolated branch. qa/coverage.json reviewed again; manual art approval remains pending.
+Reapplied only the title changes onto origin/main (d7aa29f), preserving other local work in the original checkout. Recaptured desktop/mobile evidence from this PR branch at port 5174 (the focused title crop is retained from the original title-only implementation; its appearance is unchanged); verified home-to-case-list navigation and return. Browser console errors: none. Build, the same 24 existing tests, wording lint, asset references, and asset validation (539 assets) all passed on the isolated branch. qa/coverage.json reviewed again; manual art approval remains pending.
