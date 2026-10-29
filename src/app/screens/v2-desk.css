@@ -262,19 +262,7 @@
 .v2-docs .desk-grid .doc-tile--opened {
   background: var(--color-surface-aged);
 }
-.v2-docs .desk-grid .doc-tile[data-visual='advert'] {
-  border-left-color: var(--color-accent);
-}
-.v2-docs .desk-grid .doc-tile[data-visual='ledger'],
-.v2-docs .desk-grid .doc-tile[data-visual='receipt'],
-.v2-docs .desk-grid .doc-tile[data-visual='report'] {
-  border-left-color: var(--color-info);
-}
-.v2-docs .desk-grid .doc-tile[data-visual='photo'] {
-  border-width: 0 0 var(--border-width-thin) 4px;
-  border-color: var(--color-border);
-  border-left-color: var(--color-ink);
-}
+/* 資料の種類で枠の形は変えない。状態は背景色とバッジ文言で示す。 */
 .v2-docs .desk-grid .doc-tile[aria-disabled='true'] {
   border-style: dashed;
   border-left-style: solid;
