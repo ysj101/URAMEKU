@@ -637,3 +637,100 @@
   margin: 0;
   border-top: var(--border-width-thin) solid var(--color-border);
 }
+
+/* Claims are assembled in place; source excerpts remain visible beside the draft. */
+.claim-board__tasks {
+  display: grid;
+  gap: 0.75rem;
+  margin-block: 1rem;
+}
+.claim-board__task {
+  display: grid;
+  gap: 0.4rem;
+  width: 100%;
+  padding: 1rem;
+  text-align: left;
+  color: inherit;
+  background: var(--color-surface);
+  border: 1px solid currentColor;
+  border-radius: 0.25rem;
+  overflow-wrap: anywhere;
+}
+.claim-board__task[aria-pressed='true'] {
+  border-width: 3px;
+}
+.claim-board__editor {
+  margin-block: 1rem;
+}
+.claim-board__editor fieldset {
+  min-width: 0;
+}
+.claim-board__sentence {
+  padding: 1rem;
+  background: var(--color-surface);
+  border-inline-start: 4px solid currentColor;
+  line-height: 2.8;
+  overflow-wrap: anywhere;
+}
+.claim-board__sentence button {
+  color: inherit;
+  background: transparent;
+  border: 1px solid currentColor;
+  border-radius: 0.2rem;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+  padding: 0.45rem;
+  min-height: 44px;
+  max-width: 100%;
+  white-space: normal;
+  line-height: 1.6;
+}
+.claim-board__pieces button {
+  color: inherit;
+  background: var(--color-surface);
+  border: 1px solid currentColor;
+  min-height: 44px;
+  padding: 0.5rem;
+  margin: 0.25rem;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.claim-board__pieces button[aria-pressed='true'] {
+  border-width: 3px;
+  font-weight: bold;
+}
+.claim-board__sources details {
+  margin-block: 0.5rem;
+  border-bottom: 1px solid currentColor;
+}
+.claim-board__sources summary {
+  min-height: 44px;
+  padding-block: 0.5rem;
+  cursor: pointer;
+}
+.claim-board__excerpt,
+.claim-board__disposition label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  min-height: 44px;
+  padding-block: 0.75rem;
+  overflow-wrap: anywhere;
+}
+.claim-board input {
+  flex-shrink: 0;
+  margin-top: 0.25rem;
+}
+.claim-board__attached q {
+  display: block;
+  margin-block: 0.5rem;
+  overflow-wrap: anywhere;
+}
+.claim-board__attached button {
+  min-height: 44px;
+}
+.claim-board button:focus-visible,
+.claim-board summary:focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 3px;
+}

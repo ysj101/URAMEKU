@@ -145,6 +145,11 @@ export async function prepareV2Case(
     ...new Set([
       ...selections.flatMap(({ option }) => option.evidence),
       ...path.flatMap((link) => [link.from, link.to]),
+      ...(v.board?.tasks.flatMap((task) =>
+        task.rules[options.alternative ? task.rules.length - 1 : 0]!.evidence.map(
+          (id) => v.board!.excerpts.find((entry) => entry.id === id)!.documentId,
+        ),
+      ) ?? []),
       ...(v.experiment?.revealDocuments ?? []),
       ...(v.decision?.revealDocuments ?? []),
     ]),
@@ -184,14 +189,48 @@ export async function prepareV2Case(
     await expect(group.getByRole('status')).toContainText('根拠ありとして記録しました');
   }
   await showDesk(page, '証拠ボード');
-  for (const link of path) {
-    await page.getByLabel('A：起点となる資料', { exact: true }).selectOption(link.from);
-    await page
-      .getByLabel('A は B に対して…（関係の役割）', { exact: true })
-      .selectOption(link.relation);
-    await page.getByLabel('B：結び付ける資料', { exact: true }).selectOption(link.to);
-    await page.getByRole('button', { name: '関係を追加', exact: true }).click();
-  }
+  if (v.board) {
+    for (const task of v.board.tasks) {
+      const rule = task.rules[options.alternative ? task.rules.length - 1 : 0]!;
+      await page.getByRole('button', { name: new RegExp('^' + task.title) }).click();
+      for (const field of task.fields) {
+        await page.getByRole('button', { name: `文の部分：${field.label}`, exact: true }).click();
+        await page
+          .getByRole('button', {
+            name: field.options.find((entry) => entry.id === rule.values[field.id])!.text,
+            exact: true,
+          })
+          .click();
+      }
+      for (const id of rule.evidence) {
+        const excerpt = v.board.excerpts.find((entry) => entry.id === id)!;
+        const source = page
+          .getByRole('group', { name: 'この文に添える証拠', exact: true })
+          .locator('details')
+          .filter({ hasText: title(excerpt.documentId) });
+        const checkbox = source.getByRole('checkbox', { name: excerpt.quote, exact: true });
+        if (!(await checkbox.isVisible())) await source.locator('summary').click();
+        await checkbox.check();
+      }
+      await page
+        .getByRole('radio', {
+          name: { keep: 'そのまま残す', revise: '内容を直す', hold: 'まだ判断できない' }[
+            rule.disposition
+          ],
+          exact: true,
+        })
+        .check();
+      await page.getByRole('button', { name: '文と証拠を記録', exact: true }).click();
+    }
+  } else
+    for (const link of path) {
+      await page.getByLabel('A：起点となる資料', { exact: true }).selectOption(link.from);
+      await page
+        .getByLabel('A は B に対して…（関係の役割）', { exact: true })
+        .selectOption(link.relation);
+      await page.getByLabel('B：結び付ける資料', { exact: true }).selectOption(link.to);
+      await page.getByRole('button', { name: '関係を追加', exact: true }).click();
+    }
   await goToArticle(page);
   await fillReport(page, selections.map(({ option }) => option.text).join(' '));
 }

@@ -1,4 +1,5 @@
 import type { CaseData } from './types';
+import { boardDocumentSets } from './board';
 
 function uniqueMinimalSets(sets: string[][]): string[][] {
   const result: string[][] = [];
@@ -15,7 +16,9 @@ function uniqueMinimalSets(sets: string[][]): string[][] {
 export function v2RequiredDocumentSets(caseData: CaseData): string[][] {
   const definition = caseData.v2;
   if (!definition) return [];
-  let sets = definition.graph.paths.map((path) => path.flatMap((link) => [link.from, link.to]));
+  let sets = definition.board
+    ? boardDocumentSets(caseData)
+    : definition.graph.paths.map((path) => path.flatMap((link) => [link.from, link.to]));
   for (const task of definition.decoding) {
     const alternatives = task.options
       .filter((option) => option.accepted)

@@ -9,6 +9,7 @@ import { canOpenDocument, remainingBudget } from '../domain/budget';
 import { isDeadEnd } from '../domain/deadEnd';
 import { decisionComplete } from '../domain/decision';
 import { decodingReviews } from '../domain/decoding';
+import { boardReviews } from '../domain/board';
 import { experimentComplete } from '../domain/experiment';
 import type { CaseData, CaseProgress } from '../domain/types';
 import type { GameApi } from '../state/useGame';
@@ -53,9 +54,12 @@ function summarize(caseData: CaseData, progress: CaseProgress) {
   // 「回答済み」は答えを選び、参照資料をすべて読んだ問い。答えだけの問いは根拠待ちとして別に数える。
   const answered = reviews.filter((review) => review.recorded && review.grounded).length;
   const awaitingEvidence = reviews.filter((review) => review.recorded && !review.grounded).length;
-  const links = progress.v2?.links.length ?? 0;
+  const links = v2?.board
+    ? boardReviews(caseData, progress).filter((review) => review.recorded).length
+    : (progress.v2?.links.length ?? 0);
   const paths = v2?.graph.paths ?? [];
-  const linkTarget = paths.length ? Math.min(...paths.map((path) => path.length)) : 0;
+  const linkTarget =
+    v2?.board?.tasks.length ?? (paths.length ? Math.min(...paths.map((path) => path.length)) : 0);
   return {
     opened: progress.opened.length,
     total: caseData.documents.length,
@@ -116,7 +120,9 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
             : ''
         }`
       : null,
-    summary.remainingLinks > 0 ? `関係 あと ${summary.remainingLinks} 件` : null,
+    summary.remainingLinks > 0
+      ? `${v2.board ? '文と証拠' : '関係'} あと ${summary.remainingLinks} 件`
+      : null,
   ].filter(Boolean);
 
   return (
@@ -167,13 +173,17 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
           className={`v2-progress__tile ${tabDone.board ? '' : 'is-pending'}`}
           onClick={() => selectTab('board')}
         >
-          <span className="v2-progress__label">資料の関係</span>
+          <span className="v2-progress__label">{v2.board ? '文と証拠' : '資料の関係'}</span>
           <span className="v2-progress__value">
             {summary.links}
             <small> 件</small>
           </span>
           {summary.linkTarget > 0 && (
-            <span className="v2-progress__todo">{summary.linkTarget} 件以上が目安</span>
+            <span className="v2-progress__todo">
+              {v2.board
+                ? `${summary.linkTarget} 件の文を確かめる`
+                : `${summary.linkTarget} 件以上が目安`}
+            </span>
           )}
         </button>
       </div>

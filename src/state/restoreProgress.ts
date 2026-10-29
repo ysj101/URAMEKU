@@ -1,6 +1,7 @@
 import { normalizeProgress } from '../domain/game';
 import { isDocumentSealed } from '../domain/budget';
 import { createV2Progress } from '../domain/v2Progress';
+import { validBoardRecord } from '../domain/board';
 import type { CaseData, CaseProgress } from '../domain/types';
 
 /** Restore only references belonging to this revision; malformed phases never unlock hidden data. */
@@ -61,6 +62,14 @@ export function restoreProgress(caseData: CaseData, raw: CaseProgress): CaseProg
   progress.v2 = v2;
   progress.opened = progress.opened.filter((id) => !isDocumentSealed(caseData, progress, id));
   v2.links = v2.links.filter((link) => validEvidence([link.from, link.to]));
+  if (config.board) {
+    v2.board = Object.fromEntries(
+      Object.entries(v2.board ?? {}).filter(([id, record]) => {
+        const task = config.board!.tasks.find((entry) => entry.id === id);
+        return task && validBoardRecord(caseData, progress, task, record);
+      }),
+    );
+  } else delete v2.board;
   for (const [id, response] of Object.entries(v2.decoding)) {
     if (
       !config.decoding.some(

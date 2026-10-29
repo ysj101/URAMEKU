@@ -24,6 +24,28 @@ export interface V2Choice {
   id: string;
   text: string;
 }
+export type V2BoardDisposition = 'keep' | 'revise' | 'hold';
+export interface V2BoardRecord {
+  values: Record<string, string>;
+  evidence: string[];
+  disposition: V2BoardDisposition;
+}
+export interface V2BoardTask {
+  id: string;
+  title: string;
+  prompt: string;
+  // Text alternates with editable fields. Every field appears exactly once.
+  parts: ({ text: string } | { field: string })[];
+  fields: { id: string; label: string; original: string; options: V2Choice[] }[];
+  rules: (V2BoardRecord & { explanation: string })[];
+  explanation: string;
+}
+export interface V2Board {
+  title: string;
+  prompt: string;
+  excerpts: { id: string; documentId: string; quote: string }[];
+  tasks: V2BoardTask[];
+}
 export interface V2Experiment {
   id: string;
   prompt: string;
@@ -46,6 +68,7 @@ export interface V2Case {
   modes: V2Mode[];
   decoding: V2DecodingTask[];
   graph: { prompt: string; paths: V2EvidenceLink[][] };
+  board?: V2Board;
   experiment?: V2Experiment;
   decision?: V2Decision;
   reportPrompt: string;
@@ -73,12 +96,14 @@ export interface V2HistoryEvent {
 export interface V2Progress {
   decoding: Record<string, { optionId: string; evidence: string[]; note?: string }>;
   links: V2EvidenceLink[];
+  board?: Record<string, V2BoardRecord>;
   experiment?: V2ExperimentProgress;
   decisions: V2DecisionRecord[];
   report: { claim: string; uncertainty: string };
   history: V2HistoryEvent[];
 }
 export type V2Action =
+  | { type: 'v2-board'; taskId: string; record: V2BoardRecord }
   | { type: 'v2-decode'; taskId: string; optionId: string; evidence: string[]; note?: string }
   | { type: 'v2-link'; link: V2EvidenceLink }
   | { type: 'v2-experiment-initial'; choiceId: string }

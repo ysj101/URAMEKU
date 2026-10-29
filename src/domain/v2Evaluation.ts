@@ -1,4 +1,5 @@
 import { decodingReviews } from './decoding';
+import { boardReviews } from './board';
 import { decisionComplete, decisionComparisonAvailable, reviewDecisionRecord } from './decision';
 import { experimentComplete } from './experiment';
 import { v2GraphProgress } from './link';
@@ -90,16 +91,36 @@ export function evaluateV2Case(caseData: CaseData, progress: CaseProgress): V2Ev
       total: 0,
     },
   };
-  const factualErrors = reviews
+  const factualErrors: V2FactualError[] = reviews
     .filter((review) => review.recorded && !review.factuallyConsistent)
     .map((review) => ({
       taskId: review.taskId,
       message: review.explanation ?? '資料と整合しない事実の読み取りがあります。',
       evidence: review.evidence,
     }));
+  for (const review of boardReviews(caseData, progress)) {
+    if (review.recorded && !review.accepted)
+      factualErrors.push({
+        taskId: `board:${review.task.id}`,
+        message: review.explanation,
+        evidence: [
+          ...new Set(
+            caseData
+              .v2!.board!.tasks.find((task) => task.id === review.task.id)!
+              .rules.flatMap((rule) => rule.evidence)
+              .map(
+                (id) => caseData.v2!.board!.excerpts.find((entry) => entry.id === id)!.documentId,
+              ),
+          ),
+        ],
+      });
+  }
   const missing = (Object.keys(tracks) as V2Track[])
     .filter((track) => tracks[track].done < tracks[track].total)
-    .map((track) => `${V2_TRACK_LABELS[track]}に未記録・未確認・根拠不足の項目があります。`);
+    .map(
+      (track) =>
+        `${track === 'graph' && definition?.board ? '文と証拠の確認' : V2_TRACK_LABELS[track]}に未記録・未確認・根拠不足の項目があります。`,
+    );
   if (
     definition?.decision &&
     decisionRecords.length > 0 &&

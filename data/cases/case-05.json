@@ -151,7 +151,7 @@
   "disclaimer": "登場人物・企業・統計・広告はすべて架空です。",
   "analysis_tasks": [],
   "v2": {
-    "revision": 1,
+    "revision": 2,
     "modes": [
       "decoding",
       "decision"
@@ -358,7 +358,173 @@
       ],
       "updatePrompt": "調査条件が開示された後の方針を、初回と同じでも異なっていても記録してください。速報の価値と未確認事項を両方扱ってください。"
     },
-    "reportPrompt": "回答集団内の変化、グラフの軸、対象の違い、掲載判断と未確認の原因を区別して報告してください。選ばなかった方針の想定の結果を、実際に起きた事実として書かないでください。"
+    "reportPrompt": "回答集団内の変化、グラフの軸、対象の違い、掲載判断と未確認の原因を区別して報告してください。選ばなかった方針の想定の結果を、実際に起きた事実として書かないでください。",
+    "board": {
+      "title": "グラフと記事に説明を添える",
+      "prompt": "数字の変化、グラフの見え方、調査の条件を分けて伝えましょう。",
+      "tasks": [
+        {
+          "id": "chart",
+          "title": "グラフの説明",
+          "prompt": "元データとグラフの表示範囲を見比べて、説明を組み立てましょう。",
+          "parts": [
+            {
+              "text": "回答者内の満足の割合は"
+            },
+            {
+              "field": "change"
+            },
+            {
+              "text": "。縦軸の表示範囲は"
+            },
+            {
+              "field": "axis"
+            },
+            {
+              "text": "。"
+            }
+          ],
+          "fields": [
+            {
+              "id": "change",
+              "label": "数字の変化",
+              "original": "double",
+              "options": [
+                {
+                  "id": "double",
+                  "text": "40%から80%に変わった"
+                },
+                {
+                  "id": "actual",
+                  "text": "40%から50%に変わった"
+                }
+              ]
+            },
+            {
+              "id": "axis",
+              "label": "縦軸の表示範囲",
+              "original": "full",
+              "options": [
+                {
+                  "id": "full",
+                  "text": "0〜100%である"
+                },
+                {
+                  "id": "narrow",
+                  "text": "35〜55%で、変化が大きく見える"
+                }
+              ]
+            }
+          ],
+          "rules": [
+            {
+              "values": {
+                "change": "actual",
+                "axis": "narrow"
+              },
+              "disposition": "revise",
+              "evidence": [
+                "raw_fact",
+                "axis_fact"
+              ],
+              "explanation": "元データは40%から50%への変化です。35〜55%の表示範囲は0〜100%より変化を大きく見せます。"
+            },
+            {
+              "values": {
+                "change": "actual",
+                "axis": "narrow"
+              },
+              "disposition": "revise",
+              "evidence": [
+                "raw_fact",
+                "graphic_fact"
+              ],
+              "explanation": "元データの割合と、広告グラフの35〜55という表示範囲を区別できています。"
+            }
+          ],
+          "explanation": "元データと、グラフか制作指示を見直しましょう。数値の変化と、軸による見え方は別に説明する必要があります。"
+        },
+        {
+          "id": "cause",
+          "title": "記事の原因についてのメモ",
+          "prompt": "同じ設問でも、対象者の選び方が変わっていたら何が言えるでしょうか。",
+          "parts": [
+            {
+              "text": "両月の設問は同じだが、対象者の選び方は完全には同じでない。変化の原因は"
+            },
+            {
+              "field": "cause"
+            },
+            {
+              "text": "。"
+            }
+          ],
+          "fields": [
+            {
+              "id": "cause",
+              "label": "原因について言えること",
+              "original": "quality",
+              "options": [
+                {
+                  "id": "quality",
+                  "text": "サービスの品質向上と確認できる"
+                },
+                {
+                  "id": "unknown",
+                  "text": "この資料だけでは判断できない"
+                }
+              ]
+            }
+          ],
+          "rules": [
+            {
+              "values": {
+                "cause": "unknown"
+              },
+              "disposition": "hold",
+              "evidence": [
+                "raw_fact",
+                "questions_fact"
+              ],
+              "explanation": "集計の変化は確認できますが、対象者の選び方に違いがあり、原因は判断できません。"
+            }
+          ],
+          "explanation": "元データと設問・対象者の記録を組み合わせましょう。回答の変化だけでは、その原因や全利用者への広がりは決められません。"
+        }
+      ],
+      "excerpts": [
+        {
+          "id": "graphic_fact",
+          "documentId": "graphic",
+          "quote": "満足評価が「40から50へ急上昇」と表示。縦軸は35から55の狭い範囲で描かれている。"
+        },
+        {
+          "id": "raw_fact",
+          "documentId": "raw",
+          "quote": "前月は調査回答100人中40人、今月は100人中50人が満足と回答。評価は40%→50%。"
+        },
+        {
+          "id": "axis_fact",
+          "documentId": "axis",
+          "quote": "縦軸の最小値を35%に設定して変化を強調。0〜100%の軸では視覚上の差は小さい。"
+        },
+        {
+          "id": "questions_fact",
+          "documentId": "questions",
+          "quote": "両月の設問文は同一。調査対象の選び方は完全には同じでなく、変化の因果関係は判断できない。"
+        },
+        {
+          "id": "press_fact",
+          "documentId": "press",
+          "quote": "「満足度が25%アップ」と表現。40%から50%への相対増加率は25%、絶対差は10ポイント。"
+        },
+        {
+          "id": "rumor_fact",
+          "documentId": "rumor",
+          "quote": "「サービスの品質が倍になった」との投稿。元データを示していない。"
+        }
+      ]
+    }
   },
   "schemaVersion": 2
 }

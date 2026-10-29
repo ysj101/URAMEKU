@@ -47,3 +47,24 @@ it('keeps V2 graph questions role-based instead of revealing a source title', ()
   expect(validateCase(data).errors.some((error) => error.startsWith('v2.graph.prompt:'))).toBe(true);
   expect(cliErrors(data).some((error) => error.startsWith('v2.graph.prompt:'))).toBe(true);
 });
+
+it('validates claim-board quotes, fields and alternative rules in both browser and CLI', async () => {
+  const { V2_CONTENT_CASES } = await import('../test/v2ContentCases');
+  const base = V2_CONTENT_CASES[0]!;
+  expect(validateCase(base).errors).toEqual([]);
+  expect(cliErrors(base)).toEqual([]);
+  const mutations: ((c: typeof base) => void)[] = [
+    (c) => { c.v2!.board!.excerpts[0]!.quote = '資料に存在しない引用'; },
+    (c) => { c.v2!.board!.tasks[0]!.rules[0]!.evidence = ['unknown']; },
+    (c) => { c.v2!.board!.tasks[0]!.rules[0]!.values.subject = 'unknown'; },
+    (c) => { c.v2!.board!.tasks[0]!.parts.push({ field: 'subject' }); },
+    (c) => { c.v2!.board!.tasks[0]!.rules[0]!.disposition = 'keep'; },
+    (c) => { c.v2!.board!.tasks[0]!.fields[0]!.original = 'unknown'; },
+  ];
+  for (const mutate of mutations) {
+    const copy = structuredClone(base);
+    mutate(copy);
+    expect(validateCase(copy).ok).toBe(false);
+    expect(cliErrors(copy).length).toBeGreaterThan(0);
+  }
+});

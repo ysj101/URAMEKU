@@ -133,5 +133,19 @@
       ],
       "productionApproval": "unchanged; not release-approved"
     }
+  },
+  "evidenceBoardVerification": {
+    "date": "2026-10-30",
+    "caseRevision": 2,
+    "status": "passed-on-Mac",
+    "report": "docs/qa/evidence-board-2026-10-30.md",
+    "unitTestFiles": 83,
+    "unitTestsPassed": 794,
+    "browserTestsPassed": 42,
+    "browserTestsSkipped": 0,
+    "browserScope": "e2e/v2-cases.spec.ts; chromium and mobile-chromium; keyboard and 320–430px text200 included",
+    "assetsChecked": 549,
+    "lintScope": "eslint . --ignore-pattern .claude/**; excludes another checkout and its generated files",
+    "productionApproval": "unchanged; not release-approved"
   }
 }
