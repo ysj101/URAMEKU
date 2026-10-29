@@ -7,7 +7,7 @@
     "documents": 30,
     "analysis_tasks": 10
   },
-  "asset_count": 538,
+  "asset_count": 539,
   "assets": [
     {
       "path": "public/assets/achievements/first-evidence.png",
@@ -7029,6 +7029,21 @@
       "exists": true,
       "sha256": "686bb53f3b3d8da6b5128bf65b1ffb4f0fa8a8d95e13d1a788af8fd5499bf5d3",
       "source": "locally-created-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/branding/title-peeled.png",
+      "category": "branding",
+      "bytes": 1953481,
+      "format": "png",
+      "exists": true,
+      "sha256": "0346681a6edb3d4cb908cdac4386c39e0cd5801896f41944785c963306af554e",
+      "size": [
+        2064,
+        762
+      ],
+      "alpha": true,
+      "source": "imagegen-title-ideation-selected-direction-2026-10-30",
       "art_review": "REQUIRED"
     }
   ]
