@@ -505,35 +505,7 @@ body:has(.home) {
 .desk-grid .doc-tile__cost {
   font-size: 0.8rem;
 }
-.desk-grid .doc-tile[data-visual='advert'] {
-  border: 2px solid var(--color-accent);
-}
-.desk-grid .doc-tile[data-visual='advert'] .doc-tile__kind {
-  background: var(--color-accent);
-  color: var(--color-ink-inverse);
-  padding: 5px 8px;
-  transform: rotate(-2deg);
-}
-.desk-grid .doc-tile[data-visual='ledger'],
-.desk-grid .doc-tile[data-visual='receipt'],
-.desk-grid .doc-tile[data-visual='report'] {
-  border-top-color: var(--color-info);
-}
-.desk-grid .doc-tile[data-visual='clipping'],
-.desk-grid .doc-tile[data-visual='label'] {
-  background-color: var(--color-surface-note);
-  background-image: none;
-  border-style: dashed;
-}
-.desk-grid .doc-tile[data-visual='news'] .doc-tile__kind {
-  border-block: 3px double var(--color-ink);
-  padding: 4px 0;
-}
-.desk-grid .doc-tile[data-visual='photo'] {
-  border-width: 8px 8px 24px;
-  border-color: var(--color-surface);
-  background: var(--color-surface-smudge);
-}
+/* 資料の種類で枠の形は変えない。状態は背景色とバッジ文言で示す（desk.css）。 */
 /* Detail reading uses HTML text on quiet paper; no image contains required facts. */
 .document-dialog {
   border: 1px solid var(--color-ink);
