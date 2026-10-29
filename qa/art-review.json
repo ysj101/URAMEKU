@@ -2703,6 +2703,17 @@
         ],
         "diff_in_badge_zone": true
       }
+    },
+    {
+      "path": "public/assets/branding/title-peeled.png",
+      "kind": "title-logo",
+      "status": "pending",
+      "reason": "",
+      "reviewer": null,
+      "reviewed_at": null,
+      "visual_flag": "needs_check",
+      "visual_note": "Selected paper-curl direction; generated asset still requires manual release review.",
+      "reference": "qa/title-peeled-detail.png"
     }
   ],
   "summary": {
