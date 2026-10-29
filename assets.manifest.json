@@ -7,7 +7,7 @@
     "documents": 30,
     "analysis_tasks": 10
   },
-  "asset_count": 539,
+  "asset_count": 544,
   "assets": [
     {
       "path": "public/assets/achievements/first-evidence.png",
@@ -1104,16 +1104,16 @@
     {
       "path": "public/assets/cases/case-01/cover.png",
       "category": "cases",
-      "bytes": 16738,
+      "bytes": 2642073,
       "format": "png",
       "exists": true,
-      "sha256": "c95d905a1d70ebb47e422c4331f565e2e2cfad239c21ab21fda5c477a9af9f81",
+      "sha256": "d5bfa4cb4360e8f06afe479c542b254b109adb8e26cc92e443d994d1780e1641",
       "size": [
-        720,
-        420
+        1536,
+        1024
       ],
       "alpha": false,
-      "source": "locally-created-for-urameku",
+      "source": "built-in-imagegen-for-urameku",
       "art_review": "REQUIRED"
     },
     {
@@ -1279,16 +1279,16 @@
     {
       "path": "public/assets/cases/case-02/cover.png",
       "category": "cases",
-      "bytes": 14552,
+      "bytes": 2734084,
       "format": "png",
       "exists": true,
-      "sha256": "d5b2ba35ee4748aadf853f5898208cd788c344b7d1e084dec4b36006e727eff4",
+      "sha256": "f5bac13c314055c7c1efd2bbfcf0362c2da9aff8622f939c91b98f523afbb83d",
       "size": [
-        720,
-        420
+        1536,
+        1024
       ],
       "alpha": false,
-      "source": "locally-created-for-urameku",
+      "source": "built-in-imagegen-for-urameku",
       "art_review": "REQUIRED"
     },
     {
@@ -1454,16 +1454,16 @@
     {
       "path": "public/assets/cases/case-03/cover.png",
       "category": "cases",
-      "bytes": 15915,
+      "bytes": 2760299,
       "format": "png",
       "exists": true,
-      "sha256": "1774d1991b3b72b21f35d7d2d2e0e7dbd3f2f49ef461868081f294dfa219ceff",
+      "sha256": "96eb5c111fe16b4ea3a02f61c396be538dbcb0da110760ad8fbf8e5439b208dd",
       "size": [
-        720,
-        420
+        1536,
+        1024
       ],
       "alpha": false,
-      "source": "locally-created-for-urameku",
+      "source": "built-in-imagegen-for-urameku",
       "art_review": "REQUIRED"
     },
     {
@@ -1629,16 +1629,16 @@
     {
       "path": "public/assets/cases/case-04/cover.png",
       "category": "cases",
-      "bytes": 17802,
+      "bytes": 2599136,
       "format": "png",
       "exists": true,
-      "sha256": "a1f2cb7ec4a733948c13ec0c43ab9d043b46ad54b2d244a95ef25300e1edcfb1",
+      "sha256": "389bd387882083b943b2770602bb82866a2b92a99d5243578fd56609eaa56fb2",
       "size": [
-        720,
-        420
+        1536,
+        1024
       ],
       "alpha": false,
-      "source": "locally-created-for-urameku",
+      "source": "built-in-imagegen-for-urameku",
       "art_review": "REQUIRED"
     },
     {
@@ -1804,16 +1804,16 @@
     {
       "path": "public/assets/cases/case-05/cover.png",
       "category": "cases",
-      "bytes": 14591,
+      "bytes": 2590700,
       "format": "png",
       "exists": true,
-      "sha256": "054d4ca237c23599310516b92df9b86d9c2be16c2332c6ef22966e7af7996053",
+      "sha256": "ccfe9b2ce40f6fa24b4eb048a66f8416e5e77214549bccd4068d2e1d091e4583",
       "size": [
-        720,
-        420
+        1536,
+        1024
       ],
       "alpha": false,
-      "source": "locally-created-for-urameku",
+      "source": "built-in-imagegen-for-urameku",
       "art_review": "REQUIRED"
     },
     {
@@ -7029,6 +7029,81 @@
       "exists": true,
       "sha256": "686bb53f3b3d8da6b5128bf65b1ffb4f0fa8a8d95e13d1a788af8fd5499bf5d3",
       "source": "locally-created-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-01/cover.webp",
+      "category": "cases",
+      "bytes": 50216,
+      "format": "webp",
+      "exists": true,
+      "sha256": "6606e630bb3bbd5959ef548cce19acf61e117a3cc3db5c67d79a4e29227ab6fe",
+      "size": [
+        960,
+        640
+      ],
+      "alpha": false,
+      "source": "built-in-imagegen-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-02/cover.webp",
+      "category": "cases",
+      "bytes": 60744,
+      "format": "webp",
+      "exists": true,
+      "sha256": "103a658ae50d04a0063647189c3558c3e02327b7d1ef5b647c1fcf0e636fadba",
+      "size": [
+        960,
+        640
+      ],
+      "alpha": false,
+      "source": "built-in-imagegen-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-03/cover.webp",
+      "category": "cases",
+      "bytes": 60438,
+      "format": "webp",
+      "exists": true,
+      "sha256": "fac2a0374b6016e288f9439f6ba3cdac3ed76d6743c95d1dbca45f809a44ee8b",
+      "size": [
+        960,
+        640
+      ],
+      "alpha": false,
+      "source": "built-in-imagegen-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-04/cover.webp",
+      "category": "cases",
+      "bytes": 55508,
+      "format": "webp",
+      "exists": true,
+      "sha256": "a58d7b3bf93029ba04dfc6462886904e8079f6e1ef122615abc8aada8493cae5",
+      "size": [
+        960,
+        640
+      ],
+      "alpha": false,
+      "source": "built-in-imagegen-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-05/cover.webp",
+      "category": "cases",
+      "bytes": 45054,
+      "format": "webp",
+      "exists": true,
+      "sha256": "ac3dd33da730a15552ab16283d71960990d24030ad7eb1545773f626e07f25ac",
+      "size": [
+        960,
+        640
+      ],
+      "alpha": false,
+      "source": "built-in-imagegen-for-urameku",
       "art_review": "REQUIRED"
     },
     {
