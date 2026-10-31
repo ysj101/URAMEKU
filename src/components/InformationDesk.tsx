@@ -21,9 +21,24 @@ function firstUnanswered(tasks: V2DecodingTask[], progress: CaseProgress): strin
  * すべて開いて読んでいれば ✓、未読があれば「!」で促す。
  * Only the question and player's record are shown here; answer explanations stay in the debrief.
  */
-export function InformationDesk({ caseData, progress, onAction }: V2DeskProps) {
+export function InformationDesk({
+  caseData,
+  progress,
+  onAction,
+  activeTaskId,
+  onSelectTask,
+  onOpenDocument,
+}: V2DeskProps & {
+  activeTaskId?: string | null;
+  onSelectTask?: (id: string | null) => void;
+  onOpenDocument?: (id: string) => void;
+}) {
   const tasks = caseData.v2?.decoding ?? [];
-  const [openId, setOpenId] = useState<string | null>(() => firstUnanswered(tasks, progress));
+  const [localOpenId, setLocalOpenId] = useState<string | null>(() =>
+    firstUnanswered(tasks, progress),
+  );
+  const openId = activeTaskId === undefined ? localOpenId : activeTaskId;
+  const setOpenId = onSelectTask ?? setLocalOpenId;
   if (!tasks.length) return null;
   const title = (id: string) => caseData.documents.find((d) => d.id === id)?.title ?? id;
   const read = (id: string) => progress.opened.includes(id);
@@ -129,7 +144,17 @@ export function InformationDesk({ caseData, progress, onAction }: V2DeskProps) {
                           className={read(id) ? 'v2-task__ref is-adopted' : 'v2-task__ref'}
                         >
                           <span aria-hidden="true">{read(id) ? '✓' : '○'}</span>
-                          {title(id)}
+                          {onOpenDocument ? (
+                            <button
+                              type="button"
+                              className="btn ghost"
+                              onClick={() => onOpenDocument(id)}
+                            >
+                              {title(id)}を開く
+                            </button>
+                          ) : (
+                            title(id)
+                          )}
                           <small>{read(id) ? '読んだ' : 'まだ読んでいない'}</small>
                         </li>
                       ))}

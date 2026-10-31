@@ -4,14 +4,21 @@ import { BOARD_DISPOSITIONS, boardReviews, boardStatement } from '../domain/boar
 import type { V2DeskProps } from './InformationDesk';
 import { LegacyV2EvidenceBoard } from './LegacyV2EvidenceBoard';
 
-export function V2EvidenceBoard(props: V2DeskProps) {
+type BoardProps = V2DeskProps & {
+  activeTaskId?: string;
+  onSelectTask?: (id: string) => void;
+};
+
+export function V2EvidenceBoard(props: BoardProps) {
   if (!props.caseData.v2?.board) return <LegacyV2EvidenceBoard {...props} />;
   return <ClaimBoard {...props} />;
 }
 
-function ClaimBoard({ caseData, progress, onAction }: V2DeskProps) {
+function ClaimBoard({ caseData, progress, onAction, activeTaskId, onSelectTask }: BoardProps) {
   const board = caseData.v2!.board!;
-  const [active, setActive] = useState(board.tasks[0]!.id);
+  const [localActive, setLocalActive] = useState(board.tasks[0]!.id);
+  const active = activeTaskId ?? localActive;
+  const setActive = onSelectTask ?? setLocalActive;
   const reviews = boardReviews(caseData, progress);
   const task = board.tasks.find((entry) => entry.id === active) ?? board.tasks[0]!;
   const recorded = reviews.filter((review) => review.recorded).length;
