@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { createProgress, reduceProgress } from '../domain/game';
 import type { CaseData } from '../domain/types';
+import { CASES } from '../data/cases';
 import { makeV2Case } from '../test/v2Fixtures';
 import type { GameApi } from '../state/useGame';
 import { V2InvestigationScreen } from './V2InvestigationScreen';
@@ -92,7 +93,7 @@ describe('V2プレイの統合', () => {
       'true',
     );
     expect(screen.queryByRole('group', { name: '証拠ボード' })).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: /資料の関係/ }));
+    fireEvent.click(screen.getByRole('button', { name: /^資料の関係0/ }));
     expect(screen.getByRole('group', { name: '証拠ボード' })).toBeInTheDocument();
     expect(screen.getByRole('tab', { name: /証拠ボード/ })).toHaveAttribute(
       'aria-selected',
@@ -111,5 +112,54 @@ describe('V2プレイの統合', () => {
     expect(
       screen.getByText('「資料C」は、最初の判断を記録すると開示されます。'),
     ).toBeInTheDocument();
+  });
+});
+
+describe('最初の事件の操作案内', () => {
+  it('資料を読み、問1を記録すると案内と残りの一覧が進む', () => {
+    const data = CASES[0]!;
+    render(<Harness data={data} />);
+    const guide = screen.getByRole('region', { name: '最初の事件で、遊び方を体験しよう' });
+    fireEvent.click(within(guide).getByRole('button', { name: 'キャンペーン広告を開く' }));
+    expect(screen.getByRole('dialog')).toHaveTextContent(data.documents[0]!.content);
+    fireEvent.click(within(screen.getByRole('dialog')).getByRole('button', { name: /戻る/ }));
+    fireEvent.click(within(guide).getByRole('button', { name: '問1を開く' }));
+    const task = data.v2!.decoding[0]!;
+    const option = task.options.find((entry) => entry.id === 'paid_cohort')!;
+    fireEvent.click(screen.getByRole('radio', { name: option.text }));
+    const remaining = screen.getByRole('region', { name: '残っていること' });
+    expect(remaining).toHaveTextContent('答えは記録済み。まだ読んでいない資料：');
+    for (const id of option.evidence) {
+      const doc = data.documents.find((entry) => entry.id === id)!;
+      if (id === data.documents[0]!.id) continue;
+      fireEvent.click(within(remaining).getAllByRole('button', { name: `${doc.title}を開く` })[0]!);
+      expect(screen.getByRole('dialog')).toHaveTextContent(doc.content);
+      fireEvent.click(within(screen.getByRole('dialog')).getByRole('button', { name: /戻る/ }));
+    }
+    expect(guide).toHaveTextContent('問1の回答と資料確認ができました。');
+    expect(
+      within(remaining).queryByRole('button', { name: `問1：${task.prompt}` }),
+    ).not.toBeInTheDocument();
+    const next = data.v2!.decoding[1]!;
+    fireEvent.click(within(remaining).getByRole('button', { name: `問2：${next.prompt}` }));
+    expect(screen.getByRole('radio', { name: next.options[0]!.text })).toBeVisible();
+    const boardTask = data.v2!.board!.tasks.at(-1)!;
+    fireEvent.click(
+      within(remaining).getByRole('button', {
+        name: `証拠ボード：${boardTask.title}（まだ記録していません）`,
+      }),
+    );
+    expect(
+      screen.getByRole('button', { name: new RegExp(boardTask.title), pressed: true }),
+    ).toBeVisible();
+    fireEvent.click(screen.getByRole('button', { name: '調査報告をまとめる →' }));
+    expect(screen.getByRole('complementary', { name: '初めての報告' })).toHaveTextContent(
+      '補足の文章は書かなくても提出できます。',
+    );
+    fireEvent.click(screen.getByRole('button', { name: '報告を提出して振り返る' }));
+    expect(screen.getByRole('button', { name: '報告を提出して振り返る' })).toHaveAttribute(
+      'aria-disabled',
+      'true',
+    );
   });
 });

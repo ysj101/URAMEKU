@@ -722,3 +722,39 @@
   outline: 3px solid currentColor;
   outline-offset: 3px;
 }
+
+.first-case-guide ol,
+.remaining-checklist ul {
+  padding-inline-start: 1.5rem;
+}
+
+.first-case-guide li,
+.remaining-checklist li {
+  margin-block: 0.75rem;
+  overflow-wrap: anywhere;
+}
+
+.first-case-guide li[aria-current='step'] {
+  border-inline-start: 3px solid currentColor;
+  padding-inline-start: 0.75rem;
+}
+
+.first-case-guide .btn,
+.remaining-checklist .btn,
+.v2-task__refs .btn {
+  white-space: normal;
+  text-align: start;
+  max-width: 100%;
+}
+
+.remaining-checklist li > span {
+  display: block;
+}
+
+@media (min-width: 900px) {
+  .first-case-guide ol {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 2rem;
+  }
+}

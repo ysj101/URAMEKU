@@ -5,7 +5,7 @@ import { InformationDesk } from '../components/InformationDesk';
 import { ExperimentDesk } from '../components/ExperimentDesk';
 import { DecisionDesk } from '../components/DecisionDesk';
 import { V2EvidenceBoard } from '../components/V2EvidenceBoard';
-import { canOpenDocument, remainingBudget } from '../domain/budget';
+import { canOpenDocument, remainingBudget, isDocumentSealed } from '../domain/budget';
 import { isDeadEnd } from '../domain/deadEnd';
 import { decisionComplete } from '../domain/decision';
 import { decodingReviews } from '../domain/decoding';
@@ -76,7 +76,16 @@ function summarize(caseData: CaseData, progress: CaseProgress) {
 /** V2の操作をJSONの方式から組み立てる。旧計算デスクは表示しない。 */
 export function V2InvestigationScreen({ game }: { game: GameApi }) {
   const { current, progress, dispatch } = game;
+  const [activeTaskId, setActiveTaskId] = useState<string | null>(
+    () =>
+      decodingReviews(current, progress).find((review) => !review.recorded || !review.grounded)
+        ?.taskId ??
+      current.v2?.decoding[0]?.id ??
+      null,
+  );
+  const [boardTaskId, setBoardTaskId] = useState<string | undefined>();
   const [openId, setOpenId] = useState<string | null>(null);
+  const [blockedDocument, setBlockedDocument] = useState<string | null>(null);
   const [confirmReset, setConfirmReset] = useState(false);
   const [resetEpoch, setResetEpoch] = useState(0);
   const v2 = current.v2;
@@ -112,6 +121,22 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
       document.getElementById('v2-desk-panel')?.scrollIntoView({ block: 'nearest' });
     });
   };
+  const openDocument = (documentId: string) => {
+    if (!canOpenDocument(current, progress, documentId)) {
+      setBlockedDocument(documentId);
+      return;
+    }
+    setBlockedDocument(null);
+    dispatch({ type: 'open-document', documentId });
+    setOpenId(documentId);
+  };
+  const showQuestion = (id: string) => {
+    setActiveTaskId(id);
+    selectTab('decoding');
+  };
+  const reviews = decodingReviews(current, progress);
+  const firstReview = reviews[0];
+  const firstDocument = current.documents[0];
   const pending = [
     summary.remainingTasks > 0
       ? `読み取り あと ${summary.remainingTasks} 問${
@@ -188,6 +213,53 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
         </button>
       </div>
 
+      {current.id === 'case-01' && firstReview && firstDocument && (
+        <section className="v2-panel first-case-guide" aria-labelledby="first-case-guide-title">
+          <h2 id="first-case-guide-title">最初の事件で、遊び方を体験しよう</h2>
+          <ol>
+            <li aria-current={!progress.opened.includes(firstDocument.id) ? 'step' : undefined}>
+              資料を開いて読む。まずは「{firstDocument.title}」から。
+              <button
+                type="button"
+                className="btn ghost"
+                onClick={() => openDocument(firstDocument.id)}
+              >
+                {firstDocument.title}を開く
+              </button>
+            </li>
+            <li
+              aria-current={
+                progress.opened.includes(firstDocument.id) && !firstReview.grounded
+                  ? 'step'
+                  : undefined
+              }
+            >
+              問1の答えを選び、下に出る資料をすべて読む。答えは選ぶと記録されます。
+              <button
+                type="button"
+                className="btn ghost"
+                onClick={() => showQuestion(firstReview.taskId)}
+              >
+                問1を開く
+              </button>
+              {firstReview.grounded && (
+                <p>問1の回答と資料確認ができました。同じように、残りの問いも進めましょう。</p>
+              )}
+            </li>
+            <li aria-current={tabDone.decoding && !tabDone.board ? 'step' : undefined}>
+              「証拠ボード」で文に証拠を添え、文の扱いを選んで「文と証拠を記録」を押す。
+              <button type="button" className="btn ghost" onClick={() => selectTab('board')}>
+                証拠ボードを開く
+              </button>
+            </li>
+            <li aria-current={pending.length === 0 ? 'step' : undefined}>
+              下の一覧で残りを確かめたら、報告をまとめて提出する。提出すると答えと解説を確認できます。
+            </li>
+          </ol>
+          <p>「根拠あり」「記録あり」は操作が済んだ印です。正解かどうかは提出後に分かります。</p>
+        </section>
+      )}
+
       <details className="v2-guide">
         <summary>このステップの進め方</summary>
         <p>
@@ -196,6 +268,14 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
         </p>
       </details>
 
+      {blockedDocument && !canOpenDocument(current, progress, blockedDocument) && (
+        <p className="notice" role="status">
+          「{current.documents.find((doc) => doc.id === blockedDocument)?.title}」
+          {isDocumentSealed(current, progress, blockedDocument)
+            ? 'は、最初の判断を記録すると開けます。'
+            : 'は調査予算が足りないため開けません。この事件を最初から調査し直せます。'}
+        </p>
+      )}
       {isDeadEnd(current, progress) && (
         <p className="notice" role="status">
           資料を開くための調査予算が残っていません。この事件を最初から調査し直せます。
@@ -227,11 +307,7 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
               key={resetEpoch}
               caseData={current}
               progress={progress}
-              onOpen={(documentId) => {
-                if (!canOpenDocument(current, progress, documentId)) return;
-                dispatch({ type: 'open-document', documentId });
-                setOpenId(documentId);
-              }}
+              onOpen={openDocument}
             />
           </section>
 
@@ -264,12 +340,116 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
               {tab === 'experiment' && v2.experiment && (
                 <ExperimentDesk key={resetEpoch} {...props} />
               )}
-              {tab === 'decoding' && <InformationDesk key={resetEpoch} {...props} />}
-              {tab === 'board' && <V2EvidenceBoard key={resetEpoch} {...props} />}
+              {tab === 'decoding' && (
+                <InformationDesk
+                  key={resetEpoch}
+                  {...props}
+                  activeTaskId={activeTaskId}
+                  onSelectTask={setActiveTaskId}
+                  onOpenDocument={openDocument}
+                />
+              )}
+              {tab === 'board' && (
+                <V2EvidenceBoard
+                  key={resetEpoch}
+                  {...props}
+                  activeTaskId={boardTaskId}
+                  onSelectTask={setBoardTaskId}
+                />
+              )}
               {tab === 'decision' && v2.decision && <DecisionDesk key={resetEpoch} {...props} />}
             </div>
           </section>
         </div>
+      )}
+
+      {!initialExperiment && (
+        <section className="v2-panel remaining-checklist" aria-labelledby="remaining-title">
+          <h2 id="remaining-title" tabIndex={-1}>
+            残っていること
+          </h2>
+          <p>
+            答えを選ぶことと、もとになる資料を読むことの両方が必要です。補足メモは書かなくてもかまいません。
+          </p>
+          {pending.length === 0 ? (
+            <p>記録はそろいました。報告へ進めます。</p>
+          ) : (
+            <ul>
+              {reviews
+                .filter((review) => !review.recorded || !review.grounded)
+                .map((review) => (
+                  <li key={review.taskId}>
+                    <button
+                      type="button"
+                      className="btn ghost"
+                      onClick={() => showQuestion(review.taskId)}
+                    >
+                      問{reviews.indexOf(review) + 1}：
+                      {v2.decoding.find((task) => task.id === review.taskId)?.prompt}
+                    </button>
+                    <span>
+                      {review.recorded
+                        ? '答えは記録済み。まだ読んでいない資料：'
+                        : 'まだ答えを選んでいません。'}
+                    </span>
+                    {review.evidence
+                      .filter((id) => !progress.opened.includes(id))
+                      .map((id) => (
+                        <button
+                          key={id}
+                          type="button"
+                          className="btn ghost"
+                          onClick={() => openDocument(id)}
+                        >
+                          {current.documents.find((doc) => doc.id === id)?.title}を開く
+                        </button>
+                      ))}
+                  </li>
+                ))}
+              {boardReviews(current, progress)
+                .filter((review) => !review.recorded)
+                .map(({ task }) => (
+                  <li key={task.id}>
+                    <button
+                      type="button"
+                      className="btn ghost"
+                      onClick={() => {
+                        setBoardTaskId(task.id);
+                        selectTab('board');
+                      }}
+                    >
+                      証拠ボード：{task.title}（まだ記録していません）
+                    </button>
+                  </li>
+                ))}
+              {!v2.board && summary.remainingLinks > 0 && (
+                <li>
+                  <button type="button" className="btn ghost" onClick={() => selectTab('board')}>
+                    資料の関係を記録する
+                  </button>
+                </li>
+              )}
+              {v2.experiment && !tabDone.experiment && (
+                <li>
+                  <button
+                    type="button"
+                    className="btn ghost"
+                    onClick={() => selectTab('experiment')}
+                  >
+                    ミニ実験の判断を記録する
+                  </button>
+                </li>
+              )}
+              {v2.decision && !tabDone.decision && (
+                <li>
+                  <button type="button" className="btn ghost" onClick={() => selectTab('decision')}>
+                    意思決定の判断を記録する
+                  </button>
+                </li>
+              )}
+            </ul>
+          )}
+        </section>
       )}
 
       <div className="stage-switch v2-actions">
@@ -278,6 +458,19 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
             ? `報告の前に：${pending.join('・')}（記録しなくても進めます）`
             : '記録はそろいました。報告へ進めます。'}
         </span>
+        {pending.length > 0 && !initialExperiment && (
+          <button
+            type="button"
+            className="btn ghost"
+            onClick={() => {
+              const heading = document.getElementById('remaining-title');
+              heading?.focus({ preventScroll: true });
+              heading?.scrollIntoView({ block: 'center' });
+            }}
+          >
+            残りを確認
+          </button>
+        )}
         <button type="button" className="btn ghost" onClick={() => setConfirmReset(true)}>
           この事件を最初から
         </button>
@@ -299,6 +492,9 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
             className="btn primary"
             onClick={() => {
               dispatch({ type: 'reset' });
+              setBlockedDocument(null);
+              setActiveTaskId(v2.decoding[0]?.id ?? null);
+              setBoardTaskId(undefined);
               setResetEpoch((n) => n + 1);
               setConfirmReset(false);
             }}

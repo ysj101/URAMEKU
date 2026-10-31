@@ -158,5 +158,18 @@
       "lintScope": "npm run lint; no exclusion needed in isolated worktree",
       "productionApproval": "unchanged; not release-approved"
     }
+  },
+  "firstCaseGuideVerification": {
+    "date": "2026-10-31",
+    "status": "automated-checks-passed",
+    "report": "docs/archive/qa/first-case-guide-2026-10-31.md",
+    "unitTestFiles": 83,
+    "unitTestsPassed": 795,
+    "browserTestsPassed": 44,
+    "browserTestsSkipped": 0,
+    "browserScope": "e2e/first-case-guide.spec.ts and e2e/v2-cases.spec.ts; Chromium desktop and mobile, persistence, keyboard and 320–430px at text200",
+    "assetsChecked": 549,
+    "answerKeysAndNumericFacts": "unchanged",
+    "productionApproval": "unchanged; not release-approved"
   }
 }

@@ -28,6 +28,17 @@ export function V2ArticleScreen({ game }: { game: GameApi }) {
         </span>
         <span>読んだ資料 {progress.opened.length} 件</span>
       </div>
+      {current.id === 'case-01' && (
+        <aside className="v2-panel" aria-label="初めての報告">
+          <h2>最後に、報告を提出しよう</h2>
+          <p>
+            選んだ答えと証拠は、下の報告にまとまっています。補足の文章は書かなくても提出できます。
+          </p>
+          <p>
+            内容を確かめたら「報告を提出して振り返る」を押しましょう。答えと解説が表示されます。
+          </p>
+        </aside>
+      )}
       <section className="v2-panel" aria-labelledby="v2-report-title">
         <h2 id="v2-report-title">調査記録から報告をまとめる</h2>
         <p>{current.v2?.reportPrompt}</p>
