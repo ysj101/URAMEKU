@@ -43,6 +43,20 @@ npm run preview      # dist/ をローカル配信して確認
 
 `public/` 配下のアセットと `manifest.webmanifest` はビルド時にそのまま `dist/` へコピーされます。
 
+### コミットと PR のメールアドレス保護
+
+通常の clone では `npm ci` / `npm install` の `prepare` が `.githooks/` を自動で有効にします。追加の依存はありません。linked worktree と `.git` のない配布物では Git 設定を変更しません。linked worktree で実行する場合は `git -c core.hooksPath=.githooks commit ...` を使います。
+
+`commit-msg` は `@gmail.com` を含む行を大文字・小文字を区別せず削除し、削除した行番号を表示します。author または committer のメール欄に同じ文字列があればコミットを拒否します。メールアドレスは表示しません。
+
+CI は対象コミットすべての author・committer のメール欄とメッセージ全文、PR の題名と本文を検査します。ファイルの内容は検査しません。ローカルでも同じ検査を実行できます。
+
+```bash
+scripts/check-no-gmail.sh                    # origin/main..HEAD
+scripts/check-no-gmail.sh BASE_SHA..HEAD_SHA # 任意の範囲
+PR_TITLE='変更の題名' PR_BODY='変更の説明' scripts/check-no-gmail.sh
+```
+
 ### 公開 URL とベースパス（MVP-004）
 
 | 用途 | URL | `base` |

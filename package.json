@@ -8,6 +8,7 @@
     "node": ">=26"
   },
   "scripts": {
+    "prepare": "sh scripts/install-hooks.sh",
     "dev": "vite",
     "build": "tsc -p tsconfig.json --noEmit && vite build",
     "preview": "vite preview",
