@@ -1,4 +1,5 @@
 import { assetUrl, characterPose, propUrl } from '../data/assets';
+import { loadTutorialState } from '../state/tutorialState';
 import { UI } from '../data/ui';
 import { continueCaseId } from '../domain/caseStatus';
 import type { Navigation } from '../app/navigation';
@@ -98,7 +99,17 @@ export function HomeScreen({ game, nav }: { game: GameApi; nav: Navigation }) {
           <button
             type="button"
             className="btn primary big"
-            onClick={() => nav.navigate({ screen: 'tutorial' })}
+            onClick={() => {
+              if (loadTutorialState().completed) {
+                const firstCase = game.cases[0];
+                if (firstCase) {
+                  game.selectCase(firstCase.id);
+                  nav.navigate({ screen: 'play', caseId: firstCase.id });
+                }
+              } else {
+                nav.navigate({ screen: 'tutorial' });
+              }
+            }}
           >
             {UI.home.start}
           </button>

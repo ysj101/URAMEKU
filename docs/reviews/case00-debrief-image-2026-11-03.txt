@@ -1,0 +1,11 @@
+CASE00 explanation image — 2026-11-03
+Tool: built-in image_gen, generate, infographic-diagram.
+Files: public/assets/cases/case-00/debrief/decoy-mechanism.png (original) and decoy-mechanism.webp (cwebp q85, same dimensions).
+Status: pending human art and rights approval; not release-approved.
+AI inspection: S=300yen/300mL; M=500yen/450mL; L=500yen/600mL; M only appears in second menu. No new character faces or silhouettes.
+
+Final prompt:
+Use case: infographic-diagram. Create one finished educational explanation image for Japanese investigation game ウラメク, landscape 3:2, 1536x1024. Match a handcrafted Japanese editorial evidence-board infographic: warm ivory aged paper, torn paper cards, black relief-print typography and paper-cut drink cups, restrained muted teal and vermilion accents, bold readable shapes, generous spacing. No characters or faces. This must be concise and readable on a phone, NOT a wall of text.
+Title exact Japanese: 「増えたのは、比べる相手。」
+Subtitle: 「おとり効果」
+Two large clearly separated panels side by side. Left heading 「最初のメニュー」 with ONLY S and L drink cups: S 「300円」「300mL」 and L 「500円」「600mL」. Right heading 「Mが加わると」 with S, M, L cups: S 「300円」「300mL」, M 「500円」「450mL」, L 「500円」「600mL」. Make the right M pale teal paper, right L ink black with a restrained vermilion comparison bracket joining M and L and exact short caption 「同じ500円」. Put a small tag over M 「追加」. S and L must be identically priced and sized across both panels. Cup height S smallest, M middle, L biggest. Short bottom statement exact text 「商品は同じでも、お得に見えることがある。」. No other text, no fake labels, no research data, no graphs, no percent, no claims that all people choose L, no large arrows implying people must switch, no brand logos. Aim for a beautiful sparse printed-paper learning diagram, not an app screenshot.

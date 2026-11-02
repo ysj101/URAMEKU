@@ -22,7 +22,7 @@ test('#/settings で設定が開く', async ({ page }) => {
 test('#/tutorial で遊び方が開く', async ({ page }) => {
   await page.goto('/#/tutorial');
   await expect(page.getByRole('heading', { level: 1, name: '遊び方' })).toBeVisible();
-  await expect(page.getByRole('button', { name: 'スキップして事件一覧へ' })).toBeVisible();
+  await expect(page.getByRole('button', { name: '練習をやめて事件一覧へ' })).toBeVisible();
 });
 
 test('不明なハッシュはホームにフォールバックする', async ({ page }) => {

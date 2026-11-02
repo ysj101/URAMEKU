@@ -171,5 +171,21 @@
     "assetsChecked": 549,
     "answerKeysAndNumericFacts": "unchanged",
     "productionApproval": "unchanged; not release-approved"
+  },
+  "case00Verification": {
+    "date": "2026-11-03",
+    "status": "automated-checks-passed",
+    "report": "docs/qa/case00-2026-11-03.md",
+    "unitTestFiles": 83,
+    "unitTestsPassed": 806,
+    "browserTestsPassed": 86,
+    "browserTestsSkipped": 0,
+    "browserScope": "all e2e; Chromium desktop/mobile; 320px text200; explanation image load; completed tutorial to home/reload/start to CASE01; keyboard in src/test/a11y.test.tsx",
+    "assetsChecked": 551,
+    "lintScope": "eslint . --ignore-pattern .claude/**; excludes existing nested checkout and generated files",
+    "productionApproval": "unchanged; not release-approved",
+    "learningTopic": "decoy effect; no individual diagnosis",
+    "choicePathsVerified": 6,
+    "explanationArtwork": "PNG and WebP registered; pending human art and rights approval"
   }
 }
