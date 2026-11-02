@@ -181,19 +181,44 @@ describe('スキップリンクと画面固有のキーボード操作', () => {
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('ウラメク');
   });
 
-  it('遊び方のカルーセルは矢印キーで手順を移動できる（MVP-021）', async () => {
+  it('CASE00をキーボードだけで調査から提出まで進められる', async () => {
     render(<App />);
     await tabTo(screen.getByRole('button', { name: '調査をはじめる' }));
     await pressEnter('遊び方へ');
     expect(window.location.hash).toBe('#/tutorial');
-    expect(active()).toBe(screen.getByRole('heading', { level: 1, name: '遊び方' }));
-    const carousel = screen.getByRole('region', { name: '遊び方の手順' });
-    await tabTo(carousel, 'カルーセル');
-    await user.keyboard('{ArrowRight}');
-    expect(screen.getByRole('group', { name: '手順 2 / 6' })).toBeInTheDocument();
-    await user.keyboard('{ArrowLeft}');
-    expect(screen.getByRole('group', { name: '手順 1 / 6' })).toBeInTheDocument();
-    expectFocusKept('カルーセル操作');
+    await tabTo(screen.getByRole('radio', { name: /^Sサイズ/ }));
+    await user.keyboard(' ');
+    await tabTo(screen.getByRole('button', { name: 'このサイズにする →' }));
+    await pressEnter('最初の選択');
+    await tabTo(screen.getByRole('radio', { name: /^Sサイズ/ }));
+    await user.keyboard(' ');
+    await tabTo(screen.getByRole('button', { name: '選んで資料を調べる →' }));
+    await pressEnter('メニュー追加後の選択');
+    for (const title of ['2枚のメニューの記録', '売店の引き継ぎメモ']) {
+      await tabTo(screen.getByRole('button', { name: new RegExp(`${title}を開く`) }));
+      await pressEnter(title);
+      expect(screen.getByRole('article')).toHaveTextContent(title);
+    }
+    await tabTo(screen.getByRole('button', { name: '答えを選ぶ →' }));
+    await pressEnter('答えを選ぶ');
+    expect(active()).toBe(screen.getByRole('heading', { name: '4. 答えと根拠を選ぶ' }));
+    const answers = screen.getByRole('group', {
+      name: 'Mが加わった後、SとLはどうなった？',
+    });
+    await tabTo(within(answers).getAllByRole('radio')[0]!);
+    await user.keyboard('{ArrowDown}');
+    expect(within(answers).getAllByRole('radio')[1]).toBeChecked();
+    const evidence = screen.getByRole('group', { name: '答えの根拠になる一節は？' });
+    await tabTo(within(evidence).getAllByRole('radio')[0]!);
+    await user.keyboard('{ArrowDown}');
+    expect(within(evidence).getAllByRole('radio')[1]).toBeChecked();
+    await tabTo(screen.getByRole('button', { name: '報告をまとめる →' }));
+    await pressEnter('報告へ');
+    expect(active()).toBe(screen.getByRole('heading', { name: '5. 報告を提出する' }));
+    await tabTo(screen.getByRole('button', { name: '報告を提出して振り返る' }));
+    await pressEnter('提出');
+    expect(active()).toBe(screen.getByRole('heading', { name: '6. 解説を見る' }));
+    expect(screen.getByText('答えと根拠を、資料で確かめられました。')).toBeInTheDocument();
   });
 
   it('図鑑のタブは矢印キーで切り替わり、フォーカスも追従する（MVP-027）', async () => {

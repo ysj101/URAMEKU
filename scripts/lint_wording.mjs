@@ -30,6 +30,7 @@ const ERROR_LEN = 100;
 
 const TARGETS = [
   { dir: 'data/cases', ext: ['.json'] },
+  { dir: 'data/tutorial', ext: ['.json'] },
   { dir: 'data/ui', ext: ['.json'] },
   { dir: 'src', ext: ['.tsx'] },
 ];

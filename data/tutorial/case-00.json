@@ -1,0 +1,115 @@
+{
+  "id": "case-00",
+  "title": "消えたMサイズ",
+  "lead": "映画が始まるまで、あと3分。ドリンクを1つ選んで席へ。",
+  "steps": [
+    "ドリンクを選ぶ",
+    "メニューが変わる",
+    "資料を調べる",
+    "答えと根拠を選ぶ",
+    "報告を提出する",
+    "解説を見る"
+  ],
+  "experiment": {
+    "items": [
+      {
+        "id": "s",
+        "label": "S",
+        "price": 300,
+        "volume": 300
+      },
+      {
+        "id": "m",
+        "label": "M",
+        "price": 500,
+        "volume": 450
+      },
+      {
+        "id": "l",
+        "label": "L",
+        "price": 500,
+        "volume": 600
+      }
+    ],
+    "initial": [
+      "s",
+      "l"
+    ],
+    "updated": [
+      "s",
+      "m",
+      "l"
+    ],
+    "initialPrompt": "いま飲みたいのは、どのサイズ？",
+    "updatedPrompt": "Mサイズもありました。今なら、どれにする？",
+    "notice": "好みに正解はありません。",
+    "changed": "選んだサイズが変わりました。",
+    "unchanged": "同じサイズを選びました。",
+    "explanation": "MとLはどちらも500円ですが、Lのほうが量は多くなっています。Mが加わると、Lをお得に感じて選ぶ人が増えることがあります。こうした現象を「おとり効果」と呼びます。",
+    "limit": "この1回で、あなたに効果が起きたとは決められません。",
+    "source": {
+      "title": "Huber, Payne & Puto (1982)",
+      "url": "https://doi.org/10.1086/208899"
+    }
+  },
+  "investigationPrompt": "SとLも変わった？ 2枚を開いて確かめよう。",
+  "documents": [
+    {
+      "id": "menus",
+      "title": "2枚のメニューの記録",
+      "source": "映画館の売店・同じ日のメニュー",
+      "content": "最初のメニュー：\nSは300円で300mL\nLは500円で600mL\n\n次のメニュー：\nSは300円で300mL\nMは500円で450mL\nLは500円で600mL\n\nどのサイズも同じ飲み物です。"
+    },
+    {
+      "id": "staff",
+      "title": "売店の引き継ぎメモ",
+      "source": "映画館の売店・担当者のメモ",
+      "content": "メニューを出し直したとき、SとLの価格と量は変えていません。Mの欄だけを加えました。お客さんがどれを選んだかは、このメモには記録していません。"
+    }
+  ],
+  "question": "Mが加わった後、SとLはどうなった？",
+  "options": [
+    {
+      "id": "discount",
+      "text": "Lの価格が下がった。",
+      "accepted": false
+    },
+    {
+      "id": "unchanged",
+      "text": "SもLも、価格と量は変わっていない。",
+      "accepted": true
+    },
+    {
+      "id": "more",
+      "text": "Lの量が増えた。",
+      "accepted": false
+    }
+  ],
+  "excerpts": [
+    {
+      "id": "menu_fact",
+      "documentId": "menus",
+      "quote": "どのサイズも同じ飲み物です。",
+      "supportsAnswer": false
+    },
+    {
+      "id": "staff_fact",
+      "documentId": "staff",
+      "quote": "メニューを出し直したとき、SとLの価格と量は変えていません。Mの欄だけを加えました。",
+      "supportsAnswer": true
+    }
+  ],
+  "feedback": {
+    "answerReview": "2枚のメニューを見直しましょう",
+    "evidenceSupported": "SとLが変わっていないと確認できます",
+    "evidenceUnsupported": "飲み物の種類だけでは、価格と量の変化は分かりません"
+  },
+  "explanation": "SとLの価格と量は同じ。増えたのはMだけです。",
+  "limit": "ほかのお客さんが何を選んだかや、売店がMを加えたねらいは、資料だけでは分かりません。",
+  "takeaway": "「お得そう」と思ったら、何と比べたのかも確かめよう。",
+  "visualGuide": {
+    "image": "cases/case-00/debrief/decoy-mechanism.webp",
+    "imageAlt": "最初はSが300円・300mL、Lが500円・600mL。次はMの500円・450mLだけが追加。SとLは変わらず、Mと同じ価格で量の多いLが比較の相手になる図。",
+    "intro": "比べる相手が増えると、選び方が変わることがあります。これが「おとり効果」です。"
+  }
+}

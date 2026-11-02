@@ -25,6 +25,17 @@ export function CaseSelectScreen({ game, nav }: { game: GameApi; nav: Navigation
       <p className="case-select-intro">
         編集局に届いた、5つの調査ファイル。気になる事件から、資料をめくろう。
       </p>
+      <aside className="notice" aria-label="はじめての方へ">
+        <strong>CASE 00 / はじめての調査</strong>
+        <p>ドリンク選びから始まる小さな謎。資料を調べて、答えと根拠を報告しましょう。</p>
+        <button
+          type="button"
+          className="btn secondary"
+          onClick={() => nav.navigate({ screen: 'tutorial' })}
+        >
+          CASE 00 で遊び方を体験する
+        </button>
+      </aside>
       <ul className="case-cards">
         {game.cases.map((c, i) => {
           const status = caseStatus(c.id, (game.progressByCase ?? {})[c.id], game.finished);

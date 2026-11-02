@@ -4,7 +4,7 @@ import type { StorageLike } from './persistence';
 /**
  * チュートリアルの進行状態（MVP-021）。
  *
- * - completed: 遊び方画面を最後まで見た（またはスキップした）か
+ * - completed: CASE00の報告を提出したか（旧版の説明を見終えた記録も保持）
  * - hintsEnabled: プレイ画面の段階ヒント（TutorialHint）を表示するか
  *
  * 保存先は localStorage のキー `urameku-tutorial`（セーブデータとは別キー）。

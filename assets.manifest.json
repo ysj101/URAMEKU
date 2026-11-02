@@ -7,7 +7,7 @@
     "documents": 30,
     "analysis_tasks": 10
   },
-  "asset_count": 549,
+  "asset_count": 551,
   "assets": [
     {
       "path": "public/assets/achievements/first-evidence.png",
@@ -7188,6 +7188,36 @@
       "format": "png",
       "exists": true,
       "sha256": "7a4fc4bd63f30faa93779ce47d7cb7fb3963668ff8d27534e382f3673eab3450",
+      "size": [
+        1536,
+        1024
+      ],
+      "alpha": false,
+      "source": "built-in-imagegen-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-00/debrief/decoy-mechanism.png",
+      "category": "cases",
+      "bytes": 3205644,
+      "format": "png",
+      "exists": true,
+      "sha256": "8db5bf1df6f03eb908bba27a26d28c96da81079051db0d2cf1bc2ed0bcd7dfb0",
+      "size": [
+        1536,
+        1024
+      ],
+      "alpha": false,
+      "source": "built-in-imagegen-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-00/debrief/decoy-mechanism.webp",
+      "category": "cases",
+      "bytes": 376636,
+      "format": "webp",
+      "exists": true,
+      "sha256": "6e418494b7d88996b42249c2d0b9b4388228df9bfbaa26ff067b826460dbd085",
       "size": [
         1536,
         1024

@@ -2814,11 +2814,31 @@
       "visual_flag": "needs_check",
       "visual_note": "Selected paper-curl direction; generated asset still requires manual release review.",
       "reference": "qa/title-peeled-detail.png"
+    },
+    {
+      "path": "public/assets/cases/case-00/debrief/decoy-mechanism.png",
+      "kind": "case-debrief",
+      "status": "pending",
+      "reviewer": null,
+      "reviewed_at": null,
+      "reason": "Generated CASE00 explanation; human art and rights approval pending.",
+      "visual_flag": "needs_check",
+      "visual_note": "AI checked menu labels against case JSON; not release-approved."
+    },
+    {
+      "path": "public/assets/cases/case-00/debrief/decoy-mechanism.webp",
+      "kind": "case-debrief",
+      "status": "pending",
+      "reviewer": null,
+      "reviewed_at": null,
+      "reason": "Generated CASE00 explanation; human art and rights approval pending.",
+      "visual_flag": "needs_check",
+      "visual_note": "AI checked menu labels against case JSON; not release-approved."
     }
   ],
   "summary": {
-    "total": 118,
-    "pending": 118,
+    "total": 120,
+    "pending": 120,
     "approved": 0,
     "rejected": 0,
     "auto_check": 12
