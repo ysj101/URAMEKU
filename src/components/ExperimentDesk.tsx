@@ -1,19 +1,27 @@
 import { createV2Progress } from '../domain/v2Progress';
-import { useState } from 'react';
 import {
   comparisonAvailable,
   experimentComparison,
   experimentCondition,
 } from '../domain/experiment';
 import type { V2DeskProps } from './InformationDesk';
+import { MissingList, RequiredMark } from './RequiredMark';
+import { useDraft } from './useDraft';
 import '../app/screens/v2.css';
 
 export function ExperimentDesk({ caseData, progress, onAction }: V2DeskProps) {
   const definition = caseData.v2?.experiment;
   const record = progress.v2?.experiment;
-  const [choice, setChoice] = useState('');
-  const [reason, setReason] = useState('');
+  // 比較後の判断の入力は下書きとして残す
+  const [draft, setDraft, clearDraft] = useDraft(`experiment:${caseData.id}`, () => ({
+    choice: '',
+    reason: '',
+  }));
+  const { choice, reason } = draft;
   if (!definition) return null;
+  const missing = [!choice && '判断', !reason.trim() && '理由'].filter((item): item is string =>
+    Boolean(item),
+  );
   const ui = definition.ui;
   const initial = !record?.initialChoice;
   const condition = experimentCondition(
@@ -63,8 +71,9 @@ export function ExperimentDesk({ caseData, progress, onAction }: V2DeskProps) {
             <form
               onSubmit={(event) => {
                 event.preventDefault();
-                if (choice && reason.trim())
-                  onAction({ type: 'v2-experiment-update', choiceId: choice, reason });
+                if (missing.length) return;
+                onAction({ type: 'v2-experiment-update', choiceId: choice, reason });
+                clearDraft();
               }}
             >
               <h3>{ui?.comparisonTitle ?? '提示条件を比べる'}</h3>
@@ -80,6 +89,7 @@ export function ExperimentDesk({ caseData, progress, onAction }: V2DeskProps) {
               <fieldset disabled={progress.published}>
                 <legend>
                   {ui?.comparisonLegend ?? '比較後の判断（変わらなくても構いません）'}
+                  <RequiredMark />
                 </legend>
                 {definition.choices.map((candidate) => (
                   <label key={candidate.id}>
@@ -87,22 +97,26 @@ export function ExperimentDesk({ caseData, progress, onAction }: V2DeskProps) {
                       type="radio"
                       name="experiment-updated-choice"
                       checked={choice === candidate.id}
-                      onChange={() => setChoice(candidate.id)}
+                      onChange={() => setDraft((prev) => ({ ...prev, choice: candidate.id }))}
                     />
                     {candidate.text}
                   </label>
                 ))}
                 <label htmlFor={`experiment-reason-${definition.id}`}>
                   {ui?.reasonLabel ?? '維持・変更した理由'}
+                  <RequiredMark />
                 </label>
                 <textarea
                   id={`experiment-reason-${definition.id}`}
                   value={reason}
-                  onChange={(event) => setReason(event.target.value)}
+                  onChange={(event) =>
+                    setDraft((prev) => ({ ...prev, reason: event.target.value }))
+                  }
                   maxLength={2000}
                   required
                 />
-                <button className="btn primary" type="submit" disabled={!choice || !reason.trim()}>
+                <MissingList items={missing} />
+                <button className="btn primary" type="submit" disabled={missing.length > 0}>
                   {ui?.comparisonSubmit ?? '比較後の判断を記録'}
                 </button>
               </fieldset>

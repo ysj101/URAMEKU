@@ -72,3 +72,15 @@
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
   gap: 1rem;
 }
+
+/* 必須の印と、足りない項目の案内（#157） */
+.required-mark {
+  margin-inline-start: 0.4rem;
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  color: var(--color-accent);
+}
+.missing-list {
+  margin-block: 0.4rem;
+  font-size: var(--font-size-sm);
+}

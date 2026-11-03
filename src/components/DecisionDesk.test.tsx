@@ -149,3 +149,25 @@ it('does not submit a stale source after it is removed from the evidence board',
     },
   });
 });
+
+it('足りない必須項目を文字で示し、記録前の入力は下書きとして残る', () => {
+  const onAction = vi.fn();
+  const { unmount } = render(
+    <DecisionDesk caseData={fixture()} progress={makeV2Progress()} onAction={onAction} />,
+  );
+  expect(screen.getByRole('status')).toHaveTextContent(
+    '記録するには、あと「優先する目的」「方針」「方針を支える資料」「反対の見方・制約を示す資料」「前提・不確実な点」「選択理由」が必要です。',
+  );
+  fireEvent.change(screen.getByRole('textbox', { name: '目的と根拠を踏まえた選択理由' }), {
+    target: { value: '下書きの理由' },
+  });
+  expect(screen.getByRole('status')).not.toHaveTextContent('「選択理由」');
+  expect(screen.getByText(/下書きとして残しています/)).toBeInTheDocument();
+
+  // タブを切り替えて戻る＝いったん外して描き直しても、入力が残る
+  unmount();
+  render(<DecisionDesk caseData={fixture()} progress={makeV2Progress()} onAction={onAction} />);
+  expect(screen.getByRole('textbox', { name: '目的と根拠を踏まえた選択理由' })).toHaveValue(
+    '下書きの理由',
+  );
+});
