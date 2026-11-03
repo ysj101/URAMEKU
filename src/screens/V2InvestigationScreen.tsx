@@ -46,7 +46,6 @@ function storeTab(caseId: string, tab: DeskTab) {
   }
 }
 
-/** 進捗ストリップに出す数字。すべて progress から導出する */
 function summarize(caseData: CaseData, progress: CaseProgress) {
   const v2 = caseData.v2;
   const tasks = v2?.decoding ?? [];
@@ -61,8 +60,6 @@ function summarize(caseData: CaseData, progress: CaseProgress) {
   const linkTarget =
     v2?.board?.tasks.length ?? (paths.length ? Math.min(...paths.map((path) => path.length)) : 0);
   return {
-    opened: progress.opened.length,
-    total: caseData.documents.length,
     answered,
     awaitingEvidence,
     tasks: tasks.length,
@@ -135,7 +132,6 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
     selectTab('decoding');
   };
   const reviews = decodingReviews(current, progress);
-  const firstReview = reviews[0];
   const firstDocument = current.documents[0];
   const pending = [
     summary.remainingTasks > 0
@@ -149,6 +145,93 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
       ? `${v2.board ? '文と証拠' : '関係'} あと ${summary.remainingLinks} 件`
       : null,
   ].filter(Boolean);
+
+  const nextReview = reviews.find((review) => !review.recorded || !review.grounded);
+  const nextBoard = boardReviews(current, progress).find((review) => !review.recorded);
+  const complete =
+    pending.length === 0 &&
+    (!v2.experiment || tabDone.experiment) &&
+    (!v2.decision || tabDone.decision);
+  const missingEvidence = nextReview?.evidence.find((id) => !progress.opened.includes(id));
+  const nextDocumentId =
+    complete || initialExperiment
+      ? undefined
+      : firstDocument && !progress.opened.includes(firstDocument.id)
+        ? firstDocument.id
+        : (missingEvidence ??
+          (!nextReview && !nextBoard
+            ? [
+                ...(v2.experiment?.revealDocuments ?? []),
+                ...(v2.decision?.revealDocuments ?? []),
+              ].find((id) => !progress.opened.includes(id))
+            : undefined));
+  const nextDocument = current.documents.find((doc) => doc.id === nextDocumentId);
+  // shown: 操作先がすでに画面のデスクに出ている。そのときはデスク側の操作を主役にする。
+  let next = {
+    text: '記録はそろいました。報告へ進めます。',
+    label: '調査報告をまとめる →',
+    run: () => game.setStage('article'),
+    shown: false,
+  };
+  if (
+    initialExperiment ||
+    (nextDocumentId && isDocumentSealed(current, progress, nextDocumentId))
+  ) {
+    const target = initialExperiment ? 'experiment' : 'decision';
+    next = {
+      text: 'まず、今ある情報で最初の判断を記録しましょう。',
+      label: initialExperiment ? 'ミニ実験を開く' : '意思決定を開く',
+      run: () => selectTab(target),
+      shown: initialExperiment || tab === target,
+    };
+  } else if (nextDocument) {
+    next = canOpenDocument(current, progress, nextDocument.id)
+      ? {
+          text: '資料を開いて、答えのもとになる情報を読みましょう。',
+          label: `${nextDocument.title}を開く`,
+          run: () => openDocument(nextDocument.id),
+          shown: false,
+        }
+      : {
+          text: '調査予算が足りません。最初から調べ直せます。',
+          label: 'この事件を最初からやり直す',
+          run: () => setConfirmReset(true),
+          shown: false,
+        };
+  } else if (nextReview) {
+    next = {
+      text: '答えを選んで記録し、下に出る資料をすべて読みましょう。',
+      label: `問${reviews.indexOf(nextReview) + 1}を開く`,
+      run: () => showQuestion(nextReview.taskId),
+      shown: tab === 'decoding' && activeTaskId === nextReview.taskId,
+    };
+  } else if (!tabDone.board && summary.linkTarget > 0) {
+    next = {
+      text: '文に証拠を添え、文をどう扱うか選んで記録しましょう。',
+      label: nextBoard ? `証拠ボード：${nextBoard.task.title}を開く` : '証拠ボードを開く',
+      run: () => {
+        setBoardTaskId(nextBoard?.task.id);
+        selectTab('board');
+      },
+      shown:
+        tab === 'board' &&
+        (!nextBoard || (boardTaskId ?? v2.board?.tasks[0]?.id) === nextBoard.task.id),
+    };
+  } else if (v2.experiment && !tabDone.experiment) {
+    next = {
+      text: '資料を読んだあとの判断を、ミニ実験に記録しましょう。',
+      label: 'ミニ実験を開く',
+      run: () => selectTab('experiment'),
+      shown: tab === 'experiment',
+    };
+  } else if (v2.decision && !tabDone.decision) {
+    next = {
+      text: '目的と資料をもとに、意思決定の判断を記録しましょう。',
+      label: '意思決定を開く',
+      run: () => selectTab('decision'),
+      shown: tab === 'decision',
+    };
+  }
 
   return (
     <div className="v2-workspace v2-desk-screen">
@@ -168,105 +251,17 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
         </span>
       </div>
 
-      <div className="v2-progress" aria-label="この事件の進捗">
-        <button type="button" className="v2-progress__tile" onClick={() => selectTab('decoding')}>
-          <span className="v2-progress__label">資料確認</span>
-          <span className="v2-progress__value">
-            {summary.opened}
-            <small> / {summary.total}</small>
-          </span>
-        </button>
+      <section className="v2-panel v2-next" aria-labelledby="v2-next-title">
+        <h2 id="v2-next-title">次にやること</h2>
+        <p>{next.text}</p>
         <button
           type="button"
-          className={`v2-progress__tile ${tabDone.decoding ? '' : 'is-pending'}`}
-          onClick={() => selectTab('decoding')}
+          className={`btn ${next.shown ? 'ghost' : 'primary'}`}
+          onClick={next.run}
         >
-          <span className="v2-progress__label">読み取り記録</span>
-          <span className="v2-progress__value">
-            {summary.answered}
-            <small> / {summary.tasks}</small>
-          </span>
-          {summary.remainingTasks > 0 && (
-            <span className="v2-progress__todo">
-              あと {summary.remainingTasks} 問
-              {summary.awaitingEvidence > 0 && `・未読の資料あり ${summary.awaitingEvidence}`}
-            </span>
-          )}
+          {next.label}
         </button>
-        <button
-          type="button"
-          className={`v2-progress__tile ${tabDone.board ? '' : 'is-pending'}`}
-          onClick={() => selectTab('board')}
-        >
-          <span className="v2-progress__label">{v2.board ? '文と証拠' : '資料の関係'}</span>
-          <span className="v2-progress__value">
-            {summary.links}
-            <small> 件</small>
-          </span>
-          {summary.linkTarget > 0 && (
-            <span className="v2-progress__todo">
-              {v2.board
-                ? `${summary.linkTarget} 件の文を確かめる`
-                : `${summary.linkTarget} 件以上が目安`}
-            </span>
-          )}
-        </button>
-      </div>
-
-      {current.id === 'case-01' && firstReview && firstDocument && (
-        <section className="v2-panel first-case-guide" aria-labelledby="first-case-guide-title">
-          <h2 id="first-case-guide-title">最初の事件で、遊び方を体験しよう</h2>
-          <ol>
-            <li aria-current={!progress.opened.includes(firstDocument.id) ? 'step' : undefined}>
-              資料を開いて読む。まずは「{firstDocument.title}」から。
-              <button
-                type="button"
-                className="btn ghost"
-                onClick={() => openDocument(firstDocument.id)}
-              >
-                {firstDocument.title}を開く
-              </button>
-            </li>
-            <li
-              aria-current={
-                progress.opened.includes(firstDocument.id) && !firstReview.grounded
-                  ? 'step'
-                  : undefined
-              }
-            >
-              問1の答えを選び、下に出る資料をすべて読む。答えは選ぶと記録されます。
-              <button
-                type="button"
-                className="btn ghost"
-                onClick={() => showQuestion(firstReview.taskId)}
-              >
-                問1を開く
-              </button>
-              {firstReview.grounded && (
-                <p>問1の回答と資料確認ができました。同じように、残りの問いも進めましょう。</p>
-              )}
-            </li>
-            <li aria-current={tabDone.decoding && !tabDone.board ? 'step' : undefined}>
-              「証拠ボード」で文に証拠を添え、文の扱いを選んで「文と証拠を記録」を押す。
-              <button type="button" className="btn ghost" onClick={() => selectTab('board')}>
-                証拠ボードを開く
-              </button>
-            </li>
-            <li aria-current={pending.length === 0 ? 'step' : undefined}>
-              下の一覧で残りを確かめたら、報告をまとめて提出する。提出すると答えと解説を確認できます。
-            </li>
-          </ol>
-          <p>「根拠あり」「記録あり」は操作が済んだ印です。正解かどうかは提出後に分かります。</p>
-        </section>
-      )}
-
-      <details className="v2-guide">
-        <summary>このステップの進め方</summary>
-        <p>
-          資料を読んで、主張がどこまで当てはまるか、どこから出た情報か、何が足りないかを確かめ、仮説を根拠で支えます。
-          反対のことを言う資料にも目を向けましょう。分からない点は、分からないままにして整理できます。予算が足りなくなったら、最初から調査し直せます。
-        </p>
-      </details>
+      </section>
 
       {blockedDocument && !canOpenDocument(current, progress, blockedDocument) && (
         <p className="notice" role="status">
@@ -287,7 +282,7 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
 
       {initialExperiment ? (
         <>
-          <section className="v2-panel">
+          <section className="v2-panel" id="v2-desk-panel">
             <ExperimentDesk key={resetEpoch} {...props} />
           </section>
           <p className="notice">
@@ -364,120 +359,138 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
       )}
 
       {!initialExperiment && (
-        <section className="v2-panel remaining-checklist" aria-labelledby="remaining-title">
-          <h2 id="remaining-title" tabIndex={-1}>
-            残っていること
-          </h2>
-          <p>
-            答えを選ぶことと、もとになる資料を読むことの両方が必要です。補足メモは書かなくてもかまいません。
-          </p>
-          {pending.length === 0 ? (
-            <p>記録はそろいました。報告へ進めます。</p>
-          ) : (
-            <ul>
-              {reviews
-                .filter((review) => !review.recorded || !review.grounded)
-                .map((review) => (
-                  <li key={review.taskId}>
+        <details className="v2-panel remaining-checklist">
+          <summary>残っていることの一覧</summary>
+          <section aria-labelledby="remaining-title">
+            <h2 id="remaining-title" tabIndex={-1}>
+              残っていること
+            </h2>
+            <p>{pending.join('・')}</p>
+            <p>
+              答えを選ぶことと、もとになる資料を読むことの両方が必要です。補足メモは書かなくてもかまいません。
+            </p>
+            {complete ? (
+              <p>記録はそろいました。報告へ進めます。</p>
+            ) : (
+              <ul>
+                {reviews
+                  .filter((review) => !review.recorded || !review.grounded)
+                  .map((review) => (
+                    <li key={review.taskId}>
+                      <button
+                        type="button"
+                        className="btn ghost"
+                        onClick={() => showQuestion(review.taskId)}
+                      >
+                        問{reviews.indexOf(review) + 1}：
+                        {v2.decoding.find((task) => task.id === review.taskId)?.prompt}
+                      </button>
+                      <span>
+                        {review.recorded
+                          ? '答えは記録済み。まだ読んでいない資料：'
+                          : 'まだ答えを選んでいません。'}
+                      </span>
+                      {review.evidence
+                        .filter((id) => !progress.opened.includes(id))
+                        .map((id) => (
+                          <button
+                            key={id}
+                            type="button"
+                            className="btn ghost"
+                            onClick={() => openDocument(id)}
+                          >
+                            {current.documents.find((doc) => doc.id === id)?.title}を開く
+                          </button>
+                        ))}
+                    </li>
+                  ))}
+                {boardReviews(current, progress)
+                  .filter((review) => !review.recorded)
+                  .map(({ task }) => (
+                    <li key={task.id}>
+                      <button
+                        type="button"
+                        className="btn ghost"
+                        onClick={() => {
+                          setBoardTaskId(task.id);
+                          selectTab('board');
+                        }}
+                      >
+                        証拠ボード：{task.title}（まだ記録していません）
+                      </button>
+                    </li>
+                  ))}
+                {!v2.board && summary.remainingLinks > 0 && (
+                  <li>
+                    <button type="button" className="btn ghost" onClick={() => selectTab('board')}>
+                      資料の関係を記録する
+                    </button>
+                  </li>
+                )}
+                {v2.experiment && !tabDone.experiment && (
+                  <li>
                     <button
                       type="button"
                       className="btn ghost"
-                      onClick={() => showQuestion(review.taskId)}
+                      onClick={() => selectTab('experiment')}
                     >
-                      問{reviews.indexOf(review) + 1}：
-                      {v2.decoding.find((task) => task.id === review.taskId)?.prompt}
+                      ミニ実験の判断を記録する
                     </button>
-                    <span>
-                      {review.recorded
-                        ? '答えは記録済み。まだ読んでいない資料：'
-                        : 'まだ答えを選んでいません。'}
-                    </span>
-                    {review.evidence
-                      .filter((id) => !progress.opened.includes(id))
-                      .map((id) => (
-                        <button
-                          key={id}
-                          type="button"
-                          className="btn ghost"
-                          onClick={() => openDocument(id)}
-                        >
-                          {current.documents.find((doc) => doc.id === id)?.title}を開く
-                        </button>
-                      ))}
                   </li>
-                ))}
-              {boardReviews(current, progress)
-                .filter((review) => !review.recorded)
-                .map(({ task }) => (
-                  <li key={task.id}>
+                )}
+                {v2.decision && !tabDone.decision && (
+                  <li>
                     <button
                       type="button"
                       className="btn ghost"
-                      onClick={() => {
-                        setBoardTaskId(task.id);
-                        selectTab('board');
-                      }}
+                      onClick={() => selectTab('decision')}
                     >
-                      証拠ボード：{task.title}（まだ記録していません）
+                      意思決定の判断を記録する
                     </button>
                   </li>
-                ))}
-              {!v2.board && summary.remainingLinks > 0 && (
-                <li>
-                  <button type="button" className="btn ghost" onClick={() => selectTab('board')}>
-                    資料の関係を記録する
-                  </button>
-                </li>
-              )}
-              {v2.experiment && !tabDone.experiment && (
-                <li>
-                  <button
-                    type="button"
-                    className="btn ghost"
-                    onClick={() => selectTab('experiment')}
-                  >
-                    ミニ実験の判断を記録する
-                  </button>
-                </li>
-              )}
-              {v2.decision && !tabDone.decision && (
-                <li>
-                  <button type="button" className="btn ghost" onClick={() => selectTab('decision')}>
-                    意思決定の判断を記録する
-                  </button>
-                </li>
-              )}
-            </ul>
-          )}
-        </section>
+                )}
+              </ul>
+            )}
+          </section>
+        </details>
       )}
 
-      <div className="stage-switch v2-actions">
-        <span className="v2-actions__status">
-          {pending.length
-            ? `報告の前に：${pending.join('・')}（記録しなくても進めます）`
-            : '記録はそろいました。報告へ進めます。'}
-        </span>
-        {pending.length > 0 && !initialExperiment && (
-          <button
-            type="button"
-            className="btn ghost"
-            onClick={() => {
-              const heading = document.getElementById('remaining-title');
-              heading?.focus({ preventScroll: true });
-              heading?.scrollIntoView({ block: 'center' });
-            }}
-          >
-            残りを確認
+      {/* 記録がそろうと「次にやること」カードが報告ボタンになるので、ここは未完了のときだけ出す。 */}
+      {!complete && (
+        <div className="stage-switch v2-actions">
+          <span>記録しなくても進めます。</span>
+          <button type="button" className="btn ghost" onClick={() => game.setStage('article')}>
+            調査報告をまとめる →
           </button>
+        </div>
+      )}
+
+      <details className="v2-guide">
+        <summary>遊び方</summary>
+        {current.id === 'case-01' && (
+          <section className="first-case-guide" aria-labelledby="first-case-guide-title">
+            <h2 id="first-case-guide-title">最初の事件で、遊び方を体験しよう</h2>
+            <ol>
+              <li>資料を開いて読む。まずは「{firstDocument?.title}」から。</li>
+              <li>問いの答えを選び、下に出る資料をすべて読む。答えは選ぶと記録されます。</li>
+              <li>「証拠ボード」で文に証拠を添える。文の扱いを選び、「文と証拠を記録」を押す。</li>
+              <li>
+                残りを確かめたら、報告をまとめて提出する。提出すると答えと解説を確認できます。
+              </li>
+            </ol>
+            <p>「根拠あり」「記録あり」は操作が済んだ印です。正解かどうかは提出後に分かります。</p>
+          </section>
         )}
+        <p>資料を読んで、主張がどこまで当てはまるか、情報がどこから出たのかを確かめましょう。</p>
+        <p>何が足りないかを確かめ、仮説を根拠で支えましょう。</p>
+        <p>
+          反対のことを言う資料にも目を向けましょう。分からない点は分からないままにして整理できます。
+        </p>
+        <p>予算が足りなくなったら、最初から調査し直せます。</p>
         <button type="button" className="btn ghost" onClick={() => setConfirmReset(true)}>
           この事件を最初から
         </button>
-        <button type="button" className="btn primary" onClick={() => game.setStage('article')}>
-          調査報告をまとめる →
-        </button>
-      </div>
+      </details>
 
       {confirmReset && (
         <section
