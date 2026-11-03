@@ -68,3 +68,39 @@ it('validates claim-board quotes, fields and alternative rules in both browser a
     expect(cliErrors(copy).length).toBeGreaterThan(0);
   }
 });
+
+it('validates optional experiment copy and column links in browser and CLI', async () => {
+  const { V2_CONTENT_CASES } = await import('../test/v2ContentCases');
+  const base = V2_CONTENT_CASES[1]!;
+  expect(validateCase(base).errors).toEqual([]);
+  expect(cliErrors(base)).toEqual([]);
+  const mutations: ((c: typeof base) => void)[] = [
+    (c) => { c.v2!.experiment!.scenario = ''; },
+    (c) => { c.v2!.experiment!.ui!.initialLegend = ''; },
+    ...['unknownLabel', 'initialSubmit', 'readNext', 'continueLabel', 'initialNotice'].map(
+      (key) => (c: typeof base) => { Object.assign(c.v2!.experiment!.ui!, { [key]: 'removed' }); },
+    ),
+    (c) => { c.v2!.experiment!.column!.paragraphs = []; },
+    (c) => { c.v2!.experiment!.column!.sources[0]!.url = 'javascript:alert(1)'; },
+    (c) => { c.v2!.experiment!.column!.sources[0]!.label = ''; },
+  ];
+  for (const mutate of mutations) {
+    const copy = structuredClone(base);
+    mutate(copy);
+    expect(validateCase(copy).ok).toBe(false);
+    expect(cliErrors(copy).length).toBeGreaterThan(0);
+  }
+});
+
+it('accepts experiment definitions without optional content or with partial UI copy', async () => {
+  const { V2_CONTENT_CASES } = await import('../test/v2ContentCases');
+  const copy = structuredClone(V2_CONTENT_CASES[1]!);
+  delete copy.v2!.experiment!.scenario;
+  delete copy.v2!.experiment!.ui;
+  delete copy.v2!.experiment!.column;
+  expect(validateCase(copy).errors).toEqual([]);
+  expect(cliErrors(copy)).toEqual([]);
+  copy.v2!.experiment!.ui = { comparisonSubmit: '選択を記録する' };
+  expect(validateCase(copy).errors).toEqual([]);
+  expect(cliErrors(copy)).toEqual([]);
+});

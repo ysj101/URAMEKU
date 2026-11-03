@@ -1,11 +1,13 @@
 ---
 name: verify-urameku
-description: ウラメクのWeb UIをPlaywrightで操作し、CASE00の直感で選ぶ体験、種明かし、事件調査と画面幅を検証する。
+description: ウラメクのWeb UIをPlaywrightで操作し、CASE00の直感で選ぶ体験、種明かし、CASE02のミニ実験、事件調査と画面幅を検証する。
 ---
 
 # ウラメクのUI検証
 
 2026-11-03に、以下の手順でCASE00を `CI=1 npm run test:e2e`（chromium・mobile-chromium 94件成功）と画像保存まで通した。サンドボックスでChromiumを起動できない環境では、サンドボックス外で実行する。
+
+CASE02の追加経路は [ミニ実験](features/case02-experiment.md) を参照する。CASE02のブラウザー検証と画像保存はサンドボックス外での実行待ち。このブランチで実測した成功結果として扱わない。
 
 ## Launch
 
@@ -39,11 +41,24 @@ URAMEKU_HOOK_SHOTS="/tmp/urameku-case00-shots" npm run test:e2e -- e2e/case00.sp
 CI=1 npm run test:e2e
 ```
 
+CASE02は以下の専用テストを使う。
+
+```sh
+URAMEKU_SHOTS="/tmp/urameku-case02-shots" npm run test:e2e -- e2e/case02-experiment.spec.ts --project=chromium --workers=2
+CI=1 npm run test:e2e
+```
+
 ## Evidence
 
 テストは1280x800、390x844と既存の320px文字200%を確認する。画像は指定ディレクトリのプロジェクト名・選択経路ごとのフォルダーに保存する。`01-scenario`、`02-first-choice-made`、`03-menu-changed`、`04-reveal`、`05-docs`、`06-report`、`07-debrief-column` に画面寸法を付ける。`04-reveal` は選択後の種明かしを記録し、資料や報告の画像とは保存順が異なる。
 
 画像はfullPageで保存する。文字の矩形、祖先のoverflowによる切れ、各段階に主ボタンが1つあることをテストし、画像でも次に押す場所を確認する。結果はリポジトリ外の検証ログに残す。
+
+CASE02は1280x800と390x844でA/Bを検証する。画像はリポジトリ外の指定先にプロジェクト名のフォルダーを作り、条件と画面寸法を付けてfullPageで保存する。`01-experiment-start`、`02-initial-choice-made`、`03-compare`、`04-final-column` を残す。
+
+テストは実際のボタンで選び、資料を開いて読み、比較後の理由を記録する。保存後のreloadでもコラムが残ることを確認する。Aだけは選択前の空の保存状態を作り、初期条件IDを検証用ストレージで指定する。回答、読了、完了状態は注入しない。Bは通常の固定割当を使う。
+
+各段階で主ボタンを1つ確認し、文字の矩形と祖先のoverflowを調べる。画像でも文字の欠けと次に押す場所を確認する。ブラウザーを起動できない場合は、テストの準備済みと実行成功を区別して報告する。
 
 ## Cleanup
 

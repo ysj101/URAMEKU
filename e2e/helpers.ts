@@ -173,14 +173,16 @@ export async function prepareV2Case(
       v.experiment.choices[0]!;
     await showDesk(page, '見え方のミニ実験');
     const group = page.getByRole('group', {
-      name: '比較後の判断（変わらなくても構いません）',
+      name: v.experiment.ui?.comparisonLegend ?? '比較後の判断（変わらなくても構いません）',
       exact: true,
     });
     await group.getByRole('radio', { name: choice.text, exact: true }).check();
     await group
-      .getByRole('textbox', { name: '維持・変更した理由' })
+      .getByRole('textbox', { name: v.experiment.ui?.reasonLabel ?? '維持・変更した理由' })
       .fill('開示された情報の範囲と比較条件を確認し、この判断を維持する。');
-    await group.getByRole('button', { name: '比較後の判断を記録' }).click();
+    await group
+      .getByRole('button', { name: v.experiment.ui?.comparisonSubmit ?? '比較後の判断を記録' })
+      .click();
   }
   for (const { task, option } of selections) {
     const group = await openTask(page, task.prompt);

@@ -87,29 +87,37 @@ test('実験は初回表示を固定し、保留から判断を変えても途�
   const initial = definition.choices.find((choice) => choice.id === 'hold')!;
   const updated = definition.choices.find((choice) => choice.id !== initial.id)!;
   await desk.getByRole('button', { name: initial.text, exact: true }).click();
-  await expect(desk.getByRole('textbox', { name: '維持・変更した理由' })).toHaveCount(0);
+  await expect(desk.getByRole('textbox', { name: definition.ui!.reasonLabel! })).toHaveCount(0);
   await expect
     .poll(() => page.evaluate((key) => localStorage.getItem(key), storageKey))
     .toContain('"initialChoice":"hold"');
   await page.reload();
   await showDesk(page, '見え方のミニ実験');
-  await expect(desk.getByText(`最初の判断：${initial.text}`, { exact: true })).toBeVisible();
+  await expect(
+    desk.getByText(`${definition.ui!.initialLabel}${initial.text}`, { exact: true }),
+  ).toBeVisible();
   for (const id of definition.revealDocuments) {
     await openAndRead(page, c.documents.find((document) => document.id === id)!.title);
   }
   await showDesk(page, '見え方のミニ実験');
   await desk.getByRole('radio', { name: updated.text, exact: true }).check();
   const reason = '比較情報を確認して、用途と条件を見直した。';
-  await desk.getByRole('textbox', { name: '維持・変更した理由' }).fill(reason);
-  await desk.getByRole('button', { name: '比較後の判断を記録', exact: true }).click();
-  await expect(desk.getByText(`比較後の判断：${updated.text}`, { exact: true })).toBeVisible();
+  await desk.getByRole('textbox', { name: definition.ui!.reasonLabel! }).fill(reason);
+  await desk.getByRole('button', { name: definition.ui!.comparisonSubmit!, exact: true }).click();
+  await expect(
+    desk.getByText(`${definition.ui!.updatedLabel}${updated.text}`, { exact: true }),
+  ).toBeVisible();
   await expect
     .poll(() => page.evaluate((key) => localStorage.getItem(key), storageKey))
     .toContain(reason);
   await page.reload();
   await showDesk(page, '見え方のミニ実験');
-  await expect(desk.getByText(`最初の判断：${initial.text}`, { exact: true })).toBeVisible();
-  await expect(desk.getByText(`比較後の判断：${updated.text}`, { exact: true })).toBeVisible();
+  await expect(
+    desk.getByText(`${definition.ui!.initialLabel}${initial.text}`, { exact: true }),
+  ).toBeVisible();
+  await expect(
+    desk.getByText(`${definition.ui!.updatedLabel}${updated.text}`, { exact: true }),
+  ).toBeVisible();
   await expect(desk.getByText(reason, { exact: true })).toBeVisible();
 });
 

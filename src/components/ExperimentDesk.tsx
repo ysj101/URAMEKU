@@ -14,6 +14,7 @@ export function ExperimentDesk({ caseData, progress, onAction }: V2DeskProps) {
   const [choice, setChoice] = useState('');
   const [reason, setReason] = useState('');
   if (!definition) return null;
+  const ui = definition.ui;
   const initial = !record?.initialChoice;
   const condition = experimentCondition(
     definition,
@@ -27,12 +28,13 @@ export function ExperimentDesk({ caseData, progress, onAction }: V2DeskProps) {
     <section className="v2-desk" aria-label="見え方のミニ実験">
       <h2 className="section-title">見え方のミニ実験</h2>
       <p>{definition.prompt}</p>
+      {definition.scenario && <p>{definition.scenario}</p>}
       {initial ? (
         <div>
           <h3>{condition?.label}</h3>
           <p>{condition?.prompt}</p>
           <fieldset disabled={progress.published}>
-            <legend>今ある情報での判断</legend>
+            <legend>{ui?.initialLegend ?? '今ある情報での判断'}</legend>
             {definition.choices.map((candidate) => (
               <button
                 key={candidate.id}
@@ -48,12 +50,13 @@ export function ExperimentDesk({ caseData, progress, onAction }: V2DeskProps) {
       ) : (
         <>
           <p>
-            <strong>最初の判断：</strong>
+            <strong>{ui?.initialLabel ?? '最初の判断：'}</strong>
             {compared?.initial}
           </p>
           {!canCompare && (
             <p role="status">
-              ここからは比べる段階です。新しく開けるようになった調査資料を読んでから、もう一度判断してください。
+              {ui?.waiting ??
+                'ここからは比べる段階です。新しく開けるようになった調査資料を読んでから、もう一度判断してください。'}
             </p>
           )}
           {canCompare && !finished && (
@@ -64,7 +67,7 @@ export function ExperimentDesk({ caseData, progress, onAction }: V2DeskProps) {
                   onAction({ type: 'v2-experiment-update', choiceId: choice, reason });
               }}
             >
-              <h3>提示条件を比べる</h3>
+              <h3>{ui?.comparisonTitle ?? '提示条件を比べる'}</h3>
               <ul>
                 {definition.conditions.map((candidate) => (
                   <li key={candidate.id}>
@@ -75,7 +78,9 @@ export function ExperimentDesk({ caseData, progress, onAction }: V2DeskProps) {
               </ul>
               <p>{definition.comparisonPrompt}</p>
               <fieldset disabled={progress.published}>
-                <legend>比較後の判断（変わらなくても構いません）</legend>
+                <legend>
+                  {ui?.comparisonLegend ?? '比較後の判断（変わらなくても構いません）'}
+                </legend>
                 {definition.choices.map((candidate) => (
                   <label key={candidate.id}>
                     <input
@@ -87,7 +92,9 @@ export function ExperimentDesk({ caseData, progress, onAction }: V2DeskProps) {
                     {candidate.text}
                   </label>
                 ))}
-                <label htmlFor={`experiment-reason-${definition.id}`}>維持・変更した理由</label>
+                <label htmlFor={`experiment-reason-${definition.id}`}>
+                  {ui?.reasonLabel ?? '維持・変更した理由'}
+                </label>
                 <textarea
                   id={`experiment-reason-${definition.id}`}
                   value={reason}
@@ -96,27 +103,49 @@ export function ExperimentDesk({ caseData, progress, onAction }: V2DeskProps) {
                   required
                 />
                 <button className="btn primary" type="submit" disabled={!choice || !reason.trim()}>
-                  比較後の判断を記録
+                  {ui?.comparisonSubmit ?? '比較後の判断を記録'}
                 </button>
               </fieldset>
             </form>
           )}
           {finished && (
-            <div role="status">
-              <p>
-                <strong>比較後の判断：</strong>
-                {compared?.updated}
-              </p>
-              <p>{record.reason}</p>
-              <p>
-                最初の判断と、比べたあとの判断を記録しました。反応の違いに、正解・不正解は付けません。
-              </p>
-            </div>
+            <>
+              <div role="status">
+                <p>
+                  <strong>{ui?.updatedLabel ?? '比較後の判断：'}</strong>
+                  {compared?.updated}
+                </p>
+                <p>{record.reason}</p>
+                <p>
+                  {ui?.complete ??
+                    '最初の判断と、比べたあとの判断を記録しました。反応の違いに、正解・不正解は付けません。'}
+                </p>
+              </div>
+              {definition.column && (
+                <aside aria-label={definition.column.title}>
+                  <p>{definition.explanation}</p>
+                  <h3>{definition.column.title}</h3>
+                  {definition.column.paragraphs.map((paragraph) => (
+                    <p key={paragraph}>{paragraph}</p>
+                  ))}
+                  <ul>
+                    {definition.column.sources.map((source) => (
+                      <li key={source.url}>
+                        <a href={source.url} target="_blank" rel="noreferrer">
+                          {source.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </aside>
+              )}
+            </>
           )}
         </>
       )}
       <p className="fine">
-        これは、情報の見え方をふり返るための小さな体験です。一度の反応だけで、その人の特徴を決めつけることはしません。記録はこの端末に保存します。
+        {ui?.privacy ??
+          'これは、情報の見え方をふり返るための小さな体験です。一度の反応だけで、その人の特徴を決めつけることはしません。記録はこの端末に保存します。'}
       </p>
     </section>
   );
