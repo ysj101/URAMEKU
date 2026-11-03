@@ -21,7 +21,7 @@ describe('App', () => {
     render(<App />);
     await userEvent.click(screen.getByRole('button', { name: '調査をはじめる' }));
     expect(window.location.hash).toBe('#/tutorial');
-    expect(screen.getByRole('heading', { name: '消えたMサイズ' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: '映画の前に、ひと休み' })).toBeInTheDocument();
   });
 
   it('練習が完了していれば、通常事件の記録がなくてもCASE01を開く', async () => {

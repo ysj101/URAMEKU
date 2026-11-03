@@ -31,7 +31,8 @@ export function TutorialScreen({ nav, game, storage }: TutorialScreenProps) {
   const answer = case00.options.find((option) => option.id === answerId);
   const evidence = case00.excerpts.find((excerpt) => excerpt.id === evidenceId);
   const documentTitle = (id: string) => case00.documents.find((doc) => doc.id === id)?.title;
-  const allRead = case00.documents.every((doc) => opened.includes(doc.id));
+  const nextDocument = case00.documents.find((doc) => !opened.includes(doc.id));
+  const allRead = !nextDocument;
   const openDocument = case00.documents.find((doc) => doc.id === openId);
 
   const initialItem = case00.experiment.items.find((item) => item.id === initialChoice);
@@ -59,7 +60,7 @@ export function TutorialScreen({ nav, game, storage }: TutorialScreenProps) {
       </div>
       <header className="case00-intro">
         <p className="edition">CASE 00 / はじめての調査 / 約3分</p>
-        <h2>{case00.title}</h2>
+        <h2>{step === -2 ? case00.openingTitle : case00.title}</h2>
         {step < 0 && <p>{case00.lead}</p>}
       </header>
       <p className="case00-step-count" aria-label="練習の進み具合">
@@ -109,7 +110,7 @@ export function TutorialScreen({ nav, game, storage }: TutorialScreenProps) {
               disabled={!(step === -2 ? initialChoice : updatedChoice)}
               onClick={() => setStep(step + 1)}
             >
-              {step === -2 ? 'このサイズにする →' : '選んで資料を調べる →'}
+              {step === -2 ? 'これにする →' : '資料を開く →'}
             </button>
           </>
         )}
@@ -123,7 +124,7 @@ export function TutorialScreen({ nav, game, storage }: TutorialScreenProps) {
                 <button
                   key={doc.id}
                   type="button"
-                  className="case00-document"
+                  className={`case00-document${doc.id === nextDocument?.id ? ' btn primary' : ''}`}
                   aria-expanded={openId === doc.id}
                   aria-controls="practice-document"
                   onClick={() => {
@@ -153,14 +154,11 @@ export function TutorialScreen({ nav, game, storage }: TutorialScreenProps) {
               資料確認 {opened.length} / {case00.documents.length}
               {allRead ? '枚。答えに進めます。' : '枚。2枚とも開こう。'}
             </p>
-            <button
-              type="button"
-              className="btn primary"
-              disabled={!allRead}
-              onClick={() => setStep(1)}
-            >
-              答えを選ぶ →
-            </button>
+            {allRead && (
+              <button type="button" className="btn primary" onClick={() => setStep(1)}>
+                答えを選ぶ →
+              </button>
+            )}
           </>
         )}
         {step === 1 && (
@@ -243,7 +241,7 @@ export function TutorialScreen({ nav, game, storage }: TutorialScreenProps) {
                   setStep(3);
                 }}
               >
-                報告を提出して振り返る
+                報告する →
               </button>
             </div>
           </>
@@ -318,6 +316,21 @@ export function TutorialScreen({ nav, game, storage }: TutorialScreenProps) {
                 </button>
               </details>
             </section>
+            <section className="case00-source" aria-label={case00.column.title}>
+              <h3>{case00.column.title}</h3>
+              {case00.column.paragraphs.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+              <ul>
+                {case00.column.sources.map((source) => (
+                  <li key={source.url}>
+                    <a href={source.url} target="_blank" rel="noreferrer">
+                      {source.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
             <div className="tutorial-controls">
               <button type="button" className="btn ghost" onClick={() => setStep(1)}>
                 もう一度答える
@@ -330,7 +343,7 @@ export function TutorialScreen({ nav, game, storage }: TutorialScreenProps) {
                   nav.navigate({ screen: 'play', caseId: FIRST_CASE_ID });
                 }}
               >
-                CASE 01 を始める
+                本編へ進む →
               </button>
             </div>
           </>
