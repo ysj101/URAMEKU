@@ -1,17 +1,36 @@
-import { useState } from 'react';
 import { decisionComparisonAvailable, decisionOutcome } from '../domain/decision';
 import type { V2DeskProps } from './InformationDesk';
+import { MissingList, RequiredMark } from './RequiredMark';
+import { useDraft } from './useDraft';
 import '../app/screens/v2.css';
+
+interface DecisionDraft {
+  objectiveId: string;
+  optionId: string;
+  reason: string;
+  assumptions: string;
+  evidence: string[];
+  counterEvidence: string[];
+}
+const emptyDraft = (): DecisionDraft => ({
+  objectiveId: '',
+  optionId: '',
+  reason: '',
+  assumptions: '',
+  evidence: [],
+  counterEvidence: [],
+});
 
 export function DecisionDesk({ caseData, progress, onAction }: V2DeskProps) {
   const definition = caseData.v2?.decision;
   const records = progress.v2?.decisions ?? [];
-  const [objectiveId, setObjectiveId] = useState('');
-  const [optionId, setOptionId] = useState('');
-  const [reason, setReason] = useState('');
-  const [assumptions, setAssumptions] = useState('');
-  const [evidence, setEvidence] = useState<string[]>([]);
-  const [counterEvidence, setCounterEvidence] = useState<string[]>([]);
+  // 記録前の入力は下書きとして残す（タブを切り替えても消えない）。判断ごとに別の下書き
+  const [draft, setDraft, clearDraft] = useDraft<DecisionDraft>(
+    `decision:${caseData.id}:${records.length}`,
+    emptyDraft,
+  );
+  const { objectiveId, optionId, reason, assumptions, evidence, counterEvidence } = draft;
+  const patch = (next: Partial<DecisionDraft>) => setDraft((prev) => ({ ...prev, ...next }));
   if (!definition) return null;
   const documents = caseData.documents.filter((document) => progress.opened.includes(document.id));
   const comparisonAvailable = decisionComparisonAvailable(caseData, progress);
@@ -23,16 +42,19 @@ export function DecisionDesk({ caseData, progress, onAction }: V2DeskProps) {
   const selectedCounterEvidence = counterEvidence.filter((id) =>
     documents.some((document) => document.id === id),
   );
-  const valid = Boolean(
-    definition.objectives.some((objective) => objective.id === objectiveId) &&
-    definition.options.some(
+  // 足りない必須項目。空なら記録できる
+  const missing = [
+    !definition.objectives.some((objective) => objective.id === objectiveId) && '優先する目的',
+    !definition.options.some(
       (option) => option.id === optionId && option.cost <= definition.resources,
-    ) &&
-    reason.trim() &&
-    assumptions.trim() &&
-    selectedEvidence.length &&
-    selectedCounterEvidence.length,
-  );
+    ) && '方針',
+    !selectedEvidence.length && '方針を支える資料',
+    !selectedCounterEvidence.length && '反対の見方・制約を示す資料',
+    !assumptions.trim() && '前提・不確実な点',
+    !reason.trim() && '選択理由',
+  ].filter((item): item is string => Boolean(item));
+  const valid = missing.length === 0;
+  const dirty = JSON.stringify(draft) !== JSON.stringify(emptyDraft());
   const toggle = (ids: string[], id: string, checked: boolean) =>
     checked ? [...ids, id] : ids.filter((source) => source !== id);
   return (
@@ -80,18 +102,20 @@ export function DecisionDesk({ caseData, progress, onAction }: V2DeskProps) {
                 counterEvidence: selectedCounterEvidence,
               },
             });
-            setReason('');
-            setAssumptions('');
+            clearDraft();
           }}
         >
           {records.length > 0 && <p>{definition.updatePrompt}</p>}
           <fieldset disabled={progress.published}>
             <legend>{records.length ? '追加情報を踏まえた判断' : '現在の情報での判断'}</legend>
-            <label htmlFor="decision-objective">優先する目的</label>
+            <label htmlFor="decision-objective">
+              優先する目的
+              <RequiredMark />
+            </label>
             <select
               id="decision-objective"
               value={objectiveId}
-              onChange={(event) => setObjectiveId(event.target.value)}
+              onChange={(event) => patch({ objectiveId: event.target.value })}
               required
             >
               <option value="">目的を選択</option>
@@ -102,14 +126,17 @@ export function DecisionDesk({ caseData, progress, onAction }: V2DeskProps) {
               ))}
             </select>
             <fieldset>
-              <legend>方針（どれを選んでも、合っている・まちがっているは付けません）</legend>
+              <legend>
+                方針（どれを選んでも、合っている・まちがっているは付けません）
+                <RequiredMark />
+              </legend>
               {definition.options.map((option) => (
                 <label key={option.id}>
                   <input
                     type="radio"
                     name="decision-option"
                     checked={optionId === option.id}
-                    onChange={() => setOptionId(option.id)}
+                    onChange={() => patch({ optionId: option.id })}
                     disabled={option.cost > definition.resources}
                   />
                   {option.text}（必要資源 {option.cost}
@@ -119,7 +146,10 @@ export function DecisionDesk({ caseData, progress, onAction }: V2DeskProps) {
             </fieldset>
             <div className="v2-desk__columns">
               <fieldset>
-                <legend>方針を支える資料</legend>
+                <legend>
+                  方針を支える資料
+                  <RequiredMark />
+                </legend>
                 {documents.map((document) => (
                   <label key={document.id}>
                     <input
@@ -127,7 +157,7 @@ export function DecisionDesk({ caseData, progress, onAction }: V2DeskProps) {
                       checked={evidence.includes(document.id)}
                       disabled={counterEvidence.includes(document.id)}
                       onChange={(event) =>
-                        setEvidence(toggle(evidence, document.id, event.target.checked))
+                        patch({ evidence: toggle(evidence, document.id, event.target.checked) })
                       }
                     />
                     {document.title}
@@ -135,7 +165,10 @@ export function DecisionDesk({ caseData, progress, onAction }: V2DeskProps) {
                 ))}
               </fieldset>
               <fieldset>
-                <legend>反対の見方・制約を示す資料</legend>
+                <legend>
+                  反対の見方・制約を示す資料
+                  <RequiredMark />
+                </legend>
                 {documents.map((document) => (
                   <label key={document.id}>
                     <input
@@ -143,9 +176,13 @@ export function DecisionDesk({ caseData, progress, onAction }: V2DeskProps) {
                       checked={counterEvidence.includes(document.id)}
                       disabled={evidence.includes(document.id)}
                       onChange={(event) =>
-                        setCounterEvidence(
-                          toggle(counterEvidence, document.id, event.target.checked),
-                        )
+                        patch({
+                          counterEvidence: toggle(
+                            counterEvidence,
+                            document.id,
+                            event.target.checked,
+                          ),
+                        })
                       }
                     />
                     {document.title}
@@ -154,22 +191,34 @@ export function DecisionDesk({ caseData, progress, onAction }: V2DeskProps) {
               </fieldset>
             </div>
             {documents.length < 2 && <p>ちがう資料を 2 件以上読んでください。</p>}
-            <label htmlFor="decision-assumptions">この判断が成り立つ前提・不確実な点</label>
+            <label htmlFor="decision-assumptions">
+              この判断が成り立つ前提・不確実な点
+              <RequiredMark />
+            </label>
             <textarea
               id="decision-assumptions"
               value={assumptions}
-              onChange={(event) => setAssumptions(event.target.value)}
+              onChange={(event) => patch({ assumptions: event.target.value })}
               maxLength={2000}
               required
             />
-            <label htmlFor="decision-reason">目的と根拠を踏まえた選択理由</label>
+            <label htmlFor="decision-reason">
+              目的と根拠を踏まえた選択理由
+              <RequiredMark />
+            </label>
             <textarea
               id="decision-reason"
               value={reason}
-              onChange={(event) => setReason(event.target.value)}
+              onChange={(event) => patch({ reason: event.target.value })}
               maxLength={2000}
               required
             />
+            <MissingList items={missing} />
+            {dirty && !valid && (
+              <p className="fine">
+                入力はまだ記録していません。この端末に下書きとして残しています。
+              </p>
+            )}
             <button type="submit" className="btn primary" disabled={!valid}>
               判断を記録
             </button>

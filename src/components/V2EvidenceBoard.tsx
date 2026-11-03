@@ -3,6 +3,7 @@ import type { V2BoardDisposition, V2BoardRecord, V2BoardTask } from '../domain/t
 import { BOARD_DISPOSITIONS, boardReviews, boardStatement } from '../domain/board';
 import type { V2DeskProps } from './InformationDesk';
 import { LegacyV2EvidenceBoard } from './LegacyV2EvidenceBoard';
+import { useDraft } from './useDraft';
 
 type BoardProps = V2DeskProps & {
   activeTaskId?: string;
@@ -68,12 +69,23 @@ function ClaimBoard({ caseData, progress, onAction, activeTaskId, onSelectTask }
 function BoardEditor({ task, caseData, progress, onAction }: V2DeskProps & { task: V2BoardTask }) {
   const board = caseData.v2!.board!;
   const saved = progress.v2?.board?.[task.id];
-  const [values, setValues] = useState<Record<string, string>>(
-    () =>
+  // 記録前の変更は下書きとして残す（タブを切り替えても消えない）
+  const [draft, setDraft, , forgetDraft] = useDraft<{
+    values: Record<string, string>;
+    evidence: string[];
+    disposition: V2BoardDisposition | '';
+  }>(`board:${caseData.id}:${task.id}`, () => ({
+    values:
       saved?.values ?? Object.fromEntries(task.fields.map((field) => [field.id, field.original])),
-  );
-  const [evidence, setEvidence] = useState<string[]>(saved?.evidence ?? []);
-  const [disposition, setDisposition] = useState<V2BoardDisposition | ''>(saved?.disposition ?? '');
+    evidence: saved?.evidence ?? [],
+    disposition: saved?.disposition ?? '',
+  }));
+  const { values, evidence, disposition } = draft;
+  const setValues = (next: Record<string, string>) =>
+    setDraft((prev) => ({ ...prev, values: next }));
+  const setEvidence = (next: string[]) => setDraft((prev) => ({ ...prev, evidence: next }));
+  const setDisposition = (next: V2BoardDisposition | '') =>
+    setDraft((prev) => ({ ...prev, disposition: next }));
   const [fieldId, setFieldId] = useState<string | null>(null);
   const field = task.fields.find((entry) => entry.id === fieldId);
   const record = { values, evidence, disposition };
@@ -89,8 +101,10 @@ function BoardEditor({ task, caseData, progress, onAction }: V2DeskProps & { tas
       className="claim-board__editor"
       onSubmit={(event) => {
         event.preventDefault();
-        if (evidence.length && disposition)
+        if (evidence.length && disposition) {
           onAction({ type: 'v2-board', taskId: task.id, record: record as V2BoardRecord });
+          forgetDraft(); // 記録した内容は画面に残し、下書きの保存だけ消す
+        }
       }}
     >
       <fieldset disabled={progress.published}>
