@@ -342,6 +342,7 @@ function renderV2(c) {
       '### 心理実験: 初回 → 比較 → 更新',
       '',
       e.prompt,
+      ...(e.scenario ? ['', e.scenario] : []),
       '',
       '| 条件 | 提示 |',
       '| --- | --- |',
@@ -356,6 +357,15 @@ function renderV2(c) {
       `- 限界・解説: ${e.explanation}`,
       '- 初回と更新後の両反応を保存し、判断維持・変更のどちらでも比較を完了できる。一回の反応から個人特性を判定しない。',
     );
+    if (e.column)
+      L.push(
+        '',
+        `#### ${e.column.title}`,
+        '',
+        ...e.column.paragraphs,
+        '',
+        ...e.column.sources.map((source) => `- [${source.label}](${source.url})`),
+      );
   }
   if (v2.decision) {
     const d = v2.decision;

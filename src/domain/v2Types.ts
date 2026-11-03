@@ -46,7 +46,22 @@ export interface V2Board {
   excerpts: { id: string; documentId: string; quote: string }[];
   tasks: V2BoardTask[];
 }
+export interface V2ExperimentUI {
+  initialLegend?: string;
+  initialLabel?: string;
+  waiting?: string;
+  comparisonTitle?: string;
+  comparisonLegend?: string;
+  reasonLabel?: string;
+  comparisonSubmit?: string;
+  updatedLabel?: string;
+  complete?: string;
+  privacy?: string;
+}
 export interface V2Experiment {
+  scenario?: string;
+  ui?: V2ExperimentUI;
+  column?: { title: string; paragraphs: string[]; sources: { label: string; url: string }[] };
   id: string;
   prompt: string;
   conditions: { id: string; label: string; prompt: string }[];

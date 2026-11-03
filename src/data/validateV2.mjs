@@ -89,8 +89,22 @@ export function validateV2(raw) {
   if(v.experiment){
     const e=v.experiment,p='v2.experiment';
     if(!modes.includes('experiment'))fail(p,'方式指定が必要です');
-    if(keys(e,p,['id','prompt','conditions','choices','revealDocuments','comparisonPrompt','explanation'])){
+    if(keys(e,p,['id','prompt','conditions','choices','revealDocuments','comparisonPrompt','explanation'],['scenario','ui','column'])){
       id(e.id,`${p}.id`);['prompt','comparisonPrompt','explanation'].forEach(k=>text(e[k],`${p}.${k}`));
+      if ('scenario' in e) text(e.scenario, `${p}.scenario`);
+      if ('ui' in e && keys(e.ui, `${p}.ui`, [], ["initialLegend", "initialLabel", "waiting", "comparisonTitle", "comparisonLegend", "reasonLabel", "comparisonSubmit", "updatedLabel", "complete", "privacy"])) {
+        Object.entries(e.ui).forEach(([key, value]) => text(value, `${p}.ui.${key}`));
+      }
+      if ('column' in e && keys(e.column, `${p}.column`, ['title', 'paragraphs', 'sources'])) {
+        text(e.column.title, `${p}.column.title`);
+        list(e.column.paragraphs, `${p}.column.paragraphs`, 1, 10).forEach((value, i) => text(value, `${p}.column.paragraphs[${i}]`));
+        list(e.column.sources, `${p}.column.sources`, 1, 10).forEach((source, i) => {
+          const sp = `${p}.column.sources[${i}]`;
+          if (!keys(source, sp, ['label', 'url'])) return;
+          text(source.label, `${sp}.label`);
+          if (typeof source.url !== 'string' || source.url.length > 2000 || !/^https:\/\/[^\s]+$/.test(source.url)) fail(`${sp}.url`, 'httpsのURLが必要です');
+        });
+      }
       choiceList(e.choices,`${p}.choices`);const ids=[];
       list(e.conditions,`${p}.conditions`,1,10).forEach((c,i)=>{if(!keys(c,`${p}.conditions[${i}]`,['id','label','prompt']))return;id(c.id,`${p}.conditions[${i}].id`);text(c.label,`${p}.conditions[${i}].label`);text(c.prompt,`${p}.conditions[${i}].prompt`);ids.push(c.id);});unique(ids,`${p}.conditions`);
       refs(e.revealDocuments,`${p}.revealDocuments`).forEach(d=>used.add(d));
