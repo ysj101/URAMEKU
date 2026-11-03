@@ -226,13 +226,18 @@ async function tabTo(page: Page, target: Locator) {
   throw new Error(`Tabで対象へ到達できません: ${await target.getAttribute('aria-label')}`);
 }
 
-/** デスクのタブを Tab と Enter で切り替える */
+/** デスクのタブを切り替える。Tab で選択中のタブへ移り、矢印キーで目的のタブまで進む */
 async function keyboardShowDesk(page: Page, label: string) {
   const tab = page.getByRole('tab', { name: label });
   if ((await tab.getAttribute('aria-selected')) === 'true') return;
-  await tabTo(page, tab);
-  await page.keyboard.press('Enter');
+  await tabTo(page, page.getByRole('tab', { selected: true }));
+  const count = await page.getByRole('tab').count();
+  for (let i = 0; i < count; i += 1) {
+    if ((await tab.getAttribute('aria-selected')) === 'true') break;
+    await page.keyboard.press('ArrowRight');
+  }
   await expect(tab).toHaveAttribute('aria-selected', 'true');
+  await expect(tab).toBeFocused();
 }
 
 test('マウスとドラッグを使わずTab・矢印・Space・EnterでCASE01を完了する', async ({ page }) => {

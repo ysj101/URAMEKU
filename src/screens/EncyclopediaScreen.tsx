@@ -1,5 +1,6 @@
-import { useId, useRef, useState, type KeyboardEvent } from 'react';
+import { useId, useState } from 'react';
 import type { Navigation } from '../app/navigation';
+import { useRovingTabs } from '../app/useRovingTabs';
 import { CaseNotebook } from '../components/CaseNotebook';
 import { EncyclopediaCard } from '../components/EncyclopediaCard';
 import {
@@ -45,20 +46,11 @@ function iconFor(id: string): string | null {
 export function EncyclopediaScreen({ game, nav }: { game: GameApi; nav: Navigation }) {
   const [tab, setTab] = useState<TabId>('entries');
   const baseId = useId();
-  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
-
-  const onTabKeyDown = (e: KeyboardEvent<HTMLButtonElement>, index: number) => {
-    let next: number | null = null;
-    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next = (index + 1) % TABS.length;
-    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp')
-      next = (index - 1 + TABS.length) % TABS.length;
-    else if (e.key === 'Home') next = 0;
-    else if (e.key === 'End') next = TABS.length - 1;
-    if (next === null) return;
-    e.preventDefault();
-    setTab(TABS[next]!.id);
-    tabRefs.current[next]?.focus();
-  };
+  const roving = useRovingTabs(
+    TABS.length,
+    TABS.findIndex((t) => t.id === tab),
+    (i) => setTab(TABS[i]!.id),
+  );
 
   const unlockedCount = ENCYCLOPEDIA.filter((e) => isEntryUnlocked(e, game.finished)).length;
   const earned = earnedAchievementIds(game);
@@ -82,18 +74,16 @@ export function EncyclopediaScreen({ game, nav }: { game: GameApi; nav: Navigati
           return (
             <button
               key={t.id}
-              ref={(el) => {
-                tabRefs.current[i] = el;
-              }}
+              ref={roving.tabRef(i)}
               type="button"
               role="tab"
               id={`${baseId}-tab-${t.id}`}
               aria-selected={selected}
               aria-controls={`${baseId}-panel-${t.id}`}
-              tabIndex={selected ? 0 : -1}
+              tabIndex={roving.tabIndex(i)}
               className={`encyclopedia-tab${selected ? ' active' : ''}`}
               onClick={() => setTab(t.id)}
-              onKeyDown={(e) => onTabKeyDown(e, i)}
+              onKeyDown={(e) => roving.onKeyDown(e, i)}
             >
               {t.label}
             </button>

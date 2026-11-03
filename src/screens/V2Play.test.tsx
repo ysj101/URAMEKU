@@ -90,6 +90,24 @@ describe('V2プレイの統合', () => {
     expect(screen.getByRole('radio', { name: '確認した対象に限られる' })).toBeChecked();
   });
 
+  it('デスクのタブは矢印キーと Home / End で移動し、フォーカスも追従する', () => {
+    render(<Harness data={makeV2Case(['decoding', 'decision'])} />);
+    const decoding = screen.getByRole('tab', { name: /情報解読メモ/ });
+    const board = screen.getByRole('tab', { name: /証拠ボード/ });
+    const decision = screen.getByRole('tab', { name: /意思決定/ });
+    decoding.focus();
+    fireEvent.keyDown(decoding, { key: 'ArrowRight' });
+    expect(board).toHaveAttribute('aria-selected', 'true');
+    expect(board).toHaveFocus();
+    expect(decoding).toHaveAttribute('tabindex', '-1');
+    fireEvent.keyDown(board, { key: 'End' });
+    expect(decision).toHaveAttribute('aria-selected', 'true');
+    expect(decision).toHaveFocus();
+    fireEvent.keyDown(decision, { key: 'ArrowRight' });
+    expect(decoding).toHaveAttribute('aria-selected', 'true');
+    expect(decoding).toHaveFocus();
+  });
+
   it('デスクはタブで切り替わり、証拠ボードへ移れる', () => {
     render(<Harness data={makeV2Case(['decoding', 'decision'])} />);
     const tabs = screen.getAllByRole('tab').map((tab) => tab.textContent);
