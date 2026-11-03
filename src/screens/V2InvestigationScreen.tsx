@@ -309,6 +309,8 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
           <section className="v2-desk-panel" id="v2-desk-panel" aria-label="デスク">
             <div className="v2-tabs" role="tablist" aria-label="デスクの切り替え">
               {tabs.map((candidate) => (
+                // TODO(#160): 図鑑のタブと同じく矢印キーで移動できるようにする
+                // eslint-disable-next-line no-restricted-syntax
                 <button
                   key={candidate}
                   type="button"

@@ -79,7 +79,7 @@ OK = 横スクロールなし / 44px 未満 0 / はみ出し 0。44 ケースす
 ## 修正内容
 
 - `src/app/global.css`
-  - 試作（prototype/）由来の未参照ルールを削除: `.masthead` `.brand p` `.logo-char` `.page` `.sidebar` `.small-heading` `.case-list` `.case-option*` `.info-panel*` `.link-button` `.pins` `.pin-card*` `.link-slot` `.result .grade` `.calculation-desk` `.calc-field*`（`grep -rn` で `className` 参照が無いことを確認。`src/components/CaseList.tsx` は `.case-list` を使うが、どこからも import されていない未使用コンポーネント）。
+  - 試作（prototype/）由来の未参照ルールを削除: `.masthead` `.brand p` `.logo-char` `.page` `.sidebar` `.small-heading` `.case-list` `.case-option*` `.info-panel*` `.link-button` `.pins` `.pin-card*` `.link-slot` `.result .grade` `.calculation-desk` `.calc-field*`（`grep -rn` で `className` 参照が無いことを確認。`src/components/CaseList.tsx` は `.case-list` を使うが、どこからも import されていない未使用コンポーネント。#162 で削除済み）。
   - `.case-mascot`: 固定 91×98px → `width` + `aspect-ratio: 3 / 4`（820px 以下 64px、430px 以下 56px）。
   - `.doc-tile img` → `.doc-tile > img`（識別ラベルや状態アイコンに 65×78px が当たらないように）。
   - `.section-title`: `flex-wrap: wrap` + gap（見出し文字の途中で折り返さない）。

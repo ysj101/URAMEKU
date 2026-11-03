@@ -26,6 +26,8 @@ export function InvestigationScreen({ game }: { game: GameApi }) {
   };
 
   const handleRestart = () => {
+    // TODO(#153): 画面内の 2 段階確認にそろえる
+    // eslint-disable-next-line no-restricted-properties
     if (!window.confirm('この事件の調査途中の記録を最初からやり直しますか？')) return;
     dispatch({ type: 'reset' });
   };

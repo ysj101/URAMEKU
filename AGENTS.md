@@ -7,5 +7,6 @@
 - Never alter answer keys to make tests pass; check documented facts/denominators.
 - Before claiming completion run `python3 scripts/validate_assets.py` and check `qa/coverage.json`.
 - Player-facing Japanese (case JSON prompts/options/explanations, `data/ui/ja.json`, screen text in `src/**/*.tsx`) must be readable by a junior-high student. Follow docs/CASE_AUTHORING.md「文章の書き方」: draft, run `npm run lint:wording`, then polish with the yomiyasu skill (reader: 専門知識のない人). Never add new entries to `qa/wording-baseline.json`.
+- Screen wording, settings labels and colour tokens must follow docs/UI_GUIDE_LINT.md: run `npm run lint:ui` (plus `npm run lint`) after touching buttons, settings or `src/app/tokens.css`. Never add new entries to `qa/ui-guide-baseline.json`.
 - User-facing specs must not disclose or name third-party visual inspiration sources.
 - This repository is a starter, not a deployed/production-certified application.

@@ -4,7 +4,15 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
+import jsxA11y from 'eslint-plugin-jsx-a11y';
 import prettier from 'eslint-config-prettier';
+
+/** 画面コード（テストを除く）。UI 設計ガイドと a11y のルールの対象。docs/UI_GUIDE_LINT.md */
+const SCREEN_FILES = { files: ['src/**/*.tsx'], ignores: ['**/*.test.tsx'] };
+/** ネイティブダイアログ。OK / キャンセルしか出せないので、画面内の 2 段階確認にする */
+const NATIVE_DIALOGS = ['confirm', 'alert', 'prompt'];
+const nativeDialogMessage = (name) =>
+  `${name}() は使わない。画面内の確認（例: ResetProgressPanel）にして、ボタンは「削除する」「やめる」のように結果が分かる動詞にする`;
 
 export default tseslint.config(
   {
@@ -37,6 +45,41 @@ export default tseslint.config(
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
       '@typescript-eslint/consistent-type-imports': 'error',
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+    },
+  },
+  {
+    // 画面の a11y（alt、ラベル、role と操作の対応など）
+    ...SCREEN_FILES,
+    ...jsxA11y.flatConfigs.recommended,
+  },
+  {
+    // UI 設計ガイド。文言と配色は scripts/lint_ui_guide.mjs が見る
+    ...SCREEN_FILES,
+    rules: {
+      'no-restricted-globals': [
+        'error',
+        ...NATIVE_DIALOGS.map((name) => ({ name, message: nativeDialogMessage(name) })),
+      ],
+      'no-restricted-properties': [
+        'error',
+        ...['window', 'globalThis'].flatMap((object) =>
+          NATIVE_DIALOGS.map((property) => ({
+            object,
+            property,
+            message: nativeDialogMessage(`${object}.${property}`),
+          })),
+        ),
+      ],
+      'no-restricted-syntax': [
+        'error',
+        {
+          // role="tab" のボタンは矢印キーで移動できるようにする（図鑑のタブと同じ振る舞い）
+          selector:
+            'JSXOpeningElement:has(JSXAttribute[name.name="role"] > Literal[value="tab"]):not(:has(JSXAttribute[name.name="onKeyDown"])):not(:has(JSXSpreadAttribute))',
+          message:
+            'role="tab" には onKeyDown を付けて、左右の矢印キー・Home・End でタブを移動できるようにする（EncyclopediaScreen の onTabKeyDown と同じ）',
+        },
+      ],
     },
   },
   {

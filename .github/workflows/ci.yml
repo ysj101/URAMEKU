@@ -64,6 +64,7 @@ jobs:
           npm run validate:cases
           npm run lint:content
           npm run lint:wording
+          npm run lint:ui
           npm run analyze:dead-ends -- --check
           npm run walkthrough -- --check
 
