@@ -105,6 +105,9 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
   const initialExperiment = Boolean(v2.experiment && !progress.v2?.experiment?.initialChoice);
   const summary = summarize(current, progress);
   const budget = remainingBudget(current, progress);
+  const experimentRecorded =
+    (progress.v2?.experiment?.initialChoice ? 1 : 0) +
+    (experimentComplete(current, progress) ? 1 : 0);
   const tabDone: Partial<Record<DeskTab, boolean>> = {
     experiment: experimentComplete(current, progress),
     decoding: summary.tasks > 0 && summary.remainingTasks === 0,
@@ -115,7 +118,9 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
   const tabBadge: Partial<Record<DeskTab, string>> = {
     decoding: `${summary.answered} / ${summary.tasks}${tabDone.decoding ? ' 完了' : ''}`,
     board: `${summary.links} 件${tabDone.board ? ' 完了' : ''}`,
-    experiment: tabDone.experiment ? '記録済み' : '未完了',
+    // ミニ実験は「最初の選択」と「比べてからの選択」の2回。1回目だけ済んだ状態を「未完了」と
+    // 一括りにすると、画面の「最初に選んだもの」と食い違って見えるので回数で示す。
+    experiment: `${experimentRecorded} / 2${tabDone.experiment ? ' 完了' : ''}`,
     decision: tabDone.decision ? '記録済み' : '未完了',
   };
   const selectTab = (next: DeskTab) => {
