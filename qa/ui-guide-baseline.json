@@ -1,0 +1,29 @@
+{
+  "note": "lint:ui が仕組み導入前の指摘を一時的に見逃すための控え。減らす方向にだけ更新する（--update-baseline）。",
+  "entries": [
+    "data/ui/ja.json  settings.audio.mute | positive-setting | ミュート",
+    "src/app/tokens.css | contrast | --palette-blue on --palette-paper",
+    "src/app/tokens.css | contrast | --palette-blue on --palette-paper-aged",
+    "src/app/tokens.css | contrast | --palette-blue on --palette-paper-desk",
+    "src/app/tokens.css | contrast | --palette-blue on --palette-paper-explain",
+    "src/app/tokens.css | contrast | --palette-blue on --palette-paper-note",
+    "src/app/tokens.css | contrast | --palette-blue on --palette-paper-white",
+    "src/app/tokens.css | contrast | --palette-border-dashed on --palette-paper",
+    "src/app/tokens.css | contrast | --palette-green on --palette-paper-aged",
+    "src/app/tokens.css | contrast | --palette-green on --palette-paper-desk",
+    "src/app/tokens.css | contrast | --palette-green on --palette-paper-explain",
+    "src/app/tokens.css | contrast | --palette-quiet on --palette-paper",
+    "src/app/tokens.css | contrast | --palette-quiet on --palette-paper-aged",
+    "src/app/tokens.css | contrast | --palette-quiet on --palette-paper-desk",
+    "src/app/tokens.css | contrast | --palette-quiet on --palette-paper-explain",
+    "src/app/tokens.css | contrast | --palette-red on --palette-paper",
+    "src/app/tokens.css | contrast | --palette-red on --palette-paper-aged",
+    "src/app/tokens.css | contrast | --palette-red on --palette-paper-desk",
+    "src/app/tokens.css | contrast | --palette-red on --palette-paper-explain",
+    "src/app/tokens.css | contrast | --palette-red on --palette-paper-note",
+    "src/app/tokens.css | contrast | --palette-red on --palette-paper-white",
+    "src/app/tokens.css | contrast | --palette-white on --palette-red",
+    "src/components/DocumentDialog.tsx | button-label | 戻る",
+    "src/components/MotionToggle.tsx | positive-setting | 演出を減らす"
+  ]
+}
