@@ -72,11 +72,11 @@ const { settings, toggleMuted, setVolume } = useAudioSettings();
 ```
 
 - `SoundManager` はテスト用に `createContext` / `fetchBuffer` / `now` を注入できる（`src/audio/soundManager.test.ts` 参照）。
-- `AudioControl` はミュートトグル（`aria-pressed`）と音量スライダー（`input[type=range]`、`aria-label="音量"`）。文言は `data/ui/ja.json` の `settings.audio.*`。
+- `AudioControl` は「音を鳴らす」スイッチ（`role=switch`、オフ = ミュート）と音量スライダー（`input[type=range]`、`aria-label="音量"`）。文言は `data/ui/ja.json` の `settings.audio.*`。
 
 ## 再現手順（スマホ）
 
 1. iOS Safari / Android Chrome でアプリを開き、何も触らずに待つ → 音は鳴らない（自動再生制限に従う）。
 2. 画面をタップする → 以後 `play()` で音が鳴る。
-3. `AudioControl` でミュート ON → 音が止まる。リロードしても ON のまま（localStorage）。
+3. `AudioControl` で「音を鳴らす」をオフ → 音が止まる。リロードしてもオフのまま（localStorage）。
 4. 音量スライダーを動かす → 直後の `ui-tap` の大きさが変わる。

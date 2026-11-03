@@ -132,7 +132,9 @@ function scanUiJson(file) {
   for (const { path, value } of walkStrings(JSON.parse(readFileSync(file, 'utf8')))) {
     const loc = `${rel}  ${path}`;
     checkLabel(value, loc, hits);
-    if (path.startsWith('settings.')) checkSetting(value, loc, hits);
+    // settings.* の項目名だけ。note など説明文は対象にしない
+    if (path.startsWith('settings.') && !/\.(note|body|description)$/.test(path))
+      checkSetting(value, loc, hits);
   }
   return hits;
 }

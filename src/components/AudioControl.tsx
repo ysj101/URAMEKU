@@ -2,6 +2,7 @@ import { UI } from '../data/ui';
 import { useAudioSettings, useSound } from '../audio/useSound';
 import { getSoundManager, type SoundManager } from '../audio/soundManager';
 import type { StorageLike } from '../state/persistence';
+import { SettingSwitch } from './SettingSwitch';
 
 export interface AudioControlProps {
   /** テスト用。省略時は共有マネージャ。 */
@@ -12,7 +13,7 @@ export interface AudioControlProps {
 }
 
 /**
- * ミュートトグルと音量スライダー（MVP-037）。
+ * 「音を鳴らす」スイッチと音量スライダー（MVP-037）。
  * 画面への組み込み・配置は別 Issue（設定画面）で行う。見た目は global.css 側で
  * `.audio-control` を定義する想定。
  */
@@ -29,20 +30,15 @@ export function AudioControl({ manager, storage, className }: AudioControlProps)
       role="group"
       aria-label={t.label}
     >
-      <button
-        type="button"
-        className="audio-control__mute"
-        aria-pressed={settings.muted}
-        aria-label={settings.muted ? t.unmute : t.mute}
-        onClick={() => {
+      <SettingSwitch
+        label={t.sound}
+        checked={!settings.muted}
+        onChange={() => {
           toggleMuted();
-          // ミュート解除時に確認音を鳴らす（unlock もこの操作で行われる）
+          // 音を鳴らす側に切り替えたとき確認音を鳴らす（unlock もこの操作で行われる）
           if (settings.muted) play('ui-tap');
         }}
-      >
-        <span className="audio-control__mute-text">{t.mute}</span>
-        <span className="audio-control__mute-state">{settings.muted ? t.on : t.off}</span>
-      </button>
+      />
       <label className="audio-control__volume">
         <span className="audio-control__volume-text">{t.volume}</span>
         <input
