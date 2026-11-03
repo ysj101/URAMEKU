@@ -106,6 +106,8 @@ describe('TutorialHint', () => {
         storage={storage}
       />,
     );
+    // 閉じた後どうなるかは、title ではなく見える文字で示す
+    expect(screen.getByText(UI.tutorial.hint.dismissNote)).toBeVisible();
     await user.click(screen.getByRole('button', { name: UI.tutorial.hint.dismiss }));
     expect(screen.queryByRole('status')).not.toBeInTheDocument();
     expect(loadTutorialState(storage).hintsEnabled).toBe(false);
