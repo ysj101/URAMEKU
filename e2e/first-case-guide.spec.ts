@@ -16,7 +16,7 @@ test('最初の事件で資料確認から問1の記録まで案内する', asyn
   });
   await guide.getByRole('button', { name: 'キャンペーン広告を開く' }).click();
   await expect(page.getByRole('dialog')).toContainText(data.documents[0]!.content);
-  await page.getByRole('dialog').getByRole('button', { name: /戻る/ }).click();
+  await page.getByRole('dialog').getByRole('button', { name: '資料を閉じる' }).click();
   await guide.getByRole('button', { name: '問1を開く' }).click();
   const task = data.v2!.decoding[0]!;
   const option = task.options.find((entry) => entry.id === 'paid_cohort')!;
@@ -30,7 +30,7 @@ test('最初の事件で資料確認から問1の記録まで案内する', asyn
       .first()
       .click();
     await expect(page.getByRole('dialog')).toContainText(doc.content);
-    await page.getByRole('dialog').getByRole('button', { name: /戻る/ }).click();
+    await page.getByRole('dialog').getByRole('button', { name: '資料を閉じる' }).click();
   }
   await expect(guide.getByRole('button', { name: '問2を開く' })).toBeVisible();
   await expect(

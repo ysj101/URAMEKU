@@ -47,10 +47,10 @@ export async function openDoc(page: Page, title: string): Promise<Locator> {
   await expect(dialog.getByRole('heading', { name: title, exact: true })).toBeVisible();
   return dialog;
 }
-/** 資料を開いて読み、「戻る」で閉じる。開いた時点で根拠候補になる（貼る操作はない） */
+/** 資料を開いて読み、「資料を閉じる」で閉じる。開いた時点で根拠候補になる（貼る操作はない） */
 export async function openAndRead(page: Page, title: string) {
   const dialog = await openDoc(page, title);
-  await dialog.getByRole('button', { name: '戻る', exact: true }).click();
+  await dialog.getByRole('button', { name: '資料を閉じる' }).click();
   await expect(dialog).toBeHidden();
   await expect(docTile(page, title)).toHaveAccessibleName(/調査済み/);
 }

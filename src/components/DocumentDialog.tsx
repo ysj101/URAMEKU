@@ -27,7 +27,7 @@ export interface DocumentHistoryState {
  * 開いた資料はそのまま根拠候補になるので、ここに「貼る」操作はない。
  *
  * 閉じ方は 3 通り: 背景タップ、Esc（`cancel`）、ブラウザの戻る（`popstate`）。
- * 開くときに `history.pushState({ doc }, '')` を積み、閉じるボタン等では `history.back()` で
+ * 開くときに `history.pushState({ doc }, '')` を積み、「資料を閉じる」等では `history.back()` で
  * 状態を整合させる。ハッシュは変えないので `navigation.ts` のハッシュルートとは干渉しない。
  */
 export function DocumentDialog({ caseData, progress, documentId, onClose }: Props) {
@@ -167,7 +167,7 @@ export function DocumentDialog({ caseData, progress, documentId, onClose }: Prop
             {read ? 'この資料は読んだので、記録の根拠として使えます。' : ''}
           </p>
           <button type="button" className="btn primary" onClick={requestClose}>
-            戻る
+            資料を閉じる
           </button>
         </div>
       </article>

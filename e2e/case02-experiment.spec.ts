@@ -139,7 +139,7 @@ for (const viewport of [
         await expect(dialog.getByRole('article')).toContainText(
           document.content.replace(/\s+/g, ' '),
         );
-        await dialog.getByRole('button', { name: '戻る', exact: true }).click();
+        await dialog.getByRole('button', { name: '資料を閉じる' }).click();
       }
       await showDesk(page, '見え方のミニ実験');
       await expect(desk.getByRole('heading', { name: '2つの見せ方を比べよう' })).toBeVisible();

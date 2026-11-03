@@ -128,7 +128,9 @@ describe('最初の事件の操作案内', () => {
     const guide = screen.getByRole('region', { name: '次にやること' });
     fireEvent.click(within(guide).getByRole('button', { name: 'キャンペーン広告を開く' }));
     expect(screen.getByRole('dialog')).toHaveTextContent(data.documents[0]!.content);
-    fireEvent.click(within(screen.getByRole('dialog')).getByRole('button', { name: /戻る/ }));
+    fireEvent.click(
+      within(screen.getByRole('dialog')).getByRole('button', { name: '資料を閉じる' }),
+    );
     fireEvent.click(within(guide).getByRole('button', { name: '問1を開く' }));
     const task = data.v2!.decoding[0]!;
     const option = task.options.find((entry) => entry.id === 'paid_cohort')!;
@@ -144,7 +146,9 @@ describe('最初の事件の操作案内', () => {
       );
       fireEvent.click(within(remaining).getAllByRole('button', { name: `${doc.title}を開く` })[0]!);
       expect(screen.getByRole('dialog')).toHaveTextContent(doc.content);
-      fireEvent.click(within(screen.getByRole('dialog')).getByRole('button', { name: /戻る/ }));
+      fireEvent.click(
+        within(screen.getByRole('dialog')).getByRole('button', { name: '資料を閉じる' }),
+      );
     }
     expect(within(guide).getByRole('button', { name: '問2を開く' })).toHaveClass('primary');
     expect(

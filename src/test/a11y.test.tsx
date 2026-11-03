@@ -63,9 +63,9 @@ async function openAndRead(titlePattern: RegExp) {
   expect(dialogEl()).toHaveAttribute('open');
   // 開いた直後のフォーカスはダイアログの見出し
   expect(active()).toBe(dialogEl().querySelector('#dialog-title'));
-  const back = within(dialogEl()).getByRole('button', { name: '戻る' });
-  await tabTo(back, '戻る');
-  await pressEnter('戻る');
+  const back = within(dialogEl()).getByRole('button', { name: '資料を閉じる' });
+  await tabTo(back, '資料を閉じる');
+  await pressEnter('資料を閉じる');
   expect(dialogEl()).not.toHaveAttribute('open');
   expect(active()).toBe(tile);
 }

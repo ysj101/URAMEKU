@@ -67,7 +67,7 @@ function DocumentSourceMock({ callout }: { callout: string }) {
         </dl>
         <Lines widths={['92%', '84%', '60%']} />
         <div className="ts-row">
-          <span className="ts-btn ts-btn-primary">戻る</span>
+          <span className="ts-btn ts-btn-primary">資料を閉じる</span>
         </div>
       </div>
     </div>
