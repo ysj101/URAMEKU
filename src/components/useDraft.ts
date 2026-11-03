@@ -23,12 +23,13 @@ function write<T>(key: string, value: T | undefined) {
 /**
  * 記録ボタンを押す前の入力（下書き）を sessionStorage に残すフック。
  * タブを切り替えたり画面を離れたりしても、同じタブ（ブラウザ）の中なら続きから書ける。
- * 記録したら `clear()` で消す。
+ * 記録したら `clear()` で消して初期値に戻す。記録した内容をそのまま画面に残すなら `forget()`
+ * （保存先だけ消し、今の値は保つ）。
  */
 export function useDraft<T>(
   key: string,
   initial: () => T,
-): [T, (next: T | ((prev: T) => T)) => void, () => void] {
+): [T, (next: T | ((prev: T) => T)) => void, () => void, () => void] {
   const [value, setValue] = useState<T>(() => read<T>(key) ?? initial());
   const set = useCallback(
     (next: T | ((prev: T) => T)) => {
@@ -44,5 +45,6 @@ export function useDraft<T>(
     write(key, undefined);
     setValue(initial());
   }, [key, initial]);
-  return [value, set, clear];
+  const forget = useCallback(() => write(key, undefined), [key]);
+  return [value, set, clear, forget];
 }
