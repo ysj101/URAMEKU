@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useRovingTabs } from '../app/useRovingTabs';
 import { ConfirmPanel } from '../components/ConfirmPanel';
 import { DocumentDialog } from '../components/DocumentDialog';
 import { DocumentGrid } from '../components/DocumentGrid';
@@ -96,6 +97,8 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
   ];
   const [tab, setTab] = useState<DeskTab>(() => readStoredTab(current.id, tabs) ?? 'decoding');
   useEffect(() => storeTab(current.id, tab), [current.id, tab]);
+  // 矢印キーでのタブ移動。パネルは隣にあるのでスクロールはしない
+  const roving = useRovingTabs(tabs.length, tabs.indexOf(tab), (i) => setTab(tabs[i]!));
   if (!v2) return null;
 
   const props = { caseData: current, progress, onAction: dispatch };
@@ -311,18 +314,19 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
 
           <section className="v2-desk-panel" id="v2-desk-panel" aria-label="デスク">
             <div className="v2-tabs" role="tablist" aria-label="デスクの切り替え">
-              {tabs.map((candidate) => (
-                // TODO(#160): 図鑑のタブと同じく矢印キーで移動できるようにする
-                // eslint-disable-next-line no-restricted-syntax
+              {tabs.map((candidate, i) => (
                 <button
                   key={candidate}
+                  ref={roving.tabRef(i)}
                   type="button"
                   role="tab"
                   id={`v2-tab-${candidate}`}
                   className={`v2-tab ${tabDone[candidate] ? 'is-done' : ''}`}
                   aria-selected={tab === candidate}
                   aria-controls="v2-tabpanel"
+                  tabIndex={roving.tabIndex(i)}
                   onClick={() => selectTab(candidate)}
+                  onKeyDown={(e) => roving.onKeyDown(e, i)}
                 >
                   {TAB_LABEL[candidate]}
                   {tabBadge[candidate] && (
