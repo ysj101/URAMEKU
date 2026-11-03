@@ -35,8 +35,8 @@ test('CASE01は各段階で次の操作を1つ示し、補足の機能にも戻�
     await expect(
       page.getByRole('region', { name: '最初の事件で、遊び方を体験しよう' }),
     ).toBeVisible();
-    await page.getByRole('button', { name: 'この事件を最初から', exact: true }).click();
-    const reset = page.getByRole('alertdialog', { name: '調査をやり直す確認' });
+    await page.getByRole('button', { name: 'この事件を最初からやり直す' }).click();
+    const reset = page.getByRole('alertdialog', { name: 'やり直しの確認' });
     await expect(reset).toBeVisible();
     await reset.getByRole('button', { name: 'やめる', exact: true }).click();
     await page.getByText('遊び方', { exact: true }).click();

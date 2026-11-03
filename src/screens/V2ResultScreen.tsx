@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import { ConfirmPanel } from '../components/ConfirmPanel';
 import { Debrief } from '../components/Debrief';
+import { UI } from '../data/ui';
 import { VisualCaseGuide } from '../components/VisualCaseGuide';
 import { evaluateV2Case } from '../domain/v2Evaluation';
 import { experimentComparison } from '../domain/experiment';
@@ -209,7 +211,7 @@ export function V2ResultScreen({ game, nav }: { game: GameApi; nav: Navigation }
       )}
       <div className="stage-switch">
         <button type="button" className="btn ghost" onClick={() => setConfirmReset(true)}>
-          この事件をもう一度
+          {UI.case.retry}
         </button>
         <button
           type="button"
@@ -220,22 +222,17 @@ export function V2ResultScreen({ game, nav }: { game: GameApi; nav: Navigation }
         </button>
       </div>
       {confirmReset && (
-        <section role="alertdialog" aria-label="再挑戦の確認" className="notice">
-          <p>この事件の調査記録を消して最初からやり直しますか？</p>
-          <button
-            type="button"
-            className="btn primary"
-            onClick={() => {
-              dispatch({ type: 'reset' });
-              setConfirmReset(false);
-            }}
-          >
-            やり直す
-          </button>
-          <button type="button" className="btn ghost" onClick={() => setConfirmReset(false)}>
-            やめる
-          </button>
-        </section>
+        <ConfirmPanel
+          title={UI.case.retryConfirmTitle}
+          confirmLabel={UI.case.retryConfirm}
+          onConfirm={() => {
+            dispatch({ type: 'reset' });
+            setConfirmReset(false);
+          }}
+          onCancel={() => setConfirmReset(false)}
+        >
+          この事件{UI.case.retryConfirmBody}
+        </ConfirmPanel>
       )}
     </div>
   );

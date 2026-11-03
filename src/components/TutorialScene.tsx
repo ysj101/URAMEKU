@@ -108,7 +108,7 @@ function DeskBudgetMock({ callout }: { callout: string }) {
       </div>
       <div className="ts-row">
         <span className="ts-btn ts-btn-primary">調査報告をまとめる →</span>
-        <span className="ts-btn">この事件を最初から</span>
+        <span className="ts-btn">この事件を最初からやり直す</span>
       </div>
     </div>
   );
