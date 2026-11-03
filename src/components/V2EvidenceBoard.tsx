@@ -70,7 +70,7 @@ function BoardEditor({ task, caseData, progress, onAction }: V2DeskProps & { tas
   const board = caseData.v2!.board!;
   const saved = progress.v2?.board?.[task.id];
   // 記録前の変更は下書きとして残す（タブを切り替えても消えない）
-  const [draft, setDraft, clearDraft] = useDraft<{
+  const [draft, setDraft, , forgetDraft] = useDraft<{
     values: Record<string, string>;
     evidence: string[];
     disposition: V2BoardDisposition | '';
@@ -103,7 +103,7 @@ function BoardEditor({ task, caseData, progress, onAction }: V2DeskProps & { tas
         event.preventDefault();
         if (evidence.length && disposition) {
           onAction({ type: 'v2-board', taskId: task.id, record: record as V2BoardRecord });
-          clearDraft();
+          forgetDraft(); // 記録した内容は画面に残し、下書きの保存だけ消す
         }
       }}
     >
