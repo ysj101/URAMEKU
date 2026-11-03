@@ -2,6 +2,8 @@ name: CI
 
 on:
   pull_request:
+    # edited: PR の題名・本文を直したときもメールアドレス検査を再実行する
+    types: [opened, synchronize, reopened, edited]
   push:
     branches:
       - main
@@ -21,6 +23,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Check commit and PR email privacy
+        env:
+          # PR: base..head の全コミット。main への push: 直前の状態からの差分（初回 push は HEAD のみ）。
+          COMMIT_RANGE: ${{ github.event_name == 'pull_request' && format('{0}..{1}', github.event.pull_request.base.sha, github.event.pull_request.head.sha) || (github.event.before != '0000000000000000000000000000000000000000' && format('{0}..{1}', github.event.before, github.sha) || format('{0}^!', github.sha)) }}
+          # 題名・本文は env 経由で渡す（スクリプトインジェクション対策）。
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: scripts/check-email-privacy.sh "$COMMIT_RANGE"
 
       - name: Setup Node
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0

@@ -9,6 +9,9 @@ import type { GameApi } from '../state/useGame';
 /** 1 事件のプレイ画面。調査 → 記事 → 結果を内包する。 */
 export function PlayScreen({ game, nav }: { game: GameApi; nav: Navigation }) {
   const { current, progress, stage } = game;
+  // CASE01の調査中は「次にやること」カードが同じ案内を出すので、段階ヒントを重ねない。
+  const nextStepCardShown =
+    current.id === 'case-01' && stage === 'investigate' && !progress.published;
   return (
     <section className="play" aria-labelledby="case-title">
       <div className="screen-head">
@@ -21,7 +24,7 @@ export function PlayScreen({ game, nav }: { game: GameApi; nav: Navigation }) {
         </button>
       </div>
       <CaseHeader caseData={current} />
-      <TutorialHint caseData={current} progress={progress} stage={stage} />
+      {!nextStepCardShown && <TutorialHint caseData={current} progress={progress} stage={stage} />}
       <div id="game">
         {progress.published ? (
           <ResultScreen game={game} nav={nav} />

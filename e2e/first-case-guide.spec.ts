@@ -4,11 +4,11 @@ import { GAME_CASES, gotoCase } from './helpers';
 test('最初の事件で資料確認から問1の記録まで案内する', async ({ page }, testInfo) => {
   const data = GAME_CASES[0]!;
   await gotoCase(page, data);
-  const guide = page.getByRole('region', { name: '最初の事件で、遊び方を体験しよう' });
+  const guide = page.getByRole('region', { name: '次にやること' });
   const remaining = page.getByRole('region', { name: '残っていること' });
   await expect(guide).toBeVisible();
-  await page.getByRole('button', { name: '残りを確認', exact: true }).click();
-  await expect(page.getByRole('heading', { name: '残っていること', exact: true })).toBeFocused();
+  await page.getByText('残っていることの一覧', { exact: true }).click();
+  await expect(page.getByRole('heading', { name: '残っていること', exact: true })).toBeVisible();
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({
     path: `/tmp/urameku-guide-${testInfo.project.name}.png`,
@@ -32,12 +32,13 @@ test('最初の事件で資料確認から問1の記録まで案内する', asyn
     await expect(page.getByRole('dialog')).toContainText(doc.content);
     await page.getByRole('dialog').getByRole('button', { name: /戻る/ }).click();
   }
-  await expect(guide).toContainText('問1の回答と資料確認ができました。');
+  await expect(guide.getByRole('button', { name: '問2を開く' })).toBeVisible();
   await expect(
     remaining.getByRole('button', { name: `問1：${task.prompt}`, exact: true }),
   ).toHaveCount(0);
   await page.reload();
-  await expect(guide).toContainText('問1の回答と資料確認ができました。');
+  await expect(guide.getByRole('button', { name: '問2を開く' })).toBeVisible();
+  await page.getByText('残っていることの一覧', { exact: true }).click();
   const next = data.v2!.decoding[1]!;
   await remaining.getByRole('button', { name: `問2：${next.prompt}`, exact: true }).click();
   await expect(page.getByRole('radio', { name: next.options[0]!.text, exact: true })).toBeVisible();

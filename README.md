@@ -43,6 +43,21 @@ npm run preview      # dist/ をローカル配信して確認
 
 `public/` 配下のアセットと `manifest.webmanifest` はビルド時にそのまま `dist/` へコピーされます。
 
+### コミットと PR のメールアドレス保護
+
+公開リポジトリに個人のメールアドレスを残さないため、コミットの author / committer のメール欄、コミットメッセージ全文、PR の題名と本文に **許可リスト以外のアドレスが入っていたら失敗** します。ファイルの中身は調べません。判定は末尾一致で、既定の許可リストは `@users.noreply.github.com`・`noreply@github.com`・`noreply@anthropic.com` です（`EMAIL_ALLOWLIST` 環境変数で差し替え可）。一致したアドレスは `@` より前を伏せて表示します。
+
+- **ローカル**: 通常の clone では `npm ci` / `npm install` の `prepare` が `.githooks/` を有効にし、`commit-msg` フックが作成前のコミットを止めます。黙って書き換えることはしません。linked worktree と `.git` のない配布物では Git 設定を変更しないので、`git -c core.hooksPath=.githooks commit ...` を使うか、元の clone で一度 install してください。
+- **CI**: 既存の `CI` ジョブの最初のステップとして同じ検査を実行します。`CI` は main のブランチ保護で必須チェックなので、失敗するとマージできません。squash merge のメッセージも main への push 時に検査します。
+
+```bash
+scripts/check-email-privacy.sh                    # origin/main..HEAD
+scripts/check-email-privacy.sh BASE_SHA..HEAD_SHA # 任意の範囲
+PR_TITLE='変更の題名' PR_BODY='変更の説明' scripts/check-email-privacy.sh
+```
+
+このフックはこのリポジトリだけを守ります。全リポジトリをまとめて守るには、GitHub の Settings → Emails で「Keep my email addresses private」と「Block command line pushes that expose my email」を有効にし、Git に `git config --global user.useConfigOnly true` を設定してください。
+
 ### 公開 URL とベースパス（MVP-004）
 
 | 用途 | URL | `base` |

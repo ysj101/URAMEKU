@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { fireEvent, render, screen, within } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
-import { createProgress, reduceProgress } from '../domain/game';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { createProgress, reduceProgress, type GameAction } from '../domain/game';
 import type { CaseData } from '../domain/types';
 import { CASES } from '../data/cases';
 import { makeV2Case } from '../test/v2Fixtures';
@@ -9,8 +9,14 @@ import type { GameApi } from '../state/useGame';
 import { V2InvestigationScreen } from './V2InvestigationScreen';
 import { V2ArticleScreen } from './V2ArticleScreen';
 
-function Harness({ data }: { data: CaseData }) {
-  const [progress, setProgress] = useState(() => createProgress(data));
+beforeEach(() => {
+  Element.prototype.scrollIntoView = vi.fn();
+});
+
+function Harness({ data, actions = [] }: { data: CaseData; actions?: GameAction[] }) {
+  const [progress, setProgress] = useState(() =>
+    actions.reduce((record, action) => reduceProgress(data, record, action), createProgress(data)),
+  );
   const [stage, setStage] = useState<'investigate' | 'article'>('investigate');
   const game: GameApi = {
     cases: [data],
@@ -84,7 +90,7 @@ describe('V2プレイの統合', () => {
     expect(screen.getByRole('radio', { name: '確認した対象に限られる' })).toBeChecked();
   });
 
-  it('デスクはタブで切り替わり、進捗ストリップから証拠ボードへ移れる', () => {
+  it('デスクはタブで切り替わり、証拠ボードへ移れる', () => {
     render(<Harness data={makeV2Case(['decoding', 'decision'])} />);
     const tabs = screen.getAllByRole('tab').map((tab) => tab.textContent);
     expect(tabs).toEqual(['情報解読メモ0 / 1', '証拠ボード0 件', '意思決定未完了']);
@@ -93,7 +99,7 @@ describe('V2プレイの統合', () => {
       'true',
     );
     expect(screen.queryByRole('group', { name: '証拠ボード' })).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: /^資料の関係0/ }));
+    fireEvent.click(screen.getByRole('tab', { name: /証拠ボード/ }));
     expect(screen.getByRole('group', { name: '証拠ボード' })).toBeInTheDocument();
     expect(screen.getByRole('tab', { name: /証拠ボード/ })).toHaveAttribute(
       'aria-selected',
@@ -119,7 +125,7 @@ describe('最初の事件の操作案内', () => {
   it('資料を読み、問1を記録すると案内と残りの一覧が進む', () => {
     const data = CASES[0]!;
     render(<Harness data={data} />);
-    const guide = screen.getByRole('region', { name: '最初の事件で、遊び方を体験しよう' });
+    const guide = screen.getByRole('region', { name: '次にやること' });
     fireEvent.click(within(guide).getByRole('button', { name: 'キャンペーン広告を開く' }));
     expect(screen.getByRole('dialog')).toHaveTextContent(data.documents[0]!.content);
     fireEvent.click(within(screen.getByRole('dialog')).getByRole('button', { name: /戻る/ }));
@@ -127,16 +133,20 @@ describe('最初の事件の操作案内', () => {
     const task = data.v2!.decoding[0]!;
     const option = task.options.find((entry) => entry.id === 'paid_cohort')!;
     fireEvent.click(screen.getByRole('radio', { name: option.text }));
+    fireEvent.click(screen.getByText('残っていることの一覧'));
     const remaining = screen.getByRole('region', { name: '残っていること' });
     expect(remaining).toHaveTextContent('答えは記録済み。まだ読んでいない資料：');
     for (const id of option.evidence) {
       const doc = data.documents.find((entry) => entry.id === id)!;
       if (id === data.documents[0]!.id) continue;
+      expect(within(guide).getByRole('button', { name: `${doc.title}を開く` })).toHaveClass(
+        'primary',
+      );
       fireEvent.click(within(remaining).getAllByRole('button', { name: `${doc.title}を開く` })[0]!);
       expect(screen.getByRole('dialog')).toHaveTextContent(doc.content);
       fireEvent.click(within(screen.getByRole('dialog')).getByRole('button', { name: /戻る/ }));
     }
-    expect(guide).toHaveTextContent('問1の回答と資料確認ができました。');
+    expect(within(guide).getByRole('button', { name: '問2を開く' })).toHaveClass('primary');
     expect(
       within(remaining).queryByRole('button', { name: `問1：${task.prompt}` }),
     ).not.toBeInTheDocument();
@@ -160,6 +170,63 @@ describe('最初の事件の操作案内', () => {
     expect(screen.getByRole('button', { name: '報告を提出して振り返る' })).toHaveAttribute(
       'aria-disabled',
       'true',
+    );
+  });
+});
+
+function enabledPrimaries(container: HTMLElement) {
+  return within(container)
+    .getAllByRole('button')
+    .filter((button) => button.classList.contains('primary') && !button.hasAttribute('disabled'));
+}
+
+describe('次の操作の強調', () => {
+  it.each(CASES)('$id は各デスクで押せるprimaryを多くても1つに保つ', (data) => {
+    const { container } = render(<Harness data={data} />);
+    // 最初の判断が必要な事件では、選択肢そのものが画面に出ているのでカードは控えめにする。
+    expect(enabledPrimaries(container)).toHaveLength(data.v2?.experiment ? 0 : 1);
+    if (data.v2?.experiment) {
+      fireEvent.click(screen.getByRole('button', { name: data.v2.experiment.choices[0]!.text }));
+    }
+    for (const tab of screen.getAllByRole('tab')) {
+      fireEvent.click(tab);
+      expect(enabledPrimaries(container).length).toBeLessThanOrEqual(1);
+    }
+    expect(screen.getByRole('button', { name: '調査報告をまとめる →' })).toHaveClass('ghost');
+  });
+
+  it('問いとボードの記録がそろうと、報告だけを強調する', () => {
+    const data = CASES[0]!;
+    const board = data.v2!.board!;
+    const actions: GameAction[] = [
+      ...data.documents
+        .slice(0, 4)
+        .map((doc): GameAction => ({ type: 'open-document', documentId: doc.id })),
+      ...data.v2!.decoding.map((task): GameAction => ({
+        type: 'v2-decode',
+        taskId: task.id,
+        optionId: task.options.find((option) => option.accepted)!.id,
+        evidence: [],
+      })),
+      ...board.tasks.map((task): GameAction => ({
+        type: 'v2-board',
+        taskId: task.id,
+        record: {
+          values: task.rules[0]!.values,
+          evidence: task.rules[0]!.evidence,
+          disposition: task.rules[0]!.disposition,
+        },
+      })),
+    ];
+    const { container } = render(<Harness data={data} actions={actions} />);
+    expect(enabledPrimaries(container)).toHaveLength(1);
+    expect(screen.getByRole('button', { name: '調査報告をまとめる →' })).toHaveClass('primary');
+    fireEvent.click(screen.getByRole('tab', { name: /証拠ボード/ }));
+    expect(enabledPrimaries(container)).toHaveLength(1);
+    fireEvent.click(screen.getByText('残っていることの一覧'));
+    expect(screen.getByRole('heading', { name: '残っていること' })).toBeVisible();
+    expect(screen.getByRole('region', { name: '残っていること' })).toHaveTextContent(
+      '記録はそろいました。',
     );
   });
 });

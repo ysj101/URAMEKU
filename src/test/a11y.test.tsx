@@ -188,11 +188,11 @@ describe('スキップリンクと画面固有のキーボード操作', () => {
     expect(window.location.hash).toBe('#/tutorial');
     await tabTo(screen.getByRole('radio', { name: /^Sサイズ/ }));
     await user.keyboard(' ');
-    await tabTo(screen.getByRole('button', { name: 'このサイズにする →' }));
+    await tabTo(screen.getByRole('button', { name: 'これにする →' }));
     await pressEnter('最初の選択');
     await tabTo(screen.getByRole('radio', { name: /^Sサイズ/ }));
     await user.keyboard(' ');
-    await tabTo(screen.getByRole('button', { name: '選んで資料を調べる →' }));
+    await tabTo(screen.getByRole('button', { name: '資料を開く →' }));
     await pressEnter('メニュー追加後の選択');
     for (const title of ['2枚のメニューの記録', '売店の引き継ぎメモ']) {
       await tabTo(screen.getByRole('button', { name: new RegExp(`${title}を開く`) }));
@@ -215,7 +215,7 @@ describe('スキップリンクと画面固有のキーボード操作', () => {
     await tabTo(screen.getByRole('button', { name: '報告をまとめる →' }));
     await pressEnter('報告へ');
     expect(active()).toBe(screen.getByRole('heading', { name: '5. 報告を提出する' }));
-    await tabTo(screen.getByRole('button', { name: '報告を提出して振り返る' }));
+    await tabTo(screen.getByRole('button', { name: '報告する →' }));
     await pressEnter('提出');
     expect(active()).toBe(screen.getByRole('heading', { name: '6. 解説を見る' }));
     expect(screen.getByText('答えと根拠を、資料で確かめられました。')).toBeInTheDocument();
