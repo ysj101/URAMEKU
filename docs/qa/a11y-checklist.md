@@ -21,7 +21,7 @@
 | 操作にマウス専用のものがない（ドラッグ不要） | 2.1.1 | [x] | 自動。証拠ボードは Enter/Space で選択、Delete で外す |
 | キーボードトラップがない | 2.1.2 | [x] | 自動。各操作後に `document.activeElement` が `body` に落ちないことを検査 |
 | タップ領域 44px 以上 | 2.5.5（AAA 参考） | [ ] | MVP-040 / MVP-042 のレイアウト確認に委ねる |
-| 色のコントラスト 4.5:1 | 1.4.3 | [ ] | `docs/DESIGN_TOKENS.md` のトークンに依存。実測未実施 |
+| 色のコントラスト 4.5:1 | 1.4.3 | [x] | `docs/DESIGN_TOKENS.md` の表の組み合わせを `npm run lint:ui` で算出（#156 でトークンを調整） |
 | 200% 拡大・390px 幅での折り返し | 1.4.4 / 1.4.10 | [ ] | MVP-040 のレイアウト確認に委ねる |
 | 演出の抑制（prefers-reduced-motion / 設定） | 2.3.3（AAA 参考） | [x] | 既存。`MotionToggle`、`useReducedMotion` |
 | `role="status"` / `aria-live` が 1 画面 1〜2 個（常時表示のもの） | 4.1.3 | [x] | 監査。理由文は `aria-describedby` に変更し、`role="status"` を外した（資料ダイアログ・記事提出） |
@@ -126,6 +126,6 @@
 ## 未対応・人手が必要な事項
 
 - スクリーンリーダー実機（VoiceOver / TalkBack / NVDA）での読み上げ順・告知内容の確認: **未実施**。
-- コントラスト比・拡大表示・タップ領域の実測: 未実施（MVP-040 / MVP-042 と合わせて確認）。
+- 拡大表示・タップ領域の実測: 未実施（MVP-040 / MVP-042 と合わせて確認）。コントラスト比は `lint:ui` で算出済み。
 - 事件のやり直しは全画面で `ConfirmPanel`（role=alertdialog、表示時に確認文へフォーカス）による 2 段階確認に統一（#153）。`window.confirm` は ESLint で禁止。
 - 旧サイドバーの `src/components/CaseList.tsx` は未使用だったため削除済み（#162）。

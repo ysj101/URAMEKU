@@ -26,14 +26,14 @@
 | `--color-surface-explain` | `#efe7d9` | 結果画面の解説欄 |
 | `--color-ink` | `#242426` | 本文・罫線・影 |
 | `--color-ink-inverse` | `#ffffff` | 濃色地（インク・赤・青）の上の文字 |
-| `--color-quiet` | `#746f68` | 補足・注記・無効説明 |
+| `--color-quiet` | `#5f5b55` | 補足・注記・無効説明 |
 | `--color-border` | `#aaa192` | 細い罫線（脚注の区切り） |
-| `--color-border-dashed` | `#8f8b83` | 破線枠 |
-| `--color-accent` | `#cf4b4b` | 強調（赤）：主ボタン・タグ・選択枠・成績 |
-| `--color-info` | `#487d93` | 情報（青）：副ボタン・通知の罫・フォーカス |
+| `--color-border-dashed` | `#8c8880` | 破線枠 |
+| `--color-accent` | `#a73c3c` | 強調（赤）：主ボタン・タグ・選択枠・成績 |
+| `--color-info` | `#437489` | 情報（青）：副ボタン・通知の罫・フォーカス |
 | `--color-success` | `#3f7a4e` | 成功（試作未使用。将来の正解表示用） |
 | `--color-warning` | `#f5ce6c` | 警告・予算残（暗地の上） |
-| `--color-disabled` | `#8f8b83` | 無効状態の文字・枠 |
+| `--color-disabled` | `#8c8880` | 無効状態の文字・枠 |
 | `--color-backdrop` | `#1e2021b0` | ダイアログ暗幕 |
 | `--opacity-disabled` | `0.42` | 無効ボタン |
 | `--opacity-muted` | `0.5` | 使用済みピン |
@@ -79,31 +79,24 @@
 ## コントラスト比（WCAG 2.x 相対輝度で算出）
 
 主要な組み合わせ。4.5:1 以上が通常文字の AA。3:1 以上は大きい文字（18pt / 太字 14pt 以上）と UI 部品の境界なら AA。
+この表の組み合わせは `npm run lint:ui`（`scripts/lint_ui_guide.mjs` の `CONTRAST_PAIRS`）が同じ基準で確かめる。
 
 | 前景 | 背景 | 比率 | 判定 |
 | --- | --- | --- | --- |
 | `--color-ink` | `--color-bg` / `--color-surface` / `--color-surface-aged` / `-note` / `-desk` / `-explain` | 13.6 / 14.9 / 11.2 / 14.2 / 10.5 / 12.6 | OK |
-| `--color-ink-inverse` | `--color-ink` | 15.5 | OK |
-| `--color-ink-inverse` | `--color-info` | 4.54 | OK |
+| `--color-ink-inverse` | `--color-ink` / `--color-info` / `--color-accent` | 15.5 / 5.12 / 6.26 | OK |
 | `--color-warning` | `--color-ink` | 10.3 | OK |
-| `--color-quiet` | `--color-surface` / `--color-surface-note` | 4.79 / 4.58 | OK |
+| `--color-quiet` | `--color-bg` / `--color-surface` / `--color-surface-aged` / `-desk` / `-note` / `-explain` | 5.93 / 6.48 / 4.88 / 4.55 / 6.20 / 5.49 | OK |
 | `--color-success` | `--color-surface` / `--color-bg` | 4.92 / 4.50 | OK |
-| **`--color-quiet`** | **`--color-bg`** | **4.38** | 4.5 未満（脚注 0.72rem の通常文字） |
-| **`--color-quiet`** | **`--color-surface-aged`** | **3.60** | 4.5 未満（情報パネル内の注記） |
-| **`--color-ink-inverse`** | **`--color-accent`** | **4.41** | 4.5 未満（主ボタン・タグ・h1 の帯。太字 0.7rem〜） |
-| **`--color-accent`** | `--color-surface` / `--color-bg` / `--color-surface-aged` | **4.24 / 3.88 / 3.19** | 4.5 未満（案件番号・ピン強調。成績 5rem は大文字扱いで OK） |
-| **`--color-info`** | `--color-surface` / `--color-bg` | **4.36 / 3.99** | 4.5 未満（文字としては未使用。フォーカスリングは UI 部品の 3:1 を満たす） |
+| `--color-accent` | `--color-surface` / `--color-bg` / `--color-surface-aged` | 6.02 / 5.51 / 4.53 | OK |
+| `--color-info` | `--color-surface` / `--color-bg` | 4.93 / 4.51 | OK |
+| `--color-disabled` | `--color-bg` / `--color-surface` | 3.11 / 3.39 | 無効状態の文字は WCAG の例外だが 3:1 を目安に満たす |
 | `--color-border` | `--color-bg` | 2.25 | 装飾的な罫線のみ。文字・部品境界に使わない |
-| `--color-border-dashed` | `--color-surface-note` | 3.12 | UI 部品の境界として OK |
+| `--color-border-dashed` | `--color-surface-note` | 3.24 | UI 部品の境界として OK |
 
-### 変更提案（本 Issue では適用しない）
+### 変更履歴
 
-色の変更はアートディレクションの判断が必要なため、本 Issue では値を変えず提案のみ記録する。
-
-- `--color-quiet`: `#746f68` → `#6c675f` にすると紙上 4.94、古紙上 4.06。古紙上でも 4.5 を満たすには `#67625b`（4.37）でも不足するため、情報パネル内は `--color-ink` を使う運用が現実的。
-- `--color-accent`: `#cf4b4b` → `#c43f3f` にすると白文字 5.08、紙白上 4.89。`#bf3a3a` なら紙上 4.76。
-- `--color-info`: `#487d93` → `#3f7389` にすると紙上 4.59、紙白上 5.01、白文字 5.22。
-- 赤・青を文字色として小さく使う箇所（案件番号 0.7rem など）は太字のまま 0.875rem 以上にするか、`--color-ink` に寄せる。
+- #156: 文字色として使う `--palette-quiet` `#746f68` → `#5f5b55`、`--palette-red` `#cf4b4b` → `#a73c3c`、`--palette-blue` `#487d93` → `#437489`、`--palette-border-dashed` `#8f8b83` → `#8c8880` に下げ、上の表の組み合わせをすべて基準内にした。背景色は変えていない。見た目の最終確認はアート QA で行う（`qa/art-review.json`）。
 
 ## 参考
 

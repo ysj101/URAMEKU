@@ -1,16 +1,4 @@
 {
   "note": "lint:ui が仕組み導入前の指摘を一時的に見逃すための控え。減らす方向にだけ更新する（--update-baseline）。",
-  "entries": [
-    "src/app/tokens.css | contrast | --color-accent on --color-bg = 3.88:1",
-    "src/app/tokens.css | contrast | --color-accent on --color-surface = 4.24:1",
-    "src/app/tokens.css | contrast | --color-accent on --color-surface-aged = 3.19:1",
-    "src/app/tokens.css | contrast | --color-disabled on --color-bg = 2.99:1",
-    "src/app/tokens.css | contrast | --color-info on --color-bg = 3.99:1",
-    "src/app/tokens.css | contrast | --color-info on --color-surface = 4.36:1",
-    "src/app/tokens.css | contrast | --color-ink-inverse on --color-accent = 4.41:1",
-    "src/app/tokens.css | contrast | --color-quiet on --color-bg = 4.38:1",
-    "src/app/tokens.css | contrast | --color-quiet on --color-surface-aged = 3.60:1",
-    "src/app/tokens.css | contrast | --color-quiet on --color-surface-desk = 3.36:1",
-    "src/app/tokens.css | contrast | --color-quiet on --color-surface-explain = 4.06:1"
-  ]
+  "entries": []
 }
