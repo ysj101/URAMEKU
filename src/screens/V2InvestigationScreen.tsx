@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { ConfirmPanel } from '../components/ConfirmPanel';
 import { DocumentDialog } from '../components/DocumentDialog';
 import { DocumentGrid } from '../components/DocumentGrid';
 import { InformationDesk } from '../components/InformationDesk';
@@ -13,6 +14,7 @@ import { boardReviews } from '../domain/board';
 import { experimentComplete } from '../domain/experiment';
 import type { CaseData, CaseProgress } from '../domain/types';
 import type { GameApi } from '../state/useGame';
+import { UI } from '../data/ui';
 import '../app/screens/desk.css';
 import '../app/screens/v2-integration.css';
 import '../app/screens/v2-desk.css';
@@ -490,36 +492,26 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
         </p>
         <p>予算が足りなくなったら、最初から調査し直せます。</p>
         <button type="button" className="btn ghost" onClick={() => setConfirmReset(true)}>
-          この事件を最初から
+          {UI.case.retry}
         </button>
       </details>
 
       {confirmReset && (
-        <section
-          className="notice"
-          role="alertdialog"
-          aria-label="調査をやり直す確認"
-          aria-describedby="v2-reset-description"
+        <ConfirmPanel
+          title={UI.case.retryConfirmTitle}
+          confirmLabel={UI.case.retryConfirm}
+          onConfirm={() => {
+            dispatch({ type: 'reset' });
+            setBlockedDocument(null);
+            setActiveTaskId(v2.decoding[0]?.id ?? null);
+            setBoardTaskId(undefined);
+            setResetEpoch((n) => n + 1);
+            setConfirmReset(false);
+          }}
+          onCancel={() => setConfirmReset(false)}
         >
-          <p id="v2-reset-description">この事件の調査記録を消して、最初からやり直しますか？</p>
-          <button
-            type="button"
-            className="btn primary"
-            onClick={() => {
-              dispatch({ type: 'reset' });
-              setBlockedDocument(null);
-              setActiveTaskId(v2.decoding[0]?.id ?? null);
-              setBoardTaskId(undefined);
-              setResetEpoch((n) => n + 1);
-              setConfirmReset(false);
-            }}
-          >
-            やり直す
-          </button>
-          <button type="button" className="btn ghost" onClick={() => setConfirmReset(false)}>
-            やめる
-          </button>
-        </section>
+          この事件{UI.case.retryConfirmBody}
+        </ConfirmPanel>
       )}
       <DocumentDialog
         caseData={current}

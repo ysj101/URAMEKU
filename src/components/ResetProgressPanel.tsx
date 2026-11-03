@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { UI } from '../data/ui';
+import { ConfirmPanel } from './ConfirmPanel';
 
 export interface ResetProgressPanelProps {
   /** この端末の記録をすべて削除する */
@@ -13,8 +15,7 @@ type Operation = 'case' | 'all';
 
 /**
  * 進捗リセット / 全件削除のパネル（MVP-031）。
- * 誤操作防止のため、ボタン → 確認文 + 「削除する」/「やめる」の 2 段階で実行する。
- * `window.confirm` は使わず、状態をコンポーネント内で持つ。
+ * 誤操作防止のため、ボタン → 確認文 + 「やり直す」「削除する」/「やめる」の 2 段階で実行する（ConfirmPanel）。
  */
 export function ResetProgressPanel({
   onResetAll,
@@ -49,7 +50,7 @@ export function ResetProgressPanel({
         <div className="stage-switch">
           {onResetCase && (
             <button type="button" className="btn ghost" onClick={() => start('case')}>
-              この事件をやり直す
+              {UI.case.retry}
             </button>
           )}
           <button type="button" className="btn ghost" onClick={() => start('all')}>
@@ -58,22 +59,26 @@ export function ResetProgressPanel({
         </div>
       )}
 
-      {pending !== null && (
-        <div className="notice" role="alertdialog" aria-labelledby="reset-progress-confirm">
-          <p id="reset-progress-confirm">
-            {pending === 'case'
-              ? `${caseLabel}の調査途中の記録を消して、最初からやり直します。よろしいですか？`
-              : 'この端末に保存された、すべての事件の進行とクリア記録を削除します。よろしいですか？'}
-          </p>
-          <div className="stage-switch">
-            <button type="button" className="btn primary" onClick={execute}>
-              削除する
-            </button>
-            <button type="button" className="btn ghost" onClick={cancel}>
-              やめる
-            </button>
-          </div>
-        </div>
+      {pending === 'case' && (
+        <ConfirmPanel
+          title={UI.case.retryConfirmTitle}
+          confirmLabel={UI.case.retryConfirm}
+          onConfirm={execute}
+          onCancel={cancel}
+        >
+          {caseLabel}
+          {UI.case.retryConfirmBody}
+        </ConfirmPanel>
+      )}
+      {pending === 'all' && (
+        <ConfirmPanel
+          title="削除の確認"
+          confirmLabel="削除する"
+          onConfirm={execute}
+          onCancel={cancel}
+        >
+          この端末に保存された、すべての事件の進行とクリア記録を削除します。よろしいですか？
+        </ConfirmPanel>
       )}
 
       {done !== null && (

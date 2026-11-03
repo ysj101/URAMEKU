@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { ConfirmPanel } from '../components/ConfirmPanel';
 import { useSound } from '../audio/useSound';
 import { CalculationDesk } from '../components/CalculationDesk';
 import { DocumentDialog } from '../components/DocumentDialog';
@@ -7,6 +8,7 @@ import { EvidenceBoard } from '../components/EvidenceBoard';
 import { remainingBudget } from '../domain/budget';
 import { isDeadEnd } from '../domain/deadEnd';
 import type { GameApi } from '../state/useGame';
+import { UI } from '../data/ui';
 import '../app/screens/desk.css';
 import { V2InvestigationScreen } from './V2InvestigationScreen';
 
@@ -14,6 +16,7 @@ export function InvestigationScreen({ game }: { game: GameApi }) {
   const { current, progress, dispatch } = game;
   const play = useSound();
   const [openId, setOpenId] = useState<string | null>(null);
+  const [confirmingReset, setConfirmingReset] = useState(false);
   if (current.v2) return <V2InvestigationScreen key={current.id} game={game} />;
   const deadEnd = isDeadEnd(current, progress);
 
@@ -26,9 +29,7 @@ export function InvestigationScreen({ game }: { game: GameApi }) {
   };
 
   const handleRestart = () => {
-    // TODO(#153): 画面内の 2 段階確認にそろえる
-    // eslint-disable-next-line no-restricted-properties
-    if (!window.confirm('この事件の調査途中の記録を最初からやり直しますか？')) return;
+    setConfirmingReset(false);
     dispatch({ type: 'reset' });
   };
 
@@ -48,10 +49,20 @@ export function InvestigationScreen({ game }: { game: GameApi }) {
       {deadEnd && (
         <div className="notice" role="status">
           必要な資料を開く調査予算が残っていません。この事件を最初からやり直してください。{' '}
-          <button type="button" className="btn ghost" onClick={handleRestart}>
-            この事件を最初からやり直す
+          <button type="button" className="btn ghost" onClick={() => setConfirmingReset(true)}>
+            {UI.case.retry}
           </button>
         </div>
+      )}
+      {confirmingReset && (
+        <ConfirmPanel
+          title={UI.case.retryConfirmTitle}
+          confirmLabel={UI.case.retryConfirm}
+          onConfirm={handleRestart}
+          onCancel={() => setConfirmingReset(false)}
+        >
+          この事件{UI.case.retryConfirmBody}
+        </ConfirmPanel>
       )}
       <h2 className="section-title">
         調査資料{' '}

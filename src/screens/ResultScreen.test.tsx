@@ -207,14 +207,14 @@ describe('ResultScreen（やり直し）', () => {
     const game = makeGame(clearedProgress());
     render(<ResultScreen game={game} nav={makeNav()} />);
 
-    fireEvent.click(screen.getByRole('button', { name: 'この事件をもう一度' }));
+    fireEvent.click(screen.getByRole('button', { name: 'この事件を最初からやり直す' }));
     expect(game.dispatch).not.toHaveBeenCalled();
-    const confirm = screen.getByRole('group', { name: 'やり直しの確認' });
+    const confirm = screen.getByRole('alertdialog', { name: 'やり直しの確認' });
     fireEvent.click(within(confirm).getByRole('button', { name: 'やめる' }));
-    expect(screen.queryByRole('group', { name: 'やり直しの確認' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('alertdialog', { name: 'やり直しの確認' })).not.toBeInTheDocument();
     expect(game.dispatch).not.toHaveBeenCalled();
 
-    fireEvent.click(screen.getByRole('button', { name: 'この事件をもう一度' }));
+    fireEvent.click(screen.getByRole('button', { name: 'この事件を最初からやり直す' }));
     fireEvent.click(screen.getByRole('button', { name: 'やり直す' }));
     expect(game.dispatch).toHaveBeenCalledWith({ type: 'reset' });
     expect(confirmSpy).not.toHaveBeenCalled();

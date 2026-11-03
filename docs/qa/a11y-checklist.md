@@ -127,5 +127,5 @@
 
 - スクリーンリーダー実機（VoiceOver / TalkBack / NVDA）での読み上げ順・告知内容の確認: **未実施**。
 - コントラスト比・拡大表示・タップ領域の実測: 未実施（MVP-040 / MVP-042 と合わせて確認）。
-- `window.confirm`（調査画面の「この事件を最初から」）はブラウザ標準のため読み上げは可能だが、設定画面と同じ 2 段階ボタンへの統一は別 Issue。
+- 事件のやり直しは全画面で `ConfirmPanel`（role=alertdialog、表示時に確認文へフォーカス）による 2 段階確認に統一（#153）。`window.confirm` は ESLint で禁止。
 - 旧サイドバーの `src/components/CaseList.tsx` は未使用だったため削除済み（#162）。

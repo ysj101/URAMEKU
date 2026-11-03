@@ -43,19 +43,20 @@ describe('InvestigationScreen の詰み案内', () => {
     expect(status).toHaveTextContent('この事件を最初からやり直してください');
   });
 
-  it('案内内のボタンは既存の確認フローを経てリセットする', () => {
+  it('案内内のボタンは画面内の 2 段階確認を経てリセットする', () => {
     const game = makeGame(makeProgress({ opened: ['d'] }));
-    const confirmSpy = vi.spyOn(window, 'confirm');
     render(<InvestigationScreen game={game} />);
     const button = screen.getByRole('button', { name: 'この事件を最初からやり直す' });
 
-    confirmSpy.mockReturnValueOnce(false);
     fireEvent.click(button);
+    const confirm = screen.getByRole('alertdialog', { name: 'やり直しの確認' });
+    expect(confirm).toHaveFocus();
+    fireEvent.click(screen.getByRole('button', { name: 'やめる' }));
     expect(game.dispatch).not.toHaveBeenCalled();
+    expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument();
 
-    confirmSpy.mockReturnValueOnce(true);
     fireEvent.click(button);
+    fireEvent.click(screen.getByRole('button', { name: 'やり直す' }));
     expect(game.dispatch).toHaveBeenCalledWith({ type: 'reset' });
-    confirmSpy.mockRestore();
   });
 });

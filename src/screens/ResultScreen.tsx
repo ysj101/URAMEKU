@@ -1,5 +1,7 @@
 import { useCallback, useRef, useState } from 'react';
 import { useSound } from '../audio/useSound';
+import { ConfirmPanel } from '../components/ConfirmPanel';
+import { UI } from '../data/ui';
 import { AnswerReveal } from '../components/AnswerReveal';
 import { Debrief } from '../components/Debrief';
 import { FailureReasons } from '../components/FailureReasons';
@@ -170,26 +172,18 @@ function LegacyResultScreen({ game, nav }: { game: GameApi; nav: Navigation }) {
 
           <div className="result-reset">
             {confirmingReset ? (
-              <div className="result-reset-confirm" role="group" aria-label="やり直しの確認">
-                <p>
-                  この事件の調査途中の記録（閲覧・採用・メモ・見出し）を消して最初から始めます。
-                </p>
-                <div className="result-actions">
-                  <button type="button" className="btn primary" onClick={reset}>
-                    やり直す
-                  </button>
-                  <button
-                    type="button"
-                    className="btn ghost"
-                    onClick={() => setConfirmingReset(false)}
-                  >
-                    やめる
-                  </button>
-                </div>
-              </div>
+              <ConfirmPanel
+                className="result-reset-confirm"
+                title={UI.case.retryConfirmTitle}
+                confirmLabel={UI.case.retryConfirm}
+                onConfirm={reset}
+                onCancel={() => setConfirmingReset(false)}
+              >
+                この事件{UI.case.retryConfirmBody}
+              </ConfirmPanel>
             ) : (
               <button type="button" className="btn ghost" onClick={() => setConfirmingReset(true)}>
-                この事件をもう一度
+                {UI.case.retry}
               </button>
             )}
           </div>

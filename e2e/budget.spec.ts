@@ -44,7 +44,7 @@ test('代替経路も予算不足なら案内が出て再調査できる', async
     .filter({ hasText: '資料を開くための調査予算が残っていません' });
   await expect(notice).toBeVisible();
 
-  // window.confirm を承諾して最初からやり直す
+  // 画面内の確認で「やり直す」を押して最初からやり直す
   await notice.getByRole('button', { name: 'この事件を最初からやり直す' }).click();
   await page
     .getByRole('alertdialog')
