@@ -99,7 +99,10 @@ async function recordDecision(page: Page, c: CaseData, sources: string[], option
   const title = (id: string) => c.documents.find((d) => d.id === id)!.title;
   await showDesk(page, '意思決定');
   const desk = page.getByRole('region', { name: '意思決定シミュレーション' });
-  await desk.getByLabel('優先する目的', { exact: true }).selectOption(definition.objectives[0]!.id);
+  // ラベルには読み上げない「※必須」の印が付くので、アクセシブル名で引く
+  await desk
+    .getByRole('combobox', { name: '優先する目的' })
+    .selectOption(definition.objectives[0]!.id);
   const option =
     definition.options.find((o) => o.id === optionId) ??
     definition.options.find((o) => o.cost <= definition.resources)!;
