@@ -225,6 +225,9 @@ describe('次の操作の強調', () => {
     const { container } = render(<Harness data={data} actions={actions} />);
     expect(enabledPrimaries(container)).toHaveLength(1);
     expect(screen.getByRole('button', { name: '調査報告をまとめる →' })).toHaveClass('primary');
+    // 完了は色だけでなく「完了」の文字でも分かる
+    expect(screen.getByRole('tab', { name: /情報解読メモ/ })).toHaveTextContent(/完了$/);
+    expect(screen.getByRole('tab', { name: /証拠ボード/ })).toHaveTextContent(/件 完了$/);
     fireEvent.click(screen.getByRole('tab', { name: /証拠ボード/ }));
     expect(enabledPrimaries(container)).toHaveLength(1);
     fireEvent.click(screen.getByText('残っていることの一覧'));

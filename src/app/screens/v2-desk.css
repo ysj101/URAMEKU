@@ -261,6 +261,7 @@
 }
 .v2-tab.is-done .v2-tab__badge {
   color: var(--color-success);
+  /* 完了は文字（「完了」「記録済み」）でも伝える。色は補助 */
 }
 .v2-tabpanel {
   min-width: 0;
