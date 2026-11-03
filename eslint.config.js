@@ -7,6 +7,13 @@ import reactRefresh from 'eslint-plugin-react-refresh';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import prettier from 'eslint-config-prettier';
 
+/** 画面コード（テストを除く）。UI 設計ガイドと a11y のルールの対象。docs/UI_GUIDE_LINT.md */
+const SCREEN_FILES = { files: ['src/**/*.tsx'], ignores: ['**/*.test.tsx'] };
+/** ネイティブダイアログ。OK / キャンセルしか出せないので、画面内の 2 段階確認にする */
+const NATIVE_DIALOGS = ['confirm', 'alert', 'prompt'];
+const nativeDialogMessage = (name) =>
+  `${name}() は使わない。画面内の確認（例: ResetProgressPanel）にして、ボタンは「削除する」「やめる」のように結果が分かる動詞にする`;
+
 export default tseslint.config(
   {
     ignores: [
@@ -41,31 +48,25 @@ export default tseslint.config(
     },
   },
   {
-    // 画面の a11y（alt、ラベル、role と操作の対応など）。docs/UI_GUIDE_LINT.md
-    files: ['src/**/*.tsx'],
-    ignores: ['**/*.test.tsx'],
+    // 画面の a11y（alt、ラベル、role と操作の対応など）
+    ...SCREEN_FILES,
     ...jsxA11y.flatConfigs.recommended,
   },
   {
-    // UI 設計ガイド（docs/UI_GUIDE_LINT.md）。文言と配色は scripts/lint_ui_guide.mjs が見る
-    files: ['src/**/*.tsx'],
-    ignores: ['**/*.test.tsx'],
+    // UI 設計ガイド。文言と配色は scripts/lint_ui_guide.mjs が見る
+    ...SCREEN_FILES,
     rules: {
-      // 確認は画面内の 2 段階ボタンで出す。ネイティブダイアログは OK / キャンセルしか出せない
       'no-restricted-globals': [
         'error',
-        ...['confirm', 'alert', 'prompt'].map((name) => ({
-          name,
-          message: `${name}() は使わない。画面内の確認（例: ResetProgressPanel）にして、ボタンは「削除する」「やめる」のように結果が分かる動詞にする`,
-        })),
+        ...NATIVE_DIALOGS.map((name) => ({ name, message: nativeDialogMessage(name) })),
       ],
       'no-restricted-properties': [
         'error',
         ...['window', 'globalThis'].flatMap((object) =>
-          ['confirm', 'alert', 'prompt'].map((property) => ({
+          NATIVE_DIALOGS.map((property) => ({
             object,
             property,
-            message: `${object}.${property}() は使わない。画面内の確認にして、ボタンは結果が分かる動詞にする`,
+            message: nativeDialogMessage(`${object}.${property}`),
           })),
         ),
       ],

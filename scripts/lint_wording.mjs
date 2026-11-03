@@ -21,10 +21,10 @@
  * 文の長さは見ない。手順の全体は docs/CASE_AUTHORING.md「文章の書き方」を見る。
  * 本スクリプトは補助であり、yomiyasu による推敲と人手レビューを置き換えない。
  */
-import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { join, relative, resolve } from 'node:path';
+import { ROOT, listFiles, runWithBaseline, walkStrings } from './lib/lint_common.mjs';
 
-const ROOT = resolve(new URL('..', import.meta.url).pathname);
 const WARN_LEN = 60;
 const ERROR_LEN = 100;
 
@@ -34,9 +34,6 @@ const TARGETS = [
   { dir: 'data/ui', ext: ['.json'] },
   { dir: 'src', ext: ['.tsx'] },
 ];
-const SKIP_DIRS = new Set(['node_modules', 'dist', 'coverage', 'archive']);
-const SKIP_FILE = /\.test\.tsx?$/;
-
 function readWordList(name) {
   const p = join(ROOT, '.yomiyasu-words', name);
   if (!existsSync(p)) return [];
@@ -47,29 +44,9 @@ function readWordList(name) {
 }
 const FLAG_WORDS = readWordList('flag.txt');
 
-function listFiles(dir, exts, out = []) {
-  if (!existsSync(dir)) return out;
-  for (const name of readdirSync(dir)) {
-    if (SKIP_DIRS.has(name)) continue;
-    const p = join(dir, name);
-    if (statSync(p).isDirectory()) listFiles(p, exts, out);
-    else if (exts.some((e) => name.endsWith(e)) && !SKIP_FILE.test(name)) out.push(p);
-  }
-  return out;
-}
-
 function collectTargets(args) {
   if (args.length) return args.map((a) => resolve(ROOT, a));
   return TARGETS.flatMap(({ dir, ext }) => listFiles(join(ROOT, dir), ext));
-}
-
-/** JSON の文字列を (パス, 値) で列挙する */
-function* walkStrings(value, path = '') {
-  if (typeof value === 'string') yield { path, value };
-  else if (Array.isArray(value))
-    for (const [i, v] of value.entries()) yield* walkStrings(v, `${path}[${i}]`);
-  else if (value && typeof value === 'object')
-    for (const [k, v] of Object.entries(value)) yield* walkStrings(v, path ? `${path}.${k}` : k);
 }
 
 const JA = /[ぁ-んァ-ヶ一-龥]/;
@@ -143,55 +120,18 @@ function scanTsx(file) {
 }
 
 /** 控えの鍵。tsx は行番号がずれるので、ファイル名と語と行の本文で見分ける */
-function baselineKey(h) {
-  return `${h.loc.replace(/:\d+$/, '')} | ${h.match} | ${h.text ?? ''}`;
-}
-
-const BASELINE_PATH = join(ROOT, 'qa', 'wording-baseline.json');
-function readBaseline() {
-  if (!existsSync(BASELINE_PATH)) return new Set();
-  return new Set(JSON.parse(readFileSync(BASELINE_PATH, 'utf8')).entries ?? []);
-}
+const baselineKey = (h) => `${h.loc.replace(/:\d+$/, '')} | ${h.match} | ${h.text ?? ''}`;
 
 const argv = process.argv.slice(2);
-const strict = argv.includes('--strict');
-const useBaseline = !argv.includes('--no-baseline') && !argv.includes('--update-baseline');
 const files = collectTargets(argv.filter((a) => !a.startsWith('--')));
-const allHits = files.flatMap((f) => (f.endsWith('.json') ? scanJson(f) : scanTsx(f)));
-
-if (argv.includes('--update-baseline')) {
-  const entries = [...new Set(allHits.map(baselineKey))].sort();
-  writeFileSync(
-    BASELINE_PATH,
-    JSON.stringify(
-      {
-        note: 'lint:wording が仕組み導入前の文言を一時的に見逃すための控え。減らす方向にだけ更新する（--update-baseline）。',
-        entries,
-      },
-      null,
-      2,
-    ) + '\n',
-  );
-  console.log(
-    `lint:wording  baseline updated: ${entries.length} entries -> ${relative(ROOT, BASELINE_PATH)}`,
-  );
-  process.exit(0);
-}
-
-const baseline = useBaseline ? readBaseline() : new Set();
-const hits = allHits.filter((h) => !baseline.has(baselineKey(h)));
-const suppressed = allHits.length - hits.length;
-
-let errors = 0;
-let warns = 0;
-for (const h of hits) {
-  if (h.severity === 'error') errors++;
-  else warns++;
-  console.log(`[${h.severity}] ${h.loc}  "${h.match}"  (${h.note})`);
-}
-console.log(
-  `\nlint:wording  files=${files.length}  flagWords=${FLAG_WORDS.length}  errors=${errors}  warnings=${warns}` +
-    `  baseline=${suppressed}` +
-    (strict ? '  (--strict)' : ''),
+process.exit(
+  runWithBaseline({
+    name: 'lint:wording',
+    baselinePath: join(ROOT, 'qa', 'wording-baseline.json'),
+    argv,
+    hits: files.flatMap((f) => (f.endsWith('.json') ? scanJson(f) : scanTsx(f))),
+    keyOf: baselineKey,
+    summary: `files=${files.length}  flagWords=${FLAG_WORDS.length}`,
+    strict: argv.includes('--strict'),
+  }),
 );
-process.exit(errors > 0 || (strict && warns > 0) ? 1 : 0);
