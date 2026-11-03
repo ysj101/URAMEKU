@@ -254,7 +254,7 @@ test('マウスとドラッグを使わずTab・矢印・Space・EnterでCASE01�
     await page.keyboard.press('Enter');
     const dialog = page.getByRole('dialog');
     await expect(dialog).toBeVisible();
-    await tabTo(page, dialog.getByRole('button', { name: '戻る', exact: true }));
+    await tabTo(page, dialog.getByRole('button', { name: '資料を閉じる' }));
     await page.keyboard.press('Space');
     await expect(dialog).toBeHidden();
   }

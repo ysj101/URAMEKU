@@ -75,7 +75,7 @@ describe('DocumentDialog', () => {
     expect(tile).toHaveFocus();
   });
 
-  it('閉じるボタン・戻るボタンで閉じる（history.back は 1 回だけ）', () => {
+  it('×ボタン・「資料を閉じる」で閉じる（history.back は 1 回だけ）', () => {
     render(<Harness progress={makeProgress({ opened: ['a'] })} />);
     openA();
     fireEvent.click(screen.getByRole('button', { name: '閉じる' }));
@@ -83,7 +83,7 @@ describe('DocumentDialog', () => {
     expect(back).toHaveBeenCalledTimes(1);
 
     openA();
-    fireEvent.click(screen.getByRole('button', { name: '戻る' }));
+    fireEvent.click(screen.getByRole('button', { name: '資料を閉じる' }));
     expect(dialogEl().open).toBe(false);
     expect(back).toHaveBeenCalledTimes(2);
     expect(pushState).toHaveBeenCalledTimes(2);
@@ -114,7 +114,7 @@ describe('DocumentDialog', () => {
     expect(back).not.toHaveBeenCalled();
   });
 
-  it('貼る操作はなく、読んだ資料はその旨を示して「戻る」で閉じる', () => {
+  it('貼る操作はなく、読んだ資料はその旨を示して「資料を閉じる」で閉じる', () => {
     render(<Harness progress={makeProgress({ opened: ['a'] })} />);
     openA();
     expect(
@@ -123,7 +123,7 @@ describe('DocumentDialog', () => {
     expect(screen.getByRole('status')).toHaveTextContent(
       'この資料は読んだので、記録の根拠として使えます。',
     );
-    fireEvent.click(screen.getByRole('button', { name: '戻る' }));
+    fireEvent.click(screen.getByRole('button', { name: '資料を閉じる' }));
     expect(dialogEl().open).toBe(false);
   });
 });

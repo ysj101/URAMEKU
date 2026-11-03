@@ -49,7 +49,7 @@ test('CASE01は各段階で次の操作を1つ示し、補足の機能にも戻�
   expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(page.viewportSize()!.height);
   await next.getByRole('button').click();
   await expect(page.getByRole('dialog')).toContainText(data.documents[0]!.content);
-  await page.getByRole('dialog').getByRole('button', { name: '戻る', exact: true }).click();
+  await page.getByRole('dialog').getByRole('button', { name: '資料を閉じる' }).click();
   // 問1はすでにデスクに出ているので、カードは控えめにして選択肢を主役にする。
   await checkStage('問1を開く', null, '02-first-doc');
   const opened = new Set([data.documents[0]!.id]);
@@ -65,7 +65,7 @@ test('CASE01は各段階で次の操作を1つ示し、補足の機能にも戻�
       await expect(primary).toHaveAccessibleName(`${doc.title}を開く`);
       await primary.click();
       await expect(page.getByRole('dialog')).toContainText(doc.content);
-      await page.getByRole('dialog').getByRole('button', { name: '戻る', exact: true }).click();
+      await page.getByRole('dialog').getByRole('button', { name: '資料を閉じる' }).click();
       opened.add(id);
     }
     await expect(group.getByRole('status')).toContainText('根拠ありとして記録しました');

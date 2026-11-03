@@ -3,7 +3,7 @@ import { CASE01, docTile, expectBudget, gotoCase01, openDoc } from './helpers';
 
 async function closeDialog(page: Page) {
   const dialog = page.getByRole('dialog');
-  await dialog.getByRole('button', { name: '戻る' }).click();
+  await dialog.getByRole('button', { name: '資料を閉じる' }).click();
   await expect(dialog).toBeHidden();
 }
 
