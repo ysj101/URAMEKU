@@ -2,6 +2,8 @@ name: CI
 
 on:
   pull_request:
+    # edited: PR の題名・本文を直したときもメールアドレス検査を再実行する
+    types: [opened, synchronize, reopened, edited]
   push:
     branches:
       - main
