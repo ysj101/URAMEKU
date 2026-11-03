@@ -267,3 +267,10 @@
 .motion-toggle .fine {
   margin-top: var(--space-1);
 }
+
+.hint-toggle {
+  margin: 0 0 var(--space-3);
+}
+.hint-toggle .fine {
+  margin: var(--space-1) 0 0;
+}

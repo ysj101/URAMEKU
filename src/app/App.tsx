@@ -10,6 +10,7 @@ import { useGame } from '../state/useGame';
 import { SettingsScreen } from '../screens/SettingsScreen';
 import { AudioControl } from '../components/AudioControl';
 import { MotionToggle } from '../components/MotionToggle';
+import { HintToggle } from '../components/HintToggle';
 import { findCase } from '../data/cases';
 import { SaveStatusBanner } from '../components/SaveStatusBanner';
 import { OfflineBanner } from '../components/StatusView';
@@ -66,6 +67,7 @@ export function App() {
           </div>
           <AudioControl className="settings-audio" />
           <MotionToggle />
+          <HintToggle />
           <SettingsScreen
             caseTitle={game.current.title}
             onResetCase={() => game.dispatch({ type: 'reset' })}
