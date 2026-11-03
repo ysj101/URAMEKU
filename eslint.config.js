@@ -4,6 +4,7 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
+import jsxA11y from 'eslint-plugin-jsx-a11y';
 import prettier from 'eslint-config-prettier';
 
 export default tseslint.config(
@@ -38,6 +39,12 @@ export default tseslint.config(
       '@typescript-eslint/consistent-type-imports': 'error',
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     },
+  },
+  {
+    // 画面の a11y（alt、ラベル、role と操作の対応など）。docs/UI_GUIDE_LINT.md
+    files: ['src/**/*.tsx'],
+    ignores: ['**/*.test.tsx'],
+    ...jsxA11y.flatConfigs.recommended,
   },
   {
     // UI 設計ガイド（docs/UI_GUIDE_LINT.md）。文言と配色は scripts/lint_ui_guide.mjs が見る

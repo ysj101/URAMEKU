@@ -9,7 +9,7 @@ export function FailureReasons({ reasons }: { reasons: FailureReason[] }) {
   return (
     <div className="failure-reasons">
       <strong>差し戻しの理由</strong>
-      <ul role="list" aria-label="差し戻しの理由">
+      <ul aria-label="差し戻しの理由">
         {reasons.map((r) => (
           <li key={r.track} data-track={r.track}>
             {r.message}

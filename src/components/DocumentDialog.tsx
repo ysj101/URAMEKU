@@ -128,6 +128,8 @@ export function DocumentDialog({ caseData, progress, documentId, onClose }: Prop
   };
 
   return (
+    // 背景（dialog 自身）のクリックで閉じる。キーボードは Esc（onCancel）と中の「閉じる」ボタンで操作できる
+    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
     <dialog
       ref={ref}
       className="document-dialog"
