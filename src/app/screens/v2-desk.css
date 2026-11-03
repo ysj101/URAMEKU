@@ -34,9 +34,6 @@
   margin: var(--space-1) 0 0;
   font-size: var(--font-size-md);
   line-height: var(--line-height-normal);
-  /* 文節の途中で折り返さない（対応ブラウザのみ）。行の長さもそろえる */
-  word-break: auto-phrase;
-  text-wrap: balance;
 }
 .case-header .case-mascot {
   width: 56px;
