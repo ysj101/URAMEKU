@@ -5,7 +5,8 @@
  * 一元管理する。コンポーネント側では生の色コード・影・フォーカス指定を書かず、
  * 必ずここで定義したトークンを参照すること（docs/DESIGN_TOKENS.md を参照）。
  *
- * 値はすべて試作版 global.css の見た目をそのまま引き継いでいる（ビジュアル回帰なし）。
+ * 値は試作版 global.css を引き継ぎ、文字色は #156 で WCAG 1.4.3（4.5:1）を満たす濃さに下げた。
+ * 組み合わせは `npm run lint:ui` が確かめる（docs/UI_GUIDE_LINT.md）。
  * 生の色コード（#xxxxxx）を書いてよいのはこのファイルだけ。
  */
 :root {
@@ -21,11 +22,11 @@
   --palette-paper-desk: #ddd3c1; /* 捜査デスク天板 */
   --palette-paper-note: #fff5d7; /* メモ用紙（通知・リンク枠・計算デスク） */
   --palette-paper-explain: #efe7d9; /* 解説欄 */
-  --palette-quiet: #746f68; /* 控えめ文字 */
+  --palette-quiet: #5f5b55; /* 控えめ文字（デスク天板の上でも 4.5:1） */
   --palette-border: #aaa192; /* 罫線 */
-  --palette-border-dashed: #8f8b83; /* 破線枠 */
-  --palette-red: #cf4b4b; /* 差し色・赤 */
-  --palette-blue: #487d93; /* 差し色・青 */
+  --palette-border-dashed: #8c8880; /* 破線枠・無効文字（紙の上で 3:1） */
+  --palette-red: #a73c3c; /* 差し色・赤（古紙の上でも 4.5:1、白文字 6:1） */
+  --palette-blue: #437489; /* 差し色・青（紙の上で 4.5:1） */
   --palette-green: #3f7a4e; /* 成功（試作未使用。コントラスト 4.5:1 以上で選定） */
   --palette-yellow: #f5ce6c; /* 予算メーター（暗地の上の警告色） */
   --palette-white: #ffffff; /* 反転文字 */
