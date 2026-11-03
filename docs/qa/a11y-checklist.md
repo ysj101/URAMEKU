@@ -112,8 +112,8 @@
 | 項目 | 達成基準 | 状態 | 備考 |
 | --- | --- | --- | --- |
 | h1「設定」→ h2「記録の削除」 | 1.3.1 | [x] | 本 PR で h3 → h2 |
-| 音量スライダーに `aria-label` / `aria-valuetext`、ミュートは `aria-pressed` | 4.1.2 | [x] | 監査 |
-| 演出を減らすは `aria-pressed` | 4.1.2 | [x] | 監査 |
+| 音量スライダーに `aria-label` / `aria-valuetext`、「音を鳴らす」は `role=switch` + `aria-checked` | 4.1.2 | [x] | 監査 |
+| 「演出を見せる」は `role=switch` + `aria-checked`（オフ = 演出を減らす） | 4.1.2 | [x] | 監査 |
 | 削除の確認は `role="alertdialog"` + `aria-labelledby`、完了は `role="status"` | 4.1.2 / 4.1.3 | [x] | 監査。フォーカスはボタン上に留まる |
 
 ## 共通バナー・状態表示

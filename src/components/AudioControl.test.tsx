@@ -28,28 +28,28 @@ function setup(initial?: { muted: boolean; volume: number }) {
 }
 
 describe('AudioControl', () => {
-  it('既定状態: ミュート OFF（aria-pressed=false）、音量 60', () => {
+  it('既定状態: 「音を鳴らす」がオン（aria-checked=true）、音量 60', () => {
     setup();
-    const toggle = screen.getByRole('button', { name: 'ミュート' });
-    expect(toggle).toHaveAttribute('aria-pressed', 'false');
+    const toggle = screen.getByRole('switch', { name: '音を鳴らす' });
+    expect(toggle).toHaveAttribute('aria-checked', 'true');
     const slider = screen.getByRole('slider', { name: '音量' });
     expect(slider).toHaveValue('60');
     expect(slider).not.toBeDisabled();
   });
 
-  it('ミュートトグルで aria-pressed が切り替わり保存される', async () => {
+  it('スイッチをオフにすると aria-checked が切り替わり、ミュートとして保存される', async () => {
     const user = userEvent.setup();
     const { storage, applySpy } = setup();
-    const toggle = screen.getByRole('button', { name: 'ミュート' });
+    const toggle = screen.getByRole('switch', { name: '音を鳴らす' });
     await user.click(toggle);
-    expect(toggle).toHaveAttribute('aria-pressed', 'true');
-    expect(toggle).toHaveAccessibleName('ミュート解除');
+    expect(toggle).toHaveAttribute('aria-checked', 'false');
+    expect(toggle).toHaveAccessibleName('音を鳴らす');
     expect(loadAudioSettings(storage)).toEqual({ muted: true, volume: 0.6 });
     expect(applySpy).toHaveBeenLastCalledWith({ muted: true, volume: 0.6 });
     expect(screen.getByRole('slider', { name: '音量' })).toBeDisabled();
 
     await user.click(toggle);
-    expect(toggle).toHaveAttribute('aria-pressed', 'false');
+    expect(toggle).toHaveAttribute('aria-checked', 'true');
     expect(loadAudioSettings(storage).muted).toBe(false);
   });
 
@@ -65,9 +65,9 @@ describe('AudioControl', () => {
 
   it('保存済み設定を初期値として読む', () => {
     setup({ muted: true, volume: 0.4 });
-    expect(screen.getByRole('button', { name: 'ミュート解除' })).toHaveAttribute(
-      'aria-pressed',
-      'true',
+    expect(screen.getByRole('switch', { name: '音を鳴らす' })).toHaveAttribute(
+      'aria-checked',
+      'false',
     );
     expect(screen.getByRole('slider', { name: '音量' })).toHaveValue('40');
   });

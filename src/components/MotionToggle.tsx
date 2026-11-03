@@ -4,24 +4,22 @@ import {
   setMotionPreference,
   type MotionPreference,
 } from '../app/motionSettings';
+import { UI } from '../data/ui';
+import { SettingSwitch } from './SettingSwitch';
 
-/** 演出を減らす設定のトグル（MVP-038 の設定を UI から切り替える） */
+/** 「演出を見せる」スイッチ（MVP-038 の設定を UI から切り替える）。オフ = 演出を減らす */
 export function MotionToggle() {
   const [pref, setPref] = useState<MotionPreference>(() => initMotionPreference());
-  const reduced = pref === 'reduced';
-  const toggle = () => {
-    const next: MotionPreference = reduced ? 'system' : 'reduced';
+  const t = UI.settings.motion;
+  const setShown = (shown: boolean) => {
+    const next: MotionPreference = shown ? 'system' : 'reduced';
     setMotionPreference(next);
     setPref(next);
   };
   return (
     <div className="motion-toggle">
-      <button type="button" className="btn ghost" aria-pressed={reduced} onClick={toggle}>
-        演出を減らす{reduced ? '（オン）' : '（オフ）'}
-      </button>
-      <p className="fine">
-        端末の「視差効果を減らす」設定がオンの場合は、この設定に関わらず演出を省略します。
-      </p>
+      <SettingSwitch label={t.label} checked={pref !== 'reduced'} onChange={setShown} />
+      <p className="fine">{t.note}</p>
     </div>
   );
 }
