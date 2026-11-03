@@ -108,9 +108,10 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
     board: summary.linkTarget > 0 && summary.remainingLinks === 0,
     decision: decisionComplete(current, progress),
   };
+  // 完了は色だけでなく文字でも示す（WCAG 1.4.1）
   const tabBadge: Partial<Record<DeskTab, string>> = {
-    decoding: `${summary.answered} / ${summary.tasks}`,
-    board: `${summary.links} 件`,
+    decoding: `${summary.answered} / ${summary.tasks}${tabDone.decoding ? ' 完了' : ''}`,
+    board: `${summary.links} 件${tabDone.board ? ' 完了' : ''}`,
     experiment: tabDone.experiment ? '記録済み' : '未完了',
     decision: tabDone.decision ? '記録済み' : '未完了',
   };
