@@ -53,14 +53,30 @@ for (const viewport of [
   { width: 1280, height: 800 },
   { width: 390, height: 844 },
 ]) {
-  // 新しい保存では提示Bが割り当てられる。提示Aは比較の段階で一覧に出る。
-  for (const condition of experiment.conditions.filter((item) => item.label === '提示B')) {
-    const letter = 'B';
+  // 本番の割り当ては事件IDから決まり、CASE02は常に提示B（src/domain/v2Progress.ts）。
+  // 保存の conditionId も読み込み時に上書きされるため、提示Aはテスト側で配信JSの
+  // 条件の並びを入れ替えて割り当てる（本番コードは変えない）。
+  for (const letter of ['B', 'A'] as const) {
+    const condition = experiment.conditions.find((item) => item.label === `提示${letter}`)!;
     test(`CASE02 ${letter} ${viewport.width}x${viewport.height}: 選択からコラムまで`, async ({
       page,
     }, testInfo) => {
       await page.setViewportSize(viewport);
-      await gotoCase(page, data);
+      if (letter === 'A') {
+        const from = JSON.stringify(experiment.conditions);
+        const to = JSON.stringify([...experiment.conditions].reverse());
+        let swapped = false;
+        await page.route(/\/assets\/.*\.js$/, async (route) => {
+          const response = await route.fetch();
+          const body = await response.text();
+          if (body.includes(from)) swapped = true;
+          await route.fulfill({ response, body: body.replace(from, to) });
+        });
+        await gotoCase(page, data);
+        expect(swapped, '配信JSに提示条件の並びが見つからない').toBe(true);
+      } else {
+        await gotoCase(page, data);
+      }
       const desk = page.getByRole('region', { name: '見え方のミニ実験', exact: true });
       const checkpoint = async (name: string, primaryCount = 0) => {
         await fits(page, desk);
@@ -89,6 +105,10 @@ for (const viewport of [
       };
       await expect(desk.getByRole('heading', { name: condition.label, exact: true })).toBeVisible();
       await expect(desk.getByText(condition.prompt, { exact: true })).toBeVisible();
+      // 最初の段階では割り当てた提示だけが出る
+      await expect(
+        desk.getByRole('heading', { name: letter === 'A' ? '提示B' : '提示A', exact: true }),
+      ).toHaveCount(0);
       await expect(desk.getByText(/前から欲しかったスニーカー/)).toContainText(
         '発売時は8,000円で、予算を超えていたので買いませんでした。',
       );
@@ -101,7 +121,12 @@ for (const viewport of [
       await expect(desk.locator('.btn.ghost')).toHaveCount(4);
       await expect(desk.getByRole('complementary')).toHaveCount(0);
       await checkpoint('01-experiment-start');
-      await desk.getByRole('button', { name: experiment.choices[3]!.text, exact: true }).click();
+      await desk
+        .getByRole('button', {
+          name: experiment.choices[letter === 'A' ? 0 : 3]!.text,
+          exact: true,
+        })
+        .click();
       await showDesk(page, '見え方のミニ実験');
       await expect(desk.getByRole('status')).toContainText('次は資料を読んでみよう');
       await checkpoint('02-initial-choice-made');
@@ -120,7 +145,9 @@ for (const viewport of [
       await expect(desk.getByRole('heading', { name: '2つの見せ方を比べよう' })).toBeVisible();
       await expect(desk.getByRole('complementary')).toHaveCount(0);
       await checkpoint('03-compare', 1);
-      await desk.getByRole('radio', { name: experiment.choices[0]!.text, exact: true }).check();
+      await desk
+        .getByRole('radio', { name: experiment.choices[letter === 'A' ? 1 : 0]!.text, exact: true })
+        .check();
       await desk
         .getByRole('textbox', { name: 'そう選んだ理由' })
         .fill('予算と使い道を考えて選んだ。');
