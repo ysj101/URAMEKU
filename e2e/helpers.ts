@@ -188,10 +188,23 @@ export async function prepareV2Case(
     // 根拠は参照資料を読んだかどうかから自動判定される（事前に openAndRead 済み）
     await expect(group.getByRole('status')).toContainText('根拠ありとして記録しました');
   }
+  await recordEvidenceBoard(page, c, options.alternative);
+  await goToArticle(page);
+  await fillReport(page, selections.map(({ option }) => option.text).join(' '));
+}
+export async function clearCase01(page: Page) {
+  await prepareV2Case(page, GAME_CASES[0]!);
+  await submitArticle(page);
+}
+
+export async function recordEvidenceBoard(page: Page, c: CaseData, alternative = false) {
+  const v = c.v2!;
+  const title = (id: string) => c.documents.find((d) => d.id === id)!.title;
+  const path = v.graph.paths[alternative ? v.graph.paths.length - 1 : 0]!;
   await showDesk(page, '証拠ボード');
   if (v.board) {
     for (const task of v.board.tasks) {
-      const rule = task.rules[options.alternative ? task.rules.length - 1 : 0]!;
+      const rule = task.rules[alternative ? task.rules.length - 1 : 0]!;
       await page.getByRole('button', { name: new RegExp('^' + task.title) }).click();
       for (const field of task.fields) {
         await page.getByRole('button', { name: `文の部分：${field.label}`, exact: true }).click();
@@ -231,10 +244,4 @@ export async function prepareV2Case(
       await page.getByLabel('B：結び付ける資料', { exact: true }).selectOption(link.to);
       await page.getByRole('button', { name: '関係を追加', exact: true }).click();
     }
-  await goToArticle(page);
-  await fillReport(page, selections.map(({ option }) => option.text).join(' '));
-}
-export async function clearCase01(page: Page) {
-  await prepareV2Case(page, GAME_CASES[0]!);
-  await submitArticle(page);
 }
