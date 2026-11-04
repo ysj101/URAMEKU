@@ -140,10 +140,15 @@ describe('V2プレイの統合', () => {
 });
 
 describe('最初の事件の操作案内', () => {
-  it('資料を読み、問1を記録すると案内と残りの一覧が進む', () => {
+  it('資料を読み、問1を記録すると案内とタブのバッジ、問いの行の状態が進む', () => {
     const data = CASES[0]!;
     render(<Harness data={data} />);
     const guide = screen.getByRole('region', { name: '次にやること' });
+    const decodingTab = screen.getByRole('tab', { name: /解読メモ/ });
+    const total = data.v2!.decoding.length;
+    expect(decodingTab).toHaveTextContent(`解読メモ0 / ${total}`);
+    // 「残っていることの一覧」は置かない。残数はタブのバッジ、状態は問いの行で分かる。
+    expect(screen.queryByText('残っていることの一覧')).not.toBeInTheDocument();
     fireEvent.click(within(guide).getByRole('button', { name: 'キャンペーン広告を開く' }));
     expect(screen.getByRole('dialog')).toHaveTextContent(data.documents[0]!.content);
     fireEvent.click(
@@ -151,39 +156,34 @@ describe('最初の事件の操作案内', () => {
     );
     fireEvent.click(within(guide).getByRole('button', { name: '問1を開く' }));
     const task = data.v2!.decoding[0]!;
+    const group = screen.getByRole('group', { name: task.prompt });
+    expect(group).toHaveTextContent('問 1 ・ 未回答');
     const option = task.options.find((entry) => entry.id === 'paid_cohort')!;
     fireEvent.click(screen.getByRole('radio', { name: option.text }));
-    fireEvent.click(screen.getByText('残っていることの一覧'));
-    const remaining = screen.getByRole('region', { name: '残っていること' });
-    expect(remaining).toHaveTextContent('答えは記録済み。まだ読んでいない資料：');
-    for (const id of option.evidence) {
+    const unread = option.evidence.filter((id) => id !== data.documents[0]!.id);
+    // 答えだけ選んだ問いは根拠待ち。バッジはまだ進まず、行に未読の件数が出る。
+    expect(decodingTab).toHaveTextContent(`解読メモ0 / ${total}`);
+    expect(group).toHaveTextContent(`問 1 ・ 回答済み ・ まだ読んでいない資料 ${unread.length} 件`);
+    for (const id of unread) {
       const doc = data.documents.find((entry) => entry.id === id)!;
-      if (id === data.documents[0]!.id) continue;
       expect(within(guide).getByRole('button', { name: `${doc.title}を開く` })).toHaveClass(
         'primary',
       );
-      fireEvent.click(within(remaining).getAllByRole('button', { name: `${doc.title}を開く` })[0]!);
+      fireEvent.click(within(group).getByRole('button', { name: `${doc.title}を開く` }));
       expect(screen.getByRole('dialog')).toHaveTextContent(doc.content);
       fireEvent.click(
         within(screen.getByRole('dialog')).getByRole('button', { name: '資料を閉じる' }),
       );
     }
+    expect(decodingTab).toHaveTextContent(`解読メモ1 / ${total}`);
+    expect(group).toHaveTextContent(`問 1 ・ 回答済み ・ 根拠 ${option.evidence.length} 件`);
     expect(within(guide).getByRole('button', { name: '問2を開く' })).toHaveClass('primary');
-    expect(
-      within(remaining).queryByRole('button', { name: `問1：${task.prompt}` }),
-    ).not.toBeInTheDocument();
     const next = data.v2!.decoding[1]!;
-    fireEvent.click(within(remaining).getByRole('button', { name: `問2：${next.prompt}` }));
+    expect(screen.getByRole('group', { name: next.prompt })).toHaveTextContent('問 2 ・ 未回答');
+    fireEvent.click(within(guide).getByRole('button', { name: '問2を開く' }));
     expect(screen.getByRole('radio', { name: next.options[0]!.text })).toBeVisible();
-    const boardTask = data.v2!.board!.tasks.at(-1)!;
-    fireEvent.click(
-      within(remaining).getByRole('button', {
-        name: `証拠ボード：${boardTask.title}（まだ記録していません）`,
-      }),
-    );
-    expect(
-      screen.getByRole('button', { name: new RegExp(boardTask.title), pressed: true }),
-    ).toBeVisible();
+    const boardTab = screen.getByRole('tab', { name: /証拠ボード/ });
+    expect(boardTab).toHaveTextContent(`証拠ボード0 / ${data.v2!.board!.tasks.length}`);
     fireEvent.click(screen.getByRole('button', { name: '調査報告をまとめる →' }));
     expect(screen.getByRole('complementary', { name: '初めての報告' })).toHaveTextContent(
       '補足の文章は書かなくても提出できます。',
@@ -248,10 +248,9 @@ describe('次の操作の強調', () => {
     expect(screen.getByRole('tab', { name: /証拠ボード/ })).toHaveTextContent(/^証拠ボード完了$/);
     fireEvent.click(screen.getByRole('tab', { name: /証拠ボード/ }));
     expect(enabledPrimaries(container)).toHaveLength(1);
-    fireEvent.click(screen.getByText('残っていることの一覧'));
-    expect(screen.getByRole('heading', { name: '残っていること' })).toBeVisible();
-    expect(screen.getByRole('region', { name: '残っていること' })).toHaveTextContent(
-      '記録はそろいました。',
+    expect(screen.queryByText('残っていることの一覧')).not.toBeInTheDocument();
+    expect(screen.getByRole('region', { name: '次にやること' })).toHaveTextContent(
+      '記録はそろいました。報告へ進めます。',
     );
   });
 });

@@ -20,17 +20,24 @@ test('CASE01は各段階で次の操作を1つ示し、補足の機能にも戻�
       await expect(primary).toHaveAccessibleName(main);
     }
   };
-  const checkStage = async (card: string | RegExp, main: string | RegExp | null, stage: string) => {
+  // 「残っていることの一覧」は置かない。残数はタブのバッジだけで分かる。
+  const decodingTab = page.getByRole('tab', { name: /解読メモ/ });
+  const boardTab = page.getByRole('tab', { name: /証拠ボード/ });
+  const questions = data.v2!.decoding.length;
+  const checkStage = async (
+    card: string | RegExp,
+    main: string | RegExp | null,
+    stage: string,
+    badges: { decoding: string; board: string },
+  ) => {
     await expectFocus(card, main);
     await expect(page.locator('html')).toHaveJSProperty(
       'scrollWidth',
       await page.locator('html').evaluate((el) => el.clientWidth),
     );
-    await page.getByText('残っていることの一覧', { exact: true }).click();
-    await expect(page.getByRole('heading', { name: '残っていること', exact: true })).toBeVisible();
-    const remaining = page.locator('details.remaining-checklist');
-    await expect(remaining).toHaveAttribute('open', '');
-    await remaining.locator('summary').click();
+    await expect(page.getByText('残っていることの一覧', { exact: true })).toHaveCount(0);
+    await expect(decodingTab).toHaveText(badges.decoding);
+    await expect(boardTab).toHaveText(badges.board);
     await page.getByText('遊び方', { exact: true }).click();
     await expect(
       page.getByRole('region', { name: '最初の事件で、遊び方を体験しよう' }),
@@ -44,20 +51,28 @@ test('CASE01は各段階で次の操作を1つ示し、補足の機能にも戻�
     await expectFocus(card, main);
     await page.screenshot({ path: testInfo.outputPath(`${stage}.png`), fullPage: true });
   };
-  await checkStage('キャンペーン広告を開く', 'キャンペーン広告を開く', '01-start');
+  const boardTotal = data.v2!.board!.tasks.length;
+  const start = { decoding: `解読メモ0 / ${questions}`, board: `証拠ボード0 / ${boardTotal}` };
+  await checkStage('キャンペーン広告を開く', 'キャンペーン広告を開く', '01-start', start);
   const bounds = await primary.boundingBox();
   expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(page.viewportSize()!.height);
   await next.getByRole('button').click();
   await expect(page.getByRole('dialog')).toContainText(data.documents[0]!.content);
   await page.getByRole('dialog').getByRole('button', { name: '資料を閉じる' }).click();
   // 問1はすでにデスクに出ているので、カードは控えめにして選択肢を主役にする。
-  await checkStage('問1を開く', null, '02-first-doc');
+  await checkStage('問1を開く', null, '02-first-doc', start);
   const opened = new Set([data.documents[0]!.id]);
   for (const task of data.v2!.decoding) {
     await next.getByRole('button').click();
     const group = await openTask(page, task.prompt);
+    await expect(group).toContainText('未回答');
     const option = task.options.find((entry) => entry.accepted)!;
     await group.getByRole('radio', { name: option.text, exact: true }).check();
+    // 答えだけでは根拠待ち。問いの行に未読の件数が出て、バッジはまだ進まない。
+    const unread = option.evidence.filter((id) => !opened.has(id));
+    if (unread.length > 0) {
+      await expect(group).toContainText(`回答済み ・ まだ読んでいない資料 ${unread.length} 件`);
+    }
     for (const id of option.evidence) {
       if (opened.has(id)) continue;
       const doc = data.documents.find((entry) => entry.id === id)!;
@@ -69,8 +84,16 @@ test('CASE01は各段階で次の操作を1つ示し、補足の機能にも戻�
       opened.add(id);
     }
     await expect(group.getByRole('status')).toContainText('根拠ありとして記録しました');
+    await expect(group).toContainText(`回答済み ・ 根拠 ${option.evidence.length} 件`);
+    const done = data.v2!.decoding.indexOf(task) + 1;
+    await expect(decodingTab).toHaveText(
+      done === questions ? '解読メモ完了' : `解読メモ${done} / ${questions}`,
+    );
   }
-  await checkStage(/^証拠ボード：.+を開く$/, /^証拠ボード：.+を開く$/, '03-questions');
+  await checkStage(/^証拠ボード：.+を開く$/, /^証拠ボード：.+を開く$/, '03-questions', {
+    decoding: '解読メモ完了',
+    board: start.board,
+  });
   await next.getByRole('button').click();
   await expect(page.getByRole('tab', { name: /証拠ボード/ })).toHaveAttribute(
     'aria-selected',
@@ -79,7 +102,10 @@ test('CASE01は各段階で次の操作を1つ示し、補足の機能にも戻�
   await expect(page.locator('.v2-next .btn.ghost')).toHaveCount(1);
   await expect(primary).toHaveCount(0);
   await recordEvidenceBoard(page, data);
-  await checkStage('調査報告をまとめる →', '調査報告をまとめる →', '04-board');
+  await checkStage('調査報告をまとめる →', '調査報告をまとめる →', '04-board', {
+    decoding: '解読メモ完了',
+    board: '証拠ボード完了',
+  });
   await primary.click();
   await expect(page.getByText('STEP 02 / 調査報告をまとめる', { exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'ヒントを閉じる', exact: true })).toBeVisible();
