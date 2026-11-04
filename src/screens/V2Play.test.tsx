@@ -131,7 +131,7 @@ describe('V2プレイの統合', () => {
 
   it('未開示資料を押しても本文をダイアログへ漏らさない', () => {
     render(<Harness data={makeV2Case(['decoding', 'decision'])} />);
-    const tile = screen.getByRole('button', { name: /^資料C、未調査/ });
+    const tile = screen.getByRole('button', { name: /^資料C、未読/ });
     expect(tile).toHaveAttribute('aria-disabled', 'true');
     fireEvent.click(tile);
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();

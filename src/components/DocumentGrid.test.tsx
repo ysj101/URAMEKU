@@ -30,7 +30,7 @@ describe('DocumentGrid（調査デスク）', () => {
     expect(onOpen).toHaveBeenCalledWith('a');
   });
 
-  it('状態はテキストとアイコンで示す（未調査 / 調査済み）', () => {
+  it('状態はテキストとアイコンで示す（未読 / 調査済み）', () => {
     render(
       <DocumentGrid
         caseData={caseData}
@@ -41,11 +41,15 @@ describe('DocumentGrid（調査デスク）', () => {
     const a = screen.getByRole('button', { name: /資料A/ });
     const b = screen.getByRole('button', { name: /資料B/ });
     const c = screen.getByRole('button', { name: /資料C/ });
-    expect(a).toHaveTextContent('調査済み');
-    expect(a).toHaveTextContent('再読は無料');
-    expect(b).toHaveTextContent('調査済み');
-    expect(c).toHaveTextContent('未調査');
-    expect(c).toHaveTextContent('調査コスト 1');
+    // 読み上げは「題名、状態、コスト」の順（#173）
+    expect(a).toHaveAccessibleName('資料A、調査済み、再読は無料');
+    expect(c).toHaveAccessibleName('資料C、未読、調査コスト 1');
+    // 見た目：既読はチェックと「読んだ」、未読は印なし。「未調査」「調査コスト」の文字は出さない
+    expect(a).toHaveTextContent('読んだ');
+    expect(b).toHaveTextContent('読んだ');
+    expect(c).not.toHaveTextContent('読んだ');
+    expect(c).not.toHaveTextContent('未調査');
+    expect(c).not.toHaveTextContent('調査コスト');
     expect(a.querySelector('.doc-tile__icon')).toHaveAttribute(
       'src',
       expect.stringMatching(/verified\.svg$/),
@@ -54,11 +58,17 @@ describe('DocumentGrid（調査デスク）', () => {
       'src',
       expect.stringMatching(/verified\.svg$/),
     );
-    expect(c.querySelector('.doc-tile__icon')).toHaveAttribute(
-      'src',
-      expect.stringMatching(/unseen\.svg$/),
-    );
-    expect(screen.getByRole('button', { name: /無料資料/ })).toHaveTextContent('無料で確認');
+    expect(c.querySelector('.doc-tile__icon')).toBeNull();
+    // コストは予算と同じピップ 1 個。無料は「無料」の文字のみ
+    expect(c.querySelector('.doc-tile__cost .v2-meter__pip')).not.toBeNull();
+    const free = screen.getByRole('button', { name: /無料資料/ });
+    expect(free).toHaveAccessibleName(/無料資料、未読、無料で確認/);
+    expect(free.querySelector('.doc-tile__cost')).toHaveTextContent('無料');
+    expect(free.querySelector('.doc-tile__cost .v2-meter__pip')).toBeNull();
+    // 内部 ID と事件 ID はカードの見た目に出さず、data 属性に残す
+    expect(c).not.toHaveTextContent('（c）');
+    expect(c).not.toHaveTextContent('CASE');
+    expect(c.querySelector('[data-document="c"]')).not.toBeNull();
   });
 
   it('予算不足の資料は aria-disabled で理由を表示し、タップで status に理由を告げる', () => {

@@ -1,22 +1,19 @@
-import { VISUAL_LABEL } from './documentVisuals';
 import { DocumentLabel } from './DocumentLabel';
 import '../app/screens/document-label.css';
-import { documentThumbnail, uiState, type UiStateName } from '../data/assets';
+import { documentThumbnail, uiState } from '../data/assets';
 import { documentCost, type OpenDocumentOutcome } from '../domain/budget';
 import type { CaseDocument } from '../domain/types';
 
 /** タイルの表示状態。色だけに依存せずテキストとアイコンで区別する（MVP_SPEC 12 章） */
 type TileState = 'unseen' | 'locked' | 'opened';
 
-const STATE_ICON: Record<TileState, UiStateName> = {
-  unseen: 'unseen',
-  locked: 'locked',
-  opened: 'verified',
-};
-
+/**
+ * 読み上げ用の状態語。見た目は 既読＝チェック＋「読んだ」、未読＝印なし、
+ * 開けない＝錠＋理由 1 行（#173）。読み上げは「題名、状態、コスト、理由」の順を保つ。
+ */
 const STATE_LABEL: Record<TileState, string> = {
-  unseen: '未調査',
-  locked: '未調査',
+  unseen: '未読',
+  locked: '未読',
   opened: '調査済み',
 };
 
@@ -67,9 +64,6 @@ export function DocumentTile({
       aria-label={label}
       onClick={() => (blocked ? onBlocked(doc, outcome) : onOpen(doc.id))}
     >
-      <span className="doc-tile__kind" aria-hidden="true">
-        {VISUAL_LABEL[doc.visual]}
-      </span>
       <img className="doc-tile__thumb" src={documentThumbnail(caseId, doc.id)} alt="" />
       <DocumentLabel
         caseId={caseId}
@@ -77,20 +71,30 @@ export function DocumentTile({
         documentId={doc.id}
         visual={doc.visual}
         cost={cost}
+        variant="tile"
         className="doc-tile__label"
       />
       <strong className="doc-tile__title">{doc.title}</strong>
-      <span className="doc-tile__status">
-        <img
-          className="doc-tile__icon"
-          src={uiState(STATE_ICON[state])}
-          alt=""
-          aria-hidden="true"
-        />
-        {STATE_LABEL[state]}
+      {state === 'opened' && (
+        <span className="doc-tile__status" aria-hidden="true">
+          <img className="doc-tile__icon" src={uiState('verified')} alt="" />
+          読んだ
+        </span>
+      )}
+      {/* コストはヘッダーの調査予算と同じピップ 1 個。無料は文字のみ。読み上げは aria-label 側 */}
+      <span className="doc-tile__cost" aria-hidden="true">
+        {cost === 0 ? (
+          '無料'
+        ) : (
+          <span className={`v2-meter__pip doc-tile__pip${opened ? ' is-spent' : ''}`} />
+        )}
       </span>
-      <span className="doc-tile__cost">{costText}</span>
-      {blocked && <span className="doc-tile__reason">{blockedText}</span>}
+      {blocked && (
+        <span className="doc-tile__reason" aria-hidden="true">
+          <img className="doc-tile__icon" src={uiState('locked')} alt="" />
+          {blockedText}
+        </span>
+      )}
     </button>
   );
 }

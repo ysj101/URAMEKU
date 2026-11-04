@@ -16,7 +16,9 @@ import '../app/screens/document-label.css';
  * 1:1 で対応させる（documentVisuals.ts の VISUAL_PROP）。アイコンは装飾（aria-hidden）で、読み上げは
  * テキストだけで完結する。
  *
- * 組み込み先（DocumentTile / DocumentDialog）は MVP-022 と並行のため、本 PR では触らない。
+ * `variant="tile"` は資料カード用（#173）。種別アイコン・種別名・2 桁の番号だけを出し、
+ * 事件 ID・内部 ID・コストは出さない（内部 ID は `data-document` 属性に残す）。
+ * 資料ダイアログ内では既定の `full` を使う。
  */
 
 export interface DocumentLabelProps {
@@ -28,6 +30,8 @@ export interface DocumentLabelProps {
   cost: number;
   /** true のとき、種別アイコンを出さずテキストのみ */
   hideIcon?: boolean;
+  /** `tile` は資料カード用の短い形（種別＋番号のみ） */
+  variant?: 'full' | 'tile';
   className?: string;
 }
 
@@ -38,12 +42,27 @@ export function DocumentLabel({
   visual,
   cost,
   hideIcon = false,
+  variant = 'full',
   className,
 }: DocumentLabelProps) {
   const prop = VISUAL_PROP[visual];
   const kind = VISUAL_LABEL[visual];
   const costText = cost === 0 ? '無料' : `コスト ${cost}`;
-  const classes = ['document-label', className].filter(Boolean).join(' ');
+  const classes = ['document-label', variant === 'tile' && 'document-label--tile', className]
+    .filter(Boolean)
+    .join(' ');
+
+  if (variant === 'tile') {
+    return (
+      <span className={classes} data-case={caseId} data-document={documentId} data-visual={visual}>
+        {!hideIcon && (
+          <img className="document-label__icon" src={propUrl(prop)} alt="" aria-hidden="true" />
+        )}
+        <span className="document-label__kind">{kind}</span>
+        <span className="document-label__number">{formatDocumentNumber(index)}</span>
+      </span>
+    );
+  }
 
   return (
     <span className={classes} data-case={caseId} data-document={documentId} data-visual={visual}>
