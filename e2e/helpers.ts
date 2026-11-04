@@ -70,8 +70,16 @@ export async function openTask(page: Page, prompt: string): Promise<Locator> {
   await expect(group.getByRole('radio').first()).toBeVisible();
   return group;
 }
+/** ヘッダーの「⋯」メニューを開いて項目を選ぶ */
+export async function chooseMenuItem(page: Page, name: string) {
+  await page.getByRole('button', { name: 'メニュー', exact: true }).click();
+  await page.getByRole('menuitem', { name, exact: true }).click();
+}
+/** 記録がそろっていれば「次にやること」の報告ボタン、未完ならメニューの経路で記事画面へ進む */
 export async function goToArticle(page: Page) {
-  await page.getByRole('button', { name: '調査報告をまとめる →' }).click();
+  const direct = page.getByRole('button', { name: '調査報告をまとめる →' });
+  if (await direct.count()) await direct.click();
+  else await chooseMenuItem(page, '調査報告へ進む（記録が未完でも）');
   await expect(page.getByText('STEP 02 / 調査報告をまとめる', { exact: true })).toBeVisible();
 }
 /** 任意の補足欄は <details> に畳まれているので、閉じていれば開いてから書く */

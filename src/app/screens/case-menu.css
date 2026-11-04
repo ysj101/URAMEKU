@@ -1,0 +1,90 @@
+/* 事件画面のヘッダー右「⋯」メニュー（CaseMenu）と、そこから開く「遊び方」パネル。色・余白はトークンのみ使用。 */
+.case-menu {
+  position: relative;
+  margin-inline-start: auto;
+}
+
+.case-menu__button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.case-menu__icon {
+  width: 20px;
+  height: 20px;
+}
+
+.case-menu__list {
+  position: absolute;
+  top: calc(100% + var(--space-1));
+  right: 0;
+  z-index: var(--z-overlay);
+  width: max-content;
+  min-width: 16rem;
+  max-width: calc(100vw - var(--space-8));
+  display: grid;
+  padding: var(--space-1) 0;
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-ink);
+  box-shadow: var(--shadow-paper);
+}
+
+.case-menu__item {
+  display: block;
+  width: 100%;
+  min-height: var(--tap-target-min);
+  padding: var(--space-2) var(--space-4);
+  border: 0;
+  background: transparent;
+  color: var(--color-ink);
+  font: inherit;
+  font-weight: 700;
+  text-align: start;
+  white-space: normal;
+  cursor: pointer;
+}
+
+.case-menu__item:hover,
+.case-menu__item:focus-visible {
+  background: var(--color-surface-note);
+}
+
+/* 取り消せない操作は区切り線の下に離し、文字色を変える（色だけに頼らず位置と線でも分ける） */
+.case-menu__item.is-danger {
+  color: var(--color-accent);
+}
+
+.case-menu__separator {
+  margin: var(--space-1) 0;
+  border: 0;
+  border-top: var(--border-width-thin) solid var(--color-border);
+}
+
+/* --- 遊び方パネル --- */
+.case-guide {
+  margin-bottom: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface-note);
+  border-left: 5px solid var(--color-info);
+  font-size: var(--font-size-sm);
+}
+
+.case-guide h2 {
+  margin: 0 0 var(--space-2);
+  font-size: var(--font-size-base);
+}
+
+.case-guide p {
+  margin: var(--space-1) 0 var(--space-2);
+  line-height: var(--line-height-normal);
+}
+
+.case-guide .stage-switch {
+  margin-bottom: 0;
+}
+
+/* ヘッダー直下に出すやり直しの確認 */
+.case-reset-confirm {
+  margin-bottom: var(--space-4);
+}
