@@ -129,9 +129,7 @@ export function InformationDesk({
                   aria-label="この答えのもとになる資料"
                 >
                   <h3 className="v2-task__evidence-title">この答えのもとになる資料</h3>
-                  {!answered && (
-                    <p>答えを選ぶと、もとになる資料がここに並びます。</p>
-                  )}
+                  {!answered && <p>答えを選ぶと、もとになる資料がここに並びます。</p>}
                   {answered && (
                     <ul className="v2-task__refs">
                       {references.map((id) => (
