@@ -45,9 +45,6 @@ export function InformationDesk({
   return (
     <section className="v2-desk" aria-label="情報解読メモ">
       <h2 className="section-title">情報解読メモ</h2>
-      <p className="v2-desk__lead">
-        答えを選ぶと、その答えのもとになる資料が下に並びます。並んだ資料をすべて開いて読むと「根拠あり」になり、この問いの記録が完了します。
-      </p>
       {tasks.map((task, index) => {
         const record = progress.v2?.decoding[task.id];
         const chosen = task.options.find((option) => option.id === record?.optionId);
@@ -90,13 +87,12 @@ export function InformationDesk({
               onClick={() => setOpenId(open ? null : task.id)}
             >
               <span className="v2-task__mark" aria-hidden="true">
-                {grounded ? '✓' : needsEvidence ? '!' : index + 1}
+                {grounded ? '✓' : needsEvidence ? '' : index + 1}
               </span>
               <span className="v2-task__text">
                 <span className="v2-task__meta">
-                  問 {index + 1} ・ {answered ? '回答済み' : '未回答'}
+                  問 {index + 1} ・ {needsEvidence ? '根拠待ち' : answered ? '回答済み' : '未回答'}
                   {grounded && ` ・ 根拠 ${references.length} 件`}
-                  {needsEvidence && ` ・ まだ読んでいない資料 ${missing.length} 件`}
                 </span>
                 <span className="v2-task__prompt" id={promptId}>
                   {task.prompt}
@@ -134,7 +130,7 @@ export function InformationDesk({
                 >
                   <h3 className="v2-task__evidence-title">この答えのもとになる資料</h3>
                   {!answered && (
-                    <p>答えを選ぶと、もとになる資料と、読んだかどうかがここに並びます。</p>
+                    <p>答えを選ぶと、もとになる資料がここに並びます。</p>
                   )}
                   {answered && (
                     <ul className="v2-task__refs">

@@ -34,7 +34,6 @@ function ClaimBoard({ caseData, progress, onAction, activeTaskId, onSelectTask }
         <li>読んだ資料から、根拠になる一節を添える</li>
         <li>文を直すか、そのまま残すか、まだ判断できないかを記録する</li>
       </ol>
-      <p>合っているかどうかは、報告を提出したあとに確かめます。</p>
       <div className="claim-board__tasks" aria-label="確かめる文">
         {board.tasks.map((entry) => (
           <button
@@ -128,6 +127,7 @@ function BoardEditor({ task, caseData, progress, onAction }: V2DeskProps & { tas
             );
           })}
         </p>
+        {!field && <p className="claim-board__hint">下線の部分を押すと、内容を組み直せます。</p>}
         <div id={`board-field-${task.id}`}>
           {field ? (
             <fieldset className="claim-board__pieces">
@@ -143,9 +143,7 @@ function BoardEditor({ task, caseData, progress, onAction }: V2DeskProps & { tas
                 </button>
               ))}
             </fieldset>
-          ) : (
-            <p>文の下線が付いた部分を押すと、内容を組み直せます。</p>
-          )}
+          ) : null}
         </div>
         <fieldset className="claim-board__sources">
           <legend>この文に添える証拠</legend>

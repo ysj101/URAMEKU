@@ -414,14 +414,13 @@
   margin: 0;
 }
 
-/* 根拠待ち（答えは選んだが支える資料が 0 件） */
+/* 根拠待ち（答えは選んだが、もとになる資料をまだ読み切っていない）: 半分塗りの丸 */
 .v2-task--needs-evidence {
   border-color: var(--color-accent);
 }
 .v2-task--needs-evidence .v2-task__mark {
   border-color: var(--color-accent);
-  background: var(--color-accent);
-  color: var(--color-ink-inverse);
+  background: linear-gradient(to right, var(--color-accent) 50%, transparent 50%);
 }
 .v2-task--needs-evidence .v2-task__meta {
   color: var(--color-accent);
@@ -601,6 +600,11 @@
   border-inline-start: 4px solid currentColor;
   line-height: 2.8;
   overflow-wrap: anywhere;
+}
+.claim-board__hint {
+  margin: var(--space-1) 0 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-quiet);
 }
 .claim-board__sentence button {
   color: inherit;
