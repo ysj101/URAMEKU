@@ -72,6 +72,8 @@ describe('V2プレイの統合', () => {
     fireEvent.click(screen.getByRole('button', { name: '判断を保留する' }));
     expect(screen.getByRole('heading', { name: /調査資料/ })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: '情報解読メモ' })).toBeInTheDocument();
+    // 1回目の選択は済んでいるので、タブは「未完了」ではなく回数で示す
+    expect(screen.getByRole('tab', { name: /見え方のミニ実験/ })).toHaveTextContent('1 / 2');
   });
 
   it('解読タスクは1問ずつ開き、回答済みは選んだ答えを1行に畳む', () => {
