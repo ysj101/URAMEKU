@@ -73,7 +73,7 @@ describe('V2プレイの統合', () => {
     expect(screen.getByRole('heading', { name: /調査資料/ })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: '情報解読メモ' })).toBeInTheDocument();
     // 1回目の選択は済んでいるので、タブは「未完了」ではなく回数で示す
-    expect(screen.getByRole('tab', { name: /見え方のミニ実験/ })).toHaveTextContent('1 / 2');
+    expect(screen.getByRole('tab', { name: /ミニ実験/ })).toHaveTextContent('1 / 2');
   });
 
   it('解読タスクは1問ずつ開き、回答済みは選んだ答えを1行に畳む', () => {
@@ -94,7 +94,7 @@ describe('V2プレイの統合', () => {
 
   it('デスクのタブは矢印キーと Home / End で移動し、フォーカスも追従する', () => {
     render(<Harness data={makeV2Case(['decoding', 'decision'])} />);
-    const decoding = screen.getByRole('tab', { name: /情報解読メモ/ });
+    const decoding = screen.getByRole('tab', { name: /解読メモ/ });
     const board = screen.getByRole('tab', { name: /証拠ボード/ });
     const decision = screen.getByRole('tab', { name: /意思決定/ });
     decoding.focus();
@@ -113,11 +113,9 @@ describe('V2プレイの統合', () => {
   it('デスクはタブで切り替わり、証拠ボードへ移れる', () => {
     render(<Harness data={makeV2Case(['decoding', 'decision'])} />);
     const tabs = screen.getAllByRole('tab').map((tab) => tab.textContent);
-    expect(tabs).toEqual(['情報解読メモ0 / 1', '証拠ボード0 件', '意思決定未完了']);
-    expect(screen.getByRole('tab', { name: /情報解読メモ/ })).toHaveAttribute(
-      'aria-selected',
-      'true',
-    );
+    // 全タブ「済 / 総」でそろえる
+    expect(tabs).toEqual(['解読メモ0 / 1', '証拠ボード0 / 1', '意思決定0 / 1']);
+    expect(screen.getByRole('tab', { name: /解読メモ/ })).toHaveAttribute('aria-selected', 'true');
     expect(screen.queryByRole('group', { name: '証拠ボード' })).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('tab', { name: /証拠ボード/ }));
     expect(screen.getByRole('group', { name: '証拠ボード' })).toBeInTheDocument();
@@ -245,9 +243,9 @@ describe('次の操作の強調', () => {
     const { container } = render(<Harness data={data} actions={actions} />);
     expect(enabledPrimaries(container)).toHaveLength(1);
     expect(screen.getByRole('button', { name: '調査報告をまとめる →' })).toHaveClass('primary');
-    // 完了は色だけでなく「完了」の文字でも分かる
-    expect(screen.getByRole('tab', { name: /情報解読メモ/ })).toHaveTextContent(/完了$/);
-    expect(screen.getByRole('tab', { name: /証拠ボード/ })).toHaveTextContent(/件 完了$/);
+    // 完了は色だけでなく「完了」の文字でも分かる（数字の代わりにチェックと「完了」）
+    expect(screen.getByRole('tab', { name: /解読メモ/ })).toHaveTextContent(/^解読メモ完了$/);
+    expect(screen.getByRole('tab', { name: /証拠ボード/ })).toHaveTextContent(/^証拠ボード完了$/);
     fireEvent.click(screen.getByRole('tab', { name: /証拠ボード/ }));
     expect(enabledPrimaries(container)).toHaveLength(1);
     fireEvent.click(screen.getByText('残っていることの一覧'));

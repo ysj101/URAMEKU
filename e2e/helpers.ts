@@ -61,9 +61,9 @@ export async function showDesk(page: Page, label: string) {
   if ((await tab.getAttribute('aria-selected')) !== 'true') await tab.click();
   await expect(tab).toHaveAttribute('aria-selected', 'true');
 }
-/** 情報解読メモの問い（アコーディオン）を開いて返す */
+/** 解読メモの問い（アコーディオン）を開いて返す */
 export async function openTask(page: Page, prompt: string): Promise<Locator> {
-  await showDesk(page, '情報解読メモ');
+  await showDesk(page, '解読メモ');
   const group = page.getByRole('group', { name: prompt, exact: true });
   const head = group.getByRole('button', { expanded: false });
   if (await head.count()) await head.click();
@@ -174,7 +174,7 @@ export async function prepareV2Case(
     const choice =
       v.experiment.choices.find((x) => x.id === options.experimentChoice) ??
       v.experiment.choices[0]!;
-    await showDesk(page, '見え方のミニ実験');
+    await showDesk(page, 'ミニ実験');
     const group = page.getByRole('group', {
       name: v.experiment.ui?.comparisonLegend ?? '比較後の判断（変わらなくても構いません）',
       exact: true,
