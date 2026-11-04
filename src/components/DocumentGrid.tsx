@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type FocusEvent } from 'react';
 import { documentCost, remainingBudget, tryOpenDocument } from '../domain/budget';
 import type { CaseData, CaseDocument, CaseProgress } from '../domain/types';
 import { DocumentTile } from './DocumentTile';
@@ -14,12 +14,21 @@ function blockedMessage(caseData: CaseData, progress: CaseProgress, doc: CaseDoc
   return `「${doc.title}」は予算不足のため開けません（必要 ${documentCost(doc)}、残り ${remainingBudget(caseData, progress)}）。`;
 }
 
+/**
+ * スマホ幅では列が横スクロールになる（#179）。Tab で焦点が移ったカードが
+ * 列の外に隠れないよう、見える位置まで列を寄せる。縦方向は動かさない。
+ */
+function revealFocusedTile(event: FocusEvent<HTMLDivElement>) {
+  const tile = (event.target as HTMLElement).closest('.doc-tile');
+  tile?.scrollIntoView?.({ block: 'nearest', inline: 'nearest' });
+}
+
 export function DocumentGrid({ caseData, progress, onOpen }: Props) {
   const [blocked, setBlocked] = useState<string | null>(null);
 
   return (
     <>
-      <div className="document-grid desk-grid">
+      <div className="document-grid desk-grid" onFocus={revealFocusedTile}>
         {caseData.documents.map((d, index) => (
           <DocumentTile
             key={d.id}
