@@ -29,7 +29,7 @@ describe('App', () => {
     render(<App />);
     await userEvent.click(screen.getByRole('button', { name: '調査をはじめる' }));
     expect(window.location.hash).toBe('#/play/case-01');
-    expect(screen.getByText('STEP 01 / 資料を調べる')).toBeInTheDocument();
+    expect(screen.getByRole('listitem', { current: 'step' })).toHaveTextContent('資料を調べる');
   });
 
   it('事件を選ぶとプレイ画面になり予算が表示される', async () => {
@@ -37,7 +37,7 @@ describe('App', () => {
     await userEvent.click(screen.getByRole('button', { name: /事件一覧/ }));
     await userEvent.click(screen.getByRole('button', { name: /CASE 02/ }));
     expect(window.location.hash).toBe('#/play/case-02');
-    expect(screen.getByText(/調査予算：残り 4 \/ 4/)).toBeInTheDocument();
+    expect(screen.getByRole('meter', { name: '調査予算：残り 4 / 4' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('半額セールの値札');
   });
 

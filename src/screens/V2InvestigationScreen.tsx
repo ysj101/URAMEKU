@@ -8,6 +8,7 @@ import { ExperimentDesk } from '../components/ExperimentDesk';
 import { DecisionDesk } from '../components/DecisionDesk';
 import { V2EvidenceBoard } from '../components/V2EvidenceBoard';
 import { canOpenDocument, remainingBudget, isDocumentSealed } from '../domain/budget';
+import { StageStepper } from '../components/StageStepper';
 import { isDeadEnd } from '../domain/deadEnd';
 import { decisionComplete } from '../domain/decision';
 import { decodingReviews } from '../domain/decoding';
@@ -247,17 +248,23 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
   return (
     <div className="v2-workspace v2-desk-screen">
       <div className="meter v2-meter">
-        <span data-focus-target tabIndex={-1}>
-          STEP 01 / 資料を調べる
-        </span>
-        <span className="v2-meter__budget">
+        <StageStepper current="investigate" focusTarget />
+        <span
+          className="v2-meter__budget"
+          role="meter"
+          aria-label={`調査予算：残り ${budget} / ${current.budget}`}
+          aria-valuemin={0}
+          aria-valuemax={current.budget}
+          aria-valuenow={budget}
+          aria-valuetext={`残り ${budget} / ${current.budget}`}
+        >
           <span className="v2-meter__pips" aria-hidden="true">
             {Array.from({ length: current.budget }, (_, i) => (
               <span key={i} className={i < budget ? 'v2-meter__pip' : 'v2-meter__pip is-spent'} />
             ))}
           </span>
-          <span className="budget">
-            調査予算：残り {budget} / {current.budget}
+          <span className="budget" aria-hidden="true">
+            {budget} / {current.budget}
           </span>
         </span>
       </div>

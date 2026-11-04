@@ -5,6 +5,7 @@ import { CalculationDesk } from '../components/CalculationDesk';
 import { DocumentDialog } from '../components/DocumentDialog';
 import { DocumentGrid } from '../components/DocumentGrid';
 import { EvidenceBoard } from '../components/EvidenceBoard';
+import { StageStepper } from '../components/StageStepper';
 import { remainingBudget } from '../domain/budget';
 import { isDeadEnd } from '../domain/deadEnd';
 import type { GameApi } from '../state/useGame';
@@ -36,9 +37,7 @@ export function InvestigationScreen({ game }: { game: GameApi }) {
   return (
     <>
       <div className="meter">
-        <span data-focus-target tabIndex={-1}>
-          STEP 01 / 資料を調べる
-        </span>
+        <StageStepper current="investigate" focusTarget />
         <span className="budget">
           調査予算：残り {remainingBudget(current, progress)} / {current.budget}
         </span>
