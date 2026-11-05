@@ -260,14 +260,14 @@ describe('ヘッダーのメニュー', () => {
     const paid = data.documents.find((doc) => doc.cost > 0)!;
     render(<Harness data={data} actions={[{ type: 'open-document', documentId: paid.id }]} />);
     expect(
-      screen.getByText(`調査予算：残り ${data.budget - paid.cost} / ${data.budget}`),
+      screen.getByLabelText(`調査予算：残り ${data.budget - paid.cost} / ${data.budget}`),
     ).toBeVisible();
     chooseMenuItem('この事件を最初からやり直す');
     const confirm = screen.getByRole('alertdialog', { name: 'やり直しの確認' });
     expect(confirm).toHaveFocus();
     fireEvent.click(within(confirm).getByRole('button', { name: 'やめる' }));
     expect(
-      screen.getByText(`調査予算：残り ${data.budget - paid.cost} / ${data.budget}`),
+      screen.getByLabelText(`調査予算：残り ${data.budget - paid.cost} / ${data.budget}`),
     ).toBeVisible();
     chooseMenuItem('この事件を最初からやり直す');
     fireEvent.click(
@@ -276,7 +276,7 @@ describe('ヘッダーのメニュー', () => {
       }),
     );
     expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument();
-    expect(screen.getByText(`調査予算：残り ${data.budget} / ${data.budget}`)).toBeVisible();
+    expect(screen.getByLabelText(`調査予算：残り ${data.budget} / ${data.budget}`)).toBeVisible();
   });
 });
 
