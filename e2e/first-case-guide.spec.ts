@@ -27,7 +27,7 @@ test('最初の事件で資料確認から問1の記録まで案内する', asyn
   await page.getByRole('radio', { name: option.text, exact: true }).check();
   const unread = option.evidence.filter((id) => id !== data.documents[0]!.id);
   // 答えだけ選んだ問いは根拠待ち。行に未読の件数が出て、バッジはまだ進まない。
-  await expect(group).toContainText(`問 1 ・ 回答済み ・ まだ読んでいない資料 ${unread.length} 件`);
+  await expect(group).toContainText('問 1 ・ 根拠待ち');
   await expect(decodingTab).toHaveText(`解読メモ0 / ${total}`);
   for (const id of unread) {
     const doc = data.documents.find((entry) => entry.id === id)!;

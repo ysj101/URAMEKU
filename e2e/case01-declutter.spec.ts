@@ -1,5 +1,13 @@
 import { expect, test } from '@playwright/test';
-import { GAME_CASES, gotoCase, openTask, recordEvidenceBoard, submitArticle } from './helpers';
+import {
+  GAME_CASES,
+  chooseMenuItem,
+  expectStage,
+  gotoCase,
+  openTask,
+  recordEvidenceBoard,
+  submitArticle,
+} from './helpers';
 
 test('CASE01は各段階で次の操作を1つ示し、補足の機能にも戻れる', async ({ page }, testInfo) => {
   if (testInfo.project.name === 'chromium')
@@ -38,15 +46,18 @@ test('CASE01は各段階で次の操作を1つ示し、補足の機能にも戻�
     await expect(page.getByText('残っていることの一覧', { exact: true })).toHaveCount(0);
     await expect(decodingTab).toHaveText(badges.decoding);
     await expect(boardTab).toHaveText(badges.board);
-    await page.getByText('遊び方', { exact: true }).click();
+    // 記録が未完のまま進む帯は出さない。遊び方とやり直しはヘッダーのメニューから。
+    await expect(page.getByText('記録しなくても進めます。', { exact: true })).toHaveCount(0);
+    await chooseMenuItem(page, '遊び方を見る');
     await expect(
       page.getByRole('region', { name: '最初の事件で、遊び方を体験しよう' }),
     ).toBeVisible();
-    await page.getByRole('button', { name: 'この事件を最初からやり直す' }).click();
+    await page.getByRole('button', { name: '遊び方を閉じる', exact: true }).click();
+    await chooseMenuItem(page, 'この事件を最初からやり直す');
     const reset = page.getByRole('alertdialog', { name: 'やり直しの確認' });
     await expect(reset).toBeVisible();
     await reset.getByRole('button', { name: 'やめる', exact: true }).click();
-    await page.getByText('遊び方', { exact: true }).click();
+    await expect(page.getByRole('menu')).toHaveCount(0);
     await page.evaluate(() => window.scrollTo(0, 0));
     await expectFocus(card, main);
     await page.screenshot({ path: testInfo.outputPath(`${stage}.png`), fullPage: true });
@@ -71,7 +82,7 @@ test('CASE01は各段階で次の操作を1つ示し、補足の機能にも戻�
     // 答えだけでは根拠待ち。問いの行に未読の件数が出て、バッジはまだ進まない。
     const unread = option.evidence.filter((id) => !opened.has(id));
     if (unread.length > 0) {
-      await expect(group).toContainText(`回答済み ・ まだ読んでいない資料 ${unread.length} 件`);
+      await expect(group).toContainText('・ 根拠待ち');
     }
     for (const id of option.evidence) {
       if (opened.has(id)) continue;
@@ -107,7 +118,7 @@ test('CASE01は各段階で次の操作を1つ示し、補足の機能にも戻�
     board: '証拠ボード完了',
   });
   await primary.click();
-  await expect(page.getByText('STEP 02 / 調査報告をまとめる', { exact: true })).toBeVisible();
+  await expectStage(page, '報告をまとめる');
   await expect(page.getByRole('button', { name: 'ヒントを閉じる', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'ヒントを閉じる', exact: true }).click();
   await page.reload();

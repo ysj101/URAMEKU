@@ -28,10 +28,15 @@ export function docTile(page: Page, title: string): Locator {
   return page.getByRole('button').filter({ hasText: title }).and(page.locator('.doc-tile'));
 }
 export function budgetMeter(page: Page): Locator {
-  return page.getByText(/調査予算：残り \d+ \/ \d+/);
+  return page.getByRole('meter', { name: /調査予算：残り \d+ \/ \d+/ });
 }
 export async function expectBudget(page: Page, remaining: number, total = CASE01.budget) {
-  await expect(budgetMeter(page)).toHaveText(`調査予算：残り ${remaining} / ${total}`);
+  await expect(budgetMeter(page)).toHaveAccessibleName(`調査予算：残り ${remaining} / ${total}`);
+  await expect(budgetMeter(page)).toHaveText(`${remaining} / ${total}`);
+}
+/** ステッパーの現在の段階（`aria-current="step"`）が `label` であることを確かめる */
+export async function expectStage(page: Page, label: '資料を調べる' | '報告をまとめる' | '結果') {
+  await expect(page.locator('.stage-stepper [aria-current="step"]')).toContainText(label);
 }
 export async function gotoCase(page: Page, data: CaseData) {
   await page.goto(`/#/play/${data.id}`);
@@ -70,9 +75,17 @@ export async function openTask(page: Page, prompt: string): Promise<Locator> {
   await expect(group.getByRole('radio').first()).toBeVisible();
   return group;
 }
+/** ヘッダーの「⋯」メニューを開いて項目を選ぶ */
+export async function chooseMenuItem(page: Page, name: string) {
+  await page.getByRole('button', { name: 'メニュー', exact: true }).click();
+  await page.getByRole('menuitem', { name, exact: true }).click();
+}
+/** 記録がそろっていれば「次にやること」の報告ボタン、未完ならメニューの経路で記事画面へ進む */
 export async function goToArticle(page: Page) {
-  await page.getByRole('button', { name: '調査報告をまとめる →' }).click();
-  await expect(page.getByText('STEP 02 / 調査報告をまとめる', { exact: true })).toBeVisible();
+  const direct = page.getByRole('button', { name: '調査報告をまとめる →' });
+  if (await direct.count()) await direct.click();
+  else await chooseMenuItem(page, '調査報告へ進む（記録が未完でも）');
+  await expectStage(page, '報告をまとめる');
 }
 /** 任意の補足欄は <details> に畳まれているので、閉じていれば開いてから書く */
 export async function openReportNotes(page: Page) {

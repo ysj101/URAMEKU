@@ -145,9 +145,8 @@
   display: grid;
   grid-template-columns: 44px minmax(0, 1fr) auto;
   grid-template-areas:
-    'thumb kind status'
-    'thumb title status'
-    'thumb label cost'
+    'thumb label status'
+    'thumb title cost'
     'thumb reason reason';
   align-items: center;
   column-gap: var(--space-3);
@@ -182,15 +181,13 @@
 .v2-docs .desk-grid .doc-tile:nth-child(even) .doc-tile__thumb {
   transform: none;
 }
-.v2-docs .desk-grid .doc-tile__kind {
-  grid-area: kind;
-  font-size: var(--font-size-xs);
-  letter-spacing: 0.1em;
-  padding: 0;
-  transform: none;
-  background: none;
-  color: var(--color-quiet);
-  border: 0;
+/* カードに出すのは 種別・題名・番号・コスト・状態 の 5 つだけ（#173）。同じ意味を 2 回出さない。 */
+.v2-docs .desk-grid .doc-tile__label {
+  grid-area: label;
+}
+/* 種別アイコンは collage.css がカード内で隠しているが、ここでは種別名と並べて 1 回だけ出す。 */
+.v2-docs .desk-grid .doc-tile__label .document-label__icon {
+  display: inline-block;
 }
 .v2-docs .desk-grid .doc-tile__title {
   grid-area: title;
@@ -199,26 +196,40 @@
   padding: 0;
   border: 0;
 }
-.v2-docs .desk-grid .doc-tile__label {
-  grid-area: label;
-}
+/* 既読の印（チェック＋「読んだ」）は右上。色だけに頼らない。 */
 .v2-docs .desk-grid .doc-tile__status {
   grid-area: status;
   justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
   margin: 0;
-  padding: 2px var(--space-2);
-  border: var(--border-width-thin) solid var(--color-ink);
+  padding: 0;
+  border: 0;
   font-size: var(--font-size-xs);
   white-space: nowrap;
 }
+.v2-docs .desk-grid .doc-tile__icon {
+  width: 1em;
+  height: 1em;
+  object-fit: contain;
+}
+/* コストはヘッダーの調査予算と同じピップ（.v2-meter__pip）1 個。無料は文字だけ。 */
 .v2-docs .desk-grid .doc-tile__cost {
   grid-area: cost;
   justify-self: end;
+  display: inline-flex;
+  align-items: center;
   font-size: var(--font-size-xs);
+  color: var(--color-quiet);
 }
+/* 開けない理由は錠と 1 行で、カードの下側に置く。 */
 .v2-docs .desk-grid .doc-tile__reason {
   grid-area: reason;
   justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
 }
 .v2-docs .desk-grid .doc-tile--opened {
   background: var(--color-surface-aged);
@@ -228,6 +239,87 @@
   border-style: dashed;
   border-left-style: solid;
   border-left-color: var(--color-disabled);
+}
+
+/*
+ * --- スマホ幅（860px 未満）の調査資料: 横スクロールの 1 列（#179） ---
+ * 資料 6 枚を縦に並べると「次にやること」の下のデスクが 2 画面下に沈むので、
+ * 列を横に寝かせ、次のカードを少し見切れさせて続きがあることを示す。
+ * 横に伸びるのはこの列だけで、ページ全体は横スクロールしない
+ * （contain: inline-size で列の中身が親の幅を押し広げないようにする）。
+ * カードは 375×812 の初期表示にデスクのタブが入る高さ（約 75px）に詰める。
+ * 既読のチェックと錠の印はカードの中に残す。
+ */
+@media (max-width: 859.98px) {
+  .v2-docs .document-grid.desk-grid {
+    --strip-gap: var(--space-2);
+    --strip-inset: var(--space-2);
+    /* 焦点リング（3px + 余白 3px）が overflow で切れないぶんの上下余白 */
+    --strip-ring: calc(var(--focus-ring-width) + var(--focus-ring-offset));
+    display: flex;
+    align-items: stretch;
+    gap: var(--strip-gap);
+    padding: var(--strip-ring) var(--strip-inset);
+    contain: inline-size;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--strip-inset);
+  }
+  .v2-docs .desk-grid .doc-tile {
+    /*
+     * 幅は 4 枚と 5 枚目の一部が見える値を基本にし、題名が 2 行で収まる 140px を下限にする。
+     * 375px 幅では 140px になり、2 枚と 3 枚目の一部が見える。
+     */
+    flex: 0 0 max(140px, calc((100% - 4 * var(--strip-gap)) / 4.4));
+    grid-template-columns: 36px minmax(0, 1fr) auto;
+    grid-template-areas:
+      'thumb label label'
+      'thumb title title'
+      'thumb status cost'
+      'reason reason reason';
+    align-items: start;
+    column-gap: var(--space-2);
+    row-gap: 0;
+    min-height: 0;
+    padding: var(--space-1) var(--space-2) var(--space-1) var(--space-1);
+    border: var(--border-width-thin) solid var(--color-border);
+    border-top: 4px solid var(--color-ink);
+    scroll-snap-align: start;
+  }
+  .v2-docs .desk-grid .doc-tile:last-child {
+    border-bottom: var(--border-width-thin) solid var(--color-border);
+  }
+  .v2-docs .desk-grid .doc-tile__thumb {
+    width: 36px;
+    height: 44px;
+  }
+  /* 種別名と番号は語ごとに折り返す（collage.css は番号を 1 文字ずつ折る） */
+  .v2-docs .desk-grid .doc-tile__label {
+    flex-wrap: wrap;
+    gap: 0 var(--space-1);
+    line-height: 1.3;
+  }
+  .v2-docs .desk-grid .doc-tile__label .document-label__number {
+    white-space: nowrap;
+  }
+  .v2-docs .desk-grid .doc-tile__title {
+    font-size: var(--font-size-xs);
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+  }
+  .v2-docs .desk-grid .doc-tile__status {
+    justify-self: start;
+  }
+  .v2-docs .desk-grid .doc-tile__reason {
+    line-height: 1.3;
+    white-space: normal;
+  }
+  .v2-docs .desk-grid .doc-tile[aria-disabled='true'] {
+    border-left-color: var(--color-border);
+    border-top-color: var(--color-disabled);
+  }
 }
 
 /* --- デスクのタブ --- */
@@ -428,14 +520,13 @@
   margin: 0;
 }
 
-/* 根拠待ち（答えは選んだが支える資料が 0 件） */
+/* 根拠待ち（答えは選んだが、もとになる資料をまだ読み切っていない）: 半分塗りの丸 */
 .v2-task--needs-evidence {
   border-color: var(--color-accent);
 }
 .v2-task--needs-evidence .v2-task__mark {
   border-color: var(--color-accent);
-  background: var(--color-accent);
-  color: var(--color-ink-inverse);
+  background: linear-gradient(to right, var(--color-accent) 50%, transparent 50%);
 }
 .v2-task--needs-evidence .v2-task__meta {
   color: var(--color-accent);
@@ -629,6 +720,11 @@
   border-inline-start: 4px solid currentColor;
   line-height: 2.8;
   overflow-wrap: anywhere;
+}
+.claim-board__hint {
+  margin: var(--space-1) 0 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-quiet);
 }
 .claim-board__sentence button {
   color: inherit;

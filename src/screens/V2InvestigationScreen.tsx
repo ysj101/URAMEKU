@@ -8,6 +8,7 @@ import { ExperimentDesk } from '../components/ExperimentDesk';
 import { DecisionDesk } from '../components/DecisionDesk';
 import { V2EvidenceBoard } from '../components/V2EvidenceBoard';
 import { canOpenDocument, remainingBudget, isDocumentSealed } from '../domain/budget';
+import { StageStepper } from '../components/StageStepper';
 import { isDeadEnd } from '../domain/deadEnd';
 import { decisionComplete } from '../domain/decision';
 import { decodingReviews } from '../domain/decoding';
@@ -250,17 +251,23 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
   return (
     <div className="v2-workspace v2-desk-screen">
       <div className="meter v2-meter">
-        <span data-focus-target tabIndex={-1}>
-          STEP 01 / 資料を調べる
-        </span>
-        <span className="v2-meter__budget">
+        <StageStepper current="investigate" focusTarget />
+        <span
+          className="v2-meter__budget"
+          role="meter"
+          aria-label={`調査予算：残り ${budget} / ${current.budget}`}
+          aria-valuemin={0}
+          aria-valuemax={current.budget}
+          aria-valuenow={budget}
+          aria-valuetext={`残り ${budget} / ${current.budget}`}
+        >
           <span className="v2-meter__pips" aria-hidden="true">
             {Array.from({ length: current.budget }, (_, i) => (
               <span key={i} className={i < budget ? 'v2-meter__pip' : 'v2-meter__pip is-spent'} />
             ))}
           </span>
-          <span className="budget">
-            調査予算：残り {budget} / {current.budget}
+          <span className="budget" aria-hidden="true">
+            {budget} / {current.budget}
           </span>
         </span>
       </div>
@@ -295,14 +302,9 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
       )}
 
       {initialExperiment ? (
-        <>
-          <section className="v2-panel" id="v2-desk-panel">
-            <ExperimentDesk key={resetEpoch} {...props} />
-          </section>
-          <p className="notice">
-            まず、最初に見えている情報だけで判断を記録します。記録すると、調査資料を開けるようになります。保留を選んでもかまいません。
-          </p>
-        </>
+        <section className="v2-panel" id="v2-desk-panel">
+          <ExperimentDesk key={resetEpoch} {...props} />
+        </section>
       ) : (
         <div className="v2-desk-layout">
           <section className="v2-docs" aria-labelledby="v2-documents">
@@ -397,42 +399,8 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
         </div>
       )}
 
-      {/* 記録がそろうと「次にやること」カードが報告ボタンになるので、ここは未完了のときだけ出す。 */}
-      {!complete && (
-        <div className="stage-switch v2-actions">
-          <span>記録しなくても進めます。</span>
-          <button type="button" className="btn ghost" onClick={() => game.setStage('article')}>
-            調査報告をまとめる →
-          </button>
-        </div>
-      )}
-
-      <details className="v2-guide">
-        <summary>遊び方</summary>
-        {current.id === 'case-01' && (
-          <section className="first-case-guide" aria-labelledby="first-case-guide-title">
-            <h2 id="first-case-guide-title">最初の事件で、遊び方を体験しよう</h2>
-            <ol>
-              <li>資料を開いて読む。まずは「{firstDocument?.title}」から。</li>
-              <li>問いの答えを選び、下に出る資料をすべて読む。答えは選ぶと記録されます。</li>
-              <li>「証拠ボード」で文に証拠を添える。文の扱いを選び、「文と証拠を記録」を押す。</li>
-              <li>
-                残りを確かめたら、報告をまとめて提出する。提出すると答えと解説を確認できます。
-              </li>
-            </ol>
-            <p>「根拠あり」「記録あり」は操作が済んだ印です。正解かどうかは提出後に分かります。</p>
-          </section>
-        )}
-        <p>資料を読んで、主張がどこまで当てはまるか、情報がどこから出たのかを確かめましょう。</p>
-        <p>何が足りないかを確かめ、仮説を根拠で支えましょう。</p>
-        <p>
-          反対のことを言う資料にも目を向けましょう。分からない点は分からないままにして整理できます。
-        </p>
-        <p>予算が足りなくなったら、最初から調査し直せます。</p>
-        <button type="button" className="btn ghost" onClick={() => setConfirmReset(true)}>
-          {UI.case.retry}
-        </button>
-      </details>
+      {/* 記録がそろうと「次にやること」カードが報告ボタンになる。記録が未完のまま進む経路と
+          「遊び方」、やり直しは、ヘッダーの「⋯」メニュー（PlayScreen の CaseMenu）にある。 */}
 
       {confirmReset && (
         <ConfirmPanel
