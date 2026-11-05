@@ -94,8 +94,8 @@ describe('V1互換UIをキーボードのみで完了できる（旧T13）', () 
     expect(
       screen.getByRole('heading', { level: 1, name: '消えた55人の利用者' }),
     ).toBeInTheDocument();
-    // 段階見出し（STEP 01）にフォーカスが移る
-    expect(active()).toHaveTextContent('STEP 01');
+    // ステッパーの現在の段階（資料を調べる）にフォーカスが移る
+    expect(active()).toHaveTextContent('3 段階中 1 番目、資料を調べる');
 
     // --- 無料の資料を開いて Escape で閉じる（フォーカスはタイルに戻る）
     const adTile = screen.getByRole('button', { name: /キャンペーン広告/ });
@@ -133,10 +133,10 @@ describe('V1互換UIをキーボードのみで完了できる（旧T13）', () 
     expect(q1).toHaveValue('45');
     expect(q2).toHaveValue('90');
 
-    // --- 記事画面へ（押したボタンは消えるが、フォーカスは STEP 02 の見出しへ移る）
+    // --- 記事画面へ（押したボタンは消えるが、フォーカスはステッパーの「報告をまとめる」へ移る）
     await tabTo(screen.getByRole('button', { name: '記事を組み立てる →' }));
     await pressEnter('記事を組み立てる');
-    expect(active()).toHaveTextContent('STEP 02');
+    expect(active()).toHaveTextContent('3 段階中 2 番目、報告をまとめる');
 
     // --- 断片 3 つを順に選ぶ
     for (const text of [
@@ -166,7 +166,7 @@ describe('V1互換UIをキーボードのみで完了できる（旧T13）', () 
     await pressEnter('次の事件へ');
     expect(window.location.hash).toBe('#/play/case-02');
     expect(screen.getByRole('heading', { level: 1, name: '半額セールの値札' })).toBeInTheDocument();
-    expect(active()).toHaveTextContent('STEP 01');
+    expect(active()).toHaveTextContent('3 段階中 1 番目、資料を調べる');
   }, 30_000);
 });
 

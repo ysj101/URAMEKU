@@ -2,6 +2,7 @@ import { useSound } from '../audio/useSound';
 import { describeLink, validV2Links } from '../domain/link';
 import { BOARD_DISPOSITIONS, boardReviews, boardStatement } from '../domain/board';
 import type { GameApi } from '../state/useGame';
+import { StageStepper } from '../components/StageStepper';
 import '../app/screens/article.css';
 import '../app/screens/v2-integration.css';
 
@@ -23,9 +24,7 @@ export function V2ArticleScreen({ game }: { game: GameApi }) {
   return (
     <div className="v2-workspace">
       <div className="meter">
-        <span data-focus-target tabIndex={-1}>
-          STEP 02 / 調査報告をまとめる
-        </span>
+        <StageStepper current="report" focusTarget />
         <span>読んだ資料 {progress.opened.length} 件</span>
       </div>
       {current.id === 'case-01' && (
