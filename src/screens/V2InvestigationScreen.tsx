@@ -312,14 +312,9 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
       )}
 
       {initialExperiment ? (
-        <>
-          <section className="v2-panel" id="v2-desk-panel">
-            <ExperimentDesk key={resetEpoch} {...props} />
-          </section>
-          <p className="notice">
-            まず、最初に見えている情報だけで判断を記録します。記録すると、調査資料を開けるようになります。保留を選んでもかまいません。
-          </p>
-        </>
+        <section className="v2-panel" id="v2-desk-panel">
+          <ExperimentDesk key={resetEpoch} {...props} />
+        </section>
       ) : (
         <div className="v2-desk-layout">
           <section className="v2-docs" aria-labelledby="v2-documents">

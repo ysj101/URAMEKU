@@ -30,7 +30,7 @@ it('lists the referenced sources with their read state and no manual picking', (
   expect(refs).toHaveTextContent('資料A読んだ');
   expect(refs).toHaveTextContent('資料Bまだ読んでいない');
   expect(screen.getByRole('status')).toHaveTextContent('まだ読んでいない資料があります');
-  expect(screen.getByText('問 1 ・ 回答済み ・ まだ読んでいない資料 1 件')).toBeInTheDocument();
+  expect(screen.getByText('問 1 ・ 根拠待ち')).toBeInTheDocument();
 });
 
 it('allows revising notes, with native keyboard-accessible controls', () => {
