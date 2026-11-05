@@ -28,10 +28,15 @@ export function docTile(page: Page, title: string): Locator {
   return page.getByRole('button').filter({ hasText: title }).and(page.locator('.doc-tile'));
 }
 export function budgetMeter(page: Page): Locator {
-  return page.getByText(/調査予算：残り \d+ \/ \d+/);
+  return page.getByRole('meter', { name: /調査予算：残り \d+ \/ \d+/ });
 }
 export async function expectBudget(page: Page, remaining: number, total = CASE01.budget) {
-  await expect(budgetMeter(page)).toHaveText(`調査予算：残り ${remaining} / ${total}`);
+  await expect(budgetMeter(page)).toHaveAccessibleName(`調査予算：残り ${remaining} / ${total}`);
+  await expect(budgetMeter(page)).toHaveText(`${remaining} / ${total}`);
+}
+/** ステッパーの現在の段階（`aria-current="step"`）が `label` であることを確かめる */
+export async function expectStage(page: Page, label: '資料を調べる' | '報告をまとめる' | '結果') {
+  await expect(page.locator('.stage-stepper [aria-current="step"]')).toContainText(label);
 }
 export async function gotoCase(page: Page, data: CaseData) {
   await page.goto(`/#/play/${data.id}`);
@@ -61,9 +66,9 @@ export async function showDesk(page: Page, label: string) {
   if ((await tab.getAttribute('aria-selected')) !== 'true') await tab.click();
   await expect(tab).toHaveAttribute('aria-selected', 'true');
 }
-/** 情報解読メモの問い（アコーディオン）を開いて返す */
+/** 解読メモの問い（アコーディオン）を開いて返す */
 export async function openTask(page: Page, prompt: string): Promise<Locator> {
-  await showDesk(page, '情報解読メモ');
+  await showDesk(page, '解読メモ');
   const group = page.getByRole('group', { name: prompt, exact: true });
   const head = group.getByRole('button', { expanded: false });
   if (await head.count()) await head.click();
@@ -80,7 +85,7 @@ export async function goToArticle(page: Page) {
   const direct = page.getByRole('button', { name: '調査報告をまとめる →' });
   if (await direct.count()) await direct.click();
   else await chooseMenuItem(page, '調査報告へ進む（記録が未完でも）');
-  await expect(page.getByText('STEP 02 / 調査報告をまとめる', { exact: true })).toBeVisible();
+  await expectStage(page, '報告をまとめる');
 }
 /** 任意の補足欄は <details> に畳まれているので、閉じていれば開いてから書く */
 export async function openReportNotes(page: Page) {
@@ -182,7 +187,7 @@ export async function prepareV2Case(
     const choice =
       v.experiment.choices.find((x) => x.id === options.experimentChoice) ??
       v.experiment.choices[0]!;
-    await showDesk(page, '見え方のミニ実験');
+    await showDesk(page, 'ミニ実験');
     const group = page.getByRole('group', {
       name: v.experiment.ui?.comparisonLegend ?? '比較後の判断（変わらなくても構いません）',
       exact: true,

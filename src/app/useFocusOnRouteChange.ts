@@ -12,7 +12,7 @@ import { useEffect, useRef, useState } from 'react';
  * 初回マウントではフォーカスを動かさない（ページ先頭のスキップリンクを最初の Tab 先に残すため）。
  *
  * 戻り値は `aria-live="polite"` 領域に出す画面名。`h1` の文言に、フォーカス先が別要素なら
- * その文言を続ける（例: 「半額セールの値札、STEP 02 / 記事を組み立てる」）。
+ * その文言を続ける（例: 「半額セールの値札、3 段階中 2 番目、報告をまとめる」）。
  */
 export const FOCUS_TARGET_ATTR = 'data-focus-target';
 

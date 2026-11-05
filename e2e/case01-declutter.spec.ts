@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 import {
   GAME_CASES,
   chooseMenuItem,
+  expectStage,
   gotoCase,
   openTask,
   recordEvidenceBoard,
@@ -91,7 +92,7 @@ test('CASE01は各段階で次の操作を1つ示し、補足の機能にも戻�
   await recordEvidenceBoard(page, data);
   await checkStage('調査報告をまとめる →', '調査報告をまとめる →', '04-board');
   await primary.click();
-  await expect(page.getByText('STEP 02 / 調査報告をまとめる', { exact: true })).toBeVisible();
+  await expectStage(page, '報告をまとめる');
   await expect(page.getByRole('button', { name: 'ヒントを閉じる', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'ヒントを閉じる', exact: true }).click();
   await page.reload();

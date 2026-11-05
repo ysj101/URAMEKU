@@ -3,6 +3,7 @@ import { ArticleEditor } from '../components/ArticleEditor';
 import { canSubmitArticle } from '../domain/publish';
 import { ARTICLE_LENGTH } from '../domain/types';
 import type { GameApi } from '../state/useGame';
+import { StageStepper } from '../components/StageStepper';
 import '../app/screens/article.css';
 import { V2ArticleScreen } from './V2ArticleScreen';
 
@@ -31,9 +32,7 @@ export function ArticleScreen({ game }: { game: GameApi }) {
   return (
     <>
       <div className="meter">
-        <span data-focus-target tabIndex={-1}>
-          STEP 02 / 記事を組み立てる
-        </span>
+        <StageStepper current="report" focusTarget />
         <span>
           読んだ資料 {progress.opened.length} 件 / 検証メモ {filledCalcs} 件
         </span>

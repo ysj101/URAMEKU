@@ -54,5 +54,5 @@ test('代替経路も予算不足なら案内が出て再調査できる', async
   await expect(notice).toHaveCount(0);
   await expectBudget(page, 4);
   await expect(page.getByText('0 / 6 件確認済み')).toBeVisible();
-  await expect(docTile(page, CASE01.docs.memo)).toHaveAccessibleName(/未調査/);
+  await expect(docTile(page, CASE01.docs.memo)).toHaveAccessibleName(/未読/);
 });
