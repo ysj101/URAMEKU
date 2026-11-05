@@ -16,6 +16,7 @@ import { experimentComplete } from '../domain/experiment';
 import type { CaseData, CaseProgress } from '../domain/types';
 import type { GameApi } from '../state/useGame';
 import { UI } from '../data/ui';
+import { uiIcon, type UiIconName } from '../data/assets';
 import '../app/screens/desk.css';
 import '../app/screens/v2-integration.css';
 import '../app/screens/v2-desk.css';
@@ -23,12 +24,24 @@ import '../app/screens/v2-desk.css';
 /** 右側デスクのタブ。事件が持つ方式（modes）に応じて増減する */
 type DeskTab = 'experiment' | 'decoding' | 'board' | 'decision';
 
+// タブ名は短く。パネル内の見出し（section-title）は長い名のまま
 const TAB_LABEL: Record<DeskTab, string> = {
-  experiment: '見え方のミニ実験',
-  decoding: '情報解読メモ',
+  experiment: 'ミニ実験',
+  decoding: '解読メモ',
   board: '証拠ボード',
   decision: '意思決定',
 };
+
+// アイコンは言葉に添えるだけ（aria-hidden）。public/assets/ui/icons にあるものだけ使う
+const TAB_ICON: Record<DeskTab, UiIconName> = {
+  experiment: 'inspect',
+  decoding: 'notes',
+  board: 'board',
+  decision: 'stamp',
+};
+
+/** タブの進み具合。全タブ「済 / 総」で、完了したらチェックと「完了」に置き換える */
+type TabBadge = { done: number; total: number };
 
 const TAB_STORAGE_PREFIX = 'urameku:desk-tab:';
 
@@ -114,14 +127,14 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
     board: summary.linkTarget > 0 && summary.remainingLinks === 0,
     decision: decisionComplete(current, progress),
   };
-  // 完了は色だけでなく文字でも示す（WCAG 1.4.1）
-  const tabBadge: Partial<Record<DeskTab, string>> = {
-    decoding: `${summary.answered} / ${summary.tasks}${tabDone.decoding ? ' 完了' : ''}`,
-    board: `${summary.links} 件${tabDone.board ? ' 完了' : ''}`,
+  // 全タブ「済 / 総」にそろえる。完了は色だけでなく文字でも示す（WCAG 1.4.1）
+  const tabBadge: Record<DeskTab, TabBadge> = {
+    decoding: { done: summary.answered, total: summary.tasks },
+    board: { done: summary.links, total: summary.linkTarget },
     // ミニ実験は「最初の選択」と「比べてからの選択」の2回。1回目だけ済んだ状態を「未完了」と
     // 一括りにすると、画面の「最初に選んだもの」と食い違って見えるので回数で示す。
-    experiment: `${experimentRecorded} / 2${tabDone.experiment ? ' 完了' : ''}`,
-    decision: tabDone.decision ? '記録済み' : '未完了',
+    experiment: { done: experimentRecorded, total: 2 },
+    decision: { done: tabDone.decision ? 1 : 0, total: 1 },
   };
   const selectTab = (next: DeskTab) => {
     setTab(next);
@@ -328,9 +341,31 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
                   onClick={() => selectTab(candidate)}
                   onKeyDown={(e) => roving.onKeyDown(e, i)}
                 >
-                  {TAB_LABEL[candidate]}
-                  {tabBadge[candidate] && (
-                    <span className="v2-tab__badge">{tabBadge[candidate]}</span>
+                  <img
+                    className="v2-tab__icon"
+                    src={uiIcon(TAB_ICON[candidate])}
+                    alt=""
+                    aria-hidden="true"
+                    width={18}
+                    height={18}
+                  />
+                  <span className="v2-tab__label">{TAB_LABEL[candidate]}</span>
+                  {tabDone[candidate] ? (
+                    <span className="v2-tab__badge">
+                      <img
+                        className="v2-tab__check"
+                        src={uiIcon('check')}
+                        alt=""
+                        aria-hidden="true"
+                        width={12}
+                        height={12}
+                      />
+                      完了
+                    </span>
+                  ) : (
+                    <span className="v2-tab__badge">
+                      {tabBadge[candidate].done} / {tabBadge[candidate].total}
+                    </span>
                   )}
                 </button>
               ))}

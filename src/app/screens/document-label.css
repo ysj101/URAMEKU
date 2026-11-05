@@ -61,3 +61,31 @@
 .document-label__sep {
   color: var(--color-border-dashed);
 }
+
+/*
+ * 資料カード用の短い形（variant="tile"、#173）。枠と背景を外し、
+ * 種別アイコン＋種別名＋2 桁の番号だけを 1 行で出す。
+ */
+.document-label--tile {
+  flex-wrap: nowrap;
+  gap: var(--space-1);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-quiet);
+  letter-spacing: 0.08em;
+}
+.document-label--tile .document-label__icon {
+  width: 1.2em;
+  height: 1.2em;
+}
+.document-label--tile .document-label__kind {
+  padding: 0;
+  border: 0;
+  background: none;
+}
+.document-label--tile .document-label__number {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  color: var(--color-quiet);
+}

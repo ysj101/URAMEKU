@@ -92,14 +92,14 @@ test('実験は初回表示を固定し、保留から判断を変えても途�
     .poll(() => page.evaluate((key) => localStorage.getItem(key), storageKey))
     .toContain('"initialChoice":"hold"');
   await page.reload();
-  await showDesk(page, '見え方のミニ実験');
+  await showDesk(page, 'ミニ実験');
   await expect(
     desk.getByText(`${definition.ui!.initialLabel}${initial.text}`, { exact: true }),
   ).toBeVisible();
   for (const id of definition.revealDocuments) {
     await openAndRead(page, c.documents.find((document) => document.id === id)!.title);
   }
-  await showDesk(page, '見え方のミニ実験');
+  await showDesk(page, 'ミニ実験');
   await desk.getByRole('radio', { name: updated.text, exact: true }).check();
   const reason = '比較情報を確認して、用途と条件を見直した。';
   await desk.getByRole('textbox', { name: definition.ui!.reasonLabel! }).fill(reason);
@@ -111,7 +111,7 @@ test('実験は初回表示を固定し、保留から判断を変えても途�
     .poll(() => page.evaluate((key) => localStorage.getItem(key), storageKey))
     .toContain(reason);
   await page.reload();
-  await showDesk(page, '見え方のミニ実験');
+  await showDesk(page, 'ミニ実験');
   await expect(
     desk.getByText(`${definition.ui!.initialLabel}${initial.text}`, { exact: true }),
   ).toBeVisible();
@@ -263,7 +263,7 @@ test('マウスとドラッグを使わずTab・矢印・Space・EnterでCASE01�
     await page.keyboard.press('Space');
     await expect(dialog).toBeHidden();
   }
-  await keyboardShowDesk(page, '情報解読メモ');
+  await keyboardShowDesk(page, '解読メモ');
   for (const { task, option } of selections) {
     const group = page.getByRole('group', { name: task.prompt, exact: true });
     const head = group.getByRole('button', { expanded: false });

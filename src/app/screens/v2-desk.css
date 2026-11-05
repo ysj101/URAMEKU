@@ -145,9 +145,8 @@
   display: grid;
   grid-template-columns: 44px minmax(0, 1fr) auto;
   grid-template-areas:
-    'thumb kind status'
-    'thumb title status'
-    'thumb label cost'
+    'thumb label status'
+    'thumb title cost'
     'thumb reason reason';
   align-items: center;
   column-gap: var(--space-3);
@@ -182,15 +181,13 @@
 .v2-docs .desk-grid .doc-tile:nth-child(even) .doc-tile__thumb {
   transform: none;
 }
-.v2-docs .desk-grid .doc-tile__kind {
-  grid-area: kind;
-  font-size: var(--font-size-xs);
-  letter-spacing: 0.1em;
-  padding: 0;
-  transform: none;
-  background: none;
-  color: var(--color-quiet);
-  border: 0;
+/* カードに出すのは 種別・題名・番号・コスト・状態 の 5 つだけ（#173）。同じ意味を 2 回出さない。 */
+.v2-docs .desk-grid .doc-tile__label {
+  grid-area: label;
+}
+/* 種別アイコンは collage.css がカード内で隠しているが、ここでは種別名と並べて 1 回だけ出す。 */
+.v2-docs .desk-grid .doc-tile__label .document-label__icon {
+  display: inline-block;
 }
 .v2-docs .desk-grid .doc-tile__title {
   grid-area: title;
@@ -199,26 +196,40 @@
   padding: 0;
   border: 0;
 }
-.v2-docs .desk-grid .doc-tile__label {
-  grid-area: label;
-}
+/* 既読の印（チェック＋「読んだ」）は右上。色だけに頼らない。 */
 .v2-docs .desk-grid .doc-tile__status {
   grid-area: status;
   justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
   margin: 0;
-  padding: 2px var(--space-2);
-  border: var(--border-width-thin) solid var(--color-ink);
+  padding: 0;
+  border: 0;
   font-size: var(--font-size-xs);
   white-space: nowrap;
 }
+.v2-docs .desk-grid .doc-tile__icon {
+  width: 1em;
+  height: 1em;
+  object-fit: contain;
+}
+/* コストはヘッダーの調査予算と同じピップ（.v2-meter__pip）1 個。無料は文字だけ。 */
 .v2-docs .desk-grid .doc-tile__cost {
   grid-area: cost;
   justify-self: end;
+  display: inline-flex;
+  align-items: center;
   font-size: var(--font-size-xs);
+  color: var(--color-quiet);
 }
+/* 開けない理由は錠と 1 行で、カードの下側に置く。 */
 .v2-docs .desk-grid .doc-tile__reason {
   grid-area: reason;
   justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
 }
 .v2-docs .desk-grid .doc-tile--opened {
   background: var(--color-surface-aged);
@@ -256,15 +267,29 @@
   color: var(--color-ink);
   box-shadow: inset 0 -4px 0 var(--color-accent);
 }
+.v2-tab__icon {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
 .v2-tab__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
   font-size: var(--font-size-xs);
   font-weight: 700;
   padding: 1px var(--space-2);
   border: var(--border-width-thin) solid currentColor;
+  white-space: nowrap;
+}
+.v2-tab__check {
+  width: 12px;
+  height: 12px;
+  flex: none;
 }
 .v2-tab.is-done .v2-tab__badge {
   color: var(--color-success);
-  /* 完了は文字（「完了」「記録済み」）でも伝える。色は補助 */
+  /* 完了はチェックと「完了」の文字でも伝える。色は補助 */
 }
 .v2-tabpanel {
   min-width: 0;
@@ -538,10 +563,24 @@
   border-bottom: 2px solid var(--color-ink);
 }
 @media (max-width: 430px) {
+  /* 狭い幅では 3 タブを 1 行に収めるため、バッジをタブ名の下に置く */
+  .v2-tabs {
+    flex-wrap: nowrap;
+  }
   .v2-tab {
-    flex: 1 1 auto;
+    flex: 1 1 0;
+    min-width: 0;
+    flex-wrap: wrap;
     justify-content: center;
-    padding: 0 var(--space-2);
+    row-gap: var(--space-1);
+    column-gap: var(--space-1);
+    padding: var(--space-2) var(--space-1);
+  }
+  .v2-tab__badge {
+    flex-basis: 100%;
+    justify-content: center;
+    border: 0;
+    padding: 0;
   }
   .v2-tabpanel .v2-desk {
     padding: var(--space-3);
