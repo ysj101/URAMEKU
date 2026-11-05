@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import {
   GAME_CASES,
+  chooseMenuItem,
   expectStage,
   gotoCase,
   openTask,
@@ -38,15 +39,18 @@ test('CASE01は各段階で次の操作を1つ示し、補足の機能にも戻�
     const remaining = page.locator('details.remaining-checklist');
     await expect(remaining).toHaveAttribute('open', '');
     await remaining.locator('summary').click();
-    await page.getByText('遊び方', { exact: true }).click();
+    // 記録が未完のまま進む帯は出さない。遊び方とやり直しはヘッダーのメニューから。
+    await expect(page.getByText('記録しなくても進めます。', { exact: true })).toHaveCount(0);
+    await chooseMenuItem(page, '遊び方を見る');
     await expect(
       page.getByRole('region', { name: '最初の事件で、遊び方を体験しよう' }),
     ).toBeVisible();
-    await page.getByRole('button', { name: 'この事件を最初からやり直す' }).click();
+    await page.getByRole('button', { name: '遊び方を閉じる', exact: true }).click();
+    await chooseMenuItem(page, 'この事件を最初からやり直す');
     const reset = page.getByRole('alertdialog', { name: 'やり直しの確認' });
     await expect(reset).toBeVisible();
     await reset.getByRole('button', { name: 'やめる', exact: true }).click();
-    await page.getByText('遊び方', { exact: true }).click();
+    await expect(page.getByRole('menu')).toHaveCount(0);
     await page.evaluate(() => window.scrollTo(0, 0));
     await expectFocus(card, main);
     await page.screenshot({ path: testInfo.outputPath(`${stage}.png`), fullPage: true });

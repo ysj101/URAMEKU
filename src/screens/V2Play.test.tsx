@@ -6,8 +6,8 @@ import type { CaseData } from '../domain/types';
 import { CASES } from '../data/cases';
 import { makeV2Case } from '../test/v2Fixtures';
 import type { GameApi } from '../state/useGame';
-import { V2InvestigationScreen } from './V2InvestigationScreen';
-import { V2ArticleScreen } from './V2ArticleScreen';
+import type { Navigation } from '../app/navigation';
+import { PlayScreen } from './PlayScreen';
 
 beforeEach(() => {
   Element.prototype.scrollIntoView = vi.fn();
@@ -18,6 +18,7 @@ function Harness({ data, actions = [] }: { data: CaseData; actions?: GameAction[
     actions.reduce((record, action) => reduceProgress(data, record, action), createProgress(data)),
   );
   const [stage, setStage] = useState<'investigate' | 'article'>('investigate');
+  const nav: Navigation = { route: { screen: 'play' }, navigate: vi.fn(), back: vi.fn() };
   const game: GameApi = {
     cases: [data],
     current: data,
@@ -30,18 +31,23 @@ function Harness({ data, actions = [] }: { data: CaseData; actions?: GameAction[
     goToNextCase: vi.fn(),
     resetAll: vi.fn(),
   };
-  return stage === 'article' ? (
-    <V2ArticleScreen game={game} />
-  ) : (
-    <V2InvestigationScreen game={game} />
-  );
+  return <PlayScreen game={game} nav={nav} />;
 }
+
+/** ヘッダーの「⋯」メニューを開いて項目を選ぶ */
+function chooseMenuItem(name: string) {
+  fireEvent.click(screen.getByRole('button', { name: 'メニュー' }));
+  fireEvent.click(screen.getByRole('menuitem', { name }));
+}
+const PROCEED = '調査報告へ進む（記録が未完でも）';
 
 describe('V2プレイの統合', () => {
   it('自由文を書かなくても提出でき、任意の補足は保持される', () => {
     render(<Harness data={makeV2Case()} />);
     expect(screen.queryByRole('heading', { name: '数値検証メモ' })).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: '調査報告をまとめる →' }));
+    // 記録が未完のまま進む経路は、画面の帯ではなくヘッダーのメニューにある
+    expect(screen.queryByRole('button', { name: '調査報告をまとめる →' })).not.toBeInTheDocument();
+    chooseMenuItem(PROCEED);
     const submit = screen.getByRole('button', { name: '報告を提出して振り返る' });
     expect(submit).not.toHaveAttribute('aria-disabled');
     // 骨子は記録から自動で組み立てられ、未記録の問いもそのまま見える
@@ -59,7 +65,7 @@ describe('V2プレイの統合', () => {
       },
     );
     fireEvent.click(screen.getByRole('button', { name: '← 調査へ戻る' }));
-    fireEvent.click(screen.getByRole('button', { name: '調査報告をまとめる →' }));
+    chooseMenuItem(PROCEED);
     expect(screen.getByRole('textbox', { name: '確認できたこと・採る方針' })).toHaveValue(
       '対象を限定して報告する。',
     );
@@ -82,13 +88,13 @@ describe('V2プレイの統合', () => {
     fireEvent.click(screen.getByRole('radio', { name: '確認した対象に限られる' }));
     // 答えだけでは完了にせず、参照資料の採用が必要なことを見出しで示す
     expect(screen.getByText('問 1 ・ 根拠待ち')).toBeInTheDocument();
-    expect(screen.getByRole('status')).toHaveTextContent('まだ読んでいない資料があります');
+    expect(within(group).getByRole('status')).toHaveTextContent('まだ読んでいない資料があります');
     // 畳むと選択肢は消え、選んだ答えが見出しに残る
-    fireEvent.click(screen.getByRole('button', { name: /閉じる/ }));
+    fireEvent.click(within(group).getByRole('button', { name: /閉じる/ }));
     expect(screen.queryByRole('radio')).not.toBeInTheDocument();
     expect(group).toHaveTextContent('→ 確認した対象に限られる');
     // 参照資料が未採用のうちは「資料を確認」と促す
-    fireEvent.click(screen.getByRole('button', { name: /資料を確認/ }));
+    fireEvent.click(within(group).getByRole('button', { name: /資料を確認/ }));
     expect(screen.getByRole('radio', { name: '確認した対象に限られる' })).toBeChecked();
   });
 
@@ -184,15 +190,93 @@ describe('最初の事件の操作案内', () => {
     expect(
       screen.getByRole('button', { name: new RegExp(boardTask.title), pressed: true }),
     ).toBeVisible();
-    fireEvent.click(screen.getByRole('button', { name: '調査報告をまとめる →' }));
+    chooseMenuItem(PROCEED);
     expect(screen.getByRole('complementary', { name: '初めての報告' })).toHaveTextContent(
       '補足の文章は書かなくても提出できます。',
     );
     fireEvent.click(screen.getByRole('button', { name: '報告を提出して振り返る' }));
-    expect(screen.getByRole('button', { name: '報告を提出して振り返る' })).toHaveAttribute(
-      'aria-disabled',
-      'true',
+    // 提出すると結果画面に切り替わり、記事画面の提出ボタンは消える
+    expect(
+      screen.queryByRole('button', { name: '報告を提出して振り返る' }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'メニュー' })).toBeInTheDocument();
+  });
+});
+
+describe('ヘッダーのメニュー', () => {
+  it('遊び方・報告へ進む・やり直しの順に並び、やり直しは区切り線の下に離す', () => {
+    render(<Harness data={CASES[0]!} />);
+    fireEvent.click(screen.getByRole('button', { name: 'メニュー' }));
+    const menu = screen.getByRole('menu', { name: 'メニュー' });
+    const items = within(menu).getAllByRole('menuitem');
+    expect(items.map((item) => item.textContent)).toEqual([
+      '遊び方を見る',
+      PROCEED,
+      'この事件を最初からやり直す',
+    ]);
+    expect(items[2]).toHaveClass('is-danger');
+    expect(within(menu).getByRole('separator')).toBeInTheDocument();
+    // 記事の段階では「報告へ進む」は出さない
+    fireEvent.click(within(menu).getByRole('menuitem', { name: PROCEED }));
+    fireEvent.click(screen.getByRole('button', { name: 'メニュー' }));
+    expect(screen.queryByRole('menuitem', { name: PROCEED })).not.toBeInTheDocument();
+  });
+
+  it('矢印キーで項目を移動し、Esc で閉じてボタンへ戻る', () => {
+    render(<Harness data={CASES[0]!} />);
+    const button = screen.getByRole('button', { name: 'メニュー' });
+    expect(button).toHaveAttribute('aria-haspopup', 'menu');
+    fireEvent.keyDown(button, { key: 'ArrowDown' });
+    const menu = screen.getByRole('menu', { name: 'メニュー' });
+    const [guide, proceed, reset] = within(menu).getAllByRole('menuitem');
+    expect(guide).toHaveFocus();
+    fireEvent.keyDown(menu, { key: 'ArrowDown' });
+    expect(proceed).toHaveFocus();
+    fireEvent.keyDown(menu, { key: 'End' });
+    expect(reset).toHaveFocus();
+    fireEvent.keyDown(menu, { key: 'ArrowDown' });
+    expect(guide).toHaveFocus();
+    fireEvent.keyDown(menu, { key: 'ArrowUp' });
+    expect(reset).toHaveFocus();
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    expect(button).toHaveFocus();
+    expect(button).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  it('遊び方はメニューから開き、最初の事件の手順を示す', () => {
+    render(<Harness data={CASES[0]!} />);
+    expect(screen.queryByText('最初の事件で、遊び方を体験しよう')).not.toBeInTheDocument();
+    chooseMenuItem('遊び方を見る');
+    const guide = screen.getByRole('region', { name: '最初の事件で、遊び方を体験しよう' });
+    expect(within(guide).getAllByRole('listitem')).toHaveLength(4);
+    expect(screen.getByRole('heading', { name: '遊び方' })).toHaveFocus();
+    fireEvent.click(screen.getByRole('button', { name: '遊び方を閉じる' }));
+    expect(screen.queryByRole('region', { name: '遊び方' })).not.toBeInTheDocument();
+  });
+
+  it('やり直しは確認パネルを経て、記録と予算を最初に戻す', () => {
+    const data = CASES[0]!;
+    const paid = data.documents.find((doc) => doc.cost > 0)!;
+    render(<Harness data={data} actions={[{ type: 'open-document', documentId: paid.id }]} />);
+    expect(
+      screen.getByLabelText(`調査予算：残り ${data.budget - paid.cost} / ${data.budget}`),
+    ).toBeVisible();
+    chooseMenuItem('この事件を最初からやり直す');
+    const confirm = screen.getByRole('alertdialog', { name: 'やり直しの確認' });
+    expect(confirm).toHaveFocus();
+    fireEvent.click(within(confirm).getByRole('button', { name: 'やめる' }));
+    expect(
+      screen.getByLabelText(`調査予算：残り ${data.budget - paid.cost} / ${data.budget}`),
+    ).toBeVisible();
+    chooseMenuItem('この事件を最初からやり直す');
+    fireEvent.click(
+      within(screen.getByRole('alertdialog', { name: 'やり直しの確認' })).getByRole('button', {
+        name: 'やり直す',
+      }),
     );
+    expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument();
+    expect(screen.getByLabelText(`調査予算：残り ${data.budget} / ${data.budget}`)).toBeVisible();
   });
 });
 
@@ -214,7 +298,10 @@ describe('次の操作の強調', () => {
       fireEvent.click(tab);
       expect(enabledPrimaries(container).length).toBeLessThanOrEqual(1);
     }
-    expect(screen.getByRole('button', { name: '調査報告をまとめる →' })).toHaveClass('ghost');
+    // 記録が未完の間は報告ボタンを画面に出さず、メニューの中にだけ置く
+    expect(screen.queryByRole('button', { name: '調査報告をまとめる →' })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'メニュー' }));
+    expect(screen.getByRole('menuitem', { name: PROCEED })).toBeInTheDocument();
   });
 
   it('問いとボードの記録がそろうと、報告だけを強調する', () => {
