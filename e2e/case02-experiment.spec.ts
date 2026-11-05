@@ -127,7 +127,7 @@ for (const viewport of [
           exact: true,
         })
         .click();
-      await showDesk(page, '見え方のミニ実験');
+      await showDesk(page, 'ミニ実験');
       await expect(desk.getByRole('status')).toContainText('次は資料を読んでみよう');
       await checkpoint('02-initial-choice-made');
       for (const id of experiment.revealDocuments) {
@@ -141,7 +141,7 @@ for (const viewport of [
         );
         await dialog.getByRole('button', { name: '資料を閉じる' }).click();
       }
-      await showDesk(page, '見え方のミニ実験');
+      await showDesk(page, 'ミニ実験');
       await expect(desk.getByRole('heading', { name: '2つの見せ方を比べよう' })).toBeVisible();
       await expect(desk.getByRole('complementary')).toHaveCount(0);
       await checkpoint('03-compare', 1);
@@ -176,7 +176,7 @@ for (const viewport of [
         )
         .toBe('complete');
       await page.reload();
-      await showDesk(page, '見え方のミニ実験');
+      await showDesk(page, 'ミニ実験');
       await expect(column).toBeVisible();
     });
   }

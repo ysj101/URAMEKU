@@ -267,15 +267,29 @@
   color: var(--color-ink);
   box-shadow: inset 0 -4px 0 var(--color-accent);
 }
+.v2-tab__icon {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
 .v2-tab__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
   font-size: var(--font-size-xs);
   font-weight: 700;
   padding: 1px var(--space-2);
   border: var(--border-width-thin) solid currentColor;
+  white-space: nowrap;
+}
+.v2-tab__check {
+  width: 12px;
+  height: 12px;
+  flex: none;
 }
 .v2-tab.is-done .v2-tab__badge {
   color: var(--color-success);
-  /* 完了は文字（「完了」「記録済み」）でも伝える。色は補助 */
+  /* 完了はチェックと「完了」の文字でも伝える。色は補助 */
 }
 .v2-tabpanel {
   min-width: 0;
@@ -550,10 +564,24 @@
   border-bottom: 2px solid var(--color-ink);
 }
 @media (max-width: 430px) {
+  /* 狭い幅では 3 タブを 1 行に収めるため、バッジをタブ名の下に置く */
+  .v2-tabs {
+    flex-wrap: nowrap;
+  }
   .v2-tab {
-    flex: 1 1 auto;
+    flex: 1 1 0;
+    min-width: 0;
+    flex-wrap: wrap;
     justify-content: center;
-    padding: 0 var(--space-2);
+    row-gap: var(--space-1);
+    column-gap: var(--space-1);
+    padding: var(--space-2) var(--space-1);
+  }
+  .v2-tab__badge {
+    flex-basis: 100%;
+    justify-content: center;
+    border: 0;
+    padding: 0;
   }
   .v2-tabpanel .v2-desk {
     padding: var(--space-3);
