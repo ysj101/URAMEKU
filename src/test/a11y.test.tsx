@@ -9,6 +9,10 @@ vi.mock('../data/cases', async () => {
     CASES: cases,
     findCase: (id: string) => cases.find((c) => c.id === id),
     caseIndex: (id: string) => cases.findIndex((c) => c.id === id),
+    caseNumber: (id: string) => {
+      const i = cases.findIndex((c) => c.id === id);
+      return i < 0 ? null : i + 1;
+    },
     nextCaseId: (id: string) => {
       const i = cases.findIndex((c) => c.id === id);
       return cases[i < 0 ? 0 : (i + 1) % cases.length]?.id;

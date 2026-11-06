@@ -1,3 +1,4 @@
+import { caseNumber } from '../data/cases';
 import type { PropName } from '../data/assets';
 import type { DocumentVisual } from '../domain/types';
 
@@ -33,8 +34,13 @@ export const VISUAL_LABEL = {
   label: 'ラベル',
 } as const satisfies Record<DocumentVisual, string>;
 
-/** `case-01` → `CASE 01`。想定外の形式はそのまま大文字にする。 */
+/**
+ * 事件の表示用ラベル。一覧にある事件は並び順の位置（`CASE 01` は一覧の先頭）で番号を付け、
+ * 一覧に無い ID は `case-01` → `CASE 01` のように ID の数字を使う。想定外の形式はそのまま大文字にする。
+ */
 export function formatCaseId(caseId: string): string {
+  const n = caseNumber(caseId);
+  if (n !== null) return `CASE ${String(n).padStart(2, '0')}`;
   const m = /^case-(\d+)$/.exec(caseId);
   const digits = m?.[1];
   return digits ? `CASE ${digits.padStart(2, '0')}` : caseId.toUpperCase();

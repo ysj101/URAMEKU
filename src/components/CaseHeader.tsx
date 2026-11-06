@@ -1,4 +1,5 @@
 import type { CaseData } from '../domain/types';
+import { formatCaseId } from './documentVisuals';
 import { CharImage } from './CharImage';
 
 /** 事件の見出し。番号と題名を 1 行に圧縮し、何を調査しているかが分かるよう概要は常に出す */
@@ -7,7 +8,7 @@ export function CaseHeader({ caseData }: { caseData: CaseData }) {
     <div className="case-header">
       <div className="case-header__body">
         <div className="case-header__row">
-          <span className="case-tag">{caseData.id.toUpperCase()} / FICTION</span>
+          <span className="case-tag">{formatCaseId(caseData.id).replace(' ', '-')} / FICTION</span>
           <h1 id="case-title">{caseData.title}</h1>
         </div>
         <p className="case-header__intro">{caseData.intro}</p>
