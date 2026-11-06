@@ -38,5 +38,13 @@
     "unlockCase": "case-05",
     "art": "assets/encyclopedia/graph-scale.png",
     "disclaimer": "状況内の判断を説明する概念であり、個人の心理特性を断定するものではありません。"
+  },
+  {
+    "id": "mean-outlier",
+    "title": "平均と外れ値",
+    "summary": "平均は合計を人数で割った値で、1人の大きな値に引っぱられることがある。",
+    "unlockCase": "case-06",
+    "art": "assets/encyclopedia/mean-outlier.png",
+    "disclaimer": "状況内の判断を説明する概念であり、個人の心理特性を断定するものではありません。"
   }
 ]

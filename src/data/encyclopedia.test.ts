@@ -10,9 +10,9 @@ import {
 } from './encyclopedia';
 
 describe('図鑑データ（data/encyclopedia/ja.json）', () => {
-  it('5 項目が読み込め、id が一意', () => {
-    expect(ENCYCLOPEDIA).toHaveLength(5);
-    expect(new Set(ENCYCLOPEDIA.map((e) => e.id)).size).toBe(5);
+  it('事件と同じ件数が読み込め、id が一意', () => {
+    expect(ENCYCLOPEDIA).toHaveLength(CASES.length);
+    expect(new Set(ENCYCLOPEDIA.map((e) => e.id)).size).toBe(ENCYCLOPEDIA.length);
   });
   it('unlockCase はすべて実在する事件 ID', () => {
     const caseIds = new Set(CASES.map((c) => c.id));

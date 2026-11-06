@@ -6,7 +6,7 @@ import { makeCase, makeProgress } from '../test/fixtures';
 const caseData = makeCase();
 
 describe('DocumentGrid（調査デスク）', () => {
-  it('全事件の 30 資料がタイルとして表示される', () => {
+  it('全事件の全資料がタイルとして表示される', () => {
     let total = 0;
     for (const c of CASES) {
       const { container, unmount } = render(
@@ -20,7 +20,7 @@ describe('DocumentGrid（調査デスク）', () => {
       total += tiles.length;
       unmount();
     }
-    expect(total).toBe(30);
+    expect(total).toBe(CASES.reduce((sum, c) => sum + c.documents.length, 0));
   });
 
   it('タップで onOpen が呼ばれる', () => {

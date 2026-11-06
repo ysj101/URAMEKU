@@ -1,0 +1,66 @@
+Tool used: image_gen.imagegen (built-in; no SVG fallback).
+All deliverables are draft artwork, not human release-approved.
+Production: six individual generation calls, plus one edit correcting case-06 small-stack count from 25 to 24 (four groups of six). Exact brief copy supplied without rewriting.
+Final files copied from automatic tool cache. Encyclopedia PNGs resized with sips to 640x400. Covers converted with cwebp -q 85 -resize 960 640.
+Constraint limitations: image_gen automatically saved original images to /Users/ysj/.codex/generated_images despite requested output-only path; these tool-managed cache writes could not be controlled. All deliberate file writes are under the requested out directory; repository files were not modified.
+The texture introduces tonal variations beyond literal five-color hex values. Paper texture includes mild depth/shadow, so strict flatness and exact-pixel palette are not guaranteed.
+Infographic bar/stack heights are illustrative, not precise scaled plots. Japanese wording and supplied figures checked visually; spacing/line wrapping and fullwidth punctuation may vary in generated typography.
+Coverage inventory read: manual art/rights approval remains pending. Assets are not release-approved.
+
+OUTPUT: /private/tmp/claude-501/-Users-ysj-Documents-code-URAMEKU/252ee32e-710d-4b6b-a921-f821b6c45465/scratchpad/codex-images/out/cases/case-06/cover.png
+FINAL GENERATION PROMPT:
+Create a single landscape 1536x1024 PNG illustration, 3:2. Use case: stylized-concept; editorial case cover. Restrained handmade editorial cut-paper collage and imperfect black relief print on warm ivory paper, angular bold silhouettes, tiny ink wear, subtly torn edges, flat shapes. Palette ONLY ink #242322, ivory #F5F0E6, aged paper #E4D8C2, vermilion #D44843, muted blue #437A92. Subject: a neat row of five small identical muted-blue paper coin stacks (short, equal height) on an ivory table line; at the right end one single towering vermilion coin stack, three to four times taller. A thin black horizontal cut-paper bar floats across the scene above every blue stack but far below the red stack, suggesting an average line. Only stacks and the bar. Max three main element types, generous margins, readable at 320px wide. No text, numerals, symbols on coins, lettering, pseudo-text, case numbers, logos, frames, UI, watermarks, gradients, 3D, photorealism, heavy shading, confetti, scattered props, characters or faces. If saving a file, write ONLY under /private/tmp/claude-501/-Users-ysj-Documents-code-URAMEKU/252ee32e-710d-4b6b-a921-f821b6c45465/scratchpad/codex-images/out/cases/case-06/cover.png.
+
+OUTPUT: /private/tmp/claude-501/-Users-ysj-Documents-code-URAMEKU/252ee32e-710d-4b6b-a921-f821b6c45465/scratchpad/codex-images/out/cases/case-07/cover.png
+FINAL GENERATION PROMPT:
+Create a single landscape 1536x1024 PNG illustration, 3:2. Use case: stylized-concept; editorial case cover. Restrained handmade editorial cut-paper collage and imperfect black relief print on warm ivory paper, angular bold silhouettes, tiny ink wear, subtly torn edges, flat shapes. Palette ONLY ink #242322, ivory #F5F0E6, aged paper #E4D8C2, vermilion #D44843, muted blue #437A92. Subject: two side-by-side ivory paper sheets on aged-paper background. On the left sheet a bold vermilion cut-paper arrow rises steeply; a black paper magnifying-glass silhouette hovers over it. On the right sheet an identical muted-blue arrow rises by EXACTLY the same amount, but the right sheet is half covered by a torn aged-paper flap, so it is easy to miss. Only two sheets, two arrows, flap and magnifier. One strong visual idea, generous margins, readable at 320px. No text, numbers, lettering, pseudo-text, labels, case numbers, logos, borders, UI, watermarks, gradients, 3D, photorealism, excessive shadows, confetti, scattered props, people, characters or faces. If saving, write only under /private/tmp/claude-501/-Users-ysj-Documents-code-URAMEKU/252ee32e-710d-4b6b-a921-f821b6c45465/scratchpad/codex-images/out/cases/case-07/cover.png.
+
+OUTPUT: /private/tmp/claude-501/-Users-ysj-Documents-code-URAMEKU/252ee32e-710d-4b6b-a921-f821b6c45465/scratchpad/codex-images/out/cases/case-06/debrief/mean-outlier-mechanism.png
+FINAL GENERATION PROMPT:
+Use case: infographic-diagram. Create a landscape 1536x1024 PNG Japanese educational infographic for junior-high students. Clear 2D editorial ink-and-gouache illustration, cream paper, dark ink, muted teal, small red pencil annotations, evidence-board atmosphere. Strong readable Japanese typography, ample whitespace. No characters, faces, logos. All text below must be reproduced verbatim, no invented words or numbers.
+Title: 「平均3000円」でも、ほとんどの人は1500円
+Subtitle: 平均は合計÷人数。1人の大きな金額で、平均は大きく動く。
+Middle: a row of EXACTLY 24 identical small paper coin stacks, count carefully, grouped together; label: 24人：1000〜2000円（合計36,000円）
+Then one very tall stack at right label: 1人：39,000円
+A red pencil horizontal line above ordinary stacks at height labeled 平均 3000円
+A teal horizontal line lower labeled 真ん中の人 1500円
+Use diagrammatic tall-stack break if needed; prioritize readable ordinary stacks and both reference lines.
+Below, calculation exact (may split across two lines):
+36,000円 ＋ 39,000円 ＝ 75,000円
+75,000円 ÷ 25人 ＝ 3000円
+Bottom conclusion exact: 平均だけでは、「ふつうの人」の金額は分からない。
+Bottom question in teal exact: 平均は？ と一緒に、いちばん多いのは？ 真ん中は？
+Numbers must stay exactly as supplied, including 24, 1, 25, 36,000, 39,000, 75,000, 3000, 1500 and range 1000〜2000. Do not invent other numbers. Do not imply anyone lied. Do not add scales, ticks, unrelated text, props, faces, watermarks or logos.
+If saving a file, write ONLY under /private/tmp/claude-501/-Users-ysj-Documents-code-URAMEKU/252ee32e-710d-4b6b-a921-f821b6c45465/scratchpad/codex-images/out/cases/case-06/debrief/mean-outlier-mechanism.png.
+FINAL EDIT PROMPT:
+Edit this Japanese infographic. Keep all Japanese wording, numbers, labels, colors, layout, typography and other artwork exactly unchanged. The row currently incorrectly contains 25 small coin stacks, while the label correctly says 24人. Replace the row with EXACTLY 24 small equal coin stacks. Count carefully: organize them as four subtle groups of six identical stacks along the same horizontal baseline with tiny spaces between groups, 6+6+6+6=24. Do not print group numbers or any new text. Keep the one tall stack on the right unchanged. Keep all existing labels, reference lines, calculations and conclusions exact and unchanged. Remove no existing text. Output 1536x1024 PNG. Save only under /private/tmp/claude-501/-Users-ysj-Documents-code-URAMEKU/252ee32e-710d-4b6b-a921-f821b6c45465/scratchpad/codex-images/out/cases/case-06/debrief/mean-outlier-mechanism.png.
+
+OUTPUT: /private/tmp/claude-501/-Users-ysj-Documents-code-URAMEKU/252ee32e-710d-4b6b-a921-f821b6c45465/scratchpad/codex-images/out/cases/case-07/debrief/missing-comparison-mechanism.png
+FINAL GENERATION PROMPT:
+Use case: infographic-diagram. Create landscape 1536x1024 PNG Japanese educational infographic for junior-high students. Clear 2D editorial ink-and-gouache illustration, cream paper, dark ink, muted teal, small red pencil annotations, evidence-board atmosphere. Strong readable Japanese typography, ample whitespace. No characters, faces, logos. Reproduce all Japanese exactly with no additions.
+Title: 「20点アップ」の相手は、だれ？
+Subtitle: 前と後を比べるだけでは、何のおかげかは分からない。
+Middle: two comparison panels side by side.
+Left panel has red crop-mark corners, title: 教材を使った20人
+Two vertical bars, first proportionally height 52, second 72, both share baseline. Labels below: 中間 52点 and 期末 72点 with a rightward arrow between them. Red annotation above: ＋20点
+Right panel teal border, title: 学年全体160人（教材なしの人も入る）
+Two vertical bars, first proportionally height 50, second 68, use same scale as left panel. Labels below: 中間 50点 and 期末 68点 with rightward arrow between. Teal annotation above: ＋18点
+Between panels, a small central note (can wrap): 期末は基本問題が中心で、みんな上がった
+Bottom conclusion exactly, may wrap into two lines: 教材のおかげと言えるのは、差の2点までかもしれない。それも、この資料だけでは決めきれない。
+Bottom question in teal exactly: 上がった？ と一緒に、使わなかった人は？
+Numbers must stay exactly 20, 160, 52, 72, 50, 68, 20, 18, 2 in their supplied locations. No extra numbers, tick marks, axis scales or invented statistics. Do not claim the material has no effect. Do not relabel the whole-school comparison as a control group; it includes material users too. No people or faces, decorative props, logos or watermarks.
+If saving, write only under /private/tmp/claude-501/-Users-ysj-Documents-code-URAMEKU/252ee32e-710d-4b6b-a921-f821b6c45465/scratchpad/codex-images/out/cases/case-07/debrief/missing-comparison-mechanism.png.
+
+OUTPUT: /private/tmp/claude-501/-Users-ysj-Documents-code-URAMEKU/252ee32e-710d-4b6b-a921-f821b6c45465/scratchpad/codex-images/out/encyclopedia/mean-outlier.png
+FINAL GENERATION PROMPT:
+Create a single 640x400 PNG landscape encyclopedia spot illustration, aspect 8:5. Restrained handmade editorial cut-paper collage and imperfect black relief print on warm ivory paper, angular bold silhouettes, tiny ink wear, subtly torn edges, entirely flat shapes. Palette ONLY ink #242322, ivory #F5F0E6, aged paper #E4D8C2, vermilion #D44843, muted blue #437A92. Subject: EXACTLY five equal small muted-blue paper coin stacks in a row and one towering vermilion stack at the right, 3-4 times taller. A thin black horizontal bar hovers above all the small stacks and far below the red stack top. Only stacks and bar; minimal, spacious margins, immediately readable at 320px. No symbols on coins. No text, numbers, labels, lettering, pseudo-text, frames, UI, logos, watermarks, gradients, 3D, photorealism, heavy shading, confetti, props, characters, faces. If saving write only under /private/tmp/claude-501/-Users-ysj-Documents-code-URAMEKU/252ee32e-710d-4b6b-a921-f821b6c45465/scratchpad/codex-images/out/encyclopedia/mean-outlier.png.
+
+OUTPUT: /private/tmp/claude-501/-Users-ysj-Documents-code-URAMEKU/252ee32e-710d-4b6b-a921-f821b6c45465/scratchpad/codex-images/out/encyclopedia/missing-comparison.png
+FINAL GENERATION PROMPT:
+Create a single 640x400 PNG landscape encyclopedia spot illustration, aspect 8:5. Restrained handmade editorial cut-paper collage and imperfect black relief print on warm ivory paper, angular bold silhouettes, tiny ink wear, subtly torn edges, entirely flat shapes. Palette ONLY ink #242322, ivory #F5F0E6, aged paper #E4D8C2, vermilion #D44843, muted blue #437A92. Subject: one bold vermilion rising arrow inside a small black frame on the left; beside it, an IDENTICAL rising muted-blue arrow with NO frame, partly hidden behind a torn aged-paper edge. Blue appears faint by sparse ink wear, not gradients. One strong visual idea, minimal, generous outer margins. The two arrows have the same rise. Only arrows, the single frame, torn paper edge. No text, numbers, labels, lettering, pseudo-text, UI, logos, watermarks, gradients, 3D, photorealism, shading, confetti, scattered props, characters, faces. If saving write only under /private/tmp/claude-501/-Users-ysj-Documents-code-URAMEKU/252ee32e-710d-4b6b-a921-f821b6c45465/scratchpad/codex-images/out/encyclopedia/missing-comparison.png.
+
+WEBP OUTPUTS:
+/private/tmp/claude-501/-Users-ysj-Documents-code-URAMEKU/252ee32e-710d-4b6b-a921-f821b6c45465/scratchpad/codex-images/out/cases/case-06/cover.webp — cwebp -q 85 -resize 960 640 cases/case-06/cover.png -o cases/case-06/cover.webp
+/private/tmp/claude-501/-Users-ysj-Documents-code-URAMEKU/252ee32e-710d-4b6b-a921-f821b6c45465/scratchpad/codex-images/out/cases/case-07/cover.webp — cwebp -q 85 -resize 960 640 cases/case-07/cover.png -o cases/case-07/cover.webp
+
+Verification: PIL verified all eight image formats and target dimensions. Both 640x400 encyclopedia PNGs visually inspected after resizing. Repository asset validator executed via runpy with only its qa/validation.json write suppressed: PASS, 551 assets, 5 cases, no problems. qa/coverage.json inspected. git status --short remained clean. This validator checks existing repository assets, not these external deliverables.

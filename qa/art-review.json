@@ -2834,11 +2834,51 @@
       "reason": "Generated CASE00 explanation; human art and rights approval pending.",
       "visual_flag": "needs_check",
       "visual_note": "AI checked menu labels against case JSON; not release-approved."
+    },
+    {
+      "path": "public/assets/cases/case-06/cover.png",
+      "kind": "case-cover",
+      "status": "pending",
+      "reviewer": null,
+      "reviewed_at": null,
+      "reason": "Generated 2026-11-07 via Codex image_gen for case-06; human art and rights approval pending.",
+      "visual_flag": "needs_check",
+      "visual_note": "AI visual check against the brief only (text-free cover; infographic numbers match case JSON). Not release approval."
+    },
+    {
+      "path": "public/assets/cases/case-06/cover.webp",
+      "kind": "case-cover",
+      "status": "pending",
+      "reviewer": null,
+      "reviewed_at": null,
+      "reason": "Generated 2026-11-07 via Codex image_gen for case-06; human art and rights approval pending.",
+      "visual_flag": "needs_check",
+      "visual_note": "AI visual check against the brief only (text-free cover; infographic numbers match case JSON). Not release approval."
+    },
+    {
+      "path": "public/assets/cases/case-06/debrief/mean-outlier-mechanism.png",
+      "kind": "case-debrief",
+      "status": "pending",
+      "reviewer": null,
+      "reviewed_at": null,
+      "reason": "Generated 2026-11-07 via Codex image_gen for case-06; human art and rights approval pending.",
+      "visual_flag": "needs_check",
+      "visual_note": "AI visual check against the brief only (text-free cover; infographic numbers match case JSON). Not release approval."
+    },
+    {
+      "path": "public/assets/encyclopedia/mean-outlier.png",
+      "kind": "encyclopedia-art",
+      "status": "pending",
+      "reviewer": null,
+      "reviewed_at": null,
+      "reason": "Generated 2026-11-07 via Codex image_gen for case-06; human art and rights approval pending.",
+      "visual_flag": "needs_check",
+      "visual_note": "AI visual check against the brief only (text-free cover; infographic numbers match case JSON). Not release approval."
     }
   ],
   "summary": {
-    "total": 120,
-    "pending": 120,
+    "total": 124,
+    "pending": 124,
     "approved": 0,
     "rejected": 0,
     "auto_check": 12

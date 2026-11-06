@@ -146,6 +146,7 @@ export const ENCYCLOPEDIA_IDS = [
   'anchoring',
   'framing',
   'graph-scale',
+  'mean-outlier',
   'social-proof',
   'sunk-cost',
 ] as const;

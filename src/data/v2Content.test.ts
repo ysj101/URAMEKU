@@ -83,8 +83,9 @@ describe('V2 staged case content', () => {
           expect(createProgress(c).v2?.experiment?.conditionId).toBe(initialCondition);
         });
       }
-      it('keeps documentary facts and V1 answer keys while replacing the required arithmetic tasks', () => {
-        const legacy = LEGACY_CASES.find((old) => old.id === c.id)!;
+      const legacyCase = LEGACY_CASES.find((old) => old.id === c.id);
+      it.skipIf(!legacyCase)('keeps documentary facts and V1 answer keys while replacing the required arithmetic tasks', () => {
+        const legacy = legacyCase!;
         expect(c.title).toBe(legacy.title);
         expect(c.required_evidence).toEqual(legacy.required_evidence);
         expect(c.required_link).toEqual(legacy.required_link);
@@ -100,7 +101,8 @@ describe('V2 staged case content', () => {
       it('requires multiple source readings and keeps uncertainty separate from a factual contradiction', () => {
         const v2 = c.v2!;
         const accepted = v2.decoding.flatMap((t) => t.options.filter((o) => o.accepted));
-        expect(v2.decoding.length).toBeGreaterThanOrEqual(3);
+        // 標準（NORMAL）は解読 2 問、難関以上は 3 問以上（docs/CASE_AUTHORING.md 難易度の基準）
+        expect(v2.decoding.length).toBeGreaterThanOrEqual(c.difficulty === 'NORMAL' ? 2 : 3);
         expect(accepted.some((o) => o.status === 'uncertain')).toBe(true);
         expect(new Set(accepted.flatMap((o) => o.evidence)).size).toBeGreaterThanOrEqual(3);
         expect(v2.graph.paths.length).toBeGreaterThanOrEqual(2);

@@ -3,7 +3,7 @@ import { fireEvent, render, screen, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { createProgress, reduceProgress, type GameAction } from '../domain/game';
 import type { CaseData } from '../domain/types';
-import { CASES } from '../data/cases';
+import { CASES, findCase } from '../data/cases';
 import { makeV2Case } from '../test/v2Fixtures';
 import type { GameApi } from '../state/useGame';
 import type { Navigation } from '../app/navigation';
@@ -145,9 +145,9 @@ describe('V2プレイの統合', () => {
   });
 });
 
-describe('最初の事件の操作案内', () => {
+describe('操作案内（case-01）', () => {
   it('資料を読み、問1を記録すると案内とタブのバッジ、問いの行の状態が進む', () => {
-    const data = CASES[0]!;
+    const data = findCase('case-01')!;
     render(<Harness data={data} />);
     const guide = screen.getByRole('region', { name: '次にやること' });
     const decodingTab = screen.getByRole('tab', { name: /解読メモ/ });
@@ -155,7 +155,9 @@ describe('最初の事件の操作案内', () => {
     expect(decodingTab).toHaveTextContent(`解読メモ0 / ${total}`);
     // 「残っていることの一覧」は置かない。残数はタブのバッジ、状態は問いの行で分かる。
     expect(screen.queryByText('残っていることの一覧')).not.toBeInTheDocument();
-    fireEvent.click(within(guide).getByRole('button', { name: 'キャンペーン広告を開く' }));
+    fireEvent.click(
+      within(guide).getByRole('button', { name: `${data.documents[0]!.title}を開く` }),
+    );
     expect(screen.getByRole('dialog')).toHaveTextContent(data.documents[0]!.content);
     fireEvent.click(
       within(screen.getByRole('dialog')).getByRole('button', { name: '資料を閉じる' }),
@@ -191,15 +193,24 @@ describe('最初の事件の操作案内', () => {
     const boardTab = screen.getByRole('tab', { name: /証拠ボード/ });
     expect(boardTab).toHaveTextContent(`証拠ボード0 / ${data.v2!.board!.tasks.length}`);
     chooseMenuItem(PROCEED);
-    expect(screen.getByRole('complementary', { name: '初めての報告' })).toHaveTextContent(
-      '補足の文章は書かなくても提出できます。',
-    );
+    // 「初めての報告」の案内は一覧の先頭の事件だけに出す
+    expect(screen.queryByRole('complementary', { name: '初めての報告' })).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: '報告を提出して振り返る' }));
     // 提出すると結果画面に切り替わり、記事画面の提出ボタンは消える
     expect(
       screen.queryByRole('button', { name: '報告を提出して振り返る' }),
     ).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'メニュー' })).toBeInTheDocument();
+  });
+});
+
+describe('一覧の先頭の事件', () => {
+  it('報告画面に「初めての報告」の案内を出す', () => {
+    render(<Harness data={CASES[0]!} />);
+    chooseMenuItem(PROCEED);
+    expect(screen.getByRole('complementary', { name: '初めての報告' })).toHaveTextContent(
+      '補足の文章は書かなくても提出できます。',
+    );
   });
 });
 

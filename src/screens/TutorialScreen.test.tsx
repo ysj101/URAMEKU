@@ -1,6 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { FIRST_CASE_ID, TutorialScreen } from './TutorialScreen';
+import { TutorialScreen } from './TutorialScreen';
+import { CASES } from '../data/cases';
+
+/** 練習のあとに開くのは一覧の先頭の事件 */
+const FIRST_CASE_ID = CASES[0]!.id;
 import case00 from '../../data/tutorial/case-00.json';
 import { loadTutorialState } from '../state/tutorialState';
 import type { Navigation } from '../app/navigation';

@@ -10,6 +10,7 @@ import { ResultScreen } from './ResultScreen';
 import type { Navigation } from '../app/navigation';
 import type { GameApi } from '../state/useGame';
 import { UI } from '../data/ui';
+import { caseNumber } from '../data/cases';
 
 /** 1 事件のプレイ画面。調査 → 記事 → 結果を内包する。 */
 export function PlayScreen({ game, nav }: { game: GameApi; nav: Navigation }) {
@@ -18,9 +19,9 @@ export function PlayScreen({ game, nav }: { game: GameApi; nav: Navigation }) {
   const [confirmReset, setConfirmReset] = useState(false);
   // やり直したら調査画面を作り直し、開いていた問いやタブの選択も初期状態に戻す
   const [resetEpoch, setResetEpoch] = useState(0);
-  // CASE01の調査中は「次にやること」カードが同じ案内を出すので、段階ヒントを重ねない。
+  // 一覧の先頭の事件（CASE 01）の調査中は「次にやること」カードが同じ案内を出すので、段階ヒントを重ねない。
   const nextStepCardShown =
-    current.id === 'case-01' && stage === 'investigate' && !progress.published;
+    caseNumber(current.id) === 1 && stage === 'investigate' && !progress.published;
   const investigating = stage === 'investigate' && !progress.published;
 
   // 補助機能はヘッダーのメニューにまとめる。やり直しは区切り線の下に離す（UI 設計の基本 第 5 章）。

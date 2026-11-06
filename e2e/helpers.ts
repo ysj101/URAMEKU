@@ -1,15 +1,24 @@
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { expect, type Locator, type Page } from '@playwright/test';
 import type { CaseData } from '../src/domain/types';
 
-export const GAME_CASES: CaseData[] = ['01', '02', '03', '04', '05'].map(
-  (id) =>
-    JSON.parse(
-      readFileSync(new URL(`../data/cases/case-${id}.json`, import.meta.url), 'utf8'),
-    ) as CaseData,
+/** data/cases/*.json を ID 順に読む（既存の test は GAME_CASES[0] = case-01 を前提にしている） */
+export const GAME_CASES: CaseData[] = readdirSync(new URL('../data/cases/', import.meta.url))
+  .filter((f) => /^case-\d{2}\.json$/.test(f))
+  .sort()
+  .map(
+    (f) =>
+      JSON.parse(readFileSync(new URL(`../data/cases/${f}`, import.meta.url), 'utf8')) as CaseData,
+  );
+const DIFFICULTY_ORDER = { NORMAL: 1, HARD: 2, EXPERT: 3 } as const;
+/** アプリの一覧と同じ並び（難易度の低い順 → ID 順）。先頭が画面の CASE 01 */
+export const ORDERED_CASES: CaseData[] = [...GAME_CASES].sort(
+  (a, b) =>
+    DIFFICULTY_ORDER[a.difficulty] - DIFFICULTY_ORDER[b.difficulty] || a.id.localeCompare(b.id),
 );
-const case01 = GAME_CASES[0]!;
-const case02 = GAME_CASES[1]!;
+export const FIRST_CASE = ORDERED_CASES[0]!;
+const case01 = GAME_CASES.find((c) => c.id === 'case-01')!;
+const case02 = GAME_CASES.find((c) => c.id === 'case-02')!;
 export const CASE01 = {
   id: case01.id,
   title: case01.title,

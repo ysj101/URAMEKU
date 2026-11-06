@@ -1,13 +1,13 @@
 {
   "product": "ウラメク",
   "version": "0.6.0-preproduction",
-  "generatedAt": "2026-10-24",
+  "generatedAt": "2026-11-07",
   "counts": {
-    "cases": 5,
-    "documents": 30,
+    "cases": 6,
+    "documents": 35,
     "analysis_tasks": 10
   },
-  "asset_count": 551,
+  "asset_count": 567,
   "assets": [
     {
       "path": "public/assets/achievements/first-evidence.png",
@@ -7224,6 +7224,211 @@
       ],
       "alpha": false,
       "source": "built-in-imagegen-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-06/cover.png",
+      "category": "cases",
+      "bytes": 2576017,
+      "format": "png",
+      "exists": true,
+      "sha256": "c74afd8c99e3a76a94de4d8b716685fa9a1e9efa14a4fe85d1643025a51bab6f",
+      "size": [
+        1536,
+        1024
+      ],
+      "alpha": false,
+      "source": "codex-image-gen-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-06/cover.webp",
+      "category": "cases",
+      "bytes": 41748,
+      "format": "webp",
+      "exists": true,
+      "sha256": "a6fa2d0dffbc0fdc598f9c0545ccc9bb4ae6f79a51dd4faca7ca48aa9df45d91",
+      "size": [
+        960,
+        640
+      ],
+      "alpha": false,
+      "source": "codex-image-gen-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-06/debrief/mean-outlier-mechanism.png",
+      "category": "cases",
+      "bytes": 2421966,
+      "format": "png",
+      "exists": true,
+      "sha256": "e581374c8571b35e8160fbdffca1cf7512c4f188803bd3868044a54ed5253c70",
+      "size": [
+        1536,
+        1024
+      ],
+      "alpha": false,
+      "source": "codex-image-gen-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-06/documents/chat.png",
+      "category": "cases",
+      "bytes": 18401,
+      "format": "png",
+      "exists": true,
+      "sha256": "79eb6816b29f071af8f31c0990e99e28088594fe4f40105fc4922a6d1c686b6a",
+      "size": [
+        440,
+        580
+      ],
+      "alpha": false,
+      "source": "locally-created-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-06/documents/chat.svg",
+      "category": "cases",
+      "bytes": 2044,
+      "format": "svg",
+      "exists": true,
+      "sha256": "863c455ffdbe154b83c9a7c94819f362761899ecd082520dbc6a68b867fbdd16",
+      "source": "locally-created-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-06/documents/notice.png",
+      "category": "cases",
+      "bytes": 18474,
+      "format": "png",
+      "exists": true,
+      "sha256": "6d0effa2eacda8b325aa5666454447af186fbfeb8d83fae79d2429578566c48e",
+      "size": [
+        440,
+        580
+      ],
+      "alpha": false,
+      "source": "locally-created-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-06/documents/notice.svg",
+      "category": "cases",
+      "bytes": 2062,
+      "format": "svg",
+      "exists": true,
+      "sha256": "6ad143b2402626fd626e3900750b1e265c17a46ec25a8e553e64e5e0434850eb",
+      "source": "locally-created-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-06/documents/survey.png",
+      "category": "cases",
+      "bytes": 18227,
+      "format": "png",
+      "exists": true,
+      "sha256": "07ab734a9fca98cfb22229f56303516d5b6c4a6968c65f20db8c1c5203a230e4",
+      "size": [
+        440,
+        580
+      ],
+      "alpha": false,
+      "source": "locally-created-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-06/documents/survey.svg",
+      "category": "cases",
+      "bytes": 2068,
+      "format": "svg",
+      "exists": true,
+      "sha256": "1a3b0f8acd97e9a6c4157be064c69624a02dabf935a9a7a5b9d838090e00cac9",
+      "source": "locally-created-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-06/documents/tally.png",
+      "category": "cases",
+      "bytes": 17523,
+      "format": "png",
+      "exists": true,
+      "sha256": "d90112614c7b350e457d3e9e85c0d94db4ee52771fc4e61289b3d4fc05b9c690",
+      "size": [
+        440,
+        580
+      ],
+      "alpha": false,
+      "source": "locally-created-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-06/documents/tally.svg",
+      "category": "cases",
+      "bytes": 2044,
+      "format": "svg",
+      "exists": true,
+      "sha256": "82923bcdded94714eac74c6035020f5875902ad35d2921495f0b913036b81376",
+      "source": "locally-created-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-06/documents/teacher.png",
+      "category": "cases",
+      "bytes": 17094,
+      "format": "png",
+      "exists": true,
+      "sha256": "81cba6bc4c2daf9338e25849fe440f3598042c6eced2a737051229d1d1aa495c",
+      "size": [
+        440,
+        580
+      ],
+      "alpha": false,
+      "source": "locally-created-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-06/documents/teacher.svg",
+      "category": "cases",
+      "bytes": 2050,
+      "format": "svg",
+      "exists": true,
+      "sha256": "3929a8ee404db4fa088eccab1d11859bafd8948d957df7ca4c67fb3a7394bc8c",
+      "source": "locally-created-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/encyclopedia/mean-outlier.png",
+      "category": "encyclopedia",
+      "bytes": 399494,
+      "format": "png",
+      "exists": true,
+      "sha256": "2b5984d7a9e70b27c110e1fe8dbc1a3b4b8b3412ef8847de0d5533e04908c67f",
+      "size": [
+        640,
+        400
+      ],
+      "alpha": false,
+      "source": "codex-image-gen-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/encyclopedia/mean-outlier.svg",
+      "category": "encyclopedia",
+      "bytes": 836,
+      "format": "svg",
+      "exists": true,
+      "sha256": "73eae98eddc82c6e786c3973b3118ee5ebb04d06101056a7e5ef9ce5c3dd0072",
+      "source": "locally-created-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-06/cover.svg",
+      "category": "cases",
+      "bytes": 1084,
+      "format": "svg",
+      "exists": true,
+      "sha256": "2c505b5ce1d69e33f5978102ea1d45c1a24568a026bfba483cabc61396c50c66",
+      "source": "locally-created-for-urameku",
       "art_review": "REQUIRED"
     }
   ]

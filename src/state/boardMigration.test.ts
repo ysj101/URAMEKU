@@ -7,7 +7,8 @@ import { evaluateV2Case } from '../domain/v2Evaluation';
 import { remainingBudget } from '../domain/budget';
 
 it('archives revision 1 and retains readings, spending and initial/updated judgments for the new board', () => {
-  for (const data of CASES) {
+  // 改訂 1 → 2 でボードを導入した事件だけが対象。最初からボードを持つ事件（revision 1）は移行しない
+  for (const data of CASES.filter((c) => c.v2!.revision === 2)) {
     const old = completeV2Case(data);
     delete old.v2!.board;
     const loaded = {

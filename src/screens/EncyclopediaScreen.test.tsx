@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { EncyclopediaScreen } from './EncyclopediaScreen';
-import { CASES } from '../data/cases';
+import { CASES, caseNumber } from '../data/cases';
 import { LEGACY_CASES } from '../test/legacyCases';
 import { ENCYCLOPEDIA } from '../data/encyclopedia';
 import { createProgress } from '../domain/game';
@@ -56,7 +56,8 @@ describe('EncyclopediaScreen: 図鑑タブ', () => {
     expect(screen.getByRole('heading', { level: 2, name: first.title })).toBeInTheDocument();
     expect(screen.getByText(first.summary)).toBeInTheDocument();
     expect(screen.getAllByText(first.disclaimer).length).toBeGreaterThanOrEqual(1);
-    expect(screen.queryByText('CASE 01 を解決すると追加')).not.toBeInTheDocument();
+    const label = `CASE ${String(caseNumber('case-01')).padStart(2, '0')} を解決すると追加`;
+    expect(screen.queryByText(label)).not.toBeInTheDocument();
     // 他は未解放のまま
     for (const e of ENCYCLOPEDIA.filter((x) => x.id !== first.id)) {
       expect(screen.queryByText(e.title)).not.toBeInTheDocument();

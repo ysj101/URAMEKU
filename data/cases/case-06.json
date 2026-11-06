@@ -1,0 +1,333 @@
+{
+  "id": "case-06",
+  "title": "平均おこづかい3000円",
+  "bias": "平均と外れ値",
+  "difficulty": "NORMAL",
+  "estimated_time": "3〜5分",
+  "intro": "クラス新聞に「おこづかいは平均3000円」。でも、そんなにもらっている人はいない？ 平均がどう計算されたかを資料で確かめて、新聞に書き足すことを報告しよう。",
+  "budget": 4,
+  "documents": [
+    {
+      "id": "notice",
+      "title": "クラス新聞の見出し",
+      "content": "「2年3組のおこづかいは平均3000円！」と大きく書かれている。計算のもとになった回答は載っていない。",
+      "cost": 0,
+      "visual": "news"
+    },
+    {
+      "id": "survey",
+      "title": "アンケートの回答一覧",
+      "content": "回答した25人の金額が1人ずつ並ぶ。24人は1000円から2000円の間で、1500円がいちばん多い。1人だけ39000円と書いてある。",
+      "cost": 1,
+      "visual": "ledger"
+    },
+    {
+      "id": "tally",
+      "title": "集計係のメモ",
+      "content": "25人の合計は75000円。75000円を25人で割って、平均3000円とした。39000円の1人を除いた24人の合計は36000円。",
+      "cost": 1,
+      "visual": "report"
+    },
+    {
+      "id": "teacher",
+      "title": "先生のコメント",
+      "content": "39000円と書いた子は、誕生日にもらったお金を足して書いたと話していた。金額の大きい順に並べて、真ん中にくる人は1500円。",
+      "cost": 1,
+      "visual": "clipping"
+    },
+    {
+      "id": "chat",
+      "title": "放課後の会話",
+      "content": "「平均3000円なんてうらやましい」「うちはそんなにもらってない」と話している。だれが平均より多いかは、この会話だけでは分からない。",
+      "cost": 1,
+      "visual": "photo"
+    }
+  ],
+  "required_evidence": [
+    "survey",
+    "tally"
+  ],
+  "required_link": [
+    "tally",
+    "survey"
+  ],
+  "link_prompt": "平均の計算のもとになった資料と、平均の読み方に条件を付ける資料。両方の関係を組みます。",
+  "headline_fragments": [],
+  "correct_fragments": [],
+  "debrief": {
+    "explanation": "平均3000円は、25人の合計75000円を人数で割った値で、計算は合っている。ただし、1人の39000円が平均を大きく上げていて、24人は1000円から2000円の間にいる。平均だけでは、ほとんどの人の金額は分からない。",
+    "takeaway": "平均を見たら、「いちばん多い金額は？」「真ん中の人は？」も確かめる。1人の大きな値が平均を動かすことがある。",
+    "visualGuide": {
+      "title": "「平均3000円」でも、ほとんどの人は1500円",
+      "intro": "平均は、合計を人数で割った値。1人だけ大きな金額があると、平均はその方へ引っぱられる。今回は、平均のもとになった回答に注目しよう。",
+      "image": "cases/case-06/debrief/mean-outlier-mechanism.png",
+      "imageAlt": "平均と外れ値の図解。24人は1000円から2000円で合計36000円、1人だけ39000円。合計75000円を25人で割ると平均3000円。真ん中の人は1500円。",
+      "panels": [
+        {
+          "title": "平均の計算は合っている",
+          "body": "25人の合計75000円を25人で割ると3000円。集計係のメモどおりで、計算のまちがいではない。",
+          "evidence": [
+            "tally"
+          ]
+        },
+        {
+          "title": "1人の39000円が平均を上げた",
+          "body": "24人の合計は36000円で、1人あたり1500円。そこに39000円が加わると、平均は3000円まで上がる。",
+          "evidence": [
+            "survey",
+            "tally"
+          ]
+        },
+        {
+          "title": "ほとんどの人は1500円くらい",
+          "body": "いちばん多い金額は1500円。大きい順に並べて真ん中にくる人も1500円。平均3000円より、こちらの方がクラスの様子に近い。",
+          "evidence": [
+            "survey",
+            "teacher"
+          ]
+        }
+      ],
+      "conclusion": "新聞には「1人の大きな金額を含めた平均」で、「いちばん多いのは1500円」と書き足す必要がある。",
+      "limit": "39000円の子がふだんいくらもらっているかや、回答しなかった人の金額は、この資料だけでは分からない。",
+      "takeaway": "平均は？ と一緒に、いちばん多いのは？ 真ん中は？ も確かめよう。"
+    }
+  },
+  "disclaimer": "登場人物・学校・金額はすべて架空です。",
+  "analysis_tasks": [],
+  "schemaVersion": 2,
+  "v2": {
+    "revision": 1,
+    "modes": [
+      "decoding"
+    ],
+    "decoding": [
+      {
+        "id": "average_meaning",
+        "prompt": "新聞の「平均3000円」は、どう読むのが資料に合う？",
+        "options": [
+          {
+            "id": "typical",
+            "text": "クラスのほとんどの人が、3000円くらいもらっている。",
+            "status": "contradicted",
+            "accepted": false,
+            "reason": "回答一覧では24人が1000円から2000円の間で、3000円の人はいない。",
+            "evidence": [
+              "survey"
+            ]
+          },
+          {
+            "id": "pulled_up",
+            "text": "合計を人数で割った値で、1人の39000円が平均を大きく上げている。",
+            "status": "supported",
+            "accepted": true,
+            "reason": "集計係のメモの計算と、回答一覧の39000円を合わせた説明。",
+            "evidence": [
+              "survey",
+              "tally"
+            ]
+          },
+          {
+            "id": "median_view",
+            "text": "真ん中の人は1500円で、平均3000円は多くの人の金額より高い。",
+            "status": "supported",
+            "accepted": true,
+            "reason": "先生のコメントの真ん中の金額と、回答一覧の分布を合わせた説明。",
+            "evidence": [
+              "teacher",
+              "survey"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "what_to_add",
+        "prompt": "新聞に書き足すと、読む人の誤解が減るものは？",
+        "options": [
+          {
+            "id": "add_typical",
+            "text": "いちばん多い金額は1500円で、真ん中の人も1500円だと書き足す。",
+            "status": "supported",
+            "accepted": true,
+            "reason": "回答一覧と先生のコメントに、平均とは別の目安が書いてある。",
+            "evidence": [
+              "survey",
+              "teacher"
+            ]
+          },
+          {
+            "id": "call_mistake",
+            "text": "平均3000円は計算まちがいだと書き直す。",
+            "status": "contradicted",
+            "accepted": false,
+            "reason": "75000円を25人で割ると3000円。計算は合っているので、まちがいとは言えない。",
+            "evidence": [
+              "tally"
+            ]
+          },
+          {
+            "id": "usual_unknown",
+            "text": "39000円の子がふだんいくらもらっているかは、この資料では分からない。",
+            "status": "uncertain",
+            "accepted": true,
+            "reason": "先生のコメントは誕生日のお金を足したと伝えるだけで、ふだんの金額は資料にない。",
+            "evidence": [
+              "teacher"
+            ]
+          }
+        ]
+      }
+    ],
+    "graph": {
+      "prompt": "新聞の平均を支える資料と、平均の読み方に条件を付ける資料。両方の関係を残してください。",
+      "paths": [
+        [
+          {
+            "from": "tally",
+            "to": "notice",
+            "relation": "supports"
+          },
+          {
+            "from": "survey",
+            "to": "notice",
+            "relation": "qualifies"
+          }
+        ],
+        [
+          {
+            "from": "tally",
+            "to": "notice",
+            "relation": "supports"
+          },
+          {
+            "from": "teacher",
+            "to": "notice",
+            "relation": "qualifies"
+          }
+        ]
+      ]
+    },
+    "reportPrompt": "平均3000円がどう計算されたかと、ほとんどの人の金額を分けて報告してください。数値の再計算は不要です。",
+    "board": {
+      "title": "新聞の見出しに説明を添える",
+      "prompt": "平均3000円がどんな計算から出たかを、資料で確かめましょう。",
+      "tasks": [
+        {
+          "id": "typical",
+          "title": "平均の読み方",
+          "prompt": "平均のもとになった計算と、ほとんどの人の金額を資料で確かめましょう。",
+          "parts": [
+            {
+              "text": "平均3000円は"
+            },
+            {
+              "field": "basis"
+            },
+            {
+              "text": "。ほとんどの人のおこづかいは"
+            },
+            {
+              "field": "typical"
+            },
+            {
+              "text": "。"
+            }
+          ],
+          "fields": [
+            {
+              "id": "basis",
+              "label": "どんな値か",
+              "original": "everyone",
+              "options": [
+                {
+                  "id": "everyone",
+                  "text": "みんながもらっている金額"
+                },
+                {
+                  "id": "sum_div",
+                  "text": "25人の合計を人数で割った値"
+                },
+                {
+                  "id": "mistake",
+                  "text": "計算のまちがい"
+                }
+              ]
+            },
+            {
+              "id": "typical",
+              "label": "ほとんどの人の金額",
+              "original": "about3000",
+              "options": [
+                {
+                  "id": "about3000",
+                  "text": "3000円くらい"
+                },
+                {
+                  "id": "about1500",
+                  "text": "1500円くらい"
+                },
+                {
+                  "id": "unknown",
+                  "text": "まだ分からない"
+                }
+              ]
+            }
+          ],
+          "rules": [
+            {
+              "values": {
+                "basis": "sum_div",
+                "typical": "about1500"
+              },
+              "disposition": "revise",
+              "evidence": [
+                "tally_fact",
+                "survey_fact"
+              ],
+              "explanation": "合計75000円を25人で割った平均です。24人は1000円から2000円の間で、1500円がいちばん多いです。"
+            },
+            {
+              "values": {
+                "basis": "sum_div",
+                "typical": "about1500"
+              },
+              "disposition": "revise",
+              "evidence": [
+                "tally_fact",
+                "teacher_fact"
+              ],
+              "explanation": "合計75000円を25人で割った平均です。大きい順に並べて真ん中にくる人は1500円です。"
+            }
+          ],
+          "explanation": "平均3000円は計算のまちがいではなく、1人の39000円を含めた値です。ほとんどの人は1500円くらいです。"
+        }
+      ],
+      "excerpts": [
+        {
+          "id": "notice_fact",
+          "documentId": "notice",
+          "quote": "「2年3組のおこづかいは平均3000円！」と大きく書かれている。計算のもとになった回答は載っていない。"
+        },
+        {
+          "id": "survey_fact",
+          "documentId": "survey",
+          "quote": "24人は1000円から2000円の間で、1500円がいちばん多い。1人だけ39000円と書いてある。"
+        },
+        {
+          "id": "tally_fact",
+          "documentId": "tally",
+          "quote": "25人の合計は75000円。75000円を25人で割って、平均3000円とした。"
+        },
+        {
+          "id": "teacher_fact",
+          "documentId": "teacher",
+          "quote": "金額の大きい順に並べて、真ん中にくる人は1500円。"
+        },
+        {
+          "id": "chat_fact",
+          "documentId": "chat",
+          "quote": "だれが平均より多いかは、この会話だけでは分からない。"
+        }
+      ]
+    }
+  }
+}
