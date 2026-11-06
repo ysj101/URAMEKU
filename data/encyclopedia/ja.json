@@ -46,5 +46,13 @@
     "unlockCase": "case-06",
     "art": "assets/encyclopedia/mean-outlier.png",
     "disclaimer": "状況内の判断を説明する概念であり、個人の心理特性を断定するものではありません。"
+  },
+  {
+    "id": "missing-comparison",
+    "title": "前後比較のわな",
+    "summary": "前と後を比べるだけでは、比べる相手がいないので、何のおかげで変わったかは決められない。",
+    "unlockCase": "case-07",
+    "art": "assets/encyclopedia/missing-comparison.png",
+    "disclaimer": "状況内の判断を説明する概念であり、個人の心理特性を断定するものではありません。"
   }
 ]

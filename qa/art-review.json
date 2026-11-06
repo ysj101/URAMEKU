@@ -2874,11 +2874,51 @@
       "reason": "Generated 2026-11-07 via Codex image_gen for case-06; human art and rights approval pending.",
       "visual_flag": "needs_check",
       "visual_note": "AI visual check against the brief only (text-free cover; infographic numbers match case JSON). Not release approval."
+    },
+    {
+      "path": "public/assets/cases/case-07/cover.png",
+      "kind": "case-cover",
+      "status": "pending",
+      "reviewer": null,
+      "reviewed_at": null,
+      "reason": "Generated 2026-11-07 via Codex image_gen for case-07; human art and rights approval pending.",
+      "visual_flag": "needs_check",
+      "visual_note": "AI visual check against the brief only (text-free cover; infographic numbers match case JSON). Not release approval."
+    },
+    {
+      "path": "public/assets/cases/case-07/cover.webp",
+      "kind": "case-cover",
+      "status": "pending",
+      "reviewer": null,
+      "reviewed_at": null,
+      "reason": "Generated 2026-11-07 via Codex image_gen for case-07; human art and rights approval pending.",
+      "visual_flag": "needs_check",
+      "visual_note": "AI visual check against the brief only (text-free cover; infographic numbers match case JSON). Not release approval."
+    },
+    {
+      "path": "public/assets/cases/case-07/debrief/missing-comparison-mechanism.png",
+      "kind": "case-debrief",
+      "status": "pending",
+      "reviewer": null,
+      "reviewed_at": null,
+      "reason": "Generated 2026-11-07 via Codex image_gen for case-07; human art and rights approval pending.",
+      "visual_flag": "needs_check",
+      "visual_note": "AI visual check against the brief only (text-free cover; infographic numbers match case JSON). Not release approval."
+    },
+    {
+      "path": "public/assets/encyclopedia/missing-comparison.png",
+      "kind": "encyclopedia-art",
+      "status": "pending",
+      "reviewer": null,
+      "reviewed_at": null,
+      "reason": "Generated 2026-11-07 via Codex image_gen for case-07; human art and rights approval pending.",
+      "visual_flag": "needs_check",
+      "visual_note": "AI visual check against the brief only (text-free cover; infographic numbers match case JSON). Not release approval."
     }
   ],
   "summary": {
-    "total": 124,
-    "pending": 124,
+    "total": 128,
+    "pending": 128,
     "approved": 0,
     "rejected": 0,
     "auto_check": 12
