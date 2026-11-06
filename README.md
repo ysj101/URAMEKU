@@ -8,7 +8,7 @@
 
 - MVPの実装タスク（GitHub Issue化可能な**45件**）：[`docs/MVP_IMPLEMENTATION_TASKS.md`](docs/MVP_IMPLEMENTATION_TASKS.md)
 - 本番化・配信のタスク（**46件**）：[`docs/PRODUCTION_RELEASE_TASKS.md`](docs/PRODUCTION_RELEASE_TASKS.md)
-- 事件5件・調査資料30件・自由数値検証10問のゲームデータ：`data/cases/`
+- 事件7件（標準2件・難関5件）・調査資料40件のゲームデータ：`data/cases/`
 - ロゴ・アイコン・UI・背景・事件資料サムネイル・図鑑・音：`public/assets/`
 - C-2正本の比較画像と編集用の素材：`design/`
 - 各アセットの実在パスとSHA256：[`assets.manifest.json`](assets.manifest.json)

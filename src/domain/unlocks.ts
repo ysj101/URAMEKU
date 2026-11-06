@@ -71,7 +71,7 @@ export const ACHIEVEMENT_IDS = [
 ] as const;
 export type AchievementId = (typeof ACHIEVEMENT_IDS)[number];
 
-/** 「収録 5 件を解決する」の件数 */
+/** 「事件を 5 件解決する」の件数（収録数が増えても目標は 5 のまま） */
 export const FIVE_CASES_TARGET = 5;
 /** 「数値検証 2 問を正しく回答する」の問数 */
 export const NUMBER_CHECK_TARGET = 2;

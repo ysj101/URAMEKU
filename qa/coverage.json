@@ -4,13 +4,13 @@
   "items": [
     {
       "scope": "MVP",
-      "requirement": "案件数5件",
+      "requirement": "案件数7件（標準2件・難関5件）",
       "file_present_or_complete": true,
       "reference": "data/cases/"
     },
     {
       "scope": "MVP",
-      "requirement": "資料数30件",
+      "requirement": "資料数40件",
       "file_present_or_complete": true,
       "reference": "data/cases/"
     },

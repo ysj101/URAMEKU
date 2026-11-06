@@ -25,7 +25,16 @@ const ENUMS = {
   'device.type': ['smartphone', 'tablet', 'pc'],
   'device.input': ['touch', 'mouse', 'keyboard'],
   'session.ended_reason': ['finished', 'time_up', 'participant_stopped', 'bug'],
-  'cases[].case_id': ['tutorial', 'case-01', 'case-02', 'case-03', 'case-04', 'case-05'],
+  'cases[].case_id': [
+    'tutorial',
+    'case-01',
+    'case-02',
+    'case-03',
+    'case-04',
+    'case-05',
+    'case-06',
+    'case-07',
+  ],
   'cases[].completed': ['yes', 'no', 'skipped'],
   'cases[].help_given[].condition': ['stuck_3min', 'dead_end_2min', 'bug', 'participant_request'],
   'stuck_points[].screen': [
