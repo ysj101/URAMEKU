@@ -5,7 +5,7 @@
  * `npm run build` 済みの `dist/` を一時 HTTP サーバー（Node 標準モジュールのみ）で配信し、
  *  - index.html に `<div id="root">` があること
  *  - index.html / manifest.webmanifest / favicon / JS / CSS
- *  - 5 ケース分の表紙と全資料サムネイル（data/cases/*.json の documents[].id → PNG）
+ *  - 全ケース（5 件以上）の表紙と全資料サムネイル（data/cases/*.json の documents[].id → PNG）
  * に HEAD を送って 200 で返ることを確認する。GitHub Pages のような「ただのファイル配信」を
  * 模すため、SPA フォールバックや書き換えは一切しない。
  *
@@ -127,8 +127,10 @@ checks.push({ label: 'index.html', path: `${BASE}index.html`, type: 'text/html' 
 const caseFiles = readdirSync(CASES_DIR)
   .filter((f) => /^case-\d+\.json$/.test(f))
   .sort();
-if (caseFiles.length !== 5)
-  failures.push(`data/cases に 5 件のケースが必要（現在 ${caseFiles.length} 件）`);
+// 収録数は増えるので下限だけを見る（MVP の最小構成が 5 件）。検査対象は実ファイルから列挙する。
+const MIN_CASES = 5;
+if (caseFiles.length < MIN_CASES)
+  failures.push(`data/cases に ${MIN_CASES} 件以上のケースが必要（現在 ${caseFiles.length} 件）`);
 let documentCount = 0;
 for (const f of caseFiles) {
   const c = JSON.parse(readFileSync(join(CASES_DIR, f), 'utf8'));
