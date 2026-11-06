@@ -1,12 +1,29 @@
-import { CASES, findCase, nextCaseId } from './cases';
+import { CASES, findCase, nextCaseId, caseNumber, sortCases } from './cases';
 import { evaluateCase } from '../domain/scoring';
 import { createProgress, reduceProgress } from '../domain/game';
 import { LEGACY_CASES } from '../test/legacyCases';
 import { completeV2Case } from '../test/completeV2Case';
 
 describe('実データ（data/cases）', () => {
-  it('5件が読み込める', () => {
-    expect(CASES.map((c) => c.id)).toEqual(['case-01', 'case-02', 'case-03', 'case-04', 'case-05']);
+  it('全件が読み込め、難易度の低い順・同じ難易度なら ID 順に並ぶ', () => {
+    expect(CASES.length).toBeGreaterThanOrEqual(5);
+    expect(CASES.map((c) => c.id)).toEqual(sortCases(CASES).map((c) => c.id));
+    expect(new Set(CASES.map((c) => c.id)).size).toBe(CASES.length);
+  });
+  it('sortCases は標準 → 難関 → 最難関、同じ難易度なら ID 順にする', () => {
+    const sorted = sortCases([
+      { id: 'case-02', difficulty: 'HARD' as const },
+      { id: 'case-09', difficulty: 'NORMAL' as const },
+      { id: 'case-01', difficulty: 'EXPERT' as const },
+      { id: 'case-07', difficulty: 'NORMAL' as const },
+    ]);
+    expect(sorted.map((c) => c.id)).toEqual(['case-07', 'case-09', 'case-02', 'case-01']);
+  });
+  it('表示番号は一覧の位置で決まる', () => {
+    const ids = CASES.map((c) => c.id);
+    expect(caseNumber(ids[0] ?? '')).toBe(1);
+    expect(caseNumber(ids.at(-1) ?? '')).toBe(ids.length);
+    expect(caseNumber('case-99')).toBeNull();
   });
   it('旧V1ケースは保存した不変の解法で引き続き検証できる', () => {
     for (const c of LEGACY_CASES) {
@@ -48,8 +65,9 @@ describe('実データ（data/cases）', () => {
       expect(evaluateCase(c, p).cleared).toBe(false);
     }
   });
-  it('次の事件へ循環する' , () => {
-    expect(nextCaseId('case-05')).toBe('case-01');
+  it('次の事件へ循環する', () => {
+    const ids = CASES.map((c) => c.id);
+    expect(nextCaseId(ids.at(-1) ?? '')).toBe(ids[0]);
     expect(findCase('case-03')?.title).toBeTruthy();
   });
 });
