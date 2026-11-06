@@ -3,11 +3,11 @@
   "version": "0.6.0-preproduction",
   "generatedAt": "2026-11-07",
   "counts": {
-    "cases": 6,
-    "documents": 35,
+    "cases": 7,
+    "documents": 40,
     "analysis_tasks": 10
   },
-  "asset_count": 567,
+  "asset_count": 583,
   "assets": [
     {
       "path": "public/assets/achievements/first-evidence.png",
@@ -7428,6 +7428,211 @@
       "format": "svg",
       "exists": true,
       "sha256": "2c505b5ce1d69e33f5978102ea1d45c1a24568a026bfba483cabc61396c50c66",
+      "source": "locally-created-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-07/cover.png",
+      "category": "cases",
+      "bytes": 2702622,
+      "format": "png",
+      "exists": true,
+      "sha256": "14dd9362361f1317df38c00e32a096f9697dae495cc68a66a464cad433861df0",
+      "size": [
+        1536,
+        1024
+      ],
+      "alpha": false,
+      "source": "codex-image-gen-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-07/cover.svg",
+      "category": "cases",
+      "bytes": 1060,
+      "format": "svg",
+      "exists": true,
+      "sha256": "60adbb233ba597a8b6e0f8de7fe79f857722c58efdca6e45c7dc5386901f9c5d",
+      "source": "locally-created-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-07/cover.webp",
+      "category": "cases",
+      "bytes": 54514,
+      "format": "webp",
+      "exists": true,
+      "sha256": "093846750f0f47f2e043db4ec71b5e49094229977b8e2bfa2bef6e27b8795921",
+      "size": [
+        960,
+        640
+      ],
+      "alpha": false,
+      "source": "codex-image-gen-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-07/debrief/missing-comparison-mechanism.png",
+      "category": "cases",
+      "bytes": 3065502,
+      "format": "png",
+      "exists": true,
+      "sha256": "4b01fdbb91fbffd767089658ebc556d13995714d24c769a14ec88926ed7fa844",
+      "size": [
+        1536,
+        1024
+      ],
+      "alpha": false,
+      "source": "codex-image-gen-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-07/documents/flyer.png",
+      "category": "cases",
+      "bytes": 16459,
+      "format": "png",
+      "exists": true,
+      "sha256": "b8fe7ba402b2ae53eadfddfaafa2a5ed2aebdbe0bbd46944da9d7491b2feee93",
+      "size": [
+        440,
+        580
+      ],
+      "alpha": false,
+      "source": "locally-created-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-07/documents/flyer.svg",
+      "category": "cases",
+      "bytes": 2038,
+      "format": "svg",
+      "exists": true,
+      "sha256": "a9f3a34df5519f124ea0bf2542ded09089a03f761880d539bc379fe23c1e2c9a",
+      "source": "locally-created-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-07/documents/grade.png",
+      "category": "cases",
+      "bytes": 18829,
+      "format": "png",
+      "exists": true,
+      "sha256": "6ecf2af95558c6af14a440b8ceccc6d76d6d83bc18c95b2d726e1ac34e1840f9",
+      "size": [
+        440,
+        580
+      ],
+      "alpha": false,
+      "source": "locally-created-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-07/documents/grade.svg",
+      "category": "cases",
+      "bytes": 2056,
+      "format": "svg",
+      "exists": true,
+      "sha256": "4a508e25ffb033a61e9c9a5c51738d35f16e229540a65a97a148e0e792bc24be",
+      "source": "locally-created-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-07/documents/reviews.png",
+      "category": "cases",
+      "bytes": 15970,
+      "format": "png",
+      "exists": true,
+      "sha256": "97c87920a7986abf7b588fcf4352578e5701c7f384abe3ecf782b2b49660d56a",
+      "size": [
+        440,
+        580
+      ],
+      "alpha": false,
+      "source": "locally-created-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-07/documents/reviews.svg",
+      "category": "cases",
+      "bytes": 2038,
+      "format": "svg",
+      "exists": true,
+      "sha256": "b27fd250df635b0586174b83919bc035fc38807ac6bbbd2acafd315f2460880b",
+      "source": "locally-created-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-07/documents/scores.png",
+      "category": "cases",
+      "bytes": 18864,
+      "format": "png",
+      "exists": true,
+      "sha256": "c0f7d69c8c5dffccccf0e7556c221e08561474db218b6605f6d0b69ba77a3ea0",
+      "size": [
+        440,
+        580
+      ],
+      "alpha": false,
+      "source": "locally-created-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-07/documents/scores.svg",
+      "category": "cases",
+      "bytes": 2050,
+      "format": "svg",
+      "exists": true,
+      "sha256": "a7bb200d4a141b813f4f095dadf7f5a0f2ac7b3574821506d93c458589d8ef8f",
+      "source": "locally-created-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-07/documents/teacher.png",
+      "category": "cases",
+      "bytes": 16333,
+      "format": "png",
+      "exists": true,
+      "sha256": "d915f59c4bd521ccf601a4d64be683f7cabfa8a7176ff62a7961680ae7d8ca88",
+      "size": [
+        440,
+        580
+      ],
+      "alpha": false,
+      "source": "locally-created-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/cases/case-07/documents/teacher.svg",
+      "category": "cases",
+      "bytes": 2038,
+      "format": "svg",
+      "exists": true,
+      "sha256": "ba3d56276a20e1585a62b20c9ab468527817b827051e120831d72eea6f26f2a3",
+      "source": "locally-created-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/encyclopedia/missing-comparison.png",
+      "category": "encyclopedia",
+      "bytes": 382048,
+      "format": "png",
+      "exists": true,
+      "sha256": "f7e62ded61456c01954861d9c1e95577aa22dfea7be13b384607c6147489c368",
+      "size": [
+        640,
+        400
+      ],
+      "alpha": false,
+      "source": "codex-image-gen-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/encyclopedia/missing-comparison.svg",
+      "category": "encyclopedia",
+      "bytes": 751,
+      "format": "svg",
+      "exists": true,
+      "sha256": "34f7e10bd2e54d0fd53c316dcd8e97881e1e4df39fab97881224bf97b8943047",
       "source": "locally-created-for-urameku",
       "art_review": "REQUIRED"
     }

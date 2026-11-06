@@ -1,0 +1,245 @@
+{
+  "id": "case-07",
+  "title": "教材で平均20点アップ",
+  "bias": "比べる相手のない前後比較",
+  "difficulty": "NORMAL",
+  "estimated_time": "3〜5分",
+  "intro": "塾のチラシに「この教材で平均20点アップ！」。本当に教材のおかげ？ 教材を使っていない人の点数も調べて、チラシに書き足すことを報告しよう。",
+  "budget": 4,
+  "documents": [
+    {
+      "id": "flyer",
+      "title": "塾のチラシ",
+      "content": "「この教材を使った生徒は、中間から期末で平均20点アップ！」と大きく書かれている。使っていない人の点数は載っていない。",
+      "cost": 0,
+      "visual": "advert"
+    },
+    {
+      "id": "scores",
+      "title": "受講者の点数表",
+      "content": "教材を使った20人の点数。中間テストの平均は52点、期末テストの平均は72点だった。たしかに20点上がっている。",
+      "cost": 1,
+      "visual": "ledger"
+    },
+    {
+      "id": "grade",
+      "title": "学年全体の平均点",
+      "content": "学年160人の平均点。中間テストは50点、期末テストは68点で、18点上がっている。教材を使っていない人も入っている。",
+      "cost": 1,
+      "visual": "report"
+    },
+    {
+      "id": "teacher",
+      "title": "先生のメモ",
+      "content": "期末テストは基本問題が中心で、出る範囲もせまかった。学年全体の平均は中間より18点上がった。",
+      "cost": 1,
+      "visual": "clipping"
+    },
+    {
+      "id": "reviews",
+      "title": "塾の口コミ",
+      "content": "「点が上がった」「教材が分かりやすい」という声が多い。何点上がったかや、教材を使わなかった人との差は、この口コミだけでは分からない。",
+      "cost": 1,
+      "visual": "news"
+    }
+  ],
+  "required_evidence": ["scores", "grade"],
+  "required_link": ["scores", "grade"],
+  "link_prompt": "チラシの数字のもとになった資料と、比べる相手になる資料。両方の関係を組みます。",
+  "headline_fragments": [],
+  "correct_fragments": [],
+  "debrief": {
+    "explanation": "教材を使った20人は、中間52点から期末72点へ20点上がった。これは点数表のとおり。ただし、学年全体160人も50点から68点へ18点上がっていて、期末は基本問題が中心だった。前と後を比べるだけでは、教材のおかげで何点上がったかは決められない。",
+    "takeaway": "「上がった」を見たら、「使わなかった人はどうだった？」も確かめる。比べる相手がいないと、何のおかげかは分からない。",
+    "visualGuide": {
+      "title": "「20点アップ」の相手は、だれ？",
+      "intro": "前と後を比べるだけでは、何のおかげで変わったかは分からない。同じ時期に、使わなかった人がどう変わったかと並べて見よう。",
+      "image": "cases/case-07/debrief/missing-comparison-mechanism.png",
+      "imageAlt": "前後比較の図解。教材を使った20人は中間52点から期末72点で20点アップ。学年全体160人は中間50点から期末68点で18点アップ。期末は基本問題が中心でみんな上がった。",
+      "panels": [
+        {
+          "title": "受講者は20点上がった",
+          "body": "教材を使った20人の平均は、中間52点から期末72点。チラシの数字そのものは点数表と合っている。",
+          "evidence": ["scores"]
+        },
+        {
+          "title": "使っていない人も18点上がった",
+          "body": "学年全体160人の平均は、中間50点から期末68点。教材を使っていない人も含めて、ほぼ同じだけ上がっている。",
+          "evidence": ["grade"]
+        },
+        {
+          "title": "テストが変わったことも理由になる",
+          "body": "期末は基本問題が中心で、範囲もせまかった。教材のおかげと言えるのは、差の2点までかもしれない。それも、この資料だけでは決めきれない。",
+          "evidence": ["grade", "teacher"]
+        }
+      ],
+      "conclusion": "チラシには「教材を使っていない人も含めた学年全体も18点上がった」と書き足す必要がある。",
+      "limit": "教材を使った20人がもともとどんな生徒だったかや、教材だけの効果が何点かは、この資料だけでは分からない。",
+      "takeaway": "上がった？ と一緒に、使わなかった人は？ も確かめよう。"
+    }
+  },
+  "disclaimer": "登場人物・塾・学校・点数はすべて架空です。",
+  "analysis_tasks": [],
+  "schemaVersion": 2,
+  "v2": {
+    "revision": 1,
+    "modes": ["decoding"],
+    "decoding": [
+      {
+        "id": "what_rose",
+        "prompt": "チラシの「20点アップ」は、どう読むのが資料に合う？",
+        "options": [
+          {
+            "id": "material_only",
+            "text": "教材のおかげで、受講者だけが20点上がった。",
+            "status": "contradicted",
+            "accepted": false,
+            "reason": "学年全体の平均も18点上がっている。受講者だけが上がったとは言えない。",
+            "evidence": ["grade"]
+          },
+          {
+            "id": "everyone_rose",
+            "text": "受講者は20点上がったが、学年全体も18点上がっている。",
+            "status": "supported",
+            "accepted": true,
+            "reason": "受講者の点数表と、学年全体の平均点を並べて読んだ説明。",
+            "evidence": ["scores", "grade"]
+          },
+          {
+            "id": "test_changed",
+            "text": "期末は基本問題が中心で、学年全体の点が上がりやすかった。",
+            "status": "supported",
+            "accepted": true,
+            "reason": "先生のメモのテストの変化と、学年全体の平均点を合わせた説明。",
+            "evidence": ["grade", "teacher"]
+          }
+        ]
+      },
+      {
+        "id": "what_to_add",
+        "prompt": "チラシを読む人の誤解を減らすために、書き足すことは？",
+        "options": [
+          {
+            "id": "add_grade",
+            "text": "教材を使っていない人も含めた学年全体が18点上がったと書き足す。",
+            "status": "supported",
+            "accepted": true,
+            "reason": "学年全体の平均点と受講者の点数表から、比べる相手の変化が分かる。",
+            "evidence": ["grade", "scores"]
+          },
+          {
+            "id": "no_effect",
+            "text": "教材には効果がないと書き直す。",
+            "status": "contradicted",
+            "accepted": false,
+            "reason": "受講者は学年全体より2点多く上がっている。効果がないとも、この資料では言えない。",
+            "evidence": ["scores", "grade"]
+          },
+          {
+            "id": "effect_unknown",
+            "text": "教材だけの効果が何点かは、この資料では分からない。",
+            "status": "uncertain",
+            "accepted": true,
+            "reason": "テストの変化と学年全体の上がり方が重なっていて、教材だけの分は資料から取り出せない。",
+            "evidence": ["grade", "teacher"]
+          }
+        ]
+      }
+    ],
+    "graph": {
+      "prompt": "チラシの数字を支える資料と、比べる相手になって読み方に条件を付ける資料。両方の関係を残してください。",
+      "paths": [
+        [
+          { "from": "scores", "to": "flyer", "relation": "supports" },
+          { "from": "grade", "to": "flyer", "relation": "qualifies" }
+        ],
+        [
+          { "from": "scores", "to": "flyer", "relation": "supports" },
+          { "from": "teacher", "to": "flyer", "relation": "qualifies" }
+        ]
+      ]
+    },
+    "reportPrompt": "受講者の点数の変化と、教材を使っていない人も含めた変化を分けて報告してください。数値の再計算は不要です。",
+    "board": {
+      "title": "チラシに比べる相手を添える",
+      "prompt": "受講者の変化と、教材を使っていない人も含めた変化を、資料で確かめましょう。",
+      "tasks": [
+        {
+          "id": "comparison",
+          "title": "比べる相手",
+          "prompt": "受講者と学年全体の点数の変化を、資料を突き合わせて確かめましょう。",
+          "parts": [
+            { "text": "教材を使った20人は、中間から期末で" },
+            { "field": "rise" },
+            { "text": "。教材を使っていない人も含めた学年全体は" },
+            { "field": "others" },
+            { "text": "。" }
+          ],
+          "fields": [
+            {
+              "id": "rise",
+              "label": "受講者の変化",
+              "original": "twenty",
+              "options": [
+                { "id": "twenty", "text": "20点上がった" },
+                { "id": "flat", "text": "変わらなかった" }
+              ]
+            },
+            {
+              "id": "others",
+              "label": "学年全体の変化",
+              "original": "unchanged",
+              "options": [
+                { "id": "unchanged", "text": "変わらなかった" },
+                { "id": "eighteen", "text": "18点上がった" },
+                { "id": "unknown", "text": "まだ分からない" }
+              ]
+            }
+          ],
+          "rules": [
+            {
+              "values": { "rise": "twenty", "others": "eighteen" },
+              "disposition": "revise",
+              "evidence": ["scores_fact", "grade_fact"],
+              "explanation": "受講者は52点から72点で20点上がりました。学年全体も50点から68点で18点上がっています。"
+            },
+            {
+              "values": { "rise": "twenty", "others": "eighteen" },
+              "disposition": "revise",
+              "evidence": ["scores_fact", "teacher_fact"],
+              "explanation": "受講者は20点上がりました。先生のメモでも、学年全体の平均は中間より18点上がっています。"
+            }
+          ],
+          "explanation": "受講者の20点は点数表のとおりです。ただし、教材を使っていない人も含めた学年全体も18点上がっているので、教材だけの効果とは言えません。"
+        }
+      ],
+      "excerpts": [
+        {
+          "id": "flyer_fact",
+          "documentId": "flyer",
+          "quote": "「この教材を使った生徒は、中間から期末で平均20点アップ！」と大きく書かれている。使っていない人の点数は載っていない。"
+        },
+        {
+          "id": "scores_fact",
+          "documentId": "scores",
+          "quote": "中間テストの平均は52点、期末テストの平均は72点だった。たしかに20点上がっている。"
+        },
+        {
+          "id": "grade_fact",
+          "documentId": "grade",
+          "quote": "中間テストは50点、期末テストは68点で、18点上がっている。教材を使っていない人も入っている。"
+        },
+        {
+          "id": "teacher_fact",
+          "documentId": "teacher",
+          "quote": "期末テストは基本問題が中心で、出る範囲もせまかった。学年全体の平均は中間より18点上がった。"
+        },
+        {
+          "id": "reviews_fact",
+          "documentId": "reviews",
+          "quote": "何点上がったかや、教材を使わなかった人との差は、この口コミだけでは分からない。"
+        }
+      ]
+    }
+  }
+}
