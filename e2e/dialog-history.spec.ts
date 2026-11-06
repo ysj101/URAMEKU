@@ -9,7 +9,7 @@ import { CASE01, expectStage, openDoc } from './helpers';
 async function enterCase01ViaList(page: Page) {
   await page.goto('/#/cases');
   await expect(page.getByRole('heading', { level: 1, name: '事件一覧' })).toBeVisible();
-  await page.getByRole('button', { name: new RegExp(`^CASE 01 ${CASE01.title}`) }).click();
+  await page.getByRole('button', { name: new RegExp(`^CASE \\d{2} ${CASE01.title}`) }).click();
   await expect(page).toHaveURL(/#\/play\/case-01$/);
   await expectStage(page, '資料を調べる');
 }

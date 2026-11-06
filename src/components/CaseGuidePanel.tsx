@@ -1,9 +1,10 @@
 import { useEffect, useRef } from 'react';
 import type { CaseData } from '../domain/types';
+import { caseNumber } from '../data/cases';
 
 /**
  * ヘッダーの「⋯」メニューから開く「遊び方」。
- * 最初の事件では手順 4 つを示し、原則は CASE 00 と重なるので 2 段落にとどめる。
+ * 一覧の先頭の事件（CASE 01）では手順 4 つを示し、原則は CASE 00 と重なるので 2 段落にとどめる。
  */
 export function CaseGuidePanel({ caseData, onClose }: { caseData: CaseData; onClose: () => void }) {
   const headingRef = useRef<HTMLHeadingElement>(null);
@@ -16,7 +17,7 @@ export function CaseGuidePanel({ caseData, onClose }: { caseData: CaseData; onCl
       <h2 id="case-guide-title" ref={headingRef} tabIndex={-1}>
         遊び方
       </h2>
-      {caseData.id === 'case-01' && (
+      {caseNumber(caseData.id) === 1 && (
         <section className="first-case-guide" aria-labelledby="first-case-guide-title">
           <h2 id="first-case-guide-title">最初の事件で、遊び方を体験しよう</h2>
           <ol>

@@ -15,7 +15,7 @@ describe('DocumentLabel', () => {
       <DocumentLabel caseId="case-01" index={2} documentId="trial" visual="ledger" cost={1} />,
     );
     const label = container.querySelector('.document-label');
-    expect(label).toHaveTextContent('CASE 01');
+    expect(label).toHaveTextContent(formatCaseId('case-01'));
     expect(label).toHaveTextContent('資料 02');
     expect(label).toHaveTextContent('（trial）');
     expect(label).toHaveTextContent('台帳');
@@ -53,7 +53,7 @@ describe('DocumentLabel', () => {
       />,
     );
     expect(container.querySelector('img')).toBeNull();
-    expect(container).toHaveTextContent('CASE 03');
+    expect(container).toHaveTextContent(formatCaseId('case-03'));
   });
 
   it('想定外の事件 ID 形式でも落ちずに表示する', () => {
@@ -87,7 +87,7 @@ describe('visual enum と props アイコンの対応表', () => {
     }
   });
 
-  it('収録 5 事件の全資料がラベルを描画できる', () => {
+  it('収録事件の全資料がラベルを描画できる', () => {
     for (const c of CASES) {
       c.documents.forEach((d, i) => {
         const { container, unmount } = render(

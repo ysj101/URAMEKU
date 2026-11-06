@@ -132,16 +132,18 @@ describe('用途別ヘルパー（マニフェスト照合）', () => {
     vi.unstubAllEnvs();
   });
 
-  it('5 事件 × 6 資料のサムネイルとカバー', () => {
+  it('全事件の資料サムネイルとカバー（png / svg）', () => {
     const cases = CASES;
-    expect(cases).toHaveLength(5);
+    expect(cases.length).toBeGreaterThanOrEqual(5);
     const urls: string[] = [];
+    let documents = 0;
     for (const c of cases) {
-      expect(c.documents).toHaveLength(6);
+      expect(c.documents.length).toBeGreaterThanOrEqual(5);
+      documents += c.documents.length;
       urls.push(caseCover(c.id), caseCover(c.id, 'svg'));
       for (const d of c.documents) urls.push(documentThumbnail(c.id, d.id));
     }
-    expect(urls).toHaveLength(5 * 2 + 30);
+    expect(urls).toHaveLength(cases.length * 2 + documents);
     verifyAll(urls);
   });
 
@@ -183,7 +185,7 @@ describe('用途別ヘルパー（マニフェスト照合）', () => {
     expect(() => characterPose('shinobu', 'point')).not.toThrow();
   });
 
-  it('図鑑 5 件（png / svg）', () => {
+  it('図鑑の全件（png / svg）', () => {
     verifyAll(ENCYCLOPEDIA_IDS.flatMap((id) => [encyclopediaArt(id), encyclopediaArt(id, 'svg')]));
     expect(manifestNames('encyclopedia', 'png')).toEqual([...ENCYCLOPEDIA_IDS].sort());
     expect(encyclopediaArt('graph-scale')).toBe('/URAMEKU/assets/encyclopedia/graph-scale.png');

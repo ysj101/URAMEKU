@@ -12,8 +12,8 @@ describe('CaseNotebook', () => {
     render(
       <CaseNotebook
         cases={CASES}
-        progressByCase={{ 'case-02': p2 }}
-        finished={{ 'case-01': true }}
+        progressByCase={{ [c2.id]: p2 }}
+        finished={{ [CASES[0]!.id]: true }}
       />,
     );
     expect(screen.getAllByRole('listitem')).toHaveLength(CASES.length);

@@ -18,9 +18,9 @@ export function PlayScreen({ game, nav }: { game: GameApi; nav: Navigation }) {
   const [confirmReset, setConfirmReset] = useState(false);
   // やり直したら調査画面を作り直し、開いていた問いやタブの選択も初期状態に戻す
   const [resetEpoch, setResetEpoch] = useState(0);
-  // CASE01の調査中は「次にやること」カードが同じ案内を出すので、段階ヒントを重ねない。
-  const nextStepCardShown =
-    current.id === 'case-01' && stage === 'investigate' && !progress.published;
+  // 調査中は「次にやること」カード（全事件に出る）が同じ案内を出すので、段階ヒントを重ねない。
+  // 以前は CASE 01 だけに限っていたが、並び順で先頭が変わっても崩れないよう段階だけで決める。
+  const nextStepCardShown = stage === 'investigate' && !progress.published;
   const investigating = stage === 'investigate' && !progress.published;
 
   // 補助機能はヘッダーのメニューにまとめる。やり直しは区切り線の下に離す（UI 設計の基本 第 5 章）。

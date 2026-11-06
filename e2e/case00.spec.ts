@@ -2,6 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
+import { FIRST_CASE } from './helpers';
 import type Case00Data from '../data/tutorial/case-00.json';
 
 const case00: typeof Case00Data = JSON.parse(
@@ -54,7 +55,7 @@ test('CASE00: 一覧から資料・回答・根拠・報告・解説を体験す
   await page.getByRole('button', { name: '← ホーム' }).click();
   await page.reload();
   await page.getByRole('button', { name: '調査をはじめる' }).click();
-  await expect(page).toHaveURL(/#\/play\/case-01/);
+  await expect(page).toHaveURL(new RegExp(`#/play/${FIRST_CASE.id}`));
 });
 
 test('CASE00: 狭い画面・文字200%でも各段階が横にはみ出さない', async ({ page }) => {
@@ -208,7 +209,7 @@ for (const viewport of [
       await page.getByText('答え・根拠・詳しい解説').click();
       await expectStageFits(page);
       await page.getByRole('button', { name: '本編へ進む →' }).click();
-      await expect(page).toHaveURL(/#\/play\/case-01/);
+      await expect(page).toHaveURL(new RegExp(`#/play/${FIRST_CASE.id}`));
     });
   }
 }

@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import {
-  GAME_CASES,
+  FIRST_CASE,
   chooseMenuItem,
   expectStage,
   gotoCase,
@@ -9,10 +9,12 @@ import {
   submitArticle,
 } from './helpers';
 
-test('CASE01は各段階で次の操作を1つ示し、補足の機能にも戻れる', async ({ page }, testInfo) => {
+test('一覧の先頭の事件は各段階で次の操作を1つ示し、補足の機能にも戻れる', async ({
+  page,
+}, testInfo) => {
   if (testInfo.project.name === 'chromium')
     await page.setViewportSize({ width: 1280, height: 800 });
-  const data = GAME_CASES[0]!;
+  const data = FIRST_CASE;
   await gotoCase(page, data);
   await expect(page.getByRole('button', { name: 'ヒントを閉じる', exact: true })).toHaveCount(0);
   // 何を調べる事件か（導入文）は常に見せる。
@@ -64,7 +66,8 @@ test('CASE01は各段階で次の操作を1つ示し、補足の機能にも戻�
   };
   const boardTotal = data.v2!.board!.tasks.length;
   const start = { decoding: `解読メモ0 / ${questions}`, board: `証拠ボード0 / ${boardTotal}` };
-  await checkStage('キャンペーン広告を開く', 'キャンペーン広告を開く', '01-start', start);
+  const openFirst = `${data.documents[0]!.title}を開く`;
+  await checkStage(openFirst, openFirst, '01-start', start);
   const bounds = await primary.boundingBox();
   expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(page.viewportSize()!.height);
   await next.getByRole('button').click();

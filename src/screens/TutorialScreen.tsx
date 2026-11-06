@@ -1,3 +1,4 @@
+import { CASES } from '../data/cases';
 import { useEffect, useRef, useState } from 'react';
 import { assetUrl } from '../data/assets';
 import case00 from '../../data/tutorial/case-00.json';
@@ -8,7 +9,8 @@ import type { StorageLike } from '../state/persistence';
 import '../app/screens/tutorial.css';
 import '../app/screens/case00.css';
 
-export const FIRST_CASE_ID = 'case-01';
+/** 練習のあとに開く事件。一覧の先頭（難易度の低い順）で、ID を固定しない */
+const FIRST_CASE_ID = CASES[0]?.id ?? 'case-01';
 
 export interface TutorialScreenProps {
   nav: Navigation;

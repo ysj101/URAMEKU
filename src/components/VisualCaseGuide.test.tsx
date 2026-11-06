@@ -1,11 +1,14 @@
 import { render, screen } from '@testing-library/react';
 import { expect, it } from 'vitest';
-import { CASES } from '../data/cases';
+import { CASES, findCase } from '../data/cases';
+
+const case01 = findCase('case-01')!;
+const case02 = findCase('case-02')!;
 import { validateCase } from '../data/validateCase';
 import { VisualCaseGuide } from './VisualCaseGuide';
 
 it('case-01 explains the same retained group with two denominators and evidence', () => {
-  const current = CASES[0]!;
+  const current = case01;
   render(<VisualCaseGuide caseData={current} />);
   expect(screen.getByRole('img')).toHaveAttribute(
     'src',
@@ -17,7 +20,7 @@ it('case-01 explains the same retained group with two denominators and evidence'
 });
 
 it('rejects mismatched percentages and missing source documents', () => {
-  const current = structuredClone(CASES[0]!);
+  const current = structuredClone(case01);
   current.debrief.visualGuide!.comparisons![0]!.percent = 45;
   current.debrief.visualGuide!.steps![0]!.evidence = ['missing'];
   const result = validateCase(current);
@@ -27,13 +30,13 @@ it('rejects mismatched percentages and missing source documents', () => {
 });
 
 it('leaves cases without visual guides unchanged', () => {
-  const current = structuredClone(CASES[1]!);
+  const current = structuredClone(case02);
   delete current.debrief.visualGuide;
   const { container } = render(<VisualCaseGuide caseData={current} />);
   expect(container).toBeEmptyDOMElement();
 });
 
-for (const current of CASES.slice(1)) {
+for (const current of CASES.filter((c) => c.id !== 'case-01')) {
   it(`${current.id} explains its own mechanism and source facts without a people-only formula`, () => {
     render(<VisualCaseGuide caseData={current} />);
     const guide = current.debrief.visualGuide!;
@@ -46,7 +49,7 @@ for (const current of CASES.slice(1)) {
 }
 
 it('requires a readable explanation and valid sources for the panels', () => {
-  const current = structuredClone(CASES[1]!);
+  const current = structuredClone(case02);
   current.debrief.visualGuide!.panels![0]!.evidence = ['missing'];
   expect(validateCase(current).ok).toBe(false);
   delete current.debrief.visualGuide!.panels;

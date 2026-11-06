@@ -1,3 +1,4 @@
+import { caseNumber } from '../data/cases';
 import { useSound } from '../audio/useSound';
 import { describeLink, validV2Links } from '../domain/link';
 import { BOARD_DISPOSITIONS, boardReviews, boardStatement } from '../domain/board';
@@ -27,7 +28,7 @@ export function V2ArticleScreen({ game }: { game: GameApi }) {
         <StageStepper current="report" focusTarget />
         <span>読んだ資料 {progress.opened.length} 件</span>
       </div>
-      {current.id === 'case-01' && (
+      {caseNumber(current.id) === 1 && (
         <aside className="v2-panel" aria-label="初めての報告">
           <h2>最後に、報告を提出しよう</h2>
           <p>
