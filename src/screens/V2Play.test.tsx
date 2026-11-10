@@ -266,6 +266,15 @@ describe('ヘッダーのメニュー', () => {
     expect(screen.queryByRole('region', { name: '遊び方' })).not.toBeInTheDocument();
   });
 
+  it('予算の数字には「予算 残り」を添えて、ステッパーの進み具合と見分けられるようにする', () => {
+    const data = CASES[0]!;
+    render(<Harness data={data} />);
+    const meter = screen.getByRole('meter', {
+      name: `調査予算：残り ${data.budget} / ${data.budget}`,
+    });
+    expect(within(meter).getByText(`予算 残り ${data.budget} / ${data.budget}`)).toBeVisible();
+  });
+
   it('やり直しは確認パネルを経て、記録と予算を最初に戻す', () => {
     const data = CASES[0]!;
     const paid = data.documents.find((doc) => doc.cost > 0)!;
