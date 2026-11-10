@@ -105,7 +105,6 @@ export function TutorialScreen({ nav, game, storage }: TutorialScreenProps) {
                   </label>
                 ))}
             </fieldset>
-            <p className="fine">{case00.experiment.notice}</p>
             <button
               type="button"
               className="btn primary"
@@ -154,7 +153,6 @@ export function TutorialScreen({ nav, game, storage }: TutorialScreenProps) {
             </div>
             <p role="status">
               資料確認 {opened.length} / {case00.documents.length}
-              {allRead ? '枚。答えに進めます。' : '枚。2枚とも開こう。'}
             </p>
             {allRead && (
               <button type="button" className="btn primary" onClick={() => setStep(1)}>
@@ -197,11 +195,6 @@ export function TutorialScreen({ nav, game, storage }: TutorialScreenProps) {
                 </label>
               ))}
             </fieldset>
-            <p role="status">
-              {answer && evidence
-                ? '答えと根拠を選びました。'
-                : '答えと根拠を選ぶと、先に進めます。'}
-            </p>
             <div className="tutorial-controls">
               <button type="button" className="btn ghost" onClick={() => setStep(0)}>
                 ← 資料を読み直す
@@ -279,7 +272,6 @@ export function TutorialScreen({ nav, game, storage }: TutorialScreenProps) {
                   : case00.experiment.changed}
               </p>
               <p>{case00.visualGuide.intro}</p>
-              <p className="fine">{case00.experiment.limit}</p>
               <details>
                 <summary>答え・根拠・詳しい解説</summary>
                 <dl className="case00-report">
@@ -299,7 +291,6 @@ export function TutorialScreen({ nav, game, storage }: TutorialScreenProps) {
                 </dl>
                 <p>{case00.explanation}</p>
                 <p>{case00.experiment.explanation}</p>
-                <p>{case00.limit}</p>
                 <p>{case00.takeaway}</p>
                 <button
                   type="button"
@@ -354,7 +345,6 @@ export function TutorialScreen({ nav, game, storage }: TutorialScreenProps) {
       <button type="button" className="btn ghost" onClick={() => nav.navigate({ screen: 'cases' })}>
         {step === 3 ? '事件一覧へ' : '練習をやめて事件一覧へ'}
       </button>
-      <p className="fine">架空の映画館です。途中の記録は画面を離れると消えます。</p>
     </section>
   );
 }
