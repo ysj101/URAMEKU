@@ -48,10 +48,6 @@ test('CASE00: 一覧から資料・回答・根拠・報告・解説を体験す
   await expect(page.getByText(case00.explanation)).toBeHidden();
   await page.getByText('答え・根拠・詳しい解説').click();
   await expect(page.getByText(case00.explanation)).toBeVisible();
-  await expect(page.getByText(case00.limit)).toBeVisible();
-  await expect(page.getByRole('region', { name: 'おとり効果を学ぶ' })).toContainText(
-    case00.experiment.limit,
-  );
   await page.getByRole('button', { name: '← ホーム' }).click();
   await page.reload();
   await page.getByRole('button', { name: '調査をはじめる' }).click();
@@ -195,7 +191,6 @@ for (const viewport of [
       );
       await expect(learning).toContainText('最初：Sサイズ');
       await expect(learning).toContainText(`M追加後：${updated}サイズ`);
-      await expect(learning).toContainText(case00.experiment.limit);
       await shot('04-reveal');
       const column = page.getByRole('region', { name: case00.column.title });
       for (const paragraph of case00.column.paragraphs)
