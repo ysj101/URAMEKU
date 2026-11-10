@@ -267,7 +267,7 @@ export function V2InvestigationScreen({ game }: { game: GameApi }) {
             ))}
           </span>
           <span className="budget" aria-hidden="true">
-            {budget} / {current.budget}
+            予算 残り {budget} / {current.budget}
           </span>
         </span>
       </div>
