@@ -94,7 +94,7 @@ describe('V1互換UIをキーボードのみで完了できる（旧T13）', () 
     // --- CASE 01 を開く
     await tabTo(screen.getByRole('button', { name: /CASE 01/ }), 'CASE 01');
     await pressEnter('CASE 01');
-    expect(window.location.hash).toBe('#/play/case-01');
+    expect(window.location.hash).toBe('#/play/case-03');
     expect(
       screen.getByRole('heading', { level: 1, name: '消えた55人の利用者' }),
     ).toBeInTheDocument();
@@ -168,7 +168,7 @@ describe('V1互換UIをキーボードのみで完了できる（旧T13）', () 
     // --- 次の事件へ
     await tabTo(screen.getByRole('button', { name: '次の事件へ' }));
     await pressEnter('次の事件へ');
-    expect(window.location.hash).toBe('#/play/case-02');
+    expect(window.location.hash).toBe('#/play/case-04');
     expect(screen.getByRole('heading', { level: 1, name: '半額セールの値札' })).toBeInTheDocument();
     expect(active()).toHaveTextContent('3 段階中 1 番目、資料を調べる');
   }, 30_000);

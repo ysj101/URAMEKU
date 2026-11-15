@@ -204,8 +204,8 @@ describe('V1互換fixture 5 件 × 2 問', () => {
     }
   }
 
-  it('case-02 relative: 4.76 を入れても tolerance 0.1 で正解、4.69 は不正解', () => {
-    const task = CASES.find((x) => x.id === 'case-02')!.analysis_tasks.find(
+  it('case-04 relative: 4.76 を入れても tolerance 0.1 で正解、4.69 は不正解', () => {
+    const task = CASES.find((x) => x.id === 'case-04')!.analysis_tasks.find(
       (t) => t.id === 'relative',
     )!;
     expect(task.expected).toBe(4.8);
@@ -218,8 +218,8 @@ describe('V1互換fixture 5 件 × 2 問', () => {
     expect(isTaskCorrect(task, '5')).toBe(false);
   });
 
-  it('case-02 diff: tolerance 0 なので 200 ちょうどのみ', () => {
-    const task = CASES.find((x) => x.id === 'case-02')!.analysis_tasks.find(
+  it('case-04 diff: tolerance 0 なので 200 ちょうどのみ', () => {
+    const task = CASES.find((x) => x.id === 'case-04')!.analysis_tasks.find(
       (t) => t.id === 'diff',
     )!;
     expect(isTaskCorrect(task, '200')).toBe(true);
@@ -228,8 +228,8 @@ describe('V1互換fixture 5 件 × 2 問', () => {
     expect(isTaskCorrect(task, '199')).toBe(false);
   });
 
-  it('case-04: 万円単位。円で答えると不正解', () => {
-    const cs = CASES.find((x) => x.id === 'case-04')!;
+  it('case-06: 万円単位。円で答えると不正解', () => {
+    const cs = CASES.find((x) => x.id === 'case-06')!;
     const [cont, alt] = cs.analysis_tasks;
     expect(isTaskCorrect(cont!, '150万円')).toBe(true);
     expect(isTaskCorrect(cont!, '1,500,000')).toBe(false);
@@ -237,8 +237,8 @@ describe('V1互換fixture 5 件 × 2 問', () => {
     expect(isTaskCorrect(alt!, '80.5')).toBe(false);
   });
 
-  it('case-05: 絶対差は完全一致、相対増加率は ±0.1', () => {
-    const cs = CASES.find((x) => x.id === 'case-05')!;
+  it('case-07: 絶対差は完全一致、相対増加率は ±0.1', () => {
+    const cs = CASES.find((x) => x.id === 'case-07')!;
     const [abs, rel] = cs.analysis_tasks;
     expect(isTaskCorrect(abs!, '10ポイント')).toBe(true);
     expect(isTaskCorrect(abs!, '10%')).toBe(true);

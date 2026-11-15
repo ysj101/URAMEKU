@@ -19,7 +19,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const DEFAULT_DIR = join(ROOT, 'qa', 'user-tests');
 const TARGET_PARTICIPANTS = 5;
-const PRIMARY_CASE = 'case-01';
+const PRIMARY_CASE = 'case-03';
 
 const ENUMS = {
   'device.type': ['smartphone', 'tablet', 'pc'],
@@ -27,13 +27,13 @@ const ENUMS = {
   'session.ended_reason': ['finished', 'time_up', 'participant_stopped', 'bug'],
   'cases[].case_id': [
     'tutorial',
-    'case-01',
-    'case-02',
     'case-03',
     'case-04',
     'case-05',
     'case-06',
     'case-07',
+    'case-01',
+    'case-02',
   ],
   'cases[].completed': ['yes', 'no', 'skipped'],
   'cases[].help_given[].condition': ['stuck_3min', 'dead_end_2min', 'bug', 'participant_request'],

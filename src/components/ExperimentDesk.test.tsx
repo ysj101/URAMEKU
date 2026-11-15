@@ -182,7 +182,7 @@ it.each(['buy', 'hold'])(
 );
 
 it.each(['initial', 'waiting', 'comparison', 'complete'] as const)(
-  'preserves CASE03 visible text at %s',
+  'preserves CASE05 visible text at %s',
   (stage) => {
     const progress = makeV2Progress({
       opened: stage === 'comparison' || stage === 'complete' ? ['invite', 'population'] : [],
@@ -213,7 +213,7 @@ it.each(['initial', 'waiting', 'comparison', 'complete'] as const)(
       expect(screen.getByRole('heading', { name: '提示B' })).toBeVisible();
       expect(
         screen.getByText(
-          '回答者200人中160人が支持。速報の大見出しは利用者の80%が支持となっている。サービスの採用をどう考える？',
+          '回答者200人中160人が支持。速報の大見出しは利用者の80%が支持となっている。サービスを使うかどう考える？',
         ),
       ).toBeVisible();
       const group = screen.getByRole('group', { name: '今ある情報での判断' });
@@ -224,7 +224,7 @@ it.each(['initial', 'waiting', 'comparison', 'complete'] as const)(
       ).toEqual([
         '自分の用途に合うか試してみたい',
         '自分の判断材料としては慎重に扱う',
-        '採用を見送る',
+        '利用を見送る',
         '募集方法を調べるまで保留する',
       ]);
     } else {
@@ -240,10 +240,10 @@ it.each(['initial', 'waiting', 'comparison', 'complete'] as const)(
     if (stage === 'comparison') {
       expect(screen.getByRole('heading', { name: '提示条件を比べる' })).toBeVisible();
       expect(screen.getByText('提示A：').closest('li')).toHaveTextContent(
-        '提示A：利用者の80%が新サービスを支持！ 回答者200人中160人が支持した速報がある。サービスの採用をどう考える？',
+        '提示A：利用者の80%が新サービスを支持！ 回答者200人中160人が支持した速報がある。サービスを使うかどう考える？',
       );
       expect(screen.getByText('提示B：').closest('li')).toHaveTextContent(
-        '提示B：回答者200人中160人が支持。速報の大見出しは利用者の80%が支持となっている。サービスの採用をどう考える？',
+        '提示B：回答者200人中160人が支持。速報の大見出しは利用者の80%が支持となっている。サービスを使うかどう考える？',
       );
       expect(
         screen.getByText(
@@ -259,7 +259,7 @@ it.each(['initial', 'waiting', 'comparison', 'complete'] as const)(
         [
           '自分の用途に合うか試してみたい',
           '自分の判断材料としては慎重に扱う',
-          '採用を見送る',
+          '利用を見送る',
           '募集方法を調べるまで保留する',
         ],
       );

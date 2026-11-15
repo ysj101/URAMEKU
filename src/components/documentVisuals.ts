@@ -35,8 +35,7 @@ export const VISUAL_LABEL = {
 } as const satisfies Record<DocumentVisual, string>;
 
 /**
- * 事件の表示用ラベル。一覧にある事件は並び順の位置（`CASE 01` は一覧の先頭）で番号を付け、
- * 一覧に無い ID は `case-01` → `CASE 01` のように ID の数字を使う。想定外の形式はそのまま大文字にする。
+ * 事件IDと同じ番号を表示する。想定外の形式はそのまま大文字にする。
  */
 export function formatCaseId(caseId: string): string {
   const n = caseNumber(caseId);

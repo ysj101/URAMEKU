@@ -1,22 +1,22 @@
 import { expect, test, type Page } from '@playwright/test';
-import { CASE01, expectStage, openDoc } from './helpers';
+import { CASE03, expectStage, openDoc } from './helpers';
 
 /**
  * 資料ダイアログは開くときに history.pushState を積み、閉じるときに戻す。
- * どの経路で閉じても URL ハッシュは `#/play/case-01` のままで、
+ * どの経路で閉じても URL ハッシュは `#/play/case-03` のままで、
  * その後の「戻る」は 1 回で事件一覧（`#/cases`）に戻れること（余分な履歴が残らない）。
  */
-async function enterCase01ViaList(page: Page) {
+async function enterCase03ViaList(page: Page) {
   await page.goto('/#/cases');
   await expect(page.getByRole('heading', { level: 1, name: '事件一覧' })).toBeVisible();
-  await page.getByRole('button', { name: new RegExp(`^CASE \\d{2} ${CASE01.title}`) }).click();
-  await expect(page).toHaveURL(/#\/play\/case-01$/);
+  await page.getByRole('button', { name: new RegExp(`^CASE \\d{2} ${CASE03.title}`) }).click();
+  await expect(page).toHaveURL(/#\/play\/case-03$/);
   await expectStage(page, '資料を調べる');
 }
 
 async function expectClosedAndBackToList(page: Page) {
   await expect(page.getByRole('dialog')).toBeHidden();
-  await expect(page).toHaveURL(/#\/play\/case-01$/);
+  await expect(page).toHaveURL(/#\/play\/case-03$/);
   await expectStage(page, '資料を調べる');
   // 余分な履歴が無ければ 1 回の戻るで事件一覧
   await page.goBack();
@@ -47,9 +47,9 @@ const routes: Array<[string, (page: Page) => Promise<void>]> = [
 
 for (const [label, close] of routes) {
   test(`資料ダイアログを「${label}」で閉じても履歴が崩れない`, async ({ page }) => {
-    await enterCase01ViaList(page);
-    await openDoc(page, CASE01.docs.ad);
-    await expect(page).toHaveURL(/#\/play\/case-01$/);
+    await enterCase03ViaList(page);
+    await openDoc(page, CASE03.docs.ad);
+    await expect(page).toHaveURL(/#\/play\/case-03$/);
     await close(page);
     await expectClosedAndBackToList(page);
   });

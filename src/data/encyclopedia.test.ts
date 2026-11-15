@@ -39,7 +39,7 @@ describe('図鑑データ（data/encyclopedia/ja.json）', () => {
     }
   });
   it('findEntry', () => {
-    expect(findEntry('framing')?.unlockCase).toBe('case-01');
+    expect(findEntry('framing')?.unlockCase).toBe('case-03');
     expect(findEntry('nope')).toBeUndefined();
   });
 });
@@ -71,7 +71,7 @@ describe('検証関数', () => {
     id: 'x',
     title: 't',
     summary: 's',
-    unlockCase: 'case-01',
+    unlockCase: 'case-03',
     art: 'assets/x.png',
     disclaimer: 'd',
   };
