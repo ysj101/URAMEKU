@@ -2,17 +2,17 @@ import { render, screen } from '@testing-library/react';
 import { expect, it } from 'vitest';
 import { CASES, findCase } from '../data/cases';
 
-const case01 = findCase('case-01')!;
-const case02 = findCase('case-02')!;
+const case03 = findCase('case-03')!;
+const case04 = findCase('case-04')!;
 import { validateCase } from '../data/validateCase';
 import { VisualCaseGuide } from './VisualCaseGuide';
 
-it('case-01 explains the same retained group with two denominators and evidence', () => {
-  const current = case01;
+it('case-03 explains the same retained group with two denominators and evidence', () => {
+  const current = case03;
   render(<VisualCaseGuide caseData={current} />);
   expect(screen.getByRole('img')).toHaveAttribute(
     'src',
-    expect.stringContaining('/assets/cases/case-01/debrief/'),
+    expect.stringContaining('/assets/cases/case-03/debrief/'),
   );
   expect(screen.getByText('45人 ÷ 50人')).toBeInTheDocument();
   expect(screen.getByText('45人 ÷ 100人')).toBeInTheDocument();
@@ -20,7 +20,7 @@ it('case-01 explains the same retained group with two denominators and evidence'
 });
 
 it('rejects mismatched percentages and missing source documents', () => {
-  const current = structuredClone(case01);
+  const current = structuredClone(case03);
   current.debrief.visualGuide!.comparisons![0]!.percent = 45;
   current.debrief.visualGuide!.steps![0]!.evidence = ['missing'];
   const result = validateCase(current);
@@ -30,13 +30,13 @@ it('rejects mismatched percentages and missing source documents', () => {
 });
 
 it('leaves cases without visual guides unchanged', () => {
-  const current = structuredClone(case02);
+  const current = structuredClone(case04);
   delete current.debrief.visualGuide;
   const { container } = render(<VisualCaseGuide caseData={current} />);
   expect(container).toBeEmptyDOMElement();
 });
 
-for (const current of CASES.filter((c) => c.id !== 'case-01')) {
+for (const current of CASES.filter((c) => c.id !== 'case-03')) {
   it(`${current.id} explains its own mechanism and source facts without a people-only formula`, () => {
     render(<VisualCaseGuide caseData={current} />);
     const guide = current.debrief.visualGuide!;
@@ -49,7 +49,7 @@ for (const current of CASES.filter((c) => c.id !== 'case-01')) {
 }
 
 it('requires a readable explanation and valid sources for the panels', () => {
-  const current = structuredClone(case02);
+  const current = structuredClone(case04);
   current.debrief.visualGuide!.panels![0]!.evidence = ['missing'];
   expect(validateCase(current).ok).toBe(false);
   delete current.debrief.visualGuide!.panels;

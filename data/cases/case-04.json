@@ -1,139 +1,142 @@
 {
   "id": "case-04",
-  "title": "取り戻せない開発費",
-  "bias": "サンクコスト効果",
+  "title": "半額セールの値札",
+  "bias": "アンカリングと参照価格",
   "difficulty": "HARD",
   "estimated_time": "5〜10分",
-  "intro": "新しい配信システムを続けるか、別案へ移るか、いったん止めるか。過去に戻らない費用と将来の条件を整理し、目的・前提・根拠を添えた方針を残そう。",
-  "budget": 5,
+  "intro": "「8,000円から半額」の靴を買うか。最初の印象を記録し、価格履歴の開示後に判断を維持するか更新しよう。購入方針そのものに正解はない。",
+  "budget": 4,
   "documents": [
     {
-      "id": "minutes",
-      "title": "会議議事録",
-      "content": "チームは「すでに300万円使ったのだから今さら止められない」と主張。",
+      "id": "poster",
+      "title": "店舗のポスター",
+      "content": "新作スニーカー 8,000円 → 4,000円。「今だけ50%OFF」とある。",
       "cost": 0,
-      "visual": "news"
+      "visual": "advert"
     },
     {
-      "id": "spent",
-      "title": "支払い明細",
-      "content": "過去の開発費300万円は支払済みで返金不可。今後の選択で回収額は変わらない。",
+      "id": "launch",
+      "title": "発売時の価格台帳",
+      "content": "発売初日に8,000円で販売された記録はある。ただし発売直後に価格が変更された。",
+      "cost": 1,
+      "visual": "ledger"
+    },
+    {
+      "id": "history",
+      "title": "30日間の価格履歴",
+      "content": "直近30日間の大半は4,200円で販売。セール当日4,000円。4,200円との差は200円（約4.8%）。",
+      "cost": 1,
+      "visual": "report"
+    },
+    {
+      "id": "stock",
+      "title": "在庫と販売記録",
+      "content": "直近30日間に4,200円で実際の販売があった。8,000円は発売時の短期間の価格。",
       "cost": 1,
       "visual": "receipt"
     },
     {
-      "id": "finish",
-      "title": "継続案の見積り",
-      "content": "完成まで追加で120万円、保守に30万円。来期の期待便益は最大100万円相当という見積り。今後の費用欄の合計は150万円。",
-      "cost": 1,
-      "visual": "report"
-    },
-    {
-      "id": "switch",
-      "title": "代替案の見積り",
-      "content": "既存サービス導入は追加60万円、保守20万円。来期の期待便益は120万円相当という見積り。今後の費用欄の合計は80万円。",
-      "cost": 1,
-      "visual": "report"
-    },
-    {
-      "id": "risk",
-      "title": "品質監査メモ",
-      "content": "継続案は重大な技術リスクがあり、便益見積りには不確実性がある。代替案にも移行リスクはある。",
+      "id": "interview",
+      "title": "広告担当の取材記録",
+      "content": "「半額」は発売時の8,000円を基準にした表現だと説明。直前価格との比較ではない。",
       "cost": 1,
       "visual": "clipping"
     },
     {
-      "id": "team",
-      "title": "メンバーの声",
-      "content": "「ここまで作ったのに」「苦労が無駄になる」。気持ちは重要だが将来の費用便益とは区別する。",
+      "id": "competitor",
+      "title": "競合店の価格",
+      "content": "競合店の類似シューズは3,900〜7,000円（同一商品ではない）。対象商品の正しい割引率の直接証拠にはならない。",
       "cost": 1,
       "visual": "news"
     }
   ],
   "required_evidence": [
-    "spent",
-    "finish",
-    "switch"
+    "launch",
+    "history",
+    "stock"
   ],
   "required_link": [
-    "spent",
-    "finish"
+    "poster",
+    "history"
   ],
-  "link_prompt": "取り戻せない支払い、これからの負担、別案の条件。それぞれの役割を分けて比べます。",
+  "link_prompt": "表示に使った比較基準と、一定期間に実際に売られた価格。その意味の違いを根拠付きで整理します。",
   "headline_fragments": [
     {
       "id": "f0",
-      "text": "支払済み300万円は将来の比較から分離",
+      "text": "半額表示の基準は発売時価格",
       "kind": "correct",
-      "reason": "支払済みの300万円はどちらを選んでも戻らず、将来の比較から分離する。",
+      "reason": "「半額」の基準価格8,000円は発売初日の価格だと、発売資料と担当者の説明が示している。",
       "evidence": [
-        "spent"
+        "launch",
+        "interview"
       ]
     },
     {
       "id": "f1",
-      "text": "継続案の追加費用は150万円",
+      "text": "直近の主な販売価格との差は約5%",
       "kind": "correct",
-      "reason": "継続案を完成させるには追加で150万円かかる。",
+      "reason": "直近30日の主な販売価格4,200円との差は200円で約5%にすぎない。",
       "evidence": [
-        "finish"
+        "history"
       ]
     },
     {
       "id": "f2",
-      "text": "代替案の追加費用は80万円",
+      "text": "現在の販売価格は4,000円",
       "kind": "correct",
-      "reason": "代替案は追加60万円と保守20万円で合計80万円かかる。",
+      "reason": "セール当日の販売価格は4,000円である。",
       "evidence": [
-        "switch"
+        "poster",
+        "history"
       ]
     },
     {
       "id": "f3",
-      "text": "300万円を使ったので必ず継続",
-      "kind": "misread-statistic",
-      "reason": "300万円はどちらを選んでも戻らず、将来の判断材料にならない（サンクコスト）。",
+      "text": "常に8,000円で販売されていた",
+      "kind": "ignored-counter-evidence",
+      "reason": "8,000円は発売初日の短期間のみで、直近30日の大半は4,200円で実売があった。",
       "evidence": [
-        "spent",
-        "minutes"
+        "launch",
+        "history",
+        "stock"
       ]
     },
     {
       "id": "f4",
-      "text": "期待便益だけで全て断定できる",
+      "text": "絶対に不当表示である",
       "kind": "causal-claim",
-      "reason": "継続案の技術リスクや便益見積りの不確実性が明記されており、便益だけでは断定できない。",
+      "reason": "資料は価格履歴と担当者の説明を示すだけで、法的な評価に必要な事実の確認がなく、断定は資料の範囲を超える。",
       "evidence": [
-        "risk"
+        "interview"
       ]
     },
     {
       "id": "f5",
-      "text": "過去の苦労は将来の利益そのもの",
-      "kind": "ignored-counter-evidence",
-      "reason": "チーム自身が「気持ちは重要だが将来の費用便益とは区別する」としている。",
+      "text": "競合より必ず最安値",
+      "kind": "overgeneralization",
+      "reason": "競合の類似品には4,000円より安い例があり、同一商品でもないため「必ず最安値」とは言えない。",
       "evidence": [
-        "team",
-        "spent"
+        "competitor"
       ]
     },
     {
       "id": "f6",
-      "text": "代替案は費用ゼロ",
+      "text": "直近30日の価格は不明",
       "kind": "ignored-counter-evidence",
-      "reason": "代替案にも追加60万円と保守20万円の計80万円が発生する。",
+      "reason": "30日間の価格履歴と販売記録が存在し、直近価格は4,200円と確認できる。",
       "evidence": [
-        "switch"
+        "history",
+        "stock"
       ]
     },
     {
       "id": "f7",
-      "text": "不確実性は存在しない",
-      "kind": "ignored-counter-evidence",
-      "reason": "監査メモが不確実性を明記し、継続案の便益も「最大100万円」の見積りにすぎない。",
+      "text": "購入者は全員損をした",
+      "kind": "overgeneralization",
+      "reason": "4,000円は直近価格より200円安く、購入者が損をしたことを示す資料はない。",
       "evidence": [
-        "risk",
-        "finish"
+        "stock",
+        "history"
       ]
     }
   ],
@@ -143,42 +146,41 @@
     "f2"
   ],
   "debrief": {
-    "explanation": "返金不可の300万円はどの方針でも戻らない。将来の費用は継続150万円・代替80万円と読めるが、便益は見積りで、両案に別のリスクが残る。来期条件を重視する方針と、未確認の長期目的を調べる方針、保留は前提を区別して説明する。",
-    "takeaway": "「使ってしまった」と「これから引き受ける」を分ける。結果の幸不幸だけで当時の判断や人を評価せず、当時の情報と前提へ戻る。",
+    "explanation": "8,000円と比べた半額という表現と、実売の多かった4,200円から4,000円への変更は別の比較である。履歴と販売記録の照合が比較基準を明確にする。買うのがよいかどうかは、用途や予算にもよる。",
+    "takeaway": "最初に見た比較基準をいったん言葉にし、別の基準で見たとき何が変わるか確かめる。",
     "visualGuide": {
-      "title": "「ここまで使った」が、やめにくくする。",
-      "intro": "取り戻せない費用や労力が、続ける判断に影響することがある。これを「サンクコスト効果」という。過去に使った額と、これからの見込みを分けよう。",
-      "imageAlt": "サンクコスト効果の図解。支払済み300万円はどの方針でも返金なし。今後の費用は継続案150万円、代替案80万円。両案の便益は見積りで、それぞれリスクがある。",
+      "title": "最初に見た価格が、判断の出発点になる。",
+      "intro": "先に見た数字が、その後の判断に影響することがある。これを「アンカリング」という。今回は、発売時と最近の価格を比べよう。",
+      "imageAlt": "アンカリングの図解。発売時8,000円と今の4,000円なら半額。最近の大半の4,200円と比べると、差は200円、約4.8%。",
       "panels": [
         {
-          "title": "過去に使った300万円",
-          "body": "支払済みの300万円は返金されない。「もったいない」という気持ちと、今後の費用の比較を分ける。",
+          "title": "先に見た価格が基準になる",
+          "body": "8,000円が先に目に入ると、4,000円をお得に感じることがある。",
           "evidence": [
-            "spent",
-            "team"
+            "poster"
           ]
         },
         {
-          "title": "継続案のこれから",
-          "body": "追加120万円と保守30万円で、今後の費用は150万円。来期の便益は最大100万円相当の見積り。技術リスクも残る。",
+          "title": "最近の価格でも比べる",
+          "body": "最近の大半は4,200円。今の4,000円との差は200円で、約4.8%安い。実際の販売記録もある。",
           "evidence": [
-            "finish",
-            "risk"
+            "history",
+            "stock"
           ]
         },
         {
-          "title": "代替案のこれから",
-          "body": "導入60万円と保守20万円で、今後の費用は80万円。来期の便益は120万円相当の見積り。移行リスクも残る。",
+          "title": "発売時との比較は別",
+          "body": "発売時に8,000円で売った記録はある。ただし、最近ずっとその価格だったわけではない。",
           "evidence": [
-            "switch",
-            "risk"
+            "launch",
+            "history"
           ]
         }
       ],
-      "conclusion": "使った300万円を理由にする前に、これからの費用・見込み・リスクを比べよう。",
-      "limit": "どちらの案も、見積りどおりの便益が得られるとは限らない。何を優先するかによって、継続・変更・保留の判断は変わる。",
-      "takeaway": "「使ってしまった額」と「これから引き受けること」を分けよう。",
-      "image": "cases/case-04/debrief/sunk-cost-mechanism.png"
+      "conclusion": "半額は発売時との比較。最近の主な販売価格から半額になったわけではない。",
+      "limit": "自分に必要か、予算に合うかは価格の記録だけでは決まらない。一回の反応だけで、表示の影響も決められない。",
+      "takeaway": "「いくらから安くなった？」と「自分に必要？」を分けて考えよう。",
+      "image": "cases/case-04/debrief/anchoring-mechanism.png"
     }
   },
   "disclaimer": "登場人物・企業・統計・広告はすべて架空です。",
@@ -186,245 +188,272 @@
   "v2": {
     "revision": 2,
     "modes": [
-      "decoding",
-      "decision"
+      "experiment",
+      "decoding"
     ],
     "decoding": [
       {
-        "id": "past_cost",
-        "prompt": "すでに払った300万円を、いまの方針比較でどう扱う？",
+        "id": "reference",
+        "prompt": "「半額」という言葉と、日常の買い物の比較基準をどう区別する？",
         "options": [
           {
-            "id": "recover_if_continue",
-            "text": "継続さえ選べば、すでに払った300万円が返金される。",
+            "id": "everyday_half",
+            "text": "直近30日間ずっと8,000円だったので、普段の購入価格から半額になった。",
             "status": "contradicted",
             "accepted": false,
-            "reason": "支払い明細が返金不可と明記している。",
+            "reason": "直近の大半は4,200円。発売時と直近の基準を混ぜている。",
             "evidence": [
-              "spent"
+              "history",
+              "stock"
             ]
           },
           {
-            "id": "past_is_benefit",
-            "text": "過去に300万円を投じた事実だけで、来期の利益が保証される。",
-            "status": "uncertain",
-            "accepted": false,
-            "reason": "支払いの事実から将来便益は保証できない。",
-            "evidence": [
-              "spent",
-              "finish"
-            ]
-          },
-          {
-            "id": "separate_past",
-            "text": "どの案を選んでも返金されない支払いとして、今後の負担とは区別して記録する。",
+            "id": "launch_comparison",
+            "text": "発売時の価格との比較では半額だが、最近の主な販売価格からの下げ幅とは同じではない。",
             "status": "supported",
             "accepted": true,
-            "reason": "支払済みで返金不可という条件は、継続の義務でも将来便益でもない。",
+            "reason": "発売時8,000円という記録と、直近30日の4,200円という履歴を区別する。",
             "evidence": [
-              "spent"
+              "launch",
+              "history"
+            ]
+          },
+          {
+            "id": "interview_comparison",
+            "text": "担当者の比較基準は発売時価格で、直近価格の履歴を併せると別の下げ幅が見える。",
+            "status": "supported",
+            "accepted": true,
+            "reason": "担当者の説明と独立した価格履歴を突き合わせる経路。",
+            "evidence": [
+              "interview",
+              "history"
             ]
           }
         ]
       },
       {
-        "id": "future_comparison",
-        "prompt": "将来条件について、資料から比較できる範囲は？",
+        "id": "actual_sales",
+        "prompt": "価格履歴の記載は、実際に取引があった価格なのか？",
         "options": [
           {
-            "id": "same_with_past",
-            "text": "継続案に過去の300万円を足し、その額だけを代替案の将来費用と比較すれば十分である。",
+            "id": "no_sales",
+            "text": "4,200円は掲示されただけで、販売された記録はない。",
             "status": "contradicted",
             "accepted": false,
-            "reason": "過去の返金不可費用と今後の費用を混ぜている。",
+            "reason": "販売記録が直近30日の4,200円での取引を示している。",
             "evidence": [
-              "spent",
-              "finish",
-              "switch"
+              "history",
+              "stock"
             ]
           },
           {
-            "id": "compare_forward",
-            "text": "継続案は今後150万円、代替案は80万円の費用見積り。便益の見積りと費用の記録を分けて比較する。",
+            "id": "observed_sales",
+            "text": "履歴にある4,200円は、販売記録でも実売が確認できる。",
             "status": "supported",
             "accepted": true,
-            "reason": "両案の費用欄は比較できるが、最大便益や期待便益は確実な回収額ではない。",
+            "reason": "履歴と販売記録を照合することで、単なる表示価格ではないと裏付けられる。",
             "evidence": [
-              "finish",
-              "switch"
+              "history",
+              "stock"
             ]
           },
           {
-            "id": "free_alternative",
-            "text": "代替案には導入費用も保守費用も発生しない。",
-            "status": "contradicted",
+            "id": "all_transactions",
+            "text": "30日間のどの取引も同じ価格だったと確定した。",
+            "status": "uncertain",
             "accepted": false,
-            "reason": "代替案にも追加60万円と保守20万円の記載がある。",
+            "reason": "大半の価格と実売の存在は確認できるが、全取引が同じとは書かれていない。",
             "evidence": [
-              "switch"
+              "history",
+              "stock"
             ]
           }
         ]
       },
       {
-        "id": "risk_limit",
-        "prompt": "見積りの数字を読んでもなお残る不確実性は？",
+        "id": "purchase_limit",
+        "prompt": "価格の取材だけでは決められないことは？",
         "options": [
           {
-            "id": "risk_free_switch",
-            "text": "代替案の期待便益が高いので、移行に失敗する可能性はない。",
-            "status": "contradicted",
+            "id": "must_buy",
+            "text": "半額表示があるので、誰にとっても今買うことが最善だと分かる。",
+            "status": "uncertain",
             "accepted": false,
-            "reason": "監査メモは代替案にも移行リスクがあると記している。",
+            "reason": "比較基準だけで用途・予算・商品の適合性は分からない。",
             "evidence": [
-              "risk",
-              "switch"
+              "poster",
+              "history"
             ]
           },
           {
-            "id": "risk_unresolved",
-            "text": "継続案には技術リスク、代替案には移行リスクがある。来期の便益の実現額はまだ確定していない。",
+            "id": "must_avoid",
+            "text": "直近価格との差が小さいので、購入した人は全員損をした。",
+            "status": "uncertain",
+            "accepted": false,
+            "reason": "価格差の大小だけでは購入者の便益や目的を確定できない。",
+            "evidence": [
+              "poster",
+              "history"
+            ]
+          },
+          {
+            "id": "value_is_conditional",
+            "text": "現在価格は確認できても、自分の用途や予算に対して買う価値があるかは別の条件で判断する。",
             "status": "uncertain",
             "accepted": true,
-            "reason": "監査の指摘は費用見積りだけでは解消されない。",
+            "reason": "値引きの比較と購入者の目的・予算を分ける。個人の必要性は資料にない。",
             "evidence": [
-              "risk",
-              "finish",
-              "switch"
-            ]
-          },
-          {
-            "id": "benefit_guaranteed",
-            "text": "継続案は最大100万円の便益があるので、来期に100万円を必ず回収できる。",
-            "status": "uncertain",
-            "accepted": false,
-            "reason": "最大という見積りは回収保証ではなく、監査に不確実性がある。",
-            "evidence": [
-              "risk",
-              "finish"
+              "poster",
+              "history"
             ]
           }
         ]
       }
     ],
     "graph": {
-      "prompt": "過去の費用が将来比較をどう限定し、両案の見積りがどんな比較関係にあるかを残してください。",
+      "prompt": "値札の比較基準と、最近の価格を裏付ける取引記録の関係を残してください。",
       "paths": [
         [
           {
-            "from": "spent",
-            "to": "finish",
+            "from": "poster",
+            "to": "history",
             "relation": "qualifies"
           },
           {
-            "from": "finish",
-            "to": "switch",
-            "relation": "qualifies"
+            "from": "history",
+            "to": "stock",
+            "relation": "supports"
           }
         ],
         [
           {
-            "from": "spent",
-            "to": "switch",
+            "from": "interview",
+            "to": "history",
             "relation": "qualifies"
           },
           {
-            "from": "finish",
-            "to": "switch",
-            "relation": "qualifies"
+            "from": "history",
+            "to": "stock",
+            "relation": "supports"
           }
         ]
       ]
     },
-    "decision": {
-      "prompt": "編集局のシミュレーションでは追加投入の上限を150万円と置く。実際の費用・便益・リスクの資料を読み、何を優先するかと条件付き方針を記録してください。",
-      "objectives": [
+    "experiment": {
+      "id": "price_frame",
+      "prompt": "深く考えず、直感で選んでください。あとで変えてもOKです。",
+      "conditions": [
         {
-          "id": "near_term",
-          "text": "来期の追加負担と見積便益を優先する"
+          "id": "sale_first",
+          "label": "提示A",
+          "prompt": "8,000円から4,000円へ。今だけ50%OFFと大きく書かれている。いまどうする？"
         },
         {
-          "id": "capability",
-          "text": "内部で技術を持つ可能性を調べることを優先する"
-        },
-        {
-          "id": "uncertainty",
-          "text": "不確実な条件を先に確認する"
+          "id": "price_first",
+          "label": "提示B",
+          "prompt": "販売価格は4,000円。発売時の8,000円と比べた半額表示もある。いまどうする？"
         }
       ],
-      "resources": 150,
-      "options": [
+      "choices": [
         {
-          "id": "continue",
-          "text": "継続案に進む",
-          "cost": 150,
-          "outcome": "シミュレーション上、今後150万円の枠を継続案に使う。来期便益の最大100万円は保証されず、技術リスクの確認が必要な状態で次の検討へ進む。",
-          "tradeoff": "内部技術の将来価値を見込むなら、それは未確認の前提として記録する。来期の費用負担と技術リスクを引き受ける。"
+          "id": "buy",
+          "text": "使い道と予算に合えば買う"
         },
         {
-          "id": "switch",
-          "text": "代替サービス案に移る",
-          "cost": 80,
-          "outcome": "シミュレーション上、今後80万円の枠を代替案に使う。期待便益120万円は保証ではなく、移行リスクが残る。",
-          "tradeoff": "来期見積りを重視できる一方、移行失敗や内部技術の扱いは未解決。過去費用が返金されるわけではない。"
+          "id": "compare",
+          "text": "ほかの商品や買う時期と比べる"
         },
         {
-          "id": "stop",
-          "text": "新規投入をいったん止める",
-          "cost": 0,
-          "outcome": "シミュレーション上、この場で新たな投入を確約しない。支払済み300万円は戻らず、便益を得る時期も先送りになる。",
-          "tradeoff": "追加負担は抑えるが、現在の配信上の課題や代替導入の機会を残す。"
+          "id": "pass",
+          "text": "今回は買わない"
         },
         {
           "id": "hold",
-          "text": "追加確認を条件に保留する",
-          "cost": 0,
-          "outcome": "シミュレーション上、監査と便益見積りの確認を次の判断条件として記録する。今この場での投入は確約しない。",
-          "tradeoff": "情報を待つ間の遅延を受け入れる。何を確かめたら方針を変えるかを明示する。"
+          "text": "情報が足りないので、いったん待つ"
         }
       ],
       "revealDocuments": [
-        "risk"
+        "history",
+        "stock"
       ],
-      "updatePrompt": "監査の開示前後で、目的と方針を維持するか更新するか。支持資料・反対材料・まだ仮定している点を添えて記録してください。"
+      "comparisonPrompt": "どの価格をもとに、お得かどうかを考えましたか？ 資料を読んだ今の選択と、その理由を教えてください。",
+      "explanation": "先に目に入った価格が、比べるときの基準になることがあります。今回の1回だけでは、その影響があったかは分かりません。一人ひとりの特徴も決めつけません。選択は変えても、そのままでもOKです。",
+      "scenario": "前から欲しかったスニーカーが売られています。発売時は8,000円で、予算を超えていたので買いませんでした。今も欲しい気持ちは変わっていません。",
+      "ui": {
+        "initialLegend": "今ならどうする？ 1つ選ぼう",
+        "initialLabel": "最初に選んだもの：",
+        "waiting": "次は資料を読んでみよう。読み終わったら、もう一度選べます。",
+        "comparisonTitle": "2つの見せ方を比べよう",
+        "comparisonLegend": "今ならどうする？ 同じ選択でもOK",
+        "reasonLabel": "そう選んだ理由",
+        "comparisonSubmit": "この選択を記録する →",
+        "updatedLabel": "比べてから選んだもの：",
+        "complete": "2回の選択を記録しました。どれを選んでも、正解や不正解はありません。",
+        "privacy": "見せ方で感じ方が変わるか、試してみる体験です。1回の選択で、その人の特徴は決めつけません。記録はこの端末に保存します。"
+      },
+      "column": {
+        "title": "「お得」は何と比べている？",
+        "paragraphs": [
+          "8,000円が目に入ると、4,000円をお得に感じるかもしれません。",
+          "このとき比べる基準になる価格を「参照価格」と呼びます。",
+          "セイラーは1985年の論文で、買い物の満足を「商品そのものの価値」と「参照価格と比べたお得感」に分けて考えました。",
+          "ノーベル賞の公式解説でも、セールは参照価格を高く感じさせ、同じ値段でもお得に見せると説明されています。",
+          "セイラーは行動経済学への貢献で、2017年にノーベル経済学賞を受けました。参照価格の考え方そのものが受賞したわけではありません。",
+          "今回の1回だけで、価格の見せ方が選択を変えたとは言い切れません。"
+        ],
+        "sources": [
+          {
+            "label": "セイラーの1985年の論文（英語）",
+            "url": "https://doi.org/10.1287/mksc.4.3.199"
+          },
+          {
+            "label": "ノーベル賞の公式解説（2017年・英語）",
+            "url": "https://www.nobelprize.org/prizes/economic-sciences/2017/popular-information/"
+          },
+          {
+            "label": "ノーベル賞の公式発表（2017年・英語）",
+            "url": "https://www.nobelprize.org/prizes/economic-sciences/2017/press-release/"
+          }
+        ]
+      }
     },
-    "reportPrompt": "過去費用、将来の見積り、残るリスク、選んだ目的と方針を区別して報告してください。実現していない便益を事実として書かないでください。",
+    "reportPrompt": "発売時と直近の比較基準、実売の裏付け、価格だけでは決まらない購入条件を分けて報告してください。",
     "board": {
-      "title": "判断の前に費用と見込みを分ける",
-      "prompt": "過去の支払い、今後の費用、まだ確定していない見込みを整理しましょう。",
+      "title": "値札に比較の基準を添える",
+      "prompt": "発売時と最近の価格を分けて、値札の説明を整えましょう。",
       "tasks": [
         {
-          "id": "past",
-          "title": "会議の判断メモ",
-          "prompt": "支払った費用が今後の案を選ぶことでどう変わるか確かめましょう。",
+          "id": "baseline",
+          "title": "半額の比較基準",
+          "prompt": "値札の半額表示がいつの価格と比べたものか確かめましょう。",
           "parts": [
             {
-              "text": "支払済みの300万円は"
+              "text": "4,000円は"
             },
             {
-              "field": "past"
+              "field": "baseline"
             },
             {
-              "text": "。今後の費用とは分けて考える。"
+              "text": "の8,000円と比べて半額。"
             }
           ],
           "fields": [
             {
-              "id": "past",
-              "label": "過去の費用の扱い",
-              "original": "recover",
+              "id": "baseline",
+              "label": "いつの価格",
+              "original": "recent",
               "options": [
                 {
-                  "id": "recover",
-                  "text": "継続すれば返金される"
+                  "id": "recent",
+                  "text": "セール直前"
                 },
                 {
-                  "id": "sunk",
-                  "text": "どの案を選んでも返金されない"
+                  "id": "launch",
+                  "text": "発売時"
                 },
                 {
-                  "id": "switch",
-                  "text": "代替案を選べば返金される"
+                  "id": "competitor",
+                  "text": "競合店"
                 }
               ]
             }
@@ -432,40 +461,39 @@
           "rules": [
             {
               "values": {
-                "past": "sunk"
+                "baseline": "launch"
               },
               "disposition": "revise",
               "evidence": [
-                "minutes_fact",
-                "spent_fact"
+                "launch_fact",
+                "history_fact"
               ],
-              "explanation": "支払い明細では返金不可です。過去の支払いだけでは今後どの案に進むかは決まりません。"
+              "explanation": "8,000円は発売時の価格です。最近の主な価格は4,200円でした。"
+            },
+            {
+              "values": {
+                "baseline": "launch"
+              },
+              "disposition": "revise",
+              "evidence": [
+                "interview_fact",
+                "history_fact"
+              ],
+              "explanation": "担当者は発売時価格との比較と説明しています。最近の価格履歴も確かめられます。"
             }
           ],
-          "explanation": "会議の主張と支払い明細を比べましょう。支払済みの300万円は今後の選択で返金される費用ではありません。"
+          "explanation": "半額の基準は発売時の8,000円です。最近の価格履歴と、発売時の記録か取材記録を組み合わせましょう。"
         },
         {
-          "id": "future",
-          "title": "将来の比較メモ",
-          "prompt": "両案の今後の費用と、便益が確定しているかを分けましょう。",
+          "id": "sales",
+          "title": "最近の販売の調査メモ",
+          "prompt": "価格履歴にある数字が実際に売れた価格なのかも確かめましょう。",
           "parts": [
             {
-              "text": "今後の費用は、継続案が"
+              "text": "最近の主な価格は4,200円で、"
             },
             {
-              "field": "continue_cost"
-            },
-            {
-              "text": "、代替案が"
-            },
-            {
-              "field": "switch_cost"
-            },
-            {
-              "text": "。来期の便益は"
-            },
-            {
-              "field": "benefit"
+              "field": "sales"
             },
             {
               "text": "。"
@@ -473,47 +501,17 @@
           ],
           "fields": [
             {
-              "id": "continue_cost",
-              "label": "継続案の費用",
-              "original": "one_fifty",
+              "id": "sales",
+              "label": "販売の裏付け",
+              "original": "confirmed",
               "options": [
                 {
-                  "id": "one_fifty",
-                  "text": "150万円"
+                  "id": "confirmed",
+                  "text": "その価格で売れた記録もある"
                 },
                 {
-                  "id": "four_fifty",
-                  "text": "450万円"
-                }
-              ]
-            },
-            {
-              "id": "switch_cost",
-              "label": "代替案の費用",
-              "original": "eighty",
-              "options": [
-                {
-                  "id": "eighty",
-                  "text": "80万円"
-                },
-                {
-                  "id": "three_eighty",
-                  "text": "380万円"
-                }
-              ]
-            },
-            {
-              "id": "benefit",
-              "label": "便益の確かさ",
-              "original": "guaranteed",
-              "options": [
-                {
-                  "id": "guaranteed",
-                  "text": "保証された金額である"
-                },
-                {
-                  "id": "estimate",
-                  "text": "見積りであり、両案にリスクがある"
+                  "id": "unconfirmed",
+                  "text": "値札だけで販売の記録はない"
                 }
               ]
             }
@@ -521,58 +519,49 @@
           "rules": [
             {
               "values": {
-                "continue_cost": "one_fifty",
-                "switch_cost": "eighty",
-                "benefit": "estimate"
+                "sales": "confirmed"
               },
-              "disposition": "revise",
+              "disposition": "keep",
               "evidence": [
-                "finish_fact",
-                "switch_fact",
-                "risk_fact",
-                "risk_transfer"
+                "history_fact",
+                "stock_fact"
               ],
-              "explanation": "今後の費用は150万円と80万円です。便益は見積りで、技術リスクと移行リスクが残ります。"
+              "explanation": "価格履歴の4,200円は、販売記録でも実際の取引が確認できます。"
             }
           ],
-          "explanation": "両案の見積りと監査メモを確認しましょう。過去の費用を今後の費用に足さず、便益を保証された金額にしないでください。"
+          "explanation": "価格履歴と販売記録を組み合わせると、4,200円で実際に売れたことが確認できます。"
         }
       ],
       "excerpts": [
         {
-          "id": "minutes_fact",
-          "documentId": "minutes",
-          "quote": "チームは「すでに300万円使ったのだから今さら止められない」と主張。"
+          "id": "poster_fact",
+          "documentId": "poster",
+          "quote": "新作スニーカー 8,000円 → 4,000円。「今だけ50%OFF」とある。"
         },
         {
-          "id": "spent_fact",
-          "documentId": "spent",
-          "quote": "過去の開発費300万円は支払済みで返金不可。今後の選択で回収額は変わらない。"
+          "id": "launch_fact",
+          "documentId": "launch",
+          "quote": "発売初日に8,000円で販売された記録はある。ただし発売直後に価格が変更された。"
         },
         {
-          "id": "finish_fact",
-          "documentId": "finish",
-          "quote": "完成まで追加で120万円、保守に30万円。来期の期待便益は最大100万円相当という見積り。今後の費用欄の合計は150万円。"
+          "id": "history_fact",
+          "documentId": "history",
+          "quote": "直近30日間の大半は4,200円で販売。セール当日4,000円。4,200円との差は200円（約4.8%）。"
         },
         {
-          "id": "switch_fact",
-          "documentId": "switch",
-          "quote": "既存サービス導入は追加60万円、保守20万円。来期の期待便益は120万円相当という見積り。今後の費用欄の合計は80万円。"
+          "id": "stock_fact",
+          "documentId": "stock",
+          "quote": "直近30日間に4,200円で実際の販売があった。8,000円は発売時の短期間の価格。"
         },
         {
-          "id": "risk_fact",
-          "documentId": "risk",
-          "quote": "継続案は重大な技術リスクがあり"
+          "id": "interview_fact",
+          "documentId": "interview",
+          "quote": "「半額」は発売時の8,000円を基準にした表現だと説明。直前価格との比較ではない。"
         },
         {
-          "id": "team_fact",
-          "documentId": "team",
-          "quote": "「ここまで作ったのに」「苦労が無駄になる」。気持ちは重要だが将来の費用便益とは区別する。"
-        },
-        {
-          "id": "risk_transfer",
-          "documentId": "risk",
-          "quote": "代替案にも移行リスクはある。"
+          "id": "competitor_fact",
+          "documentId": "competitor",
+          "quote": "競合店の類似シューズは3,900〜7,000円（同一商品ではない）。対象商品の正しい割引率の直接証拠にはならない。"
         }
       ]
     }

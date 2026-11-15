@@ -5,7 +5,7 @@
 | 画面 | 参照すべき素材 | 必須の状態 |
 |---|---|---|
 | タイトル・ホーム | `brand/wordmark-dark.svg, brand/symbol.svg, brand/hero-1600x900.png, backgrounds/scene-menu.svg, characters/shinobu/poses/idle.png, audio/menu-open.wav` | 初回/再開/ローディング/保存失敗 |
-| 事件選択 | `cases/case-01〜05/cover.png, ui/frames/case-card.svg, ui/states/{new,clear,locked}.svg` | 一覧/解放済み/未解放/読み込みエラー |
+| 事件選択 | `cases/case-01〜07/cover.png, ui/frames/case-card.svg, ui/states/{new,clear,locked}.svg` | 一覧/解放済み/未解放/読み込みエラー |
 | 事件導入 | `backgrounds/scene-office.svg, characters/harada/poses/idle.png, tutorial/step-01.png` | 説明/開始/スキップ |
 | 調査デスク | `backgrounds/scene-office.svg, cases/<id>/documents/<docid>.png, ui/icons/{inspect,pin,budget}.svg` | 未読/既読/調査コスト不足/ドキュメント破損 |
 | 資料閲覧 | `ui/frames/newspaper.svg, ui/stamps/confidential.svg, props/*.svg` | ズーム/スクロール/戻る |

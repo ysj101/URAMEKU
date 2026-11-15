@@ -113,17 +113,17 @@ describe('V2 staged case content', () => {
       });
     });
   }
-  it('CASE02/03 framing conditions contain the same factual numbers, without changing data between conditions', () => {
-    for (const id of ['case-02', 'case-03']) {
+  it('CASE04/05 framing conditions contain the same factual numbers, without changing data between conditions', () => {
+    for (const id of ['case-04', 'case-05']) {
       const c = byId(id);
-      const numbers = id === 'case-02' ? ['8,000', '4,000'] : ['200', '160', '80%'];
+      const numbers = id === 'case-04' ? ['8,000', '4,000'] : ['200', '160', '80%'];
       for (const condition of c.v2!.experiment!.conditions) {
         for (const n of numbers) expect(condition.prompt).toContain(n);
       }
     }
   });
-  it('CASE01 retains the 100→50→45 cohorts and explicitly supplies the comparative rate', () => {
-    const c = byId('case-01');
+  it('CASE03 retains the 100→50→45 cohorts and explicitly supplies the comparative rate', () => {
+    const c = byId('case-03');
     const body = (id: string) => c.documents.find((d) => d.id === id)!.content;
     expect(body('trial')).toContain('100人');
     expect(body('paid')).toContain('50人');

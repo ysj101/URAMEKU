@@ -49,8 +49,8 @@ describe('V1互換fixtureの設計整合', () => {
     });
   }
 
-  describe('case-01 固有（設計レビューで決めた方針）', () => {
-    const c = findCase('case-01')!;
+  describe('case-03 固有（設計レビューで決めた方針）', () => {
+    const c = findCase('case-03')!;
     const content = (id: string) => c.documents.find((d) => d.id === id)!.content;
 
     it('資料本文に検証メモの計算式や答えをそのまま書かない', () => {

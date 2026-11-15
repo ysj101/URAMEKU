@@ -32,7 +32,7 @@ Environment protection rules で `main` 以外からのデプロイを拒否し�
 
 権限は `contents: read` / `pages: write` / `id-token: write` のみ。`concurrency: pages` で同時デプロイを防ぐ（進行中の run はキャンセルしない）。
 
-`404.html` は作らない。画面遷移はハッシュルート（`#/cases`, `#/play/case-01` など）なので、Pages が解決するパスは常に `/URAMEKU/`（index.html）になり、サーバー側のフォールバックは不要。
+`404.html` は作らない。画面遷移はハッシュルート（`#/cases`, `#/play/case-03` など）なので、Pages が解決するパスは常に `/URAMEKU/`（index.html）になり、サーバー側のフォールバックは不要。
 
 ## 3. ベースパス `VITE_BASE_PATH`
 

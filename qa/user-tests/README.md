@@ -53,7 +53,7 @@
 
 | フィールド | 型 | 内容 |
 | --- | --- | --- |
-| `case_id` | enum | `tutorial` / `case-01` / `case-02` / `case-03` / `case-04` / `case-05` |
+| `case_id` | enum | `tutorial` / `case-03` / `case-04` / `case-05` / `case-06` / `case-07` |
 | `started_at`, `ended_at` | string | セッション開始を `00:00` とした経過時刻 `MM:SS` |
 | `minutes` | number | 所要分 |
 | `completed` | enum | `yes` / `no` / `skipped` |

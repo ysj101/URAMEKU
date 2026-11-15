@@ -10,7 +10,7 @@ import '../app/screens/tutorial.css';
 import '../app/screens/case00.css';
 
 /** 練習のあとに開く事件。一覧の先頭（難易度の低い順）で、ID を固定しない */
-const FIRST_CASE_ID = CASES[0]?.id ?? 'case-01';
+const FIRST_CASE_ID = CASES[0]?.id ?? 'case-03';
 
 export interface TutorialScreenProps {
   nav: Navigation;

@@ -151,12 +151,12 @@ describe('link: V1互換fixtureとの整合', () => {
     },
   );
 
-  it('cost 0 の初期資料が required_link に含まれるケース（case-02 / case-05）でも正解になる', () => {
+  it('cost 0 の初期資料が required_link に含まれるケース（case-04 / case-07）でも正解になる', () => {
     // required_link は required_evidence の部分集合とは限らない。
     const withFree = CASES.filter((cs) =>
       cs.required_link.some((id) => cs.documents.find((d) => d.id === id)?.cost === 0),
     );
-    expect(withFree.map((cs) => cs.id)).toEqual(['case-02', 'case-05']);
+    expect(withFree.map((cs) => cs.id)).toEqual(['case-04', 'case-07']);
     for (const cs of withFree) {
       expect(cs.required_link.every((id) => cs.required_evidence.includes(id))).toBe(false);
       expect(linkStatus(cs, progressWith([...cs.required_link]))).toBe('correct');

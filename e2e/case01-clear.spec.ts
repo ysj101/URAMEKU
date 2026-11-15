@@ -1,17 +1,30 @@
+import { readFileSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
-import { CASE01, CASE02_TITLE, clearCase01 } from './helpers';
+import type { CaseData } from '../src/domain/types';
+import { prepareV2Case, submitArticle } from './helpers';
 
-test('CASE 01を計算入力なしで完了し、次の事件へ進む', async ({ page }) => {
-  await page.goto('/');
-  await page.getByRole('button', { name: /^事件一覧/ }).click();
-  await page.getByRole('button', { name: new RegExp(`^CASE \\d{2} ${CASE01.title}`) }).click();
+const case01 = JSON.parse(
+  readFileSync(new URL('../data/cases/case-01.json', import.meta.url), 'utf8'),
+) as CaseData;
+
+test('標準ケース case-01 は一覧の CASE 01 に出て、主経路で完了できる', async ({ page }) => {
+  await page.goto('/#/cases');
+  const card = page.getByRole('button', {
+    name: new RegExp(`^CASE 01 ${case01.title}、難易度 標準`),
+  });
+  await expect(card).toBeVisible();
+  await card.click();
   await expect(page).toHaveURL(/#\/play\/case-01$/);
-  await clearCase01(page);
+  await expect(page.getByText(/^CASE-01 \/ FICTION$/)).toBeVisible();
+  await prepareV2Case(page, case01);
+  await submitArticle(page);
   await expect(page.getByRole('heading', { name: '根拠と判断の記録をまとめました' })).toBeVisible();
-  await expect(page.getByText(/評価点：|評価ランク/)).toHaveCount(0);
-  await expect(page.locator('input[inputmode="decimal"]')).toHaveCount(0);
   await page.getByRole('button', { name: '資料に沿った解説を開く' }).click();
   await expect(page.getByTestId('case-disclaimer')).toContainText('架空');
-  await page.getByRole('button', { name: '次の事件へ' }).click();
-  await expect(page.getByRole('heading', { level: 1, name: CASE02_TITLE })).toBeVisible();
+});
+
+test('標準ケース case-01 は別経路（先生のコメント）でも完了できる', async ({ page }) => {
+  await prepareV2Case(page, case01, { alternative: true });
+  await submitArticle(page);
+  await expect(page.getByRole('heading', { name: '根拠と判断の記録をまとめました' })).toBeVisible();
 });

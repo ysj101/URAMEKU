@@ -86,12 +86,12 @@ iOS Safari / Android Chrome はハッシュ遷移を跨がない「戻る/進む
 `DocumentDialog.tsx` は `showModal()` を呼ぶだけで履歴（`history.pushState`）を積まず、`popstate` も見ない。
 
 - Android Chrome（120 前後以降）はモーダル `<dialog>` を CloseWatcher として扱い、戻るジェスチャーで `cancel` → `close` が発火する。`onCancel={onClose}` があるので**ダイアログだけ閉じて調査画面に残る**（期待どおり）。
-- iOS Safari は CloseWatcher を実装していないため、戻るスワイプは履歴を 1 つ戻す。ハッシュルート（`#/play/case-01` → `#/cases` 等）が変わり `PlayScreen` ごと unmount されるので、利用者には「資料を閉じようとしたら事件一覧に飛ばされた」と見える。進捗は `useGame` が保持するので消えない。
+- iOS Safari は CloseWatcher を実装していないため、戻るスワイプは履歴を 1 つ戻す。ハッシュルート（`#/play/case-03` → `#/cases` 等）が変わり `PlayScreen` ごと unmount されるので、利用者には「資料を閉じようとしたら事件一覧に飛ばされた」と見える。進捗は `useGame` が保持するので消えない。
 
 提案（MVP-022 の受け入れ条件「タップ・Esc・戻るで開閉」に合わせる）:
 
 1. ダイアログを開くときに `history.pushState({ dialog: id }, '')` を積み、`popstate` で `onClose()` を呼ぶ。閉じるボタン・Esc で閉じたときは `history.back()` で積んだ分を消す（`popstate` 内で二重に閉じないようフラグを持つ）。
-2. もしくは `#/play/case-01?doc=ad` のようにクエリで開いている資料を表現し、`navigation.ts` の `parseHash` に載せる。
+2. もしくは `#/play/case-03?doc=ad` のようにクエリで開いている資料を表現し、`navigation.ts` の `parseHash` に載せる。
 3. Android の CloseWatcher と組み合わせたときに「戻る 1 回でダイアログも履歴も 1 つだけ戻る」ことを実機で確認する（M10）。
 
 ### R10. `showModal` 非対応時のフォールバック（S4）
@@ -153,5 +153,5 @@ viewport に `user-scalable=no` / `maximum-scale` が無く、拡大操作が可
 
 ## エミュレーションで確認したこと（本 Issue で実施）
 
-- `npm run build && vite preview` を起動し、iOS Safari / Android Chrome の UA で `curl` した結果、`/`、`index.html`、JS、CSS、`manifest.webmanifest`、`apple-touch-icon.png`、`app-icon-192.png`、`maskable-icon-512.png`、`audio/stamp.wav`、`cases/case-01/documents/ad.png` がすべて HTTP 200 かつ期待する Content-Type（`application/manifest+json`、`audio/wav` 等）で返ることを確認した。
+- `npm run build && vite preview` を起動し、iOS Safari / Android Chrome の UA で `curl` した結果、`/`、`index.html`、JS、CSS、`manifest.webmanifest`、`apple-touch-icon.png`、`app-icon-192.png`、`maskable-icon-512.png`、`audio/stamp.wav`、`cases/case-03/documents/ad.png` がすべて HTTP 200 かつ期待する Content-Type（`application/manifest+json`、`audio/wav` 等）で返ることを確認した。
 - それ以上（レンダリング、音、保存、ジェスチャー）は未実施。

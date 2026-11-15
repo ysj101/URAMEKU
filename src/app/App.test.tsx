@@ -46,7 +46,7 @@ describe('App', () => {
   });
 
   it('URL の事件 ID から直接開ける', () => {
-    window.location.hash = '#/play/case-05';
+    window.location.hash = '#/play/case-07';
     render(<App />);
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('急上昇するグラフ');
   });
