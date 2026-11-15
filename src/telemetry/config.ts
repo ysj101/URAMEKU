@@ -29,6 +29,7 @@ export function telemetryConfig(
     enabled: true,
     serviceName: 'urameku',
     collectorUrl: endpoint,
+    // The reusable SDK stays opt-in; this app applies its default-on/opt-out policy.
     consent: { mode: 'opt-in', ui: 'external' },
     routes: [
       { id: 'tutorial', pattern: '/tutorial' },

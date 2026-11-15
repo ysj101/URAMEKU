@@ -21,13 +21,16 @@ beforeEach(() => {
   sdk.init.mockReset().mockReturnValue(sdk);
 });
 
-describe('host consent boundary', () => {
-  it('does not send before consent, persists a grant and stops immediately on withdrawal', async () => {
+describe('host sending preference boundary', () => {
+  it('starts by default, persists an explicit stop and supports resuming', async () => {
     const client = await import('./client');
     await client.initializeTelemetry();
-    expect(client.getTelemetryStatus()).toBe('off');
+    expect(client.getTelemetryStatus()).toBe('on');
+    expect(client.observeStep('onboarding', 'started')).toBe(true);
+    expect(localStorage.getItem(client.CONSENT_KEY)).toBeNull();
+    client.setTelemetryConsent(false);
+    expect(localStorage.getItem(client.CONSENT_KEY)).toBe('false');
     expect(client.observeStep('onboarding', 'started')).toBe(false);
-    expect(sdk.trackStep).not.toHaveBeenCalled();
     client.setTelemetryConsent(true);
     expect(client.observeStep('onboarding', 'started')).toBe(true);
     expect(localStorage.getItem(client.CONSENT_KEY)).toBe('true');
@@ -56,7 +59,7 @@ describe('host consent boundary', () => {
     expect(client.getTelemetryStatus()).toBe('off');
     expect(sdk.getConsent()).toBe(false);
   });
-  it('restores only explicit host consent and handles cross-tab revocation', async () => {
+  it('restores an enabled preference and handles cross-tab stopping', async () => {
     localStorage.setItem('urameku-journeygap-consent', 'true');
     const client = await import('./client');
     await client.initializeTelemetry();
@@ -66,6 +69,29 @@ describe('host consent boundary', () => {
     );
     expect(client.getTelemetryStatus()).toBe('off');
     expect(sdk.getConsent()).toBe(false);
+  });
+  it.each(['false', 'invalid'])(
+    'does not override an existing stopped or invalid preference: %s',
+    async (choice) => {
+      localStorage.setItem('urameku-journeygap-consent', choice);
+      const client = await import('./client');
+      await client.initializeTelemetry();
+      expect(client.getTelemetryStatus()).toBe('off');
+      expect(sdk.getConsent()).toBe(false);
+      expect(client.observeStep('onboarding', 'started')).toBe(false);
+    },
+  );
+  it('stays off when stored preferences cannot be read', async () => {
+    const reading = vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+      throw Error('denied');
+    });
+    try {
+      const client = await import('./client');
+      await client.initializeTelemetry();
+      expect(client.getTelemetryStatus()).toBe('off');
+    } finally {
+      reading.mockRestore();
+    }
   });
   it('SDK failure affects only telemetry', async () => {
     sdk.init.mockImplementation(() => {

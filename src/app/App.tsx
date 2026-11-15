@@ -105,13 +105,6 @@ export function App() {
         className={`app-main${route.screen === 'home' ? ' app-main--home' : ''}`}
         tabIndex={-1}
       >
-        <TelemetryControls
-          show={
-            route.screen === 'tutorial' ||
-            route.screen === 'settings' ||
-            (route.screen === 'play' && route.caseId === 'case-01')
-          }
-        />
         <OfflineBanner />
         <SaveStatusBanner status={game.saveStatus} />
         {game.migrationNotice && (
@@ -121,7 +114,8 @@ export function App() {
         )}
         {content}
         <div className="footnote">
-          調査の記録と書いた文章は、このブラウザに保存します。操作の進み具合は、計測が有効な環境で許可した場合だけ送信します。設定から送信を止められます。
+          <p>調査の記録と書いた文章は、このブラウザに保存します。</p>
+          <TelemetryControls settings={route.screen === 'settings'} />
         </div>
       </main>
     </>
