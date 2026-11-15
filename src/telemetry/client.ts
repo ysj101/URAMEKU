@@ -1,11 +1,11 @@
 import { useSyncExternalStore } from 'react';
-import type { JourneyGapClient } from '@journeygap/web';
+import type { JourneyGapGrafanaClient } from 'journeygap-grafana';
 import { config } from './config';
 
 export const CONSENT_KEY = 'urameku-journeygap-consent';
 type Status = 'disabled' | 'loading' | 'off' | 'on' | 'unavailable';
 let status: Status = config ? 'loading' : 'disabled';
-let client: JourneyGapClient | undefined;
+let client: JourneyGapGrafanaClient | undefined;
 let initialization: Promise<void> | undefined;
 const listeners = new Set<() => void>();
 let generation = 0;
@@ -35,9 +35,9 @@ function storedConsent() {
 export function initializeTelemetry(): Promise<void> {
   const settings = config;
   if (!settings) return Promise.resolve();
-  initialization ??= import('@journeygap/web')
-    .then(({ initJourneyGap }) => {
-      client = initJourneyGap(settings);
+  initialization ??= import('journeygap-grafana')
+    .then(({ initJourneyGapGrafana }) => {
+      client = initJourneyGapGrafana(settings);
       setTelemetryConsent(memoryChoice ?? storedConsent(), false);
       window.addEventListener('storage', (event) => {
         if (

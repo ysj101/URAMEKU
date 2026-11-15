@@ -1,3 +1,42 @@
+# Grafana Cloud接続の検証
+
+対象: Issue #205。遊び方・CASE00と画面上のCASE01（内部ID `case-06`）。
+
+## 実Cloudでの確認（2026-11-16 JST）
+
+- Faroアプリ `urameku`（613）を `beigebalcony2057` に作成。
+  許可Originは `https://ysj101.github.io`。独自の中継は置かない。
+- 許可Originの検査用ページをPlaywrightでローカル応答し、実ブラウザ・実SDKから
+  合成 `connection` ジャーニーを送信。collectorは202を返した。
+- Tempoで開始 `bc0804f36401b9b9aa8b07179728765a` と
+  完了 `e03eef0cb73d507c715f27dd5a2c2532` を取得し、JourneyGapの属性保持を確認。
+- 取得した属性をOTLP形式へ戻して純粋な解析APIに渡し、2イベント・開始1・完了1・順序違反0。
+  定常集計の自動化やダッシュボード作成はこの検証に含めない。
+- 保持期間は30日。画面も30日に変更し、旧14日のローカルRelayは撤去する。
+- セッションなしの元SDKは実受信口で400になった。修正後はJourneyGapの既存IDを
+  Faroのmeta.session.idとx-faro-session-idにも渡す。別IDや自動RUMは追加しない。
+
+## アプリでの受入検証
+
+ローカルFaro受信サーバーを使い、実アプリの送信を解析する。
+同意前・拒否・撤回、CASE00/CASE01の完了、入力の非送信、対象外事件、保存復元を確認する。
+自動検証と本番配信の最終結果はPRとIssue #205に記録する。
+
+画面文言はyomiyasuのlint・差分・最終稿照合を実行。14→30の数値変更は
+ユーザーの選択とCloudの実設定に基づく。資料との自動照合は未実施。
+`yomiyasu-check: executed via=verify run=20261115T220323Z-39e23ad9 attempt=1 final=sha256:f3e10453b9c0 mode=rewrite reader=general checks=lint,diff meaning_risk=1 replay=skipped`
+
+## 制約
+
+送信はbest effort。長時間利用・休止後のFaroセッション自動更新は行わないため、
+Cloudがsession-invalidとしたバッチは欠落し、新しい同意セッションになるまで届かない場合がある。
+アート・権利・本番品質の承認は自動検証で代替しない。
+通常E2Eの既知の不安定性は https://github.com/ysj101/URAMEKU/issues/202 で追跡する。
+
+---
+
+以下は旧OTLP/Relay組み込み時の履歴。現在の受信経路・保持期間には適用しない。
+
 # JourneyGapの組み込み検証
 
 Issue: https://github.com/ysj101/URAMEKU/issues/201

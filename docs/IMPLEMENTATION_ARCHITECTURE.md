@@ -43,4 +43,4 @@ V2は既存React/TypeScript・静的JSON・純粋ドメイン・端末内保存�
 
 ## 任意の進行計測
 
-JourneyGapの設定・同意・送信範囲・検証方法は [JOURNEYGAP.md](JOURNEYGAP.md) を参照。既定では計測を無効とし、調査記録や入力内容の端末内保存を維持する。
+JourneyGapの設定・同意・送信範囲・検証方法は [JOURNEYGAP.md](JOURNEYGAP.md) を参照。ローカル・設定未指定時は計測を無効とし、公開環境でも許可後だけ送信する。調査記録や入力内容の端末内保存を維持する。

@@ -131,7 +131,7 @@ jobs:
       - name: Run E2E
         run: npm run test:e2e
 
-      - name: Run JourneyGap browser acceptance with a local Relay
+      - name: Run JourneyGap browser acceptance with a local Faro receiver
         run: npm run test:telemetry
 
       - name: Upload Playwright report

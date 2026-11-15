@@ -1,41 +1,53 @@
 import { expect, test } from '@playwright/test';
-import { createRelay } from '@journeygap/relay';
-import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { analyze, parseOtlpJson, type JourneyEvent } from 'journeygap-grafana/analysis';
+import { createServer, type Server } from 'node:http';
+import { readFileSync } from 'node:fs';
 
-const definition = JSON.parse(readFileSync('qa/journeygap.relay.local.json', 'utf8'));
+const definition = JSON.parse(readFileSync('qa/journeygap.analysis.json', 'utf8'));
 const practice = JSON.parse(readFileSync('data/tutorial/case-00.json', 'utf8'));
-const token = 'synthetic-local-test-admin-token-only';
-let relay: ReturnType<typeof createRelay>;
-let directory: string;
+let receiver: Server;
+let events: JourneyEvent[];
 test.beforeEach(async () => {
-  directory = mkdtempSync(join(tmpdir(), 'urameku-telemetry-'));
-  relay = createRelay({
-    config: { ...definition, allowedOrigins: ['http://localhost:4186'] },
-    databasePath: join(directory, 'events.db'),
-    adminToken: token,
+  events = [];
+  receiver = createServer(async (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4186');
+    res.setHeader('Access-Control-Allow-Headers', 'content-type,idempotency-key,x-faro-session-id');
+    res.setHeader('Access-Control-Allow-Methods', 'POST,OPTIONS');
+    if (req.method === 'OPTIONS') {
+      res.writeHead(204).end();
+      return;
+    }
+    let body = '';
+    for await (const chunk of req) body += chunk;
+    const envelope = JSON.parse(body);
+    expect(envelope.meta.session.id).toBe(req.headers['x-faro-session-id']);
+    const parsed = parseOtlpJson(JSON.stringify(envelope.traces), definition);
+    events.push(...parsed.journeyEvents);
+    res.writeHead(202).end();
   });
-  await relay.listen(14328, '127.0.0.1');
+  await new Promise<void>((resolve) => receiver.listen(14328, '127.0.0.1', resolve));
 });
 test.afterEach(async () => {
-  await relay?.close();
-  rmSync(directory, { recursive: true, force: true });
+  receiver.closeAllConnections();
+  await new Promise<void>((resolve) => receiver.close(() => resolve()));
 });
 async function report(journey: string) {
-  const response = await fetch(`http://127.0.0.1:14328/admin/v1/report?journey=${journey}&days=7`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  expect(response.status).toBe(200);
-  return response.json();
+  const journeyDefinition = definition.services[0].journeys.find(
+    (item: { id: string }) => item.id === journey,
+  );
+  return analyze(
+    events.filter((event) => event.journeyId === journey),
+    journeyDefinition,
+    Date.now(),
+  );
 }
 
-test('real SDK → OTLP → Relay → aggregate report for CASE00 and displayed CASE01', async ({
+test('real SDK → Faro → JourneyGap aggregate report for CASE00 and displayed CASE01', async ({
   page,
 }) => {
   const bodies: string[] = [];
   page.on('request', (request) => {
-    if (request.url().endsWith('/v1/traces') && request.method() === 'POST')
+    if (request.url().endsWith('/collect/test-app') && request.method() === 'POST')
       bodies.push(request.postData() ?? '');
   });
   await page.goto('/#/tutorial');
@@ -105,7 +117,7 @@ test('refusal and immediate withdrawal discard pending events; cross-tab revocat
 }) => {
   let posts = 0;
   page.on('request', (request) => {
-    if (request.url().endsWith('/v1/traces') && request.method() === 'POST') posts++;
+    if (request.url().endsWith('/collect/test-app') && request.method() === 'POST') posts++;
   });
   await page.goto('/#/tutorial');
   await page.getByRole('button', { name: '送信を断る' }).click();
@@ -147,7 +159,7 @@ test('other cases create no CASE01 journeys; blocked transport does not prevent 
   expect((await report('case01-report')).observedStarts).toBe(0);
   expect((await report('case01-reading')).observedStarts).toBe(0);
   let aborted = 0;
-  await page.route('**/v1/traces', (route) => {
+  await page.route('**/collect/test-app', (route) => {
     aborted++;
     return route.abort();
   });
