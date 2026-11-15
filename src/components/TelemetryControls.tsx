@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { config } from '../telemetry/config';
 import { initializeTelemetry, setTelemetryConsent, useTelemetryStatus } from '../telemetry/client';
 
 export function TelemetryControls({ show }: { show: boolean }) {
@@ -20,10 +19,7 @@ export function TelemetryControls({ show }: { show: boolean }) {
       </p>
       <details>
         <summary>送信先と保存について</summary>
-        <p>
-          送信先：{config ? new URL(config.otlpTracesEndpoint).origin : ''}
-          。受け取った記録の保存期間は14日です。
-        </p>
+        <p>送信先：Grafana Cloud。受け取った記録の保存期間は30日です。</p>
         <p>
           いつでも送信を止められます。送信待ちの記録は消えますが、送信済みの記録は保存期間が過ぎるまで残ります。
         </p>

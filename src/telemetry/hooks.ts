@@ -51,7 +51,7 @@ export function useCase01Telemetry(game: GameApi, resetEpoch: number, routeCaseI
     if (routeCaseId && routeCaseId !== current.id) return;
     const fresh = before.id !== current.id || before.reset !== resetEpoch || before.epoch !== epoch;
     if (fresh) observer.current.reset();
-    if (status === 'on' && current.id === 'case-06') {
+    if (status === 'on' && current.id === 'case-01') {
       if (!progress.published) {
         observer.current.step('case01-report', 'started');
         observer.current.step('case01-reading', 'started');

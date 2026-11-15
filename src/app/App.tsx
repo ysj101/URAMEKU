@@ -109,7 +109,7 @@ export function App() {
           show={
             route.screen === 'tutorial' ||
             route.screen === 'settings' ||
-            (route.screen === 'play' && route.caseId === 'case-06')
+            (route.screen === 'play' && route.caseId === 'case-01')
           }
         />
         <OfflineBanner />

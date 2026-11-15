@@ -1,4 +1,4 @@
-import type { JourneyGapConfig } from '@journeygap/web';
+import type { JourneyGapGrafanaConfig } from 'journeygap-grafana';
 
 import journeys from './journeys.json';
 export { journeys };
@@ -6,7 +6,7 @@ export { journeys };
 export function telemetryConfig(
   enabled: string | undefined,
   endpoint: string | undefined,
-): JourneyGapConfig | null {
+): JourneyGapGrafanaConfig | null {
   if (enabled !== 'true' || !endpoint) return null;
   // Full validation is performed by the real SDK. Reject credentials and unsafe URLs before loading it.
   try {
@@ -18,7 +18,7 @@ export function telemetryConfig(
       url.password ||
       url.search ||
       url.hash ||
-      !url.pathname.endsWith('/v1/traces')
+      !/\/collect\/[A-Za-z0-9_-]{1,256}$/.test(url.pathname)
     )
       return null;
   } catch {
@@ -28,11 +28,11 @@ export function telemetryConfig(
     schemaVersion: 1,
     enabled: true,
     serviceName: 'urameku',
-    otlpTracesEndpoint: endpoint,
+    collectorUrl: endpoint,
     consent: { mode: 'opt-in', ui: 'external' },
     routes: [
       { id: 'tutorial', pattern: '/tutorial' },
-      { id: 'case01', pattern: '/play/case-06' },
+      { id: 'case01', pattern: '/play/case-01' },
     ],
     journeys,
   };
@@ -40,5 +40,5 @@ export function telemetryConfig(
 
 export const config = telemetryConfig(
   import.meta.env.VITE_JOURNEYGAP_ENABLED,
-  import.meta.env.VITE_JOURNEYGAP_ENDPOINT,
+  import.meta.env.VITE_JOURNEYGAP_COLLECTOR_URL,
 );

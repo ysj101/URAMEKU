@@ -4,14 +4,17 @@ Issue: https://github.com/ysj101/URAMEKU/issues/201
 
 ## 対象と現在の状態
 
-実際のJourneyGap Web SDKを組み込み、既定では無効にする。対象は既存の
-`#/tutorial`（遊び方・CASE00）と `#/play/case-06`（画面上のCASE01、平均おこづかい3000円）。
-内部ID `case-01` は対象外。他事件のジャーニーは記録しない。
-本番受信先の配備、パッケージ公開、マージ・本番公開はこの変更に含まない。
-既存の画面・事件JSON・解答・採点・画像は変更しない。
+ブラウザからGrafana Cloudの管理されたFaro受信口へ直接送る。
+アプリに導入するSDKは `journeygap-grafana` の1パッケージ。
+対象は `#/tutorial`（遊び方・CASE00）と `#/play/case-01`
+（画面上のCASE01、平均おこづかい3000円）。内部ID `case-03`（消えた55人の利用者）は対象外。
+許可前には送信せず、拒否してもゲームの全機能を使える。
 
-SDKは未公開のため、固定コミットから作成したローカルパッケージを使う。
-版・ライセンス・再生成方法は `vendor/journeygap/README.md` を参照。
+送信先スタックは `beigebalcony2057`、Frontend Observabilityアプリは
+`urameku`（ID 613）。許可Originは `https://ysj101.github.io`。
+独自Relayは使わない。管理用トークンやOTLP認証情報はブラウザへ渡さない。
+SDKは未公開のため固定コミットの配布アーカイブを同梱する。
+版・ライセンス・再生成方法は `vendor/journeygap-grafana/README.md` を参照。
 
 ## 観測の契約
 
@@ -51,43 +54,50 @@ SDKの自動ナビゲーションは許可後に動作するため、対象外�
 観測される。他事件のIDやその事件の進行は送らない。Relayは定義済みステップのみ保存し、
 ナビゲーションはプロセス内カウンターに留める。
 
-ローカルRelayの保持期間は14日。公開受信先でも14日に揃える。IPは通信先に届き、
-Relayの一時的なレート制限に使われる。プロキシのアクセスログは別途確認が必要。
-本番有効化前に、実際の運営者・問い合わせ先・受信先・委託先・ログ・削除対応と
-プライバシー説明を整合させる（PRD-004/005）。
+Grafana Cloudのトレース保持期間は30日。スタックの
+`grafanacloud_traces_instance_limits{limit_name="block_retention"}` の値
+2592000000000000nsで確認し、ユーザーの希望も30日に変更済み。
+画面でも30日と説明する。送信先には通信上のIPアドレスが届く。
+SDKはIP・ブラウザ情報・ページURLを本文に追加せず、Cloud側の通信処理や
+メタデータ追加まで制御するものではない。運営者への連絡は
+[リポジトリのIssue](https://github.com/ysj101/URAMEKU/issues) を使用する。
+30日の説明はトレースが対象で、Cloud側のその他の管理ログの保持を保証しない。
 
-## 有効化とローカル検証
+## 有効化と検証
 
-`npm ci` 後、別ターミナルで次を実行する。DB・トークン・実データはGitに入れない。
+GitHub Pagesのビルドは次の公開Repository Variablesを参照する。
+未設定なら無効。`VITE_` 設定は公開バンドルに含まれる。
 
-```sh
-export JOURNEYGAP_ADMIN_TOKEN="$(openssl rand -hex 32)"
-node node_modules/@journeygap/relay/dist/main.js \
-  --config qa/journeygap.relay.local.json --db /tmp/urameku-journeygap-local.db
-```
+- `VITE_JOURNEYGAP_ENABLED`: `true` でSDKを有効化する。プレイヤーの許可は別途必要。
+- `VITE_JOURNEYGAP_COLLECTOR_URL`: Grafanaアプリの公開Faro collector URL。
+  今回の送信先は `https://faro-collector-prod-ap-northeast-0.grafana.net/collect/a995fead73882b6165a0d0cb8cba6f5b`。
+  末尾のキーはブラウザ公開用であり、管理APIの資格情報ではない。
 
-Web側は次で有効化する。設定は公開情報としてバンドルされる。
-
-```sh
-VITE_JOURNEYGAP_ENABLED=true \
-VITE_JOURNEYGAP_ENDPOINT=http://127.0.0.1:4318/v1/traces npm run dev
-```
-
-http://localhost:5173/#/tutorial で明示的に許可し、CASE00とCASE01を操作する。
-公開環境はHTTPSの `/v1/traces` を指定し、受信先のOrigin許可・CSP `connect-src` を合わせる。
-ユーザー名・パスワード・クエリー・フラグメント付きURLは使えない。認証用トークンや
-上流の資格情報を `VITE_` 変数、ブラウザ設定、URLに入れない。Relayは静的ホスティングでは動かない。
+設定変更後にDeploy Pagesを実行する。HTTPSの `/collect/<app-key>` を指定し、
+ユーザー名・パスワード・クエリー・フラグメントは付けない。
+独自にCSPを設ける場合はcollectorのOriginを `connect-src` に許可する。
+Grafanaの許可OriginはURLのパスを含めず、必要なサイトだけに限定する。
 
 ```sh
-curl -H "Authorization: Bearer $JOURNEYGAP_ADMIN_TOKEN" \
-  'http://127.0.0.1:4318/admin/v1/report?service=urameku&journey=onboarding&days=7'
+npm ci
 npm run test:telemetry
 ```
 
-受入テストは専用ポート・一時DBの実Relayとビルド済みアプリを使用する。
-通常のE2Eは無効状態を対象とし、専用テストで実SDKのOTLP送信とRelayレポートを確認する。
-設定未指定・無効なURL・SDK読込失敗は計測だけを止め、ゲームは起動する。
-ブラウザで拒否・撤回、送信内容に入力が混ざらないこと、対象外事件、再開と再挑戦も検証する。
+専用テストはローカルのFaro形式受信サーバーを使用し、実SDKからの
+ペイロードを `journeygap-grafana/analysis` で解析する。
+テストは実Cloudへ送らず、選択肢や自由入力を送らないこと、同意・撤回・対象外事件・
+保存復元を確認する。通常E2Eは計測無効で実行する。
+
+実Cloudでは許可Originのブラウザから合成 `connection` ジャーニーを送信し、
+HTTP 202とTempoへの到着を確認した。Cloudから取得した2ステップの属性を
+OTLP形式へ戻してJourneyGapで解析し、開始1・完了1・順序違反0を確認した。
+管理者によるCloudの照会はブラウザSDKに含めない。定常的な抽出・集計の自動化は別途必要。
+
+Faroのセッション情報には、同意後に作った既存のJourneyGap IDを再利用する。
+独自のFaro IDや自動RUMは追加しない。Cloudからsession-invalidが返った場合は
+成功扱いにせず、そのバッチは欠落する。Faroの自動セッション更新を無効にしているため、
+長時間の利用や休止後には、新しい同意セッションになるまで記録が届かない場合がある。
+終了時の送信もbest effortで、集計を全利用者の確実な件数として扱わない。
 
 ## 停止・撤去
 

@@ -20,7 +20,7 @@ export default defineConfig({
     env: {
       VITE_BASE_PATH: '/',
       VITE_JOURNEYGAP_ENABLED: 'true',
-      VITE_JOURNEYGAP_ENDPOINT: 'http://127.0.0.1:14328/v1/traces',
+      VITE_JOURNEYGAP_COLLECTOR_URL: 'http://127.0.0.1:14328/collect/test-app',
     },
   },
 });

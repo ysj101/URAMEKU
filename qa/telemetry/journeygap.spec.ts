@@ -1,45 +1,61 @@
 import { expect, test } from '@playwright/test';
-import { createRelay } from '@journeygap/relay';
-import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { analyze, parseOtlpJson, type JourneyEvent } from 'journeygap-grafana/analysis';
+import { createServer, type Server } from 'node:http';
+import { readFileSync } from 'node:fs';
 
-const definition = JSON.parse(readFileSync('qa/journeygap.relay.local.json', 'utf8'));
+const definition = JSON.parse(readFileSync('qa/journeygap.analysis.json', 'utf8'));
 const practice = JSON.parse(readFileSync('data/tutorial/case-00.json', 'utf8'));
-const token = 'synthetic-local-test-admin-token-only';
-let relay: ReturnType<typeof createRelay>;
-let directory: string;
+let receiver: Server;
+let events: JourneyEvent[];
 test.beforeEach(async () => {
-  directory = mkdtempSync(join(tmpdir(), 'urameku-telemetry-'));
-  relay = createRelay({
-    config: { ...definition, allowedOrigins: ['http://localhost:4186'] },
-    databasePath: join(directory, 'events.db'),
-    adminToken: token,
+  events = [];
+  receiver = createServer(async (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4186');
+    res.setHeader('Access-Control-Allow-Headers', 'content-type,idempotency-key,x-faro-session-id');
+    res.setHeader('Access-Control-Allow-Methods', 'POST,OPTIONS');
+    if (req.method === 'OPTIONS') {
+      res.writeHead(204).end();
+      return;
+    }
+    let body = '';
+    for await (const chunk of req) body += chunk;
+    const envelope = JSON.parse(body);
+    expect(envelope.meta.session.id).toBe(req.headers['x-faro-session-id']);
+    const parsed = parseOtlpJson(JSON.stringify(envelope.traces), definition);
+    events.push(...parsed.journeyEvents);
+    res.writeHead(202).end();
   });
-  await relay.listen(14328, '127.0.0.1');
+  await new Promise<void>((resolve) => receiver.listen(14328, '127.0.0.1', resolve));
 });
 test.afterEach(async () => {
-  await relay?.close();
-  rmSync(directory, { recursive: true, force: true });
+  receiver.closeAllConnections();
+  await new Promise<void>((resolve) => receiver.close(() => resolve()));
 });
 async function report(journey: string) {
-  const response = await fetch(`http://127.0.0.1:14328/admin/v1/report?journey=${journey}&days=7`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  expect(response.status).toBe(200);
-  return response.json();
+  const journeyDefinition = definition.services[0].journeys.find(
+    (item: { id: string }) => item.id === journey,
+  );
+  return analyze(
+    events.filter((event) => event.journeyId === journey),
+    journeyDefinition,
+    Date.now(),
+  );
 }
 
-test('real SDK → OTLP → Relay → aggregate report for CASE00 and displayed CASE01', async ({
+test('real SDK → Faro → JourneyGap aggregate report for CASE00 and displayed CASE01', async ({
   page,
 }) => {
   const bodies: string[] = [];
   page.on('request', (request) => {
-    if (request.url().endsWith('/v1/traces') && request.method() === 'POST')
+    if (request.url().endsWith('/collect/test-app') && request.method() === 'POST')
       bodies.push(request.postData() ?? '');
   });
   await page.goto('/#/tutorial');
   await expect(page.getByRole('button', { name: '送信を許可する' })).toBeEnabled();
+  await page.getByText('送信先と保存について', { exact: true }).click();
+  await expect(
+    page.getByText('送信先：Grafana Cloud。受け取った記録の保存期間は30日です。'),
+  ).toBeVisible();
   await page.setViewportSize({ width: 320, height: 740 });
   const textScale = await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
@@ -68,7 +84,7 @@ test('real SDK → OTLP → Relay → aggregate report for CASE00 and displayed 
   await page.getByRole('button', { name: '報告する →' }).click();
   await expect.poll(async () => (await report('onboarding')).observedCompletions).toBe(1);
   await page.getByRole('button', { name: '本編へ進む →' }).click();
-  await expect(page).toHaveURL(/play\/case-06/);
+  await expect(page).toHaveURL(/play\/case-01/);
   const doc = page.locator('.doc-tile').first();
   await doc.click();
   // Use the application's dialog close button without assuming document content.
@@ -105,7 +121,7 @@ test('refusal and immediate withdrawal discard pending events; cross-tab revocat
 }) => {
   let posts = 0;
   page.on('request', (request) => {
-    if (request.url().endsWith('/v1/traces') && request.method() === 'POST') posts++;
+    if (request.url().endsWith('/collect/test-app') && request.method() === 'POST') posts++;
   });
   await page.goto('/#/tutorial');
   await page.getByRole('button', { name: '送信を断る' }).click();
@@ -142,16 +158,16 @@ test('other cases create no CASE01 journeys; blocked transport does not prevent 
 }) => {
   await page.goto('/#/settings');
   await page.getByRole('button', { name: '送信を許可する' }).click();
-  await page.goto('/#/play/case-01');
+  await page.goto('/#/play/case-03');
   await page.waitForTimeout(5200);
   expect((await report('case01-report')).observedStarts).toBe(0);
   expect((await report('case01-reading')).observedStarts).toBe(0);
   let aborted = 0;
-  await page.route('**/v1/traces', (route) => {
+  await page.route('**/collect/test-app', (route) => {
     aborted++;
     return route.abort();
   });
-  await page.goto('/#/play/case-06');
+  await page.goto('/#/play/case-01');
   await page.getByRole('button', { name: 'メニュー', exact: true }).click();
   await page.getByRole('menuitem', { name: '調査報告へ進む（記録が未完でも）' }).click();
   await page.getByRole('button', { name: '報告を提出して振り返る' }).click();

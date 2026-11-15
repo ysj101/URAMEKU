@@ -28,6 +28,10 @@ concurrency:
 env:
   # GitHub Pages プロジェクトサイト https://<owner>.github.io/URAMEKU/ 向け（MVP-004）
   VITE_BASE_PATH: /URAMEKU/
+  # Public Faro app collector key; no management/OTLP credentials belong in a browser build.
+  # Disabling this repository variable and redeploying stops collection in new page loads.
+  VITE_JOURNEYGAP_ENABLED: ${{ vars.VITE_JOURNEYGAP_ENABLED || 'false' }}
+  VITE_JOURNEYGAP_COLLECTOR_URL: ${{ vars.VITE_JOURNEYGAP_COLLECTOR_URL }}
 
 jobs:
   build:

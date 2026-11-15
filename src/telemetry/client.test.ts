@@ -10,11 +10,11 @@ const sdk = vi.hoisted(() => {
     init: vi.fn(),
   };
 });
-vi.mock('@journeygap/web', () => ({ initJourneyGap: sdk.init }));
+vi.mock('journeygap-grafana', () => ({ initJourneyGapGrafana: sdk.init }));
 beforeEach(() => {
   vi.resetModules();
   vi.stubEnv('VITE_JOURNEYGAP_ENABLED', 'true');
-  vi.stubEnv('VITE_JOURNEYGAP_ENDPOINT', 'http://127.0.0.1:4318/v1/traces');
+  vi.stubEnv('VITE_JOURNEYGAP_COLLECTOR_URL', 'http://127.0.0.1:4318/collect/test-app');
   localStorage.clear();
   sdk.setConsent(false);
   sdk.trackStep.mockClear();

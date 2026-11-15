@@ -9,7 +9,7 @@
 
 ## JourneyGap SDK
 
-`vendor/journeygap/` のSDK・開発用RelayはApache-2.0ライセンス。固定コミットと
+`vendor/journeygap-grafana/` のSDKはApache-2.0ライセンス。固定コミットと
 生成手順・LICENSEを同梱する。これによりウラメク自身のコード・画像の利用許諾や
 未審査アセットの公開承認が決まるものではない。計測を公開環境で有効にする際は、
 [JOURNEYGAP.md](JOURNEYGAP.md) の同意・保持期間・運営者情報を実環境と整合させる。

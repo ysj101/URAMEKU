@@ -66,7 +66,7 @@
       ]
     }
   ],
-  "retentionDays": 14,
+  "retentionDays": 30,
   "rateLimitPerMinute": 600,
   "maxEvents": 100000,
   "maxDatabaseBytes": 104857600
