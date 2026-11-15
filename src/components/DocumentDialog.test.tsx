@@ -19,6 +19,9 @@ function Harness({ progress }: { progress: CaseProgress }) {
       <button type="button" onClick={() => setOpenId('a')}>
         タイルA
       </button>
+      <button type="button" onClick={() => setOpenId('b')}>
+        タイルB
+      </button>
       <DocumentDialog
         caseData={caseData}
         progress={progress}
@@ -43,6 +46,13 @@ beforeEach(() => {
 afterEach(() => {
   vi.restoreAllMocks();
 });
+
+/** history.back() の非同期な完了を、タイマーに頼らず明示する。 */
+function finishBack() {
+  act(() => {
+    window.dispatchEvent(new PopStateEvent('popstate', { state: null }));
+  });
+}
 
 function openA() {
   const tile = screen.getByRole('button', { name: 'タイルA' });
@@ -70,6 +80,7 @@ describe('DocumentDialog', () => {
     render(<Harness progress={makeProgress({ opened: ['a'] })} />);
     const tile = openA();
     fireEvent(dialogEl(), new Event('cancel', { cancelable: true }));
+    finishBack();
     expect(dialogEl().open).toBe(false);
     expect(back).toHaveBeenCalledTimes(1);
     expect(tile).toHaveFocus();
@@ -79,11 +90,13 @@ describe('DocumentDialog', () => {
     render(<Harness progress={makeProgress({ opened: ['a'] })} />);
     openA();
     fireEvent.click(screen.getByRole('button', { name: '閉じる' }));
+    finishBack();
     expect(dialogEl().open).toBe(false);
     expect(back).toHaveBeenCalledTimes(1);
 
     openA();
     fireEvent.click(screen.getByRole('button', { name: '資料を閉じる' }));
+    finishBack();
     expect(dialogEl().open).toBe(false);
     expect(back).toHaveBeenCalledTimes(2);
     expect(pushState).toHaveBeenCalledTimes(2);
@@ -95,6 +108,7 @@ describe('DocumentDialog', () => {
     fireEvent.click(screen.getByRole('heading', { name: '資料A' }));
     expect(dialogEl().open).toBe(true);
     fireEvent.click(dialogEl());
+    finishBack();
     expect(dialogEl().open).toBe(false);
     expect(back).toHaveBeenCalledTimes(1);
   });
@@ -124,6 +138,55 @@ describe('DocumentDialog', () => {
       'この資料は読んだので、記録の根拠として使えます。',
     );
     fireEvent.click(screen.getByRole('button', { name: '資料を閉じる' }));
+    finishBack();
     expect(dialogEl().open).toBe(false);
+  });
+  it('履歴の戻りが完了するまで閉じる操作とフォーカス復帰を待ち、次の資料へ影響させない', () => {
+    render(<Harness progress={makeProgress({ opened: ['a', 'b'] })} />);
+    const tile = openA();
+    fireEvent.click(screen.getByRole('button', { name: '資料を閉じる' }));
+    expect(back).toHaveBeenCalledTimes(1);
+    expect(dialogEl().open).toBe(true);
+    expect(tile).not.toHaveFocus();
+    // キーの繰り返しやEscが重なっても、履歴を二重に戻さない。
+    fireEvent.keyDown(dialogEl(), { key: 'Escape' });
+    expect(back).toHaveBeenCalledTimes(1);
+    finishBack();
+    expect(dialogEl().open).toBe(false);
+    expect(tile).toHaveFocus();
+    fireEvent.click(screen.getByRole('button', { name: 'タイルB' }));
+    expect(screen.getByRole('heading', { name: '資料B' })).toHaveFocus();
+    expect(dialogEl().open).toBe(true);
+  });
+
+  it('直前のcloseイベントが遅れて届いても、新しく開いた資料を閉じない', () => {
+    render(<Harness progress={makeProgress({ opened: ['a', 'b'] })} />);
+    openA();
+    fireEvent.click(screen.getByRole('button', { name: '資料を閉じる' }));
+    finishBack();
+    fireEvent.click(screen.getByRole('button', { name: 'タイルB' }));
+    // HTMLDialogElement.close()のcloseイベントは別タスクで配送される。
+    fireEvent(dialogEl(), new Event('close'));
+    expect(dialogEl().open).toBe(true);
+    expect(screen.getByRole('heading', { name: '資料B' })).toHaveFocus();
+    expect(back).toHaveBeenCalledTimes(1);
+  });
+
+  it('ネイティブ側で閉じられた場合は履歴を戻し、タイルへフォーカスを戻す', () => {
+    render(<Harness progress={makeProgress({ opened: ['a'] })} />);
+    const tile = openA();
+    dialogEl().removeAttribute('open');
+    fireEvent(dialogEl(), new Event('close'));
+    expect(back).toHaveBeenCalledTimes(1);
+    finishBack();
+    expect(tile).toHaveFocus();
+  });
+
+  it('履歴を戻している途中のアンマウントで、さらに戻らない', () => {
+    const { unmount } = render(<Harness progress={makeProgress({ opened: ['a'] })} />);
+    openA();
+    fireEvent.click(screen.getByRole('button', { name: '資料を閉じる' }));
+    unmount();
+    expect(back).toHaveBeenCalledTimes(1);
   });
 });

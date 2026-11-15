@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { InvestigationScreen } from './InvestigationScreen';
 import type { GameApi } from '../state/useGame';
 import { makeCase, makeProgress } from '../test/fixtures';
@@ -45,6 +45,11 @@ describe('InvestigationScreen の資料部分（MVP-022）', () => {
     fireEvent.click(screen.getByRole('button', { name: /資料A、調査済み/ }));
     expect(screen.queryByRole('button', { name: /証拠ボードに貼る/ })).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: '資料を閉じる' }));
+    expect(window.history.back).toHaveBeenCalledTimes(1);
+    expect((document.querySelector('dialog') as HTMLDialogElement).open).toBe(true);
+    act(() => {
+      window.dispatchEvent(new PopStateEvent('popstate', { state: null }));
+    });
     expect((document.querySelector('dialog') as HTMLDialogElement).open).toBe(false);
   });
 });

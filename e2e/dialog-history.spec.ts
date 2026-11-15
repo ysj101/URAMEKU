@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { CASE03, expectStage, openDoc } from './helpers';
+import { CASE03, docTile, expectStage, openDoc } from './helpers';
 
 /**
  * 資料ダイアログは開くときに history.pushState を積み、閉じるときに戻す。
@@ -48,9 +48,33 @@ const routes: Array<[string, (page: Page) => Promise<void>]> = [
 for (const [label, close] of routes) {
   test(`資料ダイアログを「${label}」で閉じても履歴が崩れない`, async ({ page }) => {
     await enterCase03ViaList(page);
-    await openDoc(page, CASE03.docs.ad);
-    await expect(page).toHaveURL(/#\/play\/case-03$/);
-    await close(page);
+    for (const title of [CASE03.docs.ad, CASE03.docs.trial, CASE03.docs.paid]) {
+      await openDoc(page, title);
+      await expect(page).toHaveURL(/#\/play\/case-03$/);
+      await close(page);
+      await expect(page.getByRole('dialog')).toBeHidden();
+      await expect(docTile(page, title)).toBeFocused();
+      expect(await page.evaluate(() => window.history.state?.doc)).toBeUndefined();
+    }
     await expectClosedAndBackToList(page);
   });
 }
+
+test('遅れて届いたcloseイベントが、次に開いた資料を閉じない', async ({ page }) => {
+  await enterCase03ViaList(page);
+  await openDoc(page, CASE03.docs.ad);
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('dialog')).toBeHidden();
+  await expect(docTile(page, CASE03.docs.ad)).toBeFocused();
+
+  const dialog = await openDoc(page, CASE03.docs.trial);
+  // close()の通知が、次のshowModal()の後まで遅れた順序を再現する。
+  await dialog.evaluate((node) => node.dispatchEvent(new Event('close')));
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByRole('heading', { name: CASE03.docs.trial })).toBeFocused();
+  expect(await page.evaluate(() => window.history.state?.doc)).toBe('trial');
+
+  await page.keyboard.press('Escape');
+  await expect(docTile(page, CASE03.docs.trial)).toBeFocused();
+  await expectClosedAndBackToList(page);
+});

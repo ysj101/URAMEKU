@@ -35,6 +35,8 @@ export function DocumentDialog({ caseData, progress, documentId, onClose }: Prop
   const headingRef = useRef<HTMLHeadingElement>(null);
   /** 自分が history に状態を積んでいるか（二重に戻らないためのガード） */
   const pushedRef = useRef(false);
+  /** history.back() の完了待ち。完了前に次の資料を開ける状態へ戻さない。 */
+  const closingRef = useRef(false);
   /** 閉じる前にフォーカスがあった要素（元のタイル） */
   const returnFocusRef = useRef<HTMLElement | null>(null);
   const onCloseRef = useRef(onClose);
@@ -47,9 +49,11 @@ export function DocumentDialog({ caseData, progress, documentId, onClose }: Prop
 
   /** 閉じる操作（ボタン・Esc・背景）。積んだ履歴を戻してから親に通知する */
   const requestClose = useCallback(() => {
+    if (closingRef.current) return;
     if (pushedRef.current) {
-      pushedRef.current = false;
+      closingRef.current = true;
       window.history.back();
+      return;
     }
     onCloseRef.current();
   }, []);
@@ -88,6 +92,7 @@ export function DocumentDialog({ caseData, progress, documentId, onClose }: Prop
     const onPop = () => {
       if (!pushedRef.current) return;
       pushedRef.current = false;
+      closingRef.current = false;
       onCloseRef.current();
     };
     window.addEventListener('popstate', onPop);
@@ -97,7 +102,7 @@ export function DocumentDialog({ caseData, progress, documentId, onClose }: Prop
   // 開いたままアンマウントされたら履歴を戻す
   useEffect(
     () => () => {
-      if (pushedRef.current) {
+      if (pushedRef.current && !closingRef.current) {
         pushedRef.current = false;
         window.history.back();
       }
@@ -111,8 +116,9 @@ export function DocumentDialog({ caseData, progress, documentId, onClose }: Prop
   };
 
   const handleNativeClose = () => {
-    // 外部要因で close されたとき（Esc の二重押しなど）も履歴を整合させる
-    if (pushedRef.current) requestClose();
+    // close()のイベントは後から届く。既に次の資料を開いていれば、前の通知として無視する。
+    // 現在のdialogがネイティブ側で実際に閉じられたときだけ履歴を整合させる。
+    if (!ref.current?.open && pushedRef.current) requestClose();
   };
 
   const handleBackdrop = (e: MouseEvent<HTMLDialogElement>) => {
