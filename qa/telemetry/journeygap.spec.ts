@@ -51,26 +51,24 @@ test('real SDK → Faro → JourneyGap aggregate report for CASE00 and displayed
       bodies.push(request.postData() ?? '');
   });
   await page.goto('/#/tutorial');
-  await expect(page.getByRole('button', { name: '送信を許可する' })).toBeEnabled();
-  await page.getByText('送信先と保存について', { exact: true }).click();
-  await expect(
-    page.getByText('送信先：Grafana Cloud。受け取った記録の保存期間は30日です。'),
-  ).toBeVisible();
+  await expect(page.getByRole('region', { name: '操作の記録について' })).toBeVisible();
+  await expect(page.getByRole('button', { name: '送信を許可する' })).toHaveCount(0);
+  await expect(page.getByText(/Grafana Cloudに送り、30日間保存します/)).toBeVisible();
   await page.setViewportSize({ width: 320, height: 740 });
   const textScale = await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
     true,
   );
   await page.screenshot({
-    path: test.info().outputPath('consent-320px-text200.png'),
+    path: test.info().outputPath('telemetry-footer-320px-text200.png'),
     fullPage: true,
   });
   await textScale.evaluate((element) => element.remove());
   await page.setViewportSize({ width: 1280, height: 800 });
 
   await page.waitForTimeout(5200);
-  expect(bodies).toEqual([]);
-  await page.getByRole('button', { name: '送信を許可する' }).click();
+  expect(bodies.length).toBeGreaterThan(0);
+  expect((await report('onboarding')).observedStarts).toBe(1);
   await page.getByRole('radio', { name: /^Sサイズ/ }).check();
   await page.getByRole('button', { name: 'これにする →' }).click();
   await page.getByRole('radio', { name: /^Lサイズ/ }).check();
@@ -115,7 +113,7 @@ test('real SDK → Faro → JourneyGap aggregate report for CASE00 and displayed
   expect((await report('case01-report')).observedCompletions).toBe(1);
 });
 
-test('refusal and immediate withdrawal discard pending events; cross-tab revocation propagates', async ({
+test('stopping persists, cancels pending events and propagates to another tab', async ({
   page,
   context,
 }) => {
@@ -123,24 +121,31 @@ test('refusal and immediate withdrawal discard pending events; cross-tab revocat
   page.on('request', (request) => {
     if (request.url().endsWith('/collect/test-app') && request.method() === 'POST') posts++;
   });
+  await page.goto('/#/settings');
+  const toggle = page.getByRole('switch', { name: '操作の記録を送る' });
+  await expect(toggle).toBeChecked();
+  await toggle.click();
   await page.goto('/#/tutorial');
-  await page.getByRole('button', { name: '送信を断る' }).click();
+  await expect(page.getByText('送信は停止中です。', { exact: true })).toBeVisible();
   await page.waitForTimeout(5200);
   expect(posts).toBe(0);
-  await page.getByRole('button', { name: '送信を許可する' }).click();
-  await page.getByRole('button', { name: '送信を止める' }).click();
+  await page.goto('/#/settings');
+  await expect(toggle).not.toBeChecked();
+  await toggle.click();
+  await toggle.click();
   await page.waitForTimeout(5200);
   expect(posts).toBe(0);
   expect((await report('onboarding')).observedStarts).toBe(0);
-  await page.getByRole('button', { name: '送信を許可する' }).click();
+  await toggle.click();
   const other = await context.newPage();
   await other.goto('/#/settings');
-  await expect(other.getByRole('button', { name: '送信を止める' })).toBeVisible();
-  await other.getByRole('button', { name: '送信を止める' }).click();
-  await expect(page.getByText('送信は停止中です。', { exact: true })).toBeVisible();
+  await expect(other.getByRole('switch', { name: '操作の記録を送る' })).toBeChecked();
+  await other.getByRole('switch', { name: '操作の記録を送る' }).click();
+  await expect(toggle).not.toBeChecked();
   await other.close();
-  await page.goto('/#/settings');
-  await page.getByRole('button', { name: '送信を許可する' }).click();
+  await page.reload();
+  await expect(toggle).not.toBeChecked();
+  await toggle.click();
   await page.getByRole('button', { name: 'この端末の記録をすべて削除', exact: true }).click();
   await page.getByRole('button', { name: '削除する', exact: true }).click();
   const keys = await page.evaluate(() => ({
@@ -149,15 +154,41 @@ test('refusal and immediate withdrawal discard pending events; cross-tab revocat
     session: sessionStorage.getItem('journeygap.session.v1'),
   }));
   expect(keys).toEqual({ host: null, sdk: null, session: null });
-  await page.goto('/#/settings');
   await expect(page.getByText('送信は停止中です。', { exact: true })).toBeVisible();
+  // Clearing all preferences makes the next full page load a default-on visit.
+  await page.goto('/#/settings');
+  await page.reload();
+  await expect(toggle).toBeChecked();
+});
+
+test('an existing refusal remains stopped until the player resumes sending in settings', async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    if (localStorage.getItem('urameku-journeygap-consent') === null)
+      localStorage.setItem('urameku-journeygap-consent', 'false');
+  });
+  let posts = 0;
+  page.on('request', (request) => {
+    if (request.url().endsWith('/collect/test-app') && request.method() === 'POST') posts++;
+  });
+  await page.goto('/#/tutorial');
+  await expect(page.getByText('送信は停止中です。', { exact: true })).toBeVisible();
+  await page.waitForTimeout(5200);
+  expect(posts).toBe(0);
+  await page.goto('/#/settings');
+  const toggle = page.getByRole('switch', { name: '操作の記録を送る' });
+  await expect(toggle).not.toBeChecked();
+  await toggle.click();
+  await page.goto('/#/tutorial');
+  await expect.poll(async () => (await report('onboarding')).observedStarts).toBe(1);
 });
 
 test('other cases create no CASE01 journeys; blocked transport does not prevent submission', async ({
   page,
 }) => {
   await page.goto('/#/settings');
-  await page.getByRole('button', { name: '送信を許可する' }).click();
+  await expect(page.getByRole('switch', { name: '操作の記録を送る' })).toBeChecked();
   await page.goto('/#/play/case-03');
   await page.waitForTimeout(5200);
   expect((await report('case01-report')).observedStarts).toBe(0);
