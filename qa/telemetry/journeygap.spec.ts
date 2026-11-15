@@ -52,6 +52,10 @@ test('real SDK → Faro → JourneyGap aggregate report for CASE00 and displayed
   });
   await page.goto('/#/tutorial');
   await expect(page.getByRole('button', { name: '送信を許可する' })).toBeEnabled();
+  await page.getByText('送信先と保存について', { exact: true }).click();
+  await expect(
+    page.getByText('送信先：Grafana Cloud。受け取った記録の保存期間は30日です。'),
+  ).toBeVisible();
   await page.setViewportSize({ width: 320, height: 740 });
   const textScale = await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
@@ -80,7 +84,7 @@ test('real SDK → Faro → JourneyGap aggregate report for CASE00 and displayed
   await page.getByRole('button', { name: '報告する →' }).click();
   await expect.poll(async () => (await report('onboarding')).observedCompletions).toBe(1);
   await page.getByRole('button', { name: '本編へ進む →' }).click();
-  await expect(page).toHaveURL(/play\/case-06/);
+  await expect(page).toHaveURL(/play\/case-01/);
   const doc = page.locator('.doc-tile').first();
   await doc.click();
   // Use the application's dialog close button without assuming document content.
@@ -154,7 +158,7 @@ test('other cases create no CASE01 journeys; blocked transport does not prevent 
 }) => {
   await page.goto('/#/settings');
   await page.getByRole('button', { name: '送信を許可する' }).click();
-  await page.goto('/#/play/case-01');
+  await page.goto('/#/play/case-03');
   await page.waitForTimeout(5200);
   expect((await report('case01-report')).observedStarts).toBe(0);
   expect((await report('case01-reading')).observedStarts).toBe(0);
@@ -163,7 +167,7 @@ test('other cases create no CASE01 journeys; blocked transport does not prevent 
     aborted++;
     return route.abort();
   });
-  await page.goto('/#/play/case-06');
+  await page.goto('/#/play/case-01');
   await page.getByRole('button', { name: 'メニュー', exact: true }).click();
   await page.getByRole('menuitem', { name: '調査報告へ進む（記録が未完でも）' }).click();
   await page.getByRole('button', { name: '報告を提出して振り返る' }).click();

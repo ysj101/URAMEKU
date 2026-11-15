@@ -1,6 +1,6 @@
 # Grafana Cloud接続の検証
 
-対象: Issue #205。遊び方・CASE00と画面上のCASE01（内部ID `case-06`）。
+対象: Issue #205。遊び方・CASE00と画面上のCASE01（内部ID `case-01`）。
 
 ## 実Cloudでの確認（2026-11-16 JST）
 

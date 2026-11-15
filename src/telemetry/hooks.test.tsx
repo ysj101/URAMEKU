@@ -17,7 +17,7 @@ beforeEach(() => {
   state.epoch = 1;
   state.send.mockClear();
 });
-function game(id = 'case-06'): GameApi {
+function game(id = 'case-01'): GameApi {
   const current = findCase(id)!;
   return { current, progress: createProgress(current), stage: 'investigate' } as GameApi;
 }
@@ -59,7 +59,7 @@ describe('actual observed onboarding progress', () => {
 
 describe('CASE01 observations', () => {
   it('does not count a stale default case while the URL selects another case', () => {
-    renderHook(() => useCase01Telemetry(game(), 0, 'case-01'));
+    renderHook(() => useCase01Telemetry(game(), 0, 'case-03'));
     expect(state.send).not.toHaveBeenCalled();
   });
   it('tracks new document, report view and submission without answer attributes', () => {
@@ -87,7 +87,7 @@ describe('CASE01 observations', () => {
     expect(calls().every((call) => call.length === 2)).toBe(true);
   });
   it('ignores other cases and restored documents/reports', () => {
-    const { unmount } = renderHook(() => useCase01Telemetry(game('case-01'), 0));
+    const { unmount } = renderHook(() => useCase01Telemetry(game('case-03'), 0));
     expect(state.send).not.toHaveBeenCalled();
     unmount();
     const saved = game();

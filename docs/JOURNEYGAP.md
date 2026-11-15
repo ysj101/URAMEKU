@@ -6,8 +6,8 @@ Issue: https://github.com/ysj101/URAMEKU/issues/201
 
 ブラウザからGrafana Cloudの管理されたFaro受信口へ直接送る。
 アプリに導入するSDKは `journeygap-grafana` の1パッケージ。
-対象は `#/tutorial`（遊び方・CASE00）と `#/play/case-06`
-（画面上のCASE01、平均おこづかい3000円）。内部ID `case-01` は対象外。
+対象は `#/tutorial`（遊び方・CASE00）と `#/play/case-01`
+（画面上のCASE01、平均おこづかい3000円）。内部ID `case-03`（消えた55人の利用者）は対象外。
 許可前には送信せず、拒否してもゲームの全機能を使える。
 
 送信先スタックは `beigebalcony2057`、Frontend Observabilityアプリは

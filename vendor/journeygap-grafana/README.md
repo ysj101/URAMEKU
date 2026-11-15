@@ -1,7 +1,7 @@
 # JourneyGap Grafana distribution
 
 Source: https://github.com/ysj101/journeygap-grafana
-Pinned source commit: `93bd2aa` (full hash in GitHub PR #4).
+Pinned source commit: `93bd2aabcdb8801b3510d4569b6e86ee06c74a6d` (GitHub PR #4).
 Version: 0.1.0 (private, unpublished). License: Apache-2.0.
 
 This archive is the unmodified output of `npm pack --ignore-scripts` after

@@ -20,6 +20,6 @@ describe('JourneyGap deployment configuration', () => {
     expect(config.collectorUrl).toBe('http://127.0.0.1:4318/collect/test-app');
     expect(validateRelayConfig(relay).valid).toBe(true);
     expect(config.journeys).toEqual(relay.services[0]!.journeys);
-    expect(config.routes!.map((route) => route.pattern)).toEqual(['/tutorial', '/play/case-06']);
+    expect(config.routes!.map((route) => route.pattern)).toEqual(['/tutorial', '/play/case-01']);
   });
 });
