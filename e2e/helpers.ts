@@ -37,7 +37,7 @@ export function budgetMeter(page: Page): Locator {
 }
 export async function expectBudget(page: Page, remaining: number, total = CASE03.budget) {
   await expect(budgetMeter(page)).toHaveAccessibleName(`調査予算：残り ${remaining} / ${total}`);
-  await expect(budgetMeter(page)).toHaveText(`${remaining} / ${total}`);
+  await expect(budgetMeter(page)).toHaveText(`予算 残り ${remaining} / ${total}`);
 }
 /** ステッパーの現在の段階（`aria-current="step"`）が `label` であることを確かめる */
 export async function expectStage(page: Page, label: '資料を調べる' | '報告をまとめる' | '結果') {
