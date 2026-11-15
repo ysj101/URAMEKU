@@ -32,7 +32,7 @@ export function telemetryConfig(
     consent: { mode: 'opt-in', ui: 'external' },
     routes: [
       { id: 'tutorial', pattern: '/tutorial' },
-      { id: 'case01', pattern: '/play/case-06' },
+      { id: 'case01', pattern: '/play/case-01' },
     ],
     journeys,
   };

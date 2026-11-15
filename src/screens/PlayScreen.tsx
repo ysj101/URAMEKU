@@ -23,7 +23,7 @@ export function PlayScreen({ game, nav }: { game: GameApi; nav: Navigation }) {
     if (action.type === 'reset') setResetEpoch((n) => n + 1);
     game.dispatch(action);
   };
-  const observedGame = current.id === 'case-06' ? { ...game, dispatch } : game;
+  const observedGame = current.id === 'case-01' ? { ...game, dispatch } : game;
   useCase01Telemetry(game, resetEpoch, nav.route.caseId);
   // 調査中は「次にやること」カード（全事件に出る）が同じ案内を出すので、段階ヒントを重ねない。
   // 以前は CASE 01 だけに限っていたが、並び順で先頭が変わっても崩れないよう段階だけで決める。

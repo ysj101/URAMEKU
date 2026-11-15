@@ -20,6 +20,6 @@ describe('JourneyGap deployment configuration', () => {
     expect(validateConfig(config).valid).toBe(true);
     expect(validateRelayConfig(relay).valid).toBe(true);
     expect(config.journeys).toEqual(relay.services[0]!.journeys);
-    expect(config.routes!.map((route) => route.pattern)).toEqual(['/tutorial', '/play/case-06']);
+    expect(config.routes!.map((route) => route.pattern)).toEqual(['/tutorial', '/play/case-01']);
   });
 });
