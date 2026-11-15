@@ -1,3 +1,4 @@
+import { revokeTelemetry } from '../telemetry/client';
 import { LEGACY_KEYS, STORAGE_KEY, type SaveData, type StorageLike } from './persistence';
 
 /**
@@ -38,7 +39,13 @@ function safeStorage(name: 'localStorage' | 'sessionStorage'): StorageLike | nul
 
 /** アプリのキーかどうか。 */
 export function isAppKey(key: string): boolean {
-  return key === STORAGE_KEY || LEGACY_KEYS.includes(key) || key.startsWith(STORAGE_KEY_PREFIX);
+  return (
+    key === STORAGE_KEY ||
+    LEGACY_KEYS.includes(key) ||
+    key.startsWith(STORAGE_KEY_PREFIX) ||
+    key === 'journeygap.consent.v1' ||
+    key === 'journeygap.session.v1'
+  );
 }
 
 /**
@@ -49,7 +56,13 @@ export function listAppKeys(storage: StorageLike | null): string[] {
   if (!storage) return [];
   const found = new Set<string>();
   try {
-    for (const key of [STORAGE_KEY, ...LEGACY_KEYS]) {
+    for (const key of [
+      STORAGE_KEY,
+      ...LEGACY_KEYS,
+      'urameku-journeygap-consent',
+      'journeygap.consent.v1',
+      'journeygap.session.v1',
+    ]) {
       if (storage.getItem(key) !== null) found.add(key);
     }
     if (isEnumerable(storage)) {
@@ -102,6 +115,7 @@ export interface WipeResult {
  * 既定では実際の Web Storage を使う。テストではスタブを渡す。
  */
 export function wipeAllLocalData(targets?: WipeTargets): WipeResult {
+  revokeTelemetry();
   const local = targets && 'local' in targets ? targets.local : safeStorage('localStorage');
   const session = targets && 'session' in targets ? targets.session : safeStorage('sessionStorage');
   const removed: string[] = [];

@@ -1,3 +1,4 @@
+import { TelemetryControls } from '../components/TelemetryControls';
 import { toHash, useNavigation } from './navigation';
 import { useFocusOnRouteChange } from './useFocusOnRouteChange';
 import './a11y.css';
@@ -104,6 +105,13 @@ export function App() {
         className={`app-main${route.screen === 'home' ? ' app-main--home' : ''}`}
         tabIndex={-1}
       >
+        <TelemetryControls
+          show={
+            route.screen === 'tutorial' ||
+            route.screen === 'settings' ||
+            (route.screen === 'play' && route.caseId === 'case-06')
+          }
+        />
         <OfflineBanner />
         <SaveStatusBanner status={game.saveStatus} />
         {game.migrationNotice && (
@@ -113,7 +121,7 @@ export function App() {
         )}
         {content}
         <div className="footnote">
-          このMVPは静的サイトとして動作します。調査内容はこのブラウザのみに保存され、サーバーへ送信しません。
+          調査の記録と書いた文章は、このブラウザに保存します。操作の進み具合は、計測が有効な環境で許可した場合だけ送信します。設定から送信を止められます。
         </div>
       </main>
     </>

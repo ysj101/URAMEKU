@@ -1,3 +1,4 @@
+import { useCase01Telemetry } from '../telemetry/hooks';
 import { useState } from 'react';
 import { CaseGuidePanel } from '../components/CaseGuidePanel';
 import { CaseHeader } from '../components/CaseHeader';
@@ -13,11 +14,17 @@ import { UI } from '../data/ui';
 
 /** 1 事件のプレイ画面。調査 → 記事 → 結果を内包する。 */
 export function PlayScreen({ game, nav }: { game: GameApi; nav: Navigation }) {
-  const { current, progress, stage, dispatch } = game;
+  const { current, progress, stage } = game;
   const [guideOpen, setGuideOpen] = useState(false);
   const [confirmReset, setConfirmReset] = useState(false);
   // やり直したら調査画面を作り直し、開いていた問いやタブの選択も初期状態に戻す
   const [resetEpoch, setResetEpoch] = useState(0);
+  const dispatch: GameApi['dispatch'] = (action) => {
+    if (action.type === 'reset') setResetEpoch((n) => n + 1);
+    game.dispatch(action);
+  };
+  const observedGame = current.id === 'case-06' ? { ...game, dispatch } : game;
+  useCase01Telemetry(game, resetEpoch, nav.route.caseId);
   // 調査中は「次にやること」カード（全事件に出る）が同じ案内を出すので、段階ヒントを重ねない。
   // 以前は CASE 01 だけに限っていたが、並び順で先頭が変わっても崩れないよう段階だけで決める。
   const nextStepCardShown = stage === 'investigate' && !progress.published;
@@ -60,7 +67,6 @@ export function PlayScreen({ game, nav }: { game: GameApi; nav: Navigation }) {
           onConfirm={() => {
             dispatch({ type: 'reset' });
             game.setStage('investigate');
-            setResetEpoch((n) => n + 1);
             setConfirmReset(false);
           }}
           onCancel={() => setConfirmReset(false)}
@@ -71,11 +77,11 @@ export function PlayScreen({ game, nav }: { game: GameApi; nav: Navigation }) {
       {!nextStepCardShown && <TutorialHint caseData={current} progress={progress} stage={stage} />}
       <div id="game">
         {progress.published ? (
-          <ResultScreen game={game} nav={nav} />
+          <ResultScreen game={observedGame} nav={nav} />
         ) : stage === 'article' ? (
-          <ArticleScreen game={game} />
+          <ArticleScreen game={observedGame} />
         ) : (
-          <InvestigationScreen key={resetEpoch} game={game} />
+          <InvestigationScreen key={resetEpoch} game={observedGame} />
         )}
       </div>
     </section>
