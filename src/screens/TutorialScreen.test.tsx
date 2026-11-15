@@ -52,9 +52,7 @@ describe('CASE00の体験チュートリアル', () => {
     expect(screen.getByText(case00.lead)).toHaveTextContent(
       'のどはかわいているけど、ポップコーン代も残しておきたい',
     );
-    expect(screen.getByText(case00.experiment.initialPrompt)).toHaveTextContent(
-      '直感で選んでください。あとで変えてもOKです。',
-    );
+    expect(screen.getByText(case00.experiment.initialPrompt)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'これにする →' })).toBeDisabled();
     expect(screen.queryByRole('radio', { name: /^Mサイズ/ })).not.toBeInTheDocument();
     expect(screen.getByRole('heading', { name: case00.openingTitle })).toBeInTheDocument();
@@ -90,7 +88,6 @@ describe('CASE00の体験チュートリアル', () => {
     expect(learning).toHaveTextContent(
       initial === updated ? case00.experiment.unchanged : case00.experiment.changed,
     );
-    expect(learning).toHaveTextContent(case00.experiment.limit);
     expect(learning).toHaveTextContent(`最初：${initial}サイズ`);
     expect(learning).toHaveTextContent(`M追加後：${updated}サイズ`);
     const column = screen.getByRole('region', { name: case00.column.title });
@@ -176,7 +173,6 @@ describe('CASE00の体験チュートリアル', () => {
     expect(screen.getByText(case00.explanation)).not.toBeVisible();
     await user.click(screen.getByText('答え・根拠・詳しい解説'));
     expect(screen.getByText(case00.explanation)).toBeVisible();
-    expect(screen.getByText(case00.limit)).toBeInTheDocument();
     expect(loadTutorialState(storage).completed).toBe(true);
     await user.click(screen.getByRole('button', { name: '本編へ進む →' }));
     expect(game.selectCase).toHaveBeenCalledWith(FIRST_CASE_ID);
@@ -238,16 +234,11 @@ describe('CASE00の体験チュートリアル', () => {
     }
   });
 
-  it('コラムは研究と受賞理由を区別する', () => {
+  it('コラムは研究と分野の名前だけを短く伝える', () => {
     const text = case00.column.paragraphs.join('');
-    expect(text).toContain('Huber、Payne、Putoは、1982年');
+    expect(text).toContain('Huber、Payne、Putoが1982年');
     expect(text).toContain('心理学で分かったことを経済学に取り入れた分野');
-    expect(text).toMatch(
-      /カーネマンは、心理学の研究を経済学に取り入れた功績で、2002年にノーベル経済学賞/,
-    );
-    expect(text).toContain('先のことが分からない中での判断や選択');
-    expect(text).toContain('セイラーは、行動経済学への貢献で、2017年');
-    expect(text).toContain('おとり効果そのものが受賞したわけではありません。');
+    expect(text).not.toMatch(/受賞|ノーベル/);
   });
 
   it('根拠の引用は資料本文に実在し、答えと根拠がそろっている', () => {

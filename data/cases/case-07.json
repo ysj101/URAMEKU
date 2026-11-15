@@ -1,245 +1,564 @@
 {
   "id": "case-07",
-  "title": "教材で平均20点アップ",
-  "bias": "比べる相手のない前後比較",
-  "difficulty": "NORMAL",
-  "estimated_time": "3〜5分",
-  "intro": "塾のチラシに「この教材で平均20点アップ！」。本当に教材のおかげ？ 教材を使っていない人の点数も調べて、チラシに書き足すことを報告しよう。",
+  "title": "急上昇するグラフ",
+  "bias": "スケール効果とフレーミング",
+  "difficulty": "HARD",
+  "estimated_time": "5〜10分",
+  "intro": "急上昇に見える評価グラフ。数字の出所、軸、調査の対象を読む。速報として伝えるか、断定を避けるか、追加確認するかを根拠付きで決めよう。",
   "budget": 4,
   "documents": [
     {
-      "id": "flyer",
-      "title": "塾のチラシ",
-      "content": "「この教材を使った生徒は、中間から期末で平均20点アップ！」と大きく書かれている。使っていない人の点数は載っていない。",
+      "id": "graphic",
+      "title": "広告の折れ線グラフ",
+      "content": "満足評価が「40から50へ急上昇」と表示。縦軸は35から55の狭い範囲で描かれている。",
       "cost": 0,
       "visual": "advert"
     },
     {
-      "id": "scores",
-      "title": "受講者の点数表",
-      "content": "教材を使った20人の点数。中間テストの平均は52点、期末テストの平均は72点だった。たしかに20点上がっている。",
+      "id": "raw",
+      "title": "元データ",
+      "content": "前月は調査回答100人中40人、今月は100人中50人が満足と回答。評価は40%→50%。",
       "cost": 1,
       "visual": "ledger"
     },
     {
-      "id": "grade",
-      "title": "学年全体の平均点",
-      "content": "学年160人の平均点。中間テストは50点、期末テストは68点で、18点上がっている。教材を使っていない人も入っている。",
+      "id": "axis",
+      "title": "グラフの制作指示",
+      "content": "縦軸の最小値を35%に設定して変化を強調。0〜100%の軸では視覚上の差は小さい。",
       "cost": 1,
       "visual": "report"
     },
     {
-      "id": "teacher",
-      "title": "先生のメモ",
-      "content": "期末テストは基本問題が中心で、出る範囲もせまかった。学年全体の平均は中間より18点上がった。",
+      "id": "questions",
+      "title": "設問・対象者の記録",
+      "content": "両月の設問文は同一。調査対象の選び方は完全には同じでなく、変化の因果関係は判断できない。",
       "cost": 1,
       "visual": "clipping"
     },
     {
-      "id": "reviews",
-      "title": "塾の口コミ",
-      "content": "「点が上がった」「教材が分かりやすい」という声が多い。何点上がったかや、教材を使わなかった人との差は、この口コミだけでは分からない。",
+      "id": "press",
+      "title": "広報部のコメント",
+      "content": "「満足度が25%アップ」と表現。40%から50%への相対増加率は25%、絶対差は10ポイント。",
+      "cost": 1,
+      "visual": "news"
+    },
+    {
+      "id": "rumor",
+      "title": "SNSのまとめ",
+      "content": "「サービスの品質が倍になった」との投稿。元データを示していない。",
       "cost": 1,
       "visual": "news"
     }
   ],
-  "required_evidence": ["scores", "grade"],
-  "required_link": ["scores", "grade"],
-  "link_prompt": "チラシの数字のもとになった資料と、比べる相手になる資料。両方の関係を組みます。",
-  "headline_fragments": [],
-  "correct_fragments": [],
+  "required_evidence": [
+    "raw",
+    "axis",
+    "questions"
+  ],
+  "required_link": [
+    "graphic",
+    "raw"
+  ],
+  "link_prompt": "グラフの見せ方と回答記録、比較を限定する調査条件。それぞれの資料の役割を組みます。",
+  "headline_fragments": [
+    {
+      "id": "f0",
+      "text": "満足評価は40%から50%へ",
+      "kind": "correct",
+      "reason": "元データでは満足評価が100人中40人から50人へ、40%から50%に変わった。",
+      "evidence": [
+        "raw"
+      ]
+    },
+    {
+      "id": "f1",
+      "text": "絶対差は10ポイント",
+      "kind": "correct",
+      "reason": "40%から50%への変化を絶対差で表すと10ポイントである。",
+      "evidence": [
+        "raw",
+        "press"
+      ]
+    },
+    {
+      "id": "f2",
+      "text": "縦軸の範囲が変化を大きく見せている",
+      "kind": "correct",
+      "reason": "縦軸を狭い範囲に切った制作指示により、10ポイントの差が大きく見えている。",
+      "evidence": [
+        "graphic",
+        "axis"
+      ]
+    },
+    {
+      "id": "f3",
+      "text": "満足度が2倍に増加した",
+      "kind": "misread-statistic",
+      "reason": "40%→50%は1.25倍（相対+25%）で、「2倍」は出所不明のSNS投稿だけが根拠。",
+      "evidence": [
+        "raw",
+        "press",
+        "rumor"
+      ]
+    },
+    {
+      "id": "f4",
+      "text": "因果関係が厳密に証明された",
+      "kind": "causal-claim",
+      "reason": "対象者の選び方が同一でなく、因果関係は判断できないと設問資料に明記されている。",
+      "evidence": [
+        "questions"
+      ]
+    },
+    {
+      "id": "f5",
+      "text": "回答者全員が満足",
+      "kind": "misread-statistic",
+      "reason": "今月も満足は100人中50人で、半数は満足と回答していない。",
+      "evidence": [
+        "raw"
+      ]
+    },
+    {
+      "id": "f6",
+      "text": "変化はゼロである",
+      "kind": "ignored-counter-evidence",
+      "reason": "40人から50人への増加は実数として存在する。",
+      "evidence": [
+        "raw"
+      ]
+    },
+    {
+      "id": "f7",
+      "text": "数字の出所は存在しない",
+      "kind": "ignored-counter-evidence",
+      "reason": "各月100人の回答という元データが存在する。出所が無いのは噂の投稿のほう。",
+      "evidence": [
+        "raw",
+        "press"
+      ]
+    }
+  ],
+  "correct_fragments": [
+    "f0",
+    "f1",
+    "f2"
+  ],
   "debrief": {
-    "explanation": "教材を使った20人は、中間52点から期末72点へ20点上がった。これは点数表のとおり。ただし、学年全体160人も50点から68点へ18点上がっていて、期末は基本問題が中心だった。前と後を比べるだけでは、教材のおかげで何点上がったかは決められない。",
-    "takeaway": "「上がった」を見たら、「使わなかった人はどうだった？」も確かめる。比べる相手がいないと、何のおかげかは分からない。",
+    "explanation": "回答集団内では40%から50%へ変化し、絶対差10ポイントと相対増加25%は別の表し方である。縦軸35〜55は変化を強く見せるが、記録された差を消すわけではない。対象の選び方が異なり、原因や全利用者の変化は未確認である。",
+    "takeaway": "見た目の印象、測定値、比較条件、掲載方針を分ける。限定付き掲載と追加確認と保留は、それぞれ引き受ける制約を説明する。",
     "visualGuide": {
-      "title": "「20点アップ」の相手は、だれ？",
-      "intro": "前と後を比べるだけでは、何のおかげで変わったかは分からない。同じ時期に、使わなかった人がどう変わったかと並べて見よう。",
-      "image": "cases/case-07/debrief/missing-comparison-mechanism.png",
-      "imageAlt": "前後比較の図解。教材を使った20人は中間52点から期末72点で20点アップ。学年全体160人は中間50点から期末68点で18点アップ。期末は基本問題が中心でみんな上がった。",
+      "title": "同じ変化でも、軸で大きく見える。",
+      "intro": "見せる範囲によって、変化の受け取り方が変わることがある。これも「フレーミング」の一つ。グラフの勢いと、記録された数字を分けて読もう。",
+      "imageAlt": "グラフの軸による見え方の図解。同じ40%から50%への変化を、縦軸35〜55%と0〜100%で比較。差は10ポイント、もとの40%からは25%増。",
       "panels": [
         {
-          "title": "受講者は20点上がった",
-          "body": "教材を使った20人の平均は、中間52点から期末72点。チラシの数字そのものは点数表と合っている。",
-          "evidence": ["scores"]
+          "title": "記録された変化",
+          "body": "前月は回答100人中40人、今月は100人中50人が満足と回答した。割合は40%から50%へ変わった。",
+          "evidence": [
+            "raw"
+          ]
         },
         {
-          "title": "使っていない人も18点上がった",
-          "body": "学年全体160人の平均は、中間50点から期末68点。教材を使っていない人も含めて、ほぼ同じだけ上がっている。",
-          "evidence": ["grade"]
+          "title": "軸で見た目が変わる",
+          "body": "縦軸35〜55%では、0〜100%の軸より同じ変化が大きく見える。軸の違いがあっても、記録された差は消えない。",
+          "evidence": [
+            "graphic",
+            "axis"
+          ]
         },
         {
-          "title": "テストが変わったことも理由になる",
-          "body": "期末は基本問題が中心で、範囲もせまかった。教材のおかげと言えるのは、差の2点までかもしれない。それも、この資料だけでは決めきれない。",
-          "evidence": ["grade", "teacher"]
+          "title": "10ポイントと25%増",
+          "body": "50%と40%の差は10ポイント。差の10をもとの40で割ると25%増になる。二つは表し方が違う。",
+          "evidence": [
+            "raw",
+            "press"
+          ]
         }
       ],
-      "conclusion": "チラシには「教材を使っていない人も含めた学年全体も18点上がった」と書き足す必要がある。",
-      "limit": "教材を使った20人がもともとどんな生徒だったかや、教材だけの効果が何点かは、この資料だけでは分からない。",
-      "takeaway": "上がった？ と一緒に、使わなかった人は？ も確かめよう。"
+      "conclusion": "見た目が急上昇でも、何がどれだけ変わったかを数字と軸で確かめよう。",
+      "limit": "両月で対象者の選び方が完全には同じではない。変化の原因や、利用者全体でも同じ変化があったかは未確認。",
+      "takeaway": "グラフの軸・数字・調査対象をセットで確かめよう。",
+      "image": "cases/case-07/debrief/axis-framing-mechanism.png"
     }
   },
-  "disclaimer": "登場人物・塾・学校・点数はすべて架空です。",
+  "disclaimer": "登場人物・企業・統計・広告はすべて架空です。",
   "analysis_tasks": [],
-  "schemaVersion": 2,
   "v2": {
-    "revision": 1,
-    "modes": ["decoding"],
+    "revision": 2,
+    "modes": [
+      "decoding",
+      "decision"
+    ],
     "decoding": [
       {
-        "id": "what_rose",
-        "prompt": "チラシの「20点アップ」は、どう読むのが資料に合う？",
+        "id": "measured_change",
+        "prompt": "元データから直接伝えられる変化は？",
         "options": [
           {
-            "id": "material_only",
-            "text": "教材のおかげで、受講者だけが20点上がった。",
+            "id": "double_quality",
+            "text": "品質そのものが2倍になったと測定された。",
             "status": "contradicted",
             "accepted": false,
-            "reason": "学年全体の平均も18点上がっている。受講者だけが上がったとは言えない。",
-            "evidence": ["grade"]
+            "reason": "満足の回答割合の変化と品質の倍増は同じではない。",
+            "evidence": [
+              "raw",
+              "graphic"
+            ]
           },
           {
-            "id": "everyone_rose",
-            "text": "受講者は20点上がったが、学年全体も18点上がっている。",
-            "status": "supported",
-            "accepted": true,
-            "reason": "受講者の点数表と、学年全体の平均点を並べて読んだ説明。",
-            "evidence": ["scores", "grade"]
+            "id": "no_change",
+            "text": "軸が切られているので実際の回答結果には変化がない。",
+            "status": "contradicted",
+            "accepted": false,
+            "reason": "表示の強調があっても、40人から50人という記録の差は消えない。",
+            "evidence": [
+              "raw",
+              "axis"
+            ]
           },
           {
-            "id": "test_changed",
-            "text": "期末は基本問題が中心で、学年全体の点が上がりやすかった。",
+            "id": "observed_change",
+            "text": "各月の回答100人のうち満足が40人から50人へ変わった。回答集団内の割合は40%から50%である。",
             "status": "supported",
             "accepted": true,
-            "reason": "先生のメモのテストの変化と、学年全体の平均点を合わせた説明。",
-            "evidence": ["grade", "teacher"]
+            "reason": "元データの対象と指標をその範囲のまま記述している。",
+            "evidence": [
+              "raw"
+            ]
           }
         ]
       },
       {
-        "id": "what_to_add",
-        "prompt": "チラシを読む人の誤解を減らすために、書き足すことは？",
+        "id": "axis_framing",
+        "prompt": "急上昇という見え方を読む際に必要な説明は？",
         "options": [
           {
-            "id": "add_grade",
-            "text": "教材を使っていない人も含めた学年全体が18点上がったと書き足す。",
+            "id": "axis_is_source",
+            "text": "縦軸の切り方だけを見れば元データの出所まで確認できる。",
+            "status": "uncertain",
+            "accepted": false,
+            "reason": "軸設定の指示は回答の収集方法や人数を証明する資料ではない。",
+            "evidence": [
+              "graphic",
+              "axis"
+            ]
+          },
+          {
+            "id": "axis_range",
+            "text": "縦軸の表示範囲は35〜55で、0〜100の軸とは同じ変化でも見た目の強さが異なる。",
             "status": "supported",
             "accepted": true,
-            "reason": "学年全体の平均点と受講者の点数表から、比べる相手の変化が分かる。",
-            "evidence": ["grade", "scores"]
+            "reason": "広告の軸範囲と制作指示を突き合わせ、表示と元の測定を分けている。",
+            "evidence": [
+              "graphic",
+              "axis"
+            ]
           },
           {
-            "id": "no_effect",
-            "text": "教材には効果がないと書き直す。",
+            "id": "all_graphs_false",
+            "text": "軸が0から始まらないので、回答100人の記録は架空だと証明できる。",
+            "status": "uncertain",
+            "accepted": false,
+            "reason": "表現の強調とデータそのものの有無を混同している。",
+            "evidence": [
+              "graphic",
+              "axis"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cause_limit",
+        "prompt": "記事で原因まで断定する前に、まだ分からない点は何？",
+        "options": [
+          {
+            "id": "ignore_method",
+            "text": "割合の増加さえ確認できれば調査対象や設問の記録は不要になる。",
             "status": "contradicted",
             "accepted": false,
-            "reason": "受講者は学年全体より2点多く上がっている。効果がないとも、この資料では言えない。",
-            "evidence": ["scores", "grade"]
+            "reason": "何について比較できるかを限定する資料を除外している。",
+            "evidence": [
+              "questions",
+              "raw"
+            ]
           },
           {
-            "id": "effect_unknown",
-            "text": "教材だけの効果が何点かは、この資料では分からない。",
+            "id": "causality_unresolved",
+            "text": "設問は同一でも対象者の選び方は完全には同じではない。変化の原因や全利用者への広がりはまだ確認できない。",
             "status": "uncertain",
             "accepted": true,
-            "reason": "テストの変化と学年全体の上がり方が重なっていて、教材だけの分は資料から取り出せない。",
-            "evidence": ["grade", "teacher"]
+            "reason": "元データの記録と調査条件を合わせても、対象の比較可能性と因果は確定しない。",
+            "evidence": [
+              "raw",
+              "questions"
+            ]
+          },
+          {
+            "id": "cause_proven",
+            "text": "両月の設問が同一なので、サービス改善が満足を増やした原因だと厳密に証明された。",
+            "status": "contradicted",
+            "accepted": false,
+            "reason": "設問が同一であることだけでは対象者の違いや原因を統制できない。",
+            "evidence": [
+              "questions",
+              "raw"
+            ]
           }
         ]
       }
     ],
     "graph": {
-      "prompt": "チラシの数字を支える資料と、比べる相手になって読み方に条件を付ける資料。両方の関係を残してください。",
+      "prompt": "測定の出所、グラフの見せ方、比較を限定する調査条件を区別して関係を組んでください。",
       "paths": [
         [
-          { "from": "scores", "to": "flyer", "relation": "supports" },
-          { "from": "grade", "to": "flyer", "relation": "qualifies" }
+          {
+            "from": "raw",
+            "to": "graphic",
+            "relation": "supports"
+          },
+          {
+            "from": "axis",
+            "to": "graphic",
+            "relation": "qualifies"
+          },
+          {
+            "from": "questions",
+            "to": "raw",
+            "relation": "qualifies"
+          }
         ],
         [
-          { "from": "scores", "to": "flyer", "relation": "supports" },
-          { "from": "teacher", "to": "flyer", "relation": "qualifies" }
+          {
+            "from": "graphic",
+            "to": "axis",
+            "relation": "supports"
+          },
+          {
+            "from": "axis",
+            "to": "raw",
+            "relation": "qualifies"
+          },
+          {
+            "from": "questions",
+            "to": "raw",
+            "relation": "qualifies"
+          }
         ]
       ]
     },
-    "reportPrompt": "受講者の点数の変化と、教材を使っていない人も含めた変化を分けて報告してください。数値の再計算は不要です。",
+    "decision": {
+      "prompt": "編集シミュレーションの追加作業枠は2。いま分かったことをどう伝えるか、速さと確認範囲の優先順位を添えて方針を残してください。作業枠はこの演習内の仮定です。",
+      "objectives": [
+        {
+          "id": "speed",
+          "text": "確認済みの変化を早く伝える"
+        },
+        {
+          "id": "comparability",
+          "text": "調査の比較可能性を先に確かめる"
+        },
+        {
+          "id": "clarity",
+          "text": "誤解しにくい表現を優先する"
+        }
+      ],
+      "resources": 2,
+      "options": [
+        {
+          "id": "publish_scoped",
+          "text": "対象と軸の注記を付けて掲載する",
+          "cost": 1,
+          "outcome": "シミュレーション上、回答集団内の40%から50%への変化として掲載する。原因や、利用者全体にも当てはまるかについては断定しない記事になる。",
+          "tradeoff": "早く伝えられるが、対象者の抽出の違いや変化の原因は未解決のまま残る。"
+        },
+        {
+          "id": "investigate",
+          "text": "調査方法を追加確認する",
+          "cost": 2,
+          "outcome": "シミュレーション上、対象者の選定方法と比較条件を次の取材課題にする。追加取材の回答はまだ得られておらず、原因は確定しない。",
+          "tradeoff": "掲載は遅れる。追加確認しても因果が分かるとは限らない。"
+        },
+        {
+          "id": "hold",
+          "text": "掲載方針を保留する",
+          "cost": 0,
+          "outcome": "シミュレーション上、確定していない点と判断を再開する条件を記録し、掲載を確約しない。",
+          "tradeoff": "利用者全体にも当てはまると確かめずに伝えることは避けられる一方、確認済みの変化を伝える時期も遅れる。"
+        }
+      ],
+      "revealDocuments": [
+        "questions"
+      ],
+      "updatePrompt": "調査条件が開示された後の方針を、初回と同じでも異なっていても記録してください。速報の価値と未確認事項を両方扱ってください。"
+    },
+    "reportPrompt": "回答集団内の変化、グラフの軸、対象の違い、掲載判断と未確認の原因を区別して報告してください。選ばなかった方針の想定の結果を、実際に起きた事実として書かないでください。",
     "board": {
-      "title": "チラシに比べる相手を添える",
-      "prompt": "受講者の変化と、教材を使っていない人も含めた変化を、資料で確かめましょう。",
+      "title": "グラフと記事に説明を添える",
+      "prompt": "数字の変化、グラフの見え方、調査の条件を分けて伝えましょう。",
       "tasks": [
         {
-          "id": "comparison",
-          "title": "比べる相手",
-          "prompt": "受講者と学年全体の点数の変化を、資料を突き合わせて確かめましょう。",
+          "id": "chart",
+          "title": "グラフの説明",
+          "prompt": "元データとグラフの表示範囲を見比べて、説明を組み立てましょう。",
           "parts": [
-            { "text": "教材を使った20人は、中間から期末で" },
-            { "field": "rise" },
-            { "text": "。教材を使っていない人も含めた学年全体は" },
-            { "field": "others" },
-            { "text": "。" }
+            {
+              "text": "回答者内の満足の割合は"
+            },
+            {
+              "field": "change"
+            },
+            {
+              "text": "。縦軸の表示範囲は"
+            },
+            {
+              "field": "axis"
+            },
+            {
+              "text": "。"
+            }
           ],
           "fields": [
             {
-              "id": "rise",
-              "label": "受講者の変化",
-              "original": "twenty",
+              "id": "change",
+              "label": "数字の変化",
+              "original": "double",
               "options": [
-                { "id": "twenty", "text": "20点上がった" },
-                { "id": "flat", "text": "変わらなかった" }
+                {
+                  "id": "double",
+                  "text": "40%から80%に変わった"
+                },
+                {
+                  "id": "actual",
+                  "text": "40%から50%に変わった"
+                }
               ]
             },
             {
-              "id": "others",
-              "label": "学年全体の変化",
-              "original": "unchanged",
+              "id": "axis",
+              "label": "縦軸の表示範囲",
+              "original": "full",
               "options": [
-                { "id": "unchanged", "text": "変わらなかった" },
-                { "id": "eighteen", "text": "18点上がった" },
-                { "id": "unknown", "text": "まだ分からない" }
+                {
+                  "id": "full",
+                  "text": "0〜100%である"
+                },
+                {
+                  "id": "narrow",
+                  "text": "35〜55%で、変化が大きく見える"
+                }
               ]
             }
           ],
           "rules": [
             {
-              "values": { "rise": "twenty", "others": "eighteen" },
+              "values": {
+                "change": "actual",
+                "axis": "narrow"
+              },
               "disposition": "revise",
-              "evidence": ["scores_fact", "grade_fact"],
-              "explanation": "受講者は52点から72点で20点上がりました。学年全体も50点から68点で18点上がっています。"
+              "evidence": [
+                "raw_fact",
+                "axis_fact"
+              ],
+              "explanation": "元データは40%から50%への変化です。35〜55%の表示範囲は0〜100%より変化を大きく見せます。"
             },
             {
-              "values": { "rise": "twenty", "others": "eighteen" },
+              "values": {
+                "change": "actual",
+                "axis": "narrow"
+              },
               "disposition": "revise",
-              "evidence": ["scores_fact", "teacher_fact"],
-              "explanation": "受講者は20点上がりました。先生のメモでも、学年全体の平均は中間より18点上がっています。"
+              "evidence": [
+                "raw_fact",
+                "graphic_fact"
+              ],
+              "explanation": "元データの割合と、広告グラフの35〜55という表示範囲を区別できています。"
             }
           ],
-          "explanation": "受講者の20点は点数表のとおりです。ただし、教材を使っていない人も含めた学年全体も18点上がっているので、教材だけの効果とは言えません。"
+          "explanation": "元データと、グラフか制作指示を見直しましょう。数値の変化と、軸による見え方は別に説明する必要があります。"
+        },
+        {
+          "id": "cause",
+          "title": "記事の原因についてのメモ",
+          "prompt": "同じ設問でも、対象者の選び方が変わっていたら何が言えるでしょうか。",
+          "parts": [
+            {
+              "text": "両月の設問は同じだが、対象者の選び方は完全には同じでない。変化の原因は"
+            },
+            {
+              "field": "cause"
+            },
+            {
+              "text": "。"
+            }
+          ],
+          "fields": [
+            {
+              "id": "cause",
+              "label": "原因について言えること",
+              "original": "quality",
+              "options": [
+                {
+                  "id": "quality",
+                  "text": "サービスの品質向上と確認できる"
+                },
+                {
+                  "id": "unknown",
+                  "text": "この資料だけでは判断できない"
+                }
+              ]
+            }
+          ],
+          "rules": [
+            {
+              "values": {
+                "cause": "unknown"
+              },
+              "disposition": "hold",
+              "evidence": [
+                "raw_fact",
+                "questions_fact"
+              ],
+              "explanation": "集計の変化は確認できますが、対象者の選び方に違いがあり、原因は判断できません。"
+            }
+          ],
+          "explanation": "元データと設問・対象者の記録を組み合わせましょう。回答の変化だけでは、その原因や全利用者への広がりは決められません。"
         }
       ],
       "excerpts": [
         {
-          "id": "flyer_fact",
-          "documentId": "flyer",
-          "quote": "「この教材を使った生徒は、中間から期末で平均20点アップ！」と大きく書かれている。使っていない人の点数は載っていない。"
+          "id": "graphic_fact",
+          "documentId": "graphic",
+          "quote": "満足評価が「40から50へ急上昇」と表示。縦軸は35から55の狭い範囲で描かれている。"
         },
         {
-          "id": "scores_fact",
-          "documentId": "scores",
-          "quote": "中間テストの平均は52点、期末テストの平均は72点だった。たしかに20点上がっている。"
+          "id": "raw_fact",
+          "documentId": "raw",
+          "quote": "前月は調査回答100人中40人、今月は100人中50人が満足と回答。評価は40%→50%。"
         },
         {
-          "id": "grade_fact",
-          "documentId": "grade",
-          "quote": "中間テストは50点、期末テストは68点で、18点上がっている。教材を使っていない人も入っている。"
+          "id": "axis_fact",
+          "documentId": "axis",
+          "quote": "縦軸の最小値を35%に設定して変化を強調。0〜100%の軸では視覚上の差は小さい。"
         },
         {
-          "id": "teacher_fact",
-          "documentId": "teacher",
-          "quote": "期末テストは基本問題が中心で、出る範囲もせまかった。学年全体の平均は中間より18点上がった。"
+          "id": "questions_fact",
+          "documentId": "questions",
+          "quote": "両月の設問文は同一。調査対象の選び方は完全には同じでなく、変化の因果関係は判断できない。"
         },
         {
-          "id": "reviews_fact",
-          "documentId": "reviews",
-          "quote": "何点上がったかや、教材を使わなかった人との差は、この口コミだけでは分からない。"
+          "id": "press_fact",
+          "documentId": "press",
+          "quote": "「満足度が25%アップ」と表現。40%から50%への相対増加率は25%、絶対差は10ポイント。"
+        },
+        {
+          "id": "rumor_fact",
+          "documentId": "rumor",
+          "quote": "「サービスの品質が倍になった」との投稿。元データを示していない。"
         }
       ]
     }
-  }
+  },
+  "schemaVersion": 2
 }

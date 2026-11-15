@@ -1,18 +1,18 @@
 import { expect, test } from '@playwright/test';
 import {
-  CASE01,
+  CASE03,
   docTile,
   expectBudget,
   fillReport,
   goToArticle,
-  gotoCase01,
+  gotoCase03,
   openAndRead,
 } from './helpers';
 const STORAGE_KEY = 'urameku-mvp-v1';
 test('V2報告と段階を復元し、端末の記録をすべて削除できる', async ({ page }) => {
-  await gotoCase01(page);
-  await openAndRead(page, CASE01.docs.trial);
-  await openAndRead(page, CASE01.docs.retained);
+  await gotoCase03(page);
+  await openAndRead(page, CASE03.docs.trial);
+  await openAndRead(page, CASE03.docs.retained);
   await goToArticle(page);
   await fillReport(page, '復元する調査報告');
   await expect
@@ -24,7 +24,7 @@ test('V2報告と段階を復元し、端末の記録をすべて削除できる
   );
   await page.getByRole('button', { name: '← 調査へ戻る' }).click();
   await expectBudget(page, 2);
-  await expect(docTile(page, CASE01.docs.trial)).toHaveAccessibleName(/調査済み/);
+  await expect(docTile(page, CASE03.docs.trial)).toHaveAccessibleName(/調査済み/);
   await page.goto('/#/');
   await expect(page.getByRole('button', { name: '前回の続き' })).toBeVisible();
   await page.getByRole('button', { name: '設定' }).click();
@@ -33,7 +33,7 @@ test('V2報告と段階を復元し、端末の記録をすべて削除できる
   await expect(page.getByRole('button', { name: '調査をはじめる' })).toBeVisible();
   expect(await page.evaluate((k) => localStorage.getItem(k), STORAGE_KEY)).toBeNull();
   await page.reload();
-  await gotoCase01(page);
+  await gotoCase03(page);
   await expectBudget(page, 4);
   await expect(page.getByText('0 / 6 件確認済み')).toBeVisible();
 });

@@ -1,273 +1,430 @@
 {
   "id": "case-06",
-  "title": "平均おこづかい3000円",
-  "bias": "平均と外れ値",
-  "difficulty": "NORMAL",
-  "estimated_time": "3〜5分",
-  "intro": "クラス新聞に「おこづかいは平均3000円」。でも、そんなにもらっている人はいない？ 平均がどう計算されたかを資料で確かめて、新聞に書き足すことを報告しよう。",
-  "budget": 4,
+  "title": "取り戻せない開発費",
+  "bias": "サンクコスト効果",
+  "difficulty": "HARD",
+  "estimated_time": "5〜10分",
+  "intro": "新しい配信システムを続けるか、別案へ移るか、いったん止めるか。過去に戻らない費用と将来の条件を整理し、目的・前提・根拠を添えた方針を残そう。",
+  "budget": 5,
   "documents": [
     {
-      "id": "notice",
-      "title": "クラス新聞の見出し",
-      "content": "「2年3組のおこづかいは平均3000円！」と大きく書かれている。計算のもとになった回答は載っていない。",
+      "id": "minutes",
+      "title": "会議議事録",
+      "content": "チームは「すでに300万円使ったのだから今さら止められない」と主張。",
       "cost": 0,
       "visual": "news"
     },
     {
-      "id": "survey",
-      "title": "アンケートの回答一覧",
-      "content": "回答した25人の金額が1人ずつ並ぶ。24人は1000円から2000円の間で、1500円がいちばん多い。1人だけ39000円と書いてある。",
+      "id": "spent",
+      "title": "支払い明細",
+      "content": "過去の開発費300万円は支払済みで返金不可。今後の選択で回収額は変わらない。",
       "cost": 1,
-      "visual": "ledger"
+      "visual": "receipt"
     },
     {
-      "id": "tally",
-      "title": "集計係のメモ",
-      "content": "25人の合計は75000円。75000円を25人で割って、平均3000円とした。39000円の1人を除いた24人の合計は36000円。",
+      "id": "finish",
+      "title": "継続案の見積り",
+      "content": "完成まで追加で120万円、保守に30万円。来期の期待便益は最大100万円相当という見積り。今後の費用欄の合計は150万円。",
       "cost": 1,
       "visual": "report"
     },
     {
-      "id": "teacher",
-      "title": "先生のコメント",
-      "content": "39000円と書いた子は、誕生日にもらったお金を足して書いたと話していた。金額の大きい順に並べて、真ん中にくる人は1500円。",
+      "id": "switch",
+      "title": "代替案の見積り",
+      "content": "既存サービス導入は追加60万円、保守20万円。来期の期待便益は120万円相当という見積り。今後の費用欄の合計は80万円。",
+      "cost": 1,
+      "visual": "report"
+    },
+    {
+      "id": "risk",
+      "title": "品質監査メモ",
+      "content": "継続案は重大な技術リスクがあり、便益見積りには不確実性がある。代替案にも移行リスクはある。",
       "cost": 1,
       "visual": "clipping"
     },
     {
-      "id": "chat",
-      "title": "放課後の会話",
-      "content": "「平均3000円なんてうらやましい」「うちはそんなにもらってない」と話している。だれが平均より多いかは、この会話だけでは分からない。",
+      "id": "team",
+      "title": "メンバーの声",
+      "content": "「ここまで作ったのに」「苦労が無駄になる」。気持ちは重要だが将来の費用便益とは区別する。",
       "cost": 1,
-      "visual": "photo"
+      "visual": "news"
     }
   ],
   "required_evidence": [
-    "survey",
-    "tally"
+    "spent",
+    "finish",
+    "switch"
   ],
   "required_link": [
-    "tally",
-    "survey"
+    "spent",
+    "finish"
   ],
-  "link_prompt": "平均の計算のもとになった資料と、平均の読み方に条件を付ける資料。両方の関係を組みます。",
-  "headline_fragments": [],
-  "correct_fragments": [],
+  "link_prompt": "取り戻せない支払い、これからの負担、別案の条件。それぞれの役割を分けて比べます。",
+  "headline_fragments": [
+    {
+      "id": "f0",
+      "text": "支払済み300万円は将来の比較から分離",
+      "kind": "correct",
+      "reason": "支払済みの300万円はどちらを選んでも戻らず、将来の比較から分離する。",
+      "evidence": [
+        "spent"
+      ]
+    },
+    {
+      "id": "f1",
+      "text": "継続案の追加費用は150万円",
+      "kind": "correct",
+      "reason": "継続案を完成させるには追加で150万円かかる。",
+      "evidence": [
+        "finish"
+      ]
+    },
+    {
+      "id": "f2",
+      "text": "代替案の追加費用は80万円",
+      "kind": "correct",
+      "reason": "代替案は追加60万円と保守20万円で合計80万円かかる。",
+      "evidence": [
+        "switch"
+      ]
+    },
+    {
+      "id": "f3",
+      "text": "300万円を使ったので必ず継続",
+      "kind": "misread-statistic",
+      "reason": "300万円はどちらを選んでも戻らず、将来の判断材料にならない（サンクコスト）。",
+      "evidence": [
+        "spent",
+        "minutes"
+      ]
+    },
+    {
+      "id": "f4",
+      "text": "期待便益だけで全て断定できる",
+      "kind": "causal-claim",
+      "reason": "継続案には技術上のリスクがあり、見込まれる効果が実際に出るかも分からないと書かれている。効果の見積りだけでは断定できない。",
+      "evidence": [
+        "risk"
+      ]
+    },
+    {
+      "id": "f5",
+      "text": "過去の苦労は将来の利益そのもの",
+      "kind": "ignored-counter-evidence",
+      "reason": "チーム自身が「気持ちは重要だが将来の費用便益とは区別する」としている。",
+      "evidence": [
+        "team",
+        "spent"
+      ]
+    },
+    {
+      "id": "f6",
+      "text": "代替案は費用ゼロ",
+      "kind": "ignored-counter-evidence",
+      "reason": "代替案にも追加60万円と保守20万円の計80万円が発生する。",
+      "evidence": [
+        "switch"
+      ]
+    },
+    {
+      "id": "f7",
+      "text": "分からないことは何もない",
+      "kind": "ignored-counter-evidence",
+      "reason": "監査メモにはまだ分からないことがあると書かれ、継続案の便益も「最大100万円」の見積りにすぎない。",
+      "evidence": [
+        "risk",
+        "finish"
+      ]
+    }
+  ],
+  "correct_fragments": [
+    "f0",
+    "f1",
+    "f2"
+  ],
   "debrief": {
-    "explanation": "平均3000円は、25人の合計75000円を人数で割った値で、計算は合っている。ただし、1人の39000円が平均を大きく上げていて、24人は1000円から2000円の間にいる。平均だけでは、ほとんどの人の金額は分からない。",
-    "takeaway": "平均を見たら、「いちばん多い金額は？」「真ん中の人は？」も確かめる。1人の大きな値が平均を動かすことがある。",
+    "explanation": "返金不可の300万円はどの方針でも戻らない。将来の費用は継続150万円・代替80万円と読めるが、便益は見積りで、両案に別のリスクが残る。来期条件を重視する方針と、未確認の長期目的を調べる方針、保留は前提を区別して説明する。",
+    "takeaway": "「使ってしまった」と「これから引き受ける」を分ける。結果がよかったか悪かったかだけで当時の判断や人を評価せず、当時の情報と前提へ戻る。",
     "visualGuide": {
-      "title": "「平均3000円」でも、ほとんどの人は1500円",
-      "intro": "平均は、合計を人数で割った値。1人だけ大きな金額があると、平均はその方へ引っぱられる。今回は、平均のもとになった回答に注目しよう。",
-      "image": "cases/case-06/debrief/mean-outlier-mechanism.png",
-      "imageAlt": "平均と外れ値の図解。24人は1000円から2000円で合計36000円、1人だけ39000円。合計75000円を25人で割ると平均3000円。真ん中の人は1500円。",
+      "title": "「ここまで使った」が、やめにくくする。",
+      "intro": "取り戻せない費用や労力が、続ける判断に影響することがある。これを「サンクコスト効果」という。過去に使った額と、これからの見込みを分けよう。",
+      "imageAlt": "サンクコスト効果の図解。支払済み300万円はどの方針でも返金なし。今後の費用は継続案150万円、代替案80万円。両案の便益は見積りで、それぞれリスクがある。",
       "panels": [
         {
-          "title": "平均の計算は合っている",
-          "body": "25人の合計75000円を25人で割ると3000円。集計係のメモどおりで、計算のまちがいではない。",
+          "title": "過去に使った300万円",
+          "body": "支払済みの300万円は返金されない。「もったいない」という気持ちと、今後の費用の比較を分ける。",
           "evidence": [
-            "tally"
+            "spent",
+            "team"
           ]
         },
         {
-          "title": "1人の39000円が平均を上げた",
-          "body": "24人の合計は36000円で、1人あたり1500円。そこに39000円が加わると、平均は3000円まで上がる。",
+          "title": "継続案のこれから",
+          "body": "追加120万円と保守30万円で、今後の費用は150万円。来期の便益は最大100万円相当の見積り。技術リスクも残る。",
           "evidence": [
-            "survey",
-            "tally"
+            "finish",
+            "risk"
           ]
         },
         {
-          "title": "ほとんどの人は1500円くらい",
-          "body": "いちばん多い金額は1500円。大きい順に並べて真ん中にくる人も1500円。平均3000円より、こちらの方がクラスの様子に近い。",
+          "title": "代替案のこれから",
+          "body": "導入60万円と保守20万円で、今後の費用は80万円。来期の便益は120万円相当の見積り。移行リスクも残る。",
           "evidence": [
-            "survey",
-            "teacher"
+            "switch",
+            "risk"
           ]
         }
       ],
-      "conclusion": "新聞には「1人の大きな金額を含めた平均」で、「いちばん多いのは1500円」と書き足す必要がある。",
-      "limit": "39000円の子がふだんいくらもらっているかや、回答しなかった人の金額は、この資料だけでは分からない。",
-      "takeaway": "平均は？ と一緒に、いちばん多いのは？ 真ん中は？ も確かめよう。"
+      "conclusion": "使った300万円を理由にする前に、これからの費用・見込み・リスクを比べよう。",
+      "limit": "どちらの案も、見積りどおりの便益が得られるとは限らない。何を優先するかによって、継続・変更・保留の判断は変わる。",
+      "takeaway": "「使ってしまった額」と「これから引き受けること」を分けよう。",
+      "image": "cases/case-06/debrief/sunk-cost-mechanism.png"
     }
   },
-  "disclaimer": "登場人物・学校・金額はすべて架空です。",
+  "disclaimer": "登場人物・企業・統計・広告はすべて架空です。",
   "analysis_tasks": [],
-  "schemaVersion": 2,
   "v2": {
-    "revision": 1,
+    "revision": 2,
     "modes": [
-      "decoding"
+      "decoding",
+      "decision"
     ],
     "decoding": [
       {
-        "id": "average_meaning",
-        "prompt": "新聞の「平均3000円」は、どう読むのが資料に合う？",
+        "id": "past_cost",
+        "prompt": "すでに払った300万円を、いまの方針比較でどう扱う？",
         "options": [
           {
-            "id": "typical",
-            "text": "クラスのほとんどの人が、3000円くらいもらっている。",
+            "id": "recover_if_continue",
+            "text": "継続さえ選べば、すでに払った300万円が返金される。",
             "status": "contradicted",
             "accepted": false,
-            "reason": "回答一覧では24人が1000円から2000円の間で、3000円の人はいない。",
+            "reason": "支払い明細が返金不可と明記している。",
             "evidence": [
-              "survey"
+              "spent"
             ]
           },
           {
-            "id": "pulled_up",
-            "text": "合計を人数で割った値で、1人の39000円が平均を大きく上げている。",
-            "status": "supported",
-            "accepted": true,
-            "reason": "集計係のメモの計算と、回答一覧の39000円を合わせた説明。",
+            "id": "past_is_benefit",
+            "text": "過去に300万円を投じた事実だけで、来期の利益が保証される。",
+            "status": "uncertain",
+            "accepted": false,
+            "reason": "支払いの事実から将来便益は保証できない。",
             "evidence": [
-              "survey",
-              "tally"
+              "spent",
+              "finish"
             ]
           },
           {
-            "id": "median_view",
-            "text": "真ん中の人は1500円で、平均3000円は多くの人の金額より高い。",
+            "id": "separate_past",
+            "text": "どの案を選んでも返金されない支払いとして、今後の負担とは区別して記録する。",
             "status": "supported",
             "accepted": true,
-            "reason": "先生のコメントの真ん中の金額と、回答一覧の分布を合わせた説明。",
+            "reason": "支払済みで返金不可という条件は、継続の義務でも将来便益でもない。",
             "evidence": [
-              "teacher",
-              "survey"
+              "spent"
             ]
           }
         ]
       },
       {
-        "id": "what_to_add",
-        "prompt": "新聞に書き足すと、読む人の誤解が減るものは？",
+        "id": "future_comparison",
+        "prompt": "将来条件について、資料から比較できる範囲は？",
         "options": [
           {
-            "id": "add_typical",
-            "text": "いちばん多い金額は1500円で、真ん中の人も1500円だと書き足す。",
-            "status": "supported",
-            "accepted": true,
-            "reason": "回答一覧と先生のコメントに、平均とは別の目安が書いてある。",
-            "evidence": [
-              "survey",
-              "teacher"
-            ]
-          },
-          {
-            "id": "call_mistake",
-            "text": "平均3000円は計算まちがいだと書き直す。",
+            "id": "same_with_past",
+            "text": "継続案に過去の300万円を足し、その額だけを代替案の将来費用と比較すれば十分である。",
             "status": "contradicted",
             "accepted": false,
-            "reason": "75000円を25人で割ると3000円。計算は合っているので、まちがいとは言えない。",
+            "reason": "過去の返金不可費用と今後の費用を混ぜている。",
             "evidence": [
-              "tally"
+              "spent",
+              "finish",
+              "switch"
             ]
           },
           {
-            "id": "usual_unknown",
-            "text": "39000円の子がふだんいくらもらっているかは、この資料では分からない。",
+            "id": "compare_forward",
+            "text": "継続案は今後150万円、代替案は80万円の費用見積り。便益の見積りと費用の記録を分けて比較する。",
+            "status": "supported",
+            "accepted": true,
+            "reason": "両案の費用欄は比較できるが、最大便益や期待便益は確実な回収額ではない。",
+            "evidence": [
+              "finish",
+              "switch"
+            ]
+          },
+          {
+            "id": "free_alternative",
+            "text": "代替案には導入費用も保守費用も発生しない。",
+            "status": "contradicted",
+            "accepted": false,
+            "reason": "代替案にも追加60万円と保守20万円の記載がある。",
+            "evidence": [
+              "switch"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "risk_limit",
+        "prompt": "見積りの数字を読んでも、まだ分からないことは？",
+        "options": [
+          {
+            "id": "risk_free_switch",
+            "text": "代替案の期待便益が高いので、移行に失敗する可能性はない。",
+            "status": "contradicted",
+            "accepted": false,
+            "reason": "監査メモは代替案にも移行リスクがあると記している。",
+            "evidence": [
+              "risk",
+              "switch"
+            ]
+          },
+          {
+            "id": "risk_unresolved",
+            "text": "継続案には技術リスク、代替案には移行リスクがある。来期の便益の実現額はまだ確定していない。",
             "status": "uncertain",
             "accepted": true,
-            "reason": "先生のコメントは誕生日のお金を足したと伝えるだけで、ふだんの金額は資料にない。",
+            "reason": "監査の指摘は費用見積りだけでは解消されない。",
             "evidence": [
-              "teacher"
+              "risk",
+              "finish",
+              "switch"
+            ]
+          },
+          {
+            "id": "benefit_guaranteed",
+            "text": "継続案は最大100万円の便益があるので、来期に100万円を必ず回収できる。",
+            "status": "uncertain",
+            "accepted": false,
+            "reason": "最大という見積りは回収を約束するものではなく、監査にはまだ分からない点がある。",
+            "evidence": [
+              "risk",
+              "finish"
             ]
           }
         ]
       }
     ],
     "graph": {
-      "prompt": "新聞の平均を支える資料と、平均の読み方に条件を付ける資料。両方の関係を残してください。",
+      "prompt": "過去の費用が将来比較をどう限定し、両案の見積りがどんな比較関係にあるかを残してください。",
       "paths": [
         [
           {
-            "from": "tally",
-            "to": "notice",
-            "relation": "supports"
+            "from": "spent",
+            "to": "finish",
+            "relation": "qualifies"
           },
           {
-            "from": "survey",
-            "to": "notice",
+            "from": "finish",
+            "to": "switch",
             "relation": "qualifies"
           }
         ],
         [
           {
-            "from": "tally",
-            "to": "notice",
-            "relation": "supports"
+            "from": "spent",
+            "to": "switch",
+            "relation": "qualifies"
           },
           {
-            "from": "teacher",
-            "to": "notice",
+            "from": "finish",
+            "to": "switch",
             "relation": "qualifies"
           }
         ]
       ]
     },
-    "reportPrompt": "平均3000円がどう計算されたかと、ほとんどの人の金額を分けて報告してください。数値の再計算は不要です。",
+    "decision": {
+      "prompt": "編集局のシミュレーションでは追加投入の上限を150万円と置く。実際の費用・便益・リスクの資料を読み、何を優先するかと条件付き方針を記録してください。",
+      "objectives": [
+        {
+          "id": "near_term",
+          "text": "来期の追加負担と見積便益を優先する"
+        },
+        {
+          "id": "capability",
+          "text": "内部で技術を持つ可能性を調べることを優先する"
+        },
+        {
+          "id": "uncertainty",
+          "text": "不確実な条件を先に確認する"
+        }
+      ],
+      "resources": 150,
+      "options": [
+        {
+          "id": "continue",
+          "text": "継続案に進む",
+          "cost": 150,
+          "outcome": "シミュレーション上、今後150万円の枠を継続案に使う。来期便益の最大100万円は保証されず、技術リスクの確認が必要な状態で次の検討へ進む。",
+          "tradeoff": "内部技術の将来価値を見込むなら、それは未確認の前提として記録する。来期の費用負担と技術リスクを引き受ける。"
+        },
+        {
+          "id": "switch",
+          "text": "代替サービス案に移る",
+          "cost": 80,
+          "outcome": "シミュレーション上、今後80万円の枠を代替案に使う。期待便益120万円は保証ではなく、移行リスクが残る。",
+          "tradeoff": "来期見積りを重視できる一方、移行失敗や内部技術の扱いは未解決。過去費用が返金されるわけではない。"
+        },
+        {
+          "id": "stop",
+          "text": "新規投入をいったん止める",
+          "cost": 0,
+          "outcome": "シミュレーション上、この場で新たな投入を確約しない。支払済み300万円は戻らず、便益を得る時期も先送りになる。",
+          "tradeoff": "追加負担は抑えるが、現在の配信上の課題や代替導入の機会を残す。"
+        },
+        {
+          "id": "hold",
+          "text": "追加確認を条件に保留する",
+          "cost": 0,
+          "outcome": "シミュレーション上、監査と便益見積りの確認を次の判断条件として記録する。今この場での投入は確約しない。",
+          "tradeoff": "情報を待つ間の遅延を受け入れる。何を確かめたら方針を変えるかを明示する。"
+        }
+      ],
+      "revealDocuments": [
+        "risk"
+      ],
+      "updatePrompt": "監査の開示前後で、目的と方針を維持するか更新するか。支持資料・反対材料・まだ仮定している点を添えて記録してください。"
+    },
+    "reportPrompt": "過去費用、将来の見積り、残るリスク、選んだ目的と方針を区別して報告してください。実現していない便益を事実として書かないでください。",
     "board": {
-      "title": "新聞の見出しに説明を添える",
-      "prompt": "平均3000円がどんな計算から出たかを、資料で確かめましょう。",
+      "title": "判断の前に費用と見込みを分ける",
+      "prompt": "過去の支払い、今後の費用、まだ確定していない見込みを整理しましょう。",
       "tasks": [
         {
-          "id": "typical",
-          "title": "平均の読み方",
-          "prompt": "平均のもとになった計算と、ほとんどの人の金額を資料で確かめましょう。",
+          "id": "past",
+          "title": "会議の判断メモ",
+          "prompt": "支払った費用が今後の案を選ぶことでどう変わるか確かめましょう。",
           "parts": [
             {
-              "text": "平均3000円は"
+              "text": "支払済みの300万円は"
             },
             {
-              "field": "basis"
+              "field": "past"
             },
             {
-              "text": "。ほとんどの人のおこづかいは"
-            },
-            {
-              "field": "typical"
-            },
-            {
-              "text": "。"
+              "text": "。今後の費用とは分けて考える。"
             }
           ],
           "fields": [
             {
-              "id": "basis",
-              "label": "どんな値か",
-              "original": "everyone",
+              "id": "past",
+              "label": "過去の費用の扱い",
+              "original": "recover",
               "options": [
                 {
-                  "id": "everyone",
-                  "text": "みんながもらっている金額"
+                  "id": "recover",
+                  "text": "継続すれば返金される"
                 },
                 {
-                  "id": "sum_div",
-                  "text": "25人の合計を人数で割った値"
+                  "id": "sunk",
+                  "text": "どの案を選んでも返金されない"
                 },
                 {
-                  "id": "mistake",
-                  "text": "計算のまちがい"
-                }
-              ]
-            },
-            {
-              "id": "typical",
-              "label": "ほとんどの人の金額",
-              "original": "about3000",
-              "options": [
-                {
-                  "id": "about3000",
-                  "text": "3000円くらい"
-                },
-                {
-                  "id": "about1500",
-                  "text": "1500円くらい"
-                },
-                {
-                  "id": "unknown",
-                  "text": "まだ分からない"
+                  "id": "switch",
+                  "text": "代替案を選べば返金される"
                 }
               ]
             }
@@ -275,59 +432,150 @@
           "rules": [
             {
               "values": {
-                "basis": "sum_div",
-                "typical": "about1500"
+                "past": "sunk"
               },
               "disposition": "revise",
               "evidence": [
-                "tally_fact",
-                "survey_fact"
+                "minutes_fact",
+                "spent_fact"
               ],
-              "explanation": "合計75000円を25人で割った平均です。24人は1000円から2000円の間で、1500円がいちばん多いです。"
-            },
-            {
-              "values": {
-                "basis": "sum_div",
-                "typical": "about1500"
-              },
-              "disposition": "revise",
-              "evidence": [
-                "tally_fact",
-                "teacher_fact"
-              ],
-              "explanation": "合計75000円を25人で割った平均です。大きい順に並べて真ん中にくる人は1500円です。"
+              "explanation": "支払い明細では返金不可です。過去の支払いだけでは今後どの案に進むかは決まりません。"
             }
           ],
-          "explanation": "平均3000円は計算のまちがいではなく、1人の39000円を含めた値です。ほとんどの人は1500円くらいです。"
+          "explanation": "会議の主張と支払い明細を比べましょう。支払済みの300万円は今後の選択で返金される費用ではありません。"
+        },
+        {
+          "id": "future",
+          "title": "将来の比較メモ",
+          "prompt": "両案の今後の費用と、便益が確定しているかを分けましょう。",
+          "parts": [
+            {
+              "text": "今後の費用は、継続案が"
+            },
+            {
+              "field": "continue_cost"
+            },
+            {
+              "text": "、代替案が"
+            },
+            {
+              "field": "switch_cost"
+            },
+            {
+              "text": "。来期の便益は"
+            },
+            {
+              "field": "benefit"
+            },
+            {
+              "text": "。"
+            }
+          ],
+          "fields": [
+            {
+              "id": "continue_cost",
+              "label": "継続案の費用",
+              "original": "one_fifty",
+              "options": [
+                {
+                  "id": "one_fifty",
+                  "text": "150万円"
+                },
+                {
+                  "id": "four_fifty",
+                  "text": "450万円"
+                }
+              ]
+            },
+            {
+              "id": "switch_cost",
+              "label": "代替案の費用",
+              "original": "eighty",
+              "options": [
+                {
+                  "id": "eighty",
+                  "text": "80万円"
+                },
+                {
+                  "id": "three_eighty",
+                  "text": "380万円"
+                }
+              ]
+            },
+            {
+              "id": "benefit",
+              "label": "便益の確かさ",
+              "original": "guaranteed",
+              "options": [
+                {
+                  "id": "guaranteed",
+                  "text": "保証された金額である"
+                },
+                {
+                  "id": "estimate",
+                  "text": "見積りであり、両案にリスクがある"
+                }
+              ]
+            }
+          ],
+          "rules": [
+            {
+              "values": {
+                "continue_cost": "one_fifty",
+                "switch_cost": "eighty",
+                "benefit": "estimate"
+              },
+              "disposition": "revise",
+              "evidence": [
+                "finish_fact",
+                "switch_fact",
+                "risk_fact",
+                "risk_transfer"
+              ],
+              "explanation": "今後の費用は150万円と80万円です。便益は見積りで、技術リスクと移行リスクが残ります。"
+            }
+          ],
+          "explanation": "両案の見積りと監査メモを確認しましょう。過去の費用を今後の費用に足さず、便益を保証された金額にしないでください。"
         }
       ],
       "excerpts": [
         {
-          "id": "notice_fact",
-          "documentId": "notice",
-          "quote": "「2年3組のおこづかいは平均3000円！」と大きく書かれている。計算のもとになった回答は載っていない。"
+          "id": "minutes_fact",
+          "documentId": "minutes",
+          "quote": "チームは「すでに300万円使ったのだから今さら止められない」と主張。"
         },
         {
-          "id": "survey_fact",
-          "documentId": "survey",
-          "quote": "24人は1000円から2000円の間で、1500円がいちばん多い。1人だけ39000円と書いてある。"
+          "id": "spent_fact",
+          "documentId": "spent",
+          "quote": "過去の開発費300万円は支払済みで返金不可。今後の選択で回収額は変わらない。"
         },
         {
-          "id": "tally_fact",
-          "documentId": "tally",
-          "quote": "25人の合計は75000円。75000円を25人で割って、平均3000円とした。"
+          "id": "finish_fact",
+          "documentId": "finish",
+          "quote": "完成まで追加で120万円、保守に30万円。来期の期待便益は最大100万円相当という見積り。今後の費用欄の合計は150万円。"
         },
         {
-          "id": "teacher_fact",
-          "documentId": "teacher",
-          "quote": "金額の大きい順に並べて、真ん中にくる人は1500円。"
+          "id": "switch_fact",
+          "documentId": "switch",
+          "quote": "既存サービス導入は追加60万円、保守20万円。来期の期待便益は120万円相当という見積り。今後の費用欄の合計は80万円。"
         },
         {
-          "id": "chat_fact",
-          "documentId": "chat",
-          "quote": "だれが平均より多いかは、この会話だけでは分からない。"
+          "id": "risk_fact",
+          "documentId": "risk",
+          "quote": "継続案は重大な技術リスクがあり"
+        },
+        {
+          "id": "team_fact",
+          "documentId": "team",
+          "quote": "「ここまで作ったのに」「苦労が無駄になる」。気持ちは重要だが将来の費用便益とは区別する。"
+        },
+        {
+          "id": "risk_transfer",
+          "documentId": "risk",
+          "quote": "代替案にも移行リスクはある。"
         }
       ]
     }
-  }
+  },
+  "schemaVersion": 2
 }

@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { CASE01, docTile, gotoCase01, openDoc } from './helpers';
+import { CASE03, docTile, gotoCase03, openDoc } from './helpers';
 
 /**
  * #179: スマホ幅では調査資料を横スクロールの 1 列にし、デスクを初期表示に入れる。
@@ -17,7 +17,7 @@ test.describe('スマホ幅の資料列', () => {
   test.beforeEach(async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== 'mobile-chromium', 'スマホ幅だけ');
     await page.setViewportSize({ width: 375, height: 812 });
-    await gotoCase01(page);
+    await gotoCase03(page);
   });
 
   test('資料列だけが横に伸び、次にやることとデスクのタブが初期表示に入る', async ({
@@ -71,27 +71,27 @@ test.describe('スマホ幅の資料列', () => {
   });
 
   test('既読のチェックと開けない錠の印が列の中でも見える', async ({ page }, testInfo) => {
-    await openDoc(page, CASE01.docs.ad);
+    await openDoc(page, CASE03.docs.ad);
     const dialog = page.getByRole('dialog');
     await dialog.getByRole('button', { name: '資料を閉じる' }).click();
     await expect(dialog).toBeHidden();
-    const read = docTile(page, CASE01.docs.ad);
+    const read = docTile(page, CASE03.docs.ad);
     await expect(read).toHaveAccessibleName(/調査済み/);
     await expect(read.locator('.doc-tile__status')).toContainText('読んだ');
     await expect(read.locator('.doc-tile__status .doc-tile__icon')).toBeInViewport();
 
     // 有料 4 件を開いて予算を使い切ると、残りの有料資料は錠と理由付きで開けなくなる
     for (const title of [
-      CASE01.docs.trial,
-      CASE01.docs.paid,
-      CASE01.docs.retained,
-      CASE01.docs.memo,
+      CASE03.docs.trial,
+      CASE03.docs.paid,
+      CASE03.docs.retained,
+      CASE03.docs.memo,
     ]) {
       await openDoc(page, title);
       await dialog.getByRole('button', { name: '資料を閉じる' }).click();
       await expect(dialog).toBeHidden();
     }
-    const locked = docTile(page, CASE01.docs.reviews);
+    const locked = docTile(page, CASE03.docs.reviews);
     await expect(locked).toHaveAttribute('aria-disabled', 'true');
     await locked.focus();
     await expect(locked.locator('.doc-tile__reason')).toContainText('予算不足');
@@ -103,7 +103,7 @@ test.describe('スマホ幅の資料列', () => {
 test('1280px では資料は縦 1 列のままで横スクロールしない', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'chromium', 'デスクトップ幅だけ');
   await page.setViewportSize({ width: 1280, height: 800 });
-  await gotoCase01(page);
+  await gotoCase03(page);
   const list = strip(page);
   const metrics = await list.evaluate((el) => ({
     scrollWidth: el.scrollWidth,

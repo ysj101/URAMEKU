@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "allowedOrigins": [
+    "http://localhost:5173",
+    "http://localhost:4175",
+    "http://127.0.0.1:4175"
+  ],
+  "services": [
+    {
+      "serviceName": "urameku",
+      "journeys": [
+        {
+          "id": "onboarding",
+          "steps": [
+            {
+              "id": "started"
+            },
+            {
+              "id": "initial-choice-confirmed"
+            },
+            {
+              "id": "updated-choice-confirmed"
+            },
+            {
+              "id": "documents-reviewed"
+            },
+            {
+              "id": "report-prepared"
+            },
+            {
+              "id": "report-submitted",
+              "terminal": true
+            }
+          ],
+          "timeoutMinutes": 30
+        },
+        {
+          "id": "case01-report",
+          "steps": [
+            {
+              "id": "started"
+            },
+            {
+              "id": "report-opened"
+            },
+            {
+              "id": "report-submitted",
+              "terminal": true
+            }
+          ],
+          "timeoutMinutes": 30
+        },
+        {
+          "id": "case01-reading",
+          "steps": [
+            {
+              "id": "started"
+            },
+            {
+              "id": "document-opened",
+              "terminal": true
+            }
+          ],
+          "timeoutMinutes": 30
+        }
+      ]
+    }
+  ],
+  "retentionDays": 14,
+  "rateLimitPerMinute": 600,
+  "maxEvents": 100000,
+  "maxDatabaseBytes": 104857600
+}

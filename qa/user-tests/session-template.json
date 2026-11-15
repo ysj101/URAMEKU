@@ -27,7 +27,7 @@
       "help_given": []
     },
     {
-      "case_id": "case-01",
+      "case_id": "case-03",
       "started_at": "00:00",
       "ended_at": "00:00",
       "minutes": 0,
@@ -41,7 +41,7 @@
   "stuck_points": [
     {
       "time": "00:00",
-      "case_id": "case-01",
+      "case_id": "case-03",
       "screen": "board",
       "action": "link_select",
       "observation": "",

@@ -1,141 +1,143 @@
 {
   "id": "case-05",
-  "title": "急上昇するグラフ",
-  "bias": "スケール効果とフレーミング",
+  "title": "8割が支持の正体",
+  "bias": "社会的証明とサンプル選択",
   "difficulty": "HARD",
   "estimated_time": "5〜10分",
-  "intro": "急上昇に見える評価グラフ。数字の出所、軸、調査の対象を読む。速報として伝えるか、表現を留保するか、追加確認するかを根拠付きで決めよう。",
+  "intro": "「利用者の8割が支持」という速報を読んだ時点の判断を記録しよう。募集方法を開示した後、支持判断と、記事が言える範囲を分けて考える。",
   "budget": 4,
   "documents": [
     {
-      "id": "graphic",
-      "title": "広告の折れ線グラフ",
-      "content": "満足評価が「40から50へ急上昇」と表示。縦軸は35から55の狭い範囲で描かれている。",
+      "id": "headline",
+      "title": "速報記事",
+      "content": "「利用者の80%が新サービスを支持！」。調査概要へのリンクがない。",
       "cost": 0,
-      "visual": "advert"
+      "visual": "news"
     },
     {
-      "id": "raw",
-      "title": "元データ",
-      "content": "前月は調査回答100人中40人、今月は100人中50人が満足と回答。評価は40%→50%。",
-      "cost": 1,
-      "visual": "ledger"
-    },
-    {
-      "id": "axis",
-      "title": "グラフの制作指示",
-      "content": "縦軸の最小値を35%に設定して変化を強調。0〜100%の軸では視覚上の差は小さい。",
+      "id": "count",
+      "title": "オンライン投票の集計表",
+      "content": "回答した200人中160人が「支持」。この回答者内の割合は80%。",
       "cost": 1,
       "visual": "report"
     },
     {
-      "id": "questions",
-      "title": "設問・対象者の記録",
-      "content": "両月の設問文は同一。調査対象の選び方は完全には同じでなく、変化の因果関係は判断できない。",
+      "id": "invite",
+      "title": "アンケートの募集方法",
+      "content": "新サービスの公式ファンコミュニティにのみアンケートリンクを投稿。任意回答。",
       "cost": 1,
       "visual": "clipping"
     },
     {
-      "id": "press",
-      "title": "広報部のコメント",
-      "content": "「満足度が25%アップ」と表現。40%から50%への相対増加率は25%、絶対差は10ポイント。",
+      "id": "population",
+      "title": "利用者全体の資料",
+      "content": "利用者は約20,000人。投票した200人が母集団を代表するよう抽出された証拠はない。",
       "cost": 1,
-      "visual": "news"
+      "visual": "ledger"
     },
     {
-      "id": "rumor",
-      "title": "SNSのまとめ",
-      "content": "「サービスの品質が倍になった」との投稿。元データを示していない。",
+      "id": "other",
+      "title": "別の調査会社の発表",
+      "content": "無作為抽出を目指した別調査では1,000人中540人が支持。ただし対象時点や質問の違いもある。",
+      "cost": 1,
+      "visual": "report"
+    },
+    {
+      "id": "comments",
+      "title": "SNSの反応",
+      "content": "支持・反対双方の投稿がある。投稿量から実際の支持率を確定することはできない。",
       "cost": 1,
       "visual": "news"
     }
   ],
   "required_evidence": [
-    "raw",
-    "axis",
-    "questions"
+    "count",
+    "invite",
+    "population"
   ],
   "required_link": [
-    "graphic",
-    "raw"
+    "count",
+    "invite"
   ],
-  "link_prompt": "グラフの見せ方と回答記録、比較を限定する調査条件。それぞれの資料の役割を組みます。",
+  "link_prompt": "集計結果と、誰が回答へ参加できたか。その関係から、どの範囲の人について説明できるかを考えます。",
   "headline_fragments": [
     {
       "id": "f0",
-      "text": "満足評価は40%から50%へ",
+      "text": "8割支持は任意回答者200人での結果",
       "kind": "correct",
-      "reason": "元データでは満足評価が100人中40人から50人へ、40%から50%に変わった。",
+      "reason": "80%は任意回答者200人のうち160人が支持した比率である。",
       "evidence": [
-        "raw"
+        "count",
+        "invite"
       ]
     },
     {
       "id": "f1",
-      "text": "絶対差は10ポイント",
+      "text": "募集先は公式ファンコミュニティ",
       "kind": "correct",
-      "reason": "40%から50%への変化を絶対差で表すと10ポイントである。",
+      "reason": "回答の募集リンクは公式ファンコミュニティにだけ投稿された。",
       "evidence": [
-        "raw",
-        "press"
+        "invite"
       ]
     },
     {
       "id": "f2",
-      "text": "縦軸の範囲が変化を大きく見せている",
+      "text": "利用者全体の支持率とは断定できない",
       "kind": "correct",
-      "reason": "縦軸を狭い範囲に切った制作指示により、10ポイントの差が大きく見えている。",
+      "reason": "利用者20,000人を代表する抽出ではなく、別調査の支持率も異なるため全体には広げられない。",
       "evidence": [
-        "graphic",
-        "axis"
+        "population",
+        "other"
       ]
     },
     {
       "id": "f3",
-      "text": "満足度が2倍に増加した",
+      "text": "利用者2万人のうち8割が支持",
       "kind": "misread-statistic",
-      "reason": "40%→50%は1.25倍（相対+25%）で、「2倍」は出所不明のSNS投稿だけが根拠。",
+      "reason": "80%は回答者200人内の比率で、利用者20,000人を代表する抽出ではない。母数をすり替えている。",
       "evidence": [
-        "raw",
-        "press",
-        "rumor"
+        "count",
+        "population"
       ]
     },
     {
       "id": "f4",
-      "text": "因果関係が厳密に証明された",
-      "kind": "causal-claim",
-      "reason": "対象者の選び方が同一でなく、因果関係は判断できないと設問資料に明記されている。",
+      "text": "アンケート結果はすべて無意味",
+      "kind": "overgeneralization",
+      "reason": "160÷200=80%は回答者内の比率として正しく、適用範囲が狭いだけで無意味とは言えない。",
       "evidence": [
-        "questions"
+        "count"
       ]
     },
     {
       "id": "f5",
-      "text": "回答者全員が満足",
-      "kind": "misread-statistic",
-      "reason": "今月も満足は100人中50人で、半数は満足と回答していない。",
+      "text": "反対者は存在しない",
+      "kind": "ignored-counter-evidence",
+      "reason": "回答200人中40人は支持ではなく、SNSの反対投稿や別調査の不支持も存在する。",
       "evidence": [
-        "raw"
+        "count",
+        "comments",
+        "other"
       ]
     },
     {
       "id": "f6",
-      "text": "変化はゼロである",
+      "text": "回答者は無作為抽出だった",
       "kind": "ignored-counter-evidence",
-      "reason": "40人から50人への増加は実数として存在する。",
+      "reason": "ファンコミュニティにのみリンクを投稿した任意回答で、無作為抽出の証拠はない。",
       "evidence": [
-        "raw"
+        "invite",
+        "population"
       ]
     },
     {
       "id": "f7",
-      "text": "数字の出所は存在しない",
-      "kind": "ignored-counter-evidence",
-      "reason": "各月100人の回答という元データが存在する。出所が無いのは噂の投稿のほう。",
+      "text": "どの調査も完全に正しい",
+      "kind": "overgeneralization",
+      "reason": "別調査にも対象時点や質問の違いがあり、SNSの投稿量からも支持率は確定できない。",
       "evidence": [
-        "raw",
-        "press"
+        "other",
+        "comments"
       ]
     }
   ],
@@ -145,41 +147,41 @@
     "f2"
   ],
   "debrief": {
-    "explanation": "回答集団内では40%から50%へ変化し、絶対差10ポイントと相対増加25%は別の表し方である。縦軸35〜55は変化を強く見せるが、記録された差を消すわけではない。対象の選び方が異なり、原因や全利用者の変化は未確認である。",
-    "takeaway": "見た目の印象、測定値、比較条件、掲載方針を分ける。限定付き掲載と追加確認と保留は、それぞれ引き受ける制約を説明する。",
+    "explanation": "回答者200人中160人の支持は回答者内の事実である。募集先が限られ、参加も自由だったため、この結果が利用者全体にも当てはまるとは言い切れない。別調査の1,000人中540人という結果も、時点と設問が違うため直ちに唯一の真実とはできない。",
+    "takeaway": "人気があるかという主張と、自分の目的に合うかという判断を分ける。代表性が未確認でも、逆向きの断定をしない。",
     "visualGuide": {
-      "title": "同じ変化でも、軸で大きく見える。",
-      "intro": "見せる範囲によって、変化の受け取り方が変わることがある。これも「フレーミング」の一つ。グラフの勢いと、記録された数字を分けて読もう。",
-      "imageAlt": "グラフの軸による見え方の図解。同じ40%から50%への変化を、縦軸35〜55%と0〜100%で比較。差は10ポイント、もとの40%からは25%増。",
+      "title": "「みんなが支持」が、判断の手がかりになる。",
+      "intro": "ほかの人の選択を、自分の判断の手がかりにすることがある。これを「社会的証明」という。ただし、誰の声が集まったかも確かめよう。",
+      "imageAlt": "社会的証明の図解。80%が支持という見出しのもとは、公式ファンコミュニティで自由参加した200人中160人。約20,000人の利用者全体の割合は未確認。",
       "panels": [
         {
-          "title": "記録された変化",
-          "body": "前月は回答100人中40人、今月は100人中50人が満足と回答した。割合は40%から50%へ変わった。",
+          "title": "人気が判断の手がかりになる",
+          "body": "「80%が支持」と聞いて、人気ならよさそうと感じることがある。",
           "evidence": [
-            "raw"
+            "headline"
           ]
         },
         {
-          "title": "軸で見た目が変わる",
-          "body": "縦軸35〜55%では、0〜100%の軸より同じ変化が大きく見える。軸の違いがあっても、記録された差は消えない。",
+          "title": "80%は回答した人の中の割合",
+          "body": "回答者200人中160人が支持した。募集先は公式ファンコミュニティだけで、回答は自由参加だった。",
           "evidence": [
-            "graphic",
-            "axis"
+            "count",
+            "invite"
           ]
         },
         {
-          "title": "10ポイントと25%増",
-          "body": "50%と40%の差は10ポイント。差の10をもとの40で割ると25%増になる。二つは表し方が違う。",
+          "title": "全体の声とは限らない",
+          "body": "利用者は約20,000人。回答者が全体を代表しているかは未確認。別調査は1,000人中540人だが、時点や質問も違う。",
           "evidence": [
-            "raw",
-            "press"
+            "population",
+            "other"
           ]
         }
       ],
-      "conclusion": "見た目が急上昇でも、何がどれだけ変わったかを数字と軸で確かめよう。",
-      "limit": "両月で対象者の選び方が完全には同じではない。変化の原因や、利用者全体でも同じ変化があったかは未確認。",
-      "takeaway": "グラフの軸・数字・調査対象をセットで確かめよう。",
-      "image": "cases/case-05/debrief/axis-framing-mechanism.png"
+      "conclusion": "回答者の80%が支持したことと、利用者全体の80%が支持したことは違う。",
+      "limit": "利用者全体の支持率は、この調査だけでは分からない。別調査の54%が唯一の正しい割合とも決められない。",
+      "takeaway": "「みんな」は誰のこと？ 人気の数字と、自分の目的に合うかを分けよう。",
+      "image": "cases/case-05/debrief/social-proof-mechanism.png"
     }
   },
   "disclaimer": "登場人物・企業・統計・広告はすべて架空です。",
@@ -187,265 +189,232 @@
   "v2": {
     "revision": 2,
     "modes": [
-      "decoding",
-      "decision"
+      "experiment",
+      "decoding"
     ],
     "decoding": [
       {
-        "id": "measured_change",
-        "prompt": "元データから直接伝えられる変化は？",
+        "id": "respondents",
+        "prompt": "80%という結果は、どの集団について直接確認できる？",
         "options": [
           {
-            "id": "double_quality",
-            "text": "品質そのものが2倍になったと測定された。",
+            "id": "meaningless_result",
+            "text": "任意回答なので、200人の回答内容についても何も言えない。",
             "status": "contradicted",
             "accepted": false,
-            "reason": "満足の回答割合の変化と品質の倍増は同じではない。",
+            "reason": "代表性の限界があっても、実際に回答した人の集計は読める。",
             "evidence": [
-              "raw",
-              "graphic"
+              "count",
+              "invite"
             ]
           },
           {
-            "id": "no_change",
-            "text": "軸が切られているので実際の回答結果には変化がない。",
-            "status": "contradicted",
-            "accepted": false,
-            "reason": "表示の強調があっても、40人から50人という記録の差は消えない。",
-            "evidence": [
-              "raw",
-              "axis"
-            ]
-          },
-          {
-            "id": "observed_change",
-            "text": "各月の回答100人のうち満足が40人から50人へ変わった。回答集団内の割合は40%から50%である。",
+            "id": "respondent_result",
+            "text": "ファンコミュニティ経由で任意に回答した200人の中で、160人が支持した結果である。",
             "status": "supported",
             "accepted": true,
-            "reason": "元データの対象と指標をその範囲のまま記述している。",
+            "reason": "集計表だけでなく、回答者が集まった方法も含めて適用範囲を示している。",
             "evidence": [
-              "raw"
+              "count",
+              "invite"
+            ]
+          },
+          {
+            "id": "population_result",
+            "text": "利用者約20,000人のうち80%が支持していることを直接数えた結果である。",
+            "status": "contradicted",
+            "accepted": false,
+            "reason": "集計は200人。利用者全体の抽出・集計ではない。",
+            "evidence": [
+              "count",
+              "population"
             ]
           }
         ]
       },
       {
-        "id": "axis_framing",
-        "prompt": "急上昇という見え方を読む際に必要な説明は？",
+        "id": "sampling",
+        "prompt": "回答者内の結果が利用者全体にも当てはまるか考えるとき、何に注意する？",
         "options": [
           {
-            "id": "axis_is_source",
-            "text": "縦軸の切り方だけを見れば元データの出所まで確認できる。",
-            "status": "uncertain",
+            "id": "random_sample",
+            "text": "母集団が大きくても、回答200人がいれば無作為抽出と同じように扱える。",
+            "status": "contradicted",
             "accepted": false,
-            "reason": "軸設定の指示は回答の収集方法や人数を証明する資料ではない。",
+            "reason": "人数の大小は募集経路と任意参加を無作為抽出へ変えない。",
             "evidence": [
-              "graphic",
-              "axis"
+              "invite",
+              "population"
             ]
           },
           {
-            "id": "axis_range",
-            "text": "縦軸の表示範囲は35〜55で、0〜100の軸とは同じ変化でも見た目の強さが異なる。",
+            "id": "not_representative",
+            "text": "募集先が限定され任意参加なので、全利用者を代表する抽出だとは確認できない。",
             "status": "supported",
             "accepted": true,
-            "reason": "広告の軸範囲と制作指示を突き合わせ、表示と元の測定を分けている。",
+            "reason": "募集方法と利用者全体の資料を照合する。代表性の証拠がないことと、全体の支持率を知ることは別。",
             "evidence": [
-              "graphic",
-              "axis"
+              "invite",
+              "population"
             ]
           },
           {
-            "id": "all_graphs_false",
-            "text": "軸が0から始まらないので、回答100人の記録は架空だと証明できる。",
+            "id": "reverse_majority",
+            "text": "代表性がないので、利用者全体では反対が多数だと確定する。",
             "status": "uncertain",
             "accepted": false,
-            "reason": "表現の強調とデータそのものの有無を混同している。",
+            "reason": "偏りの可能性から反対多数という逆向きの断定もできない。",
             "evidence": [
-              "graphic",
-              "axis"
+              "invite",
+              "population"
             ]
           }
         ]
       },
       {
-        "id": "cause_limit",
-        "prompt": "記事で原因まで断定する前に、何を留保する？",
+        "id": "unknown_population",
+        "prompt": "この取材の後にも未確認として残すべきことは？",
         "options": [
           {
-            "id": "ignore_method",
-            "text": "割合の増加さえ確認できれば調査対象や設問の記録は不要になる。",
-            "status": "contradicted",
+            "id": "all_support_known",
+            "text": "80%が支持したという見出しを見れば、未回答者の意見も分かる。",
+            "status": "uncertain",
             "accepted": false,
-            "reason": "何について比較できるかを限定する資料を除外している。",
+            "reason": "未回答者の意見は提示されていない。",
             "evidence": [
-              "questions",
-              "raw"
+              "count",
+              "population"
             ]
           },
           {
-            "id": "causality_unresolved",
-            "text": "設問は同一でも対象者の選び方は完全には同じではない。変化の原因や全利用者への広がりはまだ確認できない。",
+            "id": "alternative_is_truth",
+            "text": "別調査があるなら、その数字だけで時期も設問も異なるすべての利用者の真の意見が分かる。",
+            "status": "uncertain",
+            "accepted": false,
+            "reason": "別調査にも時点・質問の違いがあり、その比較可能性を別途確認する必要がある。",
+            "evidence": [
+              "other",
+              "population"
+            ]
+          },
+          {
+            "id": "whole_support_unknown",
+            "text": "全利用者の支持率と、支持が生まれた原因はこの投票だけでは特定できない。",
             "status": "uncertain",
             "accepted": true,
-            "reason": "元データの記録と調査条件を合わせても、対象の比較可能性と因果は確定しない。",
+            "reason": "利用者全体の代表抽出がなく、投票の支持理由や因果比較もない。",
             "evidence": [
-              "raw",
-              "questions"
-            ]
-          },
-          {
-            "id": "cause_proven",
-            "text": "両月の設問が同一なので、サービス改善が満足を増やした原因だと厳密に証明された。",
-            "status": "contradicted",
-            "accepted": false,
-            "reason": "設問が同一であることだけでは対象者の違いや原因を統制できない。",
-            "evidence": [
-              "questions",
-              "raw"
+              "count",
+              "invite",
+              "population"
             ]
           }
         ]
       }
     ],
     "graph": {
-      "prompt": "測定の出所、グラフの見せ方、比較を限定する調査条件を区別して関係を組んでください。",
+      "prompt": "回答結果が適用できる範囲を、募集の経路と母集団の範囲から限定してください。",
       "paths": [
         [
           {
-            "from": "raw",
-            "to": "graphic",
-            "relation": "supports"
-          },
-          {
-            "from": "axis",
-            "to": "graphic",
+            "from": "invite",
+            "to": "count",
             "relation": "qualifies"
           },
           {
-            "from": "questions",
-            "to": "raw",
+            "from": "population",
+            "to": "count",
             "relation": "qualifies"
           }
         ],
         [
           {
-            "from": "graphic",
-            "to": "axis",
+            "from": "invite",
+            "to": "population",
+            "relation": "qualifies"
+          },
+          {
+            "from": "count",
+            "to": "invite",
             "relation": "supports"
-          },
-          {
-            "from": "axis",
-            "to": "raw",
-            "relation": "qualifies"
-          },
-          {
-            "from": "questions",
-            "to": "raw",
-            "relation": "qualifies"
           }
         ]
       ]
     },
-    "decision": {
-      "prompt": "編集シミュレーションの追加作業枠は2。いま分かったことをどう伝えるか、速さと確認範囲の優先順位を添えて方針を残してください。作業枠はこの演習内の仮定です。",
-      "objectives": [
+    "experiment": {
+      "id": "majority_frame",
+      "prompt": "速報の第一印象として、このサービスをどう扱うか記録してください。支持・反対・保留のいずれにも正解を設定しません。",
+      "conditions": [
         {
-          "id": "speed",
-          "text": "確認済みの変化を早く伝える"
+          "id": "percent_first",
+          "label": "提示A",
+          "prompt": "利用者の80%が新サービスを支持！ 回答者200人中160人が支持した速報がある。サービスを使うかどう考える？"
         },
         {
-          "id": "comparability",
-          "text": "調査の比較可能性を先に確かめる"
-        },
-        {
-          "id": "clarity",
-          "text": "誤解しにくい表現を優先する"
+          "id": "count_first",
+          "label": "提示B",
+          "prompt": "回答者200人中160人が支持。速報の大見出しは利用者の80%が支持となっている。サービスを使うかどう考える？"
         }
       ],
-      "resources": 2,
-      "options": [
+      "choices": [
         {
-          "id": "publish_scoped",
-          "text": "対象と軸の注記を付けて掲載する",
-          "cost": 1,
-          "outcome": "シミュレーション上、回答集団内の40%から50%への変化として掲載する。原因や全体への一般化を留保した記事になる。",
-          "tradeoff": "早く伝えられるが、対象者の抽出の違いや変化の原因は未解決のまま残る。"
+          "id": "try",
+          "text": "自分の用途に合うか試してみたい"
         },
         {
-          "id": "investigate",
-          "text": "調査方法を追加確認する",
-          "cost": 2,
-          "outcome": "シミュレーション上、対象者の選定方法と比較条件を次の取材課題にする。追加取材の回答はまだ得られておらず、原因は確定しない。",
-          "tradeoff": "掲載は遅れる。追加確認しても因果が分かるとは限らない。"
+          "id": "skeptical",
+          "text": "自分の判断材料としては慎重に扱う"
+        },
+        {
+          "id": "pass",
+          "text": "利用を見送る"
         },
         {
           "id": "hold",
-          "text": "掲載方針を保留する",
-          "cost": 0,
-          "outcome": "シミュレーション上、確定していない点と判断を再開する条件を記録し、掲載を確約しない。",
-          "tradeoff": "不確かな一般化を避ける一方、確認済みの変化を伝える時期も遅れる。"
+          "text": "募集方法を調べるまで保留する"
         }
       ],
       "revealDocuments": [
-        "questions"
+        "invite",
+        "population"
       ],
-      "updatePrompt": "調査条件が開示された後の方針を、初回と同じでも異なっていても記録してください。速報の価値と未確認事項を両方扱ってください。"
+      "comparisonPrompt": "募集方法を知った後、サービスへの判断と、80%という表現が言える範囲をそれぞれどう考えるか記録してください。",
+      "explanation": "多数派を示す表現が判断の手がかりになることはあるが、一回の反応からその影響や個人の特徴は決められない。支持したままでも、支持の適用範囲を慎重に扱うことはできる。"
     },
-    "reportPrompt": "回答集団内の変化、グラフの軸、対象の違い、掲載判断と未確認の原因を区別して報告してください。選ばなかった方針の想定の結果を、実際に起きた事実として書かないでください。",
+    "reportPrompt": "回答者内の結果、募集方法の制約、未回答者について分からないことを区別して報告してください。自分の支持判断はそのままでも更新してもかまいません。",
     "board": {
-      "title": "グラフと記事に説明を添える",
-      "prompt": "数字の変化、グラフの見え方、調査の条件を分けて伝えましょう。",
+      "title": "速報の見出しを確かめる",
+      "prompt": "回答した人の結果と、利用者全体について分からないことを分けましょう。",
       "tasks": [
         {
-          "id": "chart",
-          "title": "グラフの説明",
-          "prompt": "元データとグラフの表示範囲を見比べて、説明を組み立てましょう。",
+          "id": "respondents",
+          "title": "見出しの対象",
+          "prompt": "80%という数字が指す人たちを、集計と募集方法から確かめましょう。",
           "parts": [
             {
-              "text": "回答者内の満足の割合は"
+              "field": "subject"
             },
             {
-              "field": "change"
-            },
-            {
-              "text": "。縦軸の表示範囲は"
-            },
-            {
-              "field": "axis"
-            },
-            {
-              "text": "。"
+              "text": "の80%が新サービスを支持。"
             }
           ],
           "fields": [
             {
-              "id": "change",
-              "label": "数字の変化",
-              "original": "double",
+              "id": "subject",
+              "label": "誰について",
+              "original": "all",
               "options": [
                 {
-                  "id": "double",
-                  "text": "40%から80%に変わった"
+                  "id": "all",
+                  "text": "利用者全体"
                 },
                 {
-                  "id": "actual",
-                  "text": "40%から50%に変わった"
-                }
-              ]
-            },
-            {
-              "id": "axis",
-              "label": "縦軸の表示範囲",
-              "original": "full",
-              "options": [
-                {
-                  "id": "full",
-                  "text": "0〜100%である"
+                  "id": "respondents",
+                  "text": "ファンコミュニティ経由で任意に回答した200人"
                 },
                 {
-                  "id": "narrow",
-                  "text": "35〜55%で、変化が大きく見える"
+                  "id": "random",
+                  "text": "無作為に選ばれた200人"
                 }
               ]
             }
@@ -453,41 +422,28 @@
           "rules": [
             {
               "values": {
-                "change": "actual",
-                "axis": "narrow"
+                "subject": "respondents"
               },
               "disposition": "revise",
               "evidence": [
-                "raw_fact",
-                "axis_fact"
+                "count_fact",
+                "invite_fact"
               ],
-              "explanation": "元データは40%から50%への変化です。35〜55%の表示範囲は0〜100%より変化を大きく見せます。"
-            },
-            {
-              "values": {
-                "change": "actual",
-                "axis": "narrow"
-              },
-              "disposition": "revise",
-              "evidence": [
-                "raw_fact",
-                "graphic_fact"
-              ],
-              "explanation": "元データの割合と、広告グラフの35〜55という表示範囲を区別できています。"
+              "explanation": "任意に回答した200人中160人の支持です。募集先は公式ファンコミュニティです。"
             }
           ],
-          "explanation": "元データと、グラフか制作指示を見直しましょう。数値の変化と、軸による見え方は別に説明する必要があります。"
+          "explanation": "集計表と募集方法を確認しましょう。回答者200人の結果を利用者全体へ広げることはできません。"
         },
         {
-          "id": "cause",
-          "title": "記事の原因についてのメモ",
-          "prompt": "同じ設問でも、対象者の選び方が変わっていたら何が言えるでしょうか。",
+          "id": "population",
+          "title": "利用者全体の調査メモ",
+          "prompt": "回答していない人も含めた割合を、この投票だけで決められるでしょうか。",
           "parts": [
             {
-              "text": "両月の設問は同じだが、対象者の選び方は完全には同じでない。変化の原因は"
+              "text": "利用者全体の支持率は、"
             },
             {
-              "field": "cause"
+              "field": "scope"
             },
             {
               "text": "。"
@@ -495,17 +451,21 @@
           ],
           "fields": [
             {
-              "id": "cause",
-              "label": "原因について言えること",
-              "original": "quality",
+              "id": "scope",
+              "label": "全体について言えること",
+              "original": "eighty",
               "options": [
                 {
-                  "id": "quality",
-                  "text": "サービスの品質向上と確認できる"
+                  "id": "eighty",
+                  "text": "80%と確認できる"
                 },
                 {
                   "id": "unknown",
-                  "text": "この資料だけでは判断できない"
+                  "text": "この投票だけでは分からない"
+                },
+                {
+                  "id": "low",
+                  "text": "80%より低いと確認できる"
                 }
               ]
             }
@@ -513,49 +473,49 @@
           "rules": [
             {
               "values": {
-                "cause": "unknown"
+                "scope": "unknown"
               },
               "disposition": "hold",
               "evidence": [
-                "raw_fact",
-                "questions_fact"
+                "invite_fact",
+                "population_fact"
               ],
-              "explanation": "集計の変化は確認できますが、対象者の選び方に違いがあり、原因は判断できません。"
+              "explanation": "募集先が限られた任意回答です。利用者全体を代表する選び方だった証拠はありません。"
             }
           ],
-          "explanation": "元データと設問・対象者の記録を組み合わせましょう。回答の変化だけでは、その原因や全利用者への広がりは決められません。"
+          "explanation": "募集方法と利用者全体の資料を見直しましょう。全体の割合が高いか低いかも、この投票だけでは決められません。"
         }
       ],
       "excerpts": [
         {
-          "id": "graphic_fact",
-          "documentId": "graphic",
-          "quote": "満足評価が「40から50へ急上昇」と表示。縦軸は35から55の狭い範囲で描かれている。"
+          "id": "headline_fact",
+          "documentId": "headline",
+          "quote": "「利用者の80%が新サービスを支持！」。調査概要へのリンクがない。"
         },
         {
-          "id": "raw_fact",
-          "documentId": "raw",
-          "quote": "前月は調査回答100人中40人、今月は100人中50人が満足と回答。評価は40%→50%。"
+          "id": "count_fact",
+          "documentId": "count",
+          "quote": "回答した200人中160人が「支持」。この回答者内の割合は80%。"
         },
         {
-          "id": "axis_fact",
-          "documentId": "axis",
-          "quote": "縦軸の最小値を35%に設定して変化を強調。0〜100%の軸では視覚上の差は小さい。"
+          "id": "invite_fact",
+          "documentId": "invite",
+          "quote": "新サービスの公式ファンコミュニティにのみアンケートリンクを投稿。任意回答。"
         },
         {
-          "id": "questions_fact",
-          "documentId": "questions",
-          "quote": "両月の設問文は同一。調査対象の選び方は完全には同じでなく、変化の因果関係は判断できない。"
+          "id": "population_fact",
+          "documentId": "population",
+          "quote": "投票した200人が母集団を代表するよう抽出された証拠はない。"
         },
         {
-          "id": "press_fact",
-          "documentId": "press",
-          "quote": "「満足度が25%アップ」と表現。40%から50%への相対増加率は25%、絶対差は10ポイント。"
+          "id": "other_fact",
+          "documentId": "other",
+          "quote": "無作為抽出を目指した別調査では1,000人中540人が支持。ただし対象時点や質問の違いもある。"
         },
         {
-          "id": "rumor_fact",
-          "documentId": "rumor",
-          "quote": "「サービスの品質が倍になった」との投稿。元データを示していない。"
+          "id": "comments_fact",
+          "documentId": "comments",
+          "quote": "支持・反対双方の投稿がある。投稿量から実際の支持率を確定することはできない。"
         }
       ]
     }

@@ -17,22 +17,22 @@ describe('caseStatus', () => {
   });
   it('続きの事件を選ぶ', () => {
     const cases = [
-      makeCase({ id: 'case-01' }),
-      makeCase({ id: 'case-02' }),
       makeCase({ id: 'case-03' }),
+      makeCase({ id: 'case-04' }),
+      makeCase({ id: 'case-05' }),
     ];
-    expect(continueCaseId(cases, 'case-01', {}, {})).toBe('case-01');
-    expect(continueCaseId(cases, 'case-01', {}, { 'case-01': true })).toBe('case-02');
+    expect(continueCaseId(cases, 'case-03', {}, {})).toBe('case-03');
+    expect(continueCaseId(cases, 'case-03', {}, { 'case-03': true })).toBe('case-04');
     expect(
       continueCaseId(
         cases,
-        'case-01',
-        { 'case-03': makeProgress({ opened: ['a'] }) },
-        { 'case-01': true },
+        'case-03',
+        { 'case-05': makeProgress({ opened: ['a'] }) },
+        { 'case-03': true },
       ),
-    ).toBe('case-03');
+    ).toBe('case-05');
     expect(
-      continueCaseId(cases, 'case-01', {}, { 'case-01': true, 'case-02': true, 'case-03': true }),
+      continueCaseId(cases, 'case-03', {}, { 'case-03': true, 'case-04': true, 'case-05': true }),
     ).toBeUndefined();
   });
 });

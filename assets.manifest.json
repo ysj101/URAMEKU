@@ -1102,7 +1102,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-01/cover.png",
+      "path": "public/assets/cases/case-03/cover.png",
       "category": "cases",
       "bytes": 2642073,
       "format": "png",
@@ -1117,17 +1117,17 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-01/cover.svg",
+      "path": "public/assets/cases/case-03/cover.svg",
       "category": "cases",
       "bytes": 929,
       "format": "svg",
       "exists": true,
-      "sha256": "722563388b50db500f853c51942d8242bf2146fea33284b7d6983099c798cf3e",
+      "sha256": "7033b93528d3d272d272fbc5096e25a4ee42eecaf81d13115c46b928141577ae",
       "source": "locally-created-for-urameku",
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-01/documents/ad.png",
+      "path": "public/assets/cases/case-03/documents/ad.png",
       "category": "cases",
       "bytes": 16643,
       "format": "png",
@@ -1142,7 +1142,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-01/documents/ad.svg",
+      "path": "public/assets/cases/case-03/documents/ad.svg",
       "category": "cases",
       "bytes": 2056,
       "format": "svg",
@@ -1152,7 +1152,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-01/documents/memo.png",
+      "path": "public/assets/cases/case-03/documents/memo.png",
       "category": "cases",
       "bytes": 17533,
       "format": "png",
@@ -1167,7 +1167,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-01/documents/memo.svg",
+      "path": "public/assets/cases/case-03/documents/memo.svg",
       "category": "cases",
       "bytes": 2227,
       "format": "svg",
@@ -1177,7 +1177,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-01/documents/paid.png",
+      "path": "public/assets/cases/case-03/documents/paid.png",
       "category": "cases",
       "bytes": 22554,
       "format": "png",
@@ -1192,7 +1192,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-01/documents/paid.svg",
+      "path": "public/assets/cases/case-03/documents/paid.svg",
       "category": "cases",
       "bytes": 1997,
       "format": "svg",
@@ -1202,7 +1202,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-01/documents/retained.png",
+      "path": "public/assets/cases/case-03/documents/retained.png",
       "category": "cases",
       "bytes": 19168,
       "format": "png",
@@ -1217,7 +1217,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-01/documents/retained.svg",
+      "path": "public/assets/cases/case-03/documents/retained.svg",
       "category": "cases",
       "bytes": 2050,
       "format": "svg",
@@ -1227,7 +1227,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-01/documents/reviews.png",
+      "path": "public/assets/cases/case-03/documents/reviews.png",
       "category": "cases",
       "bytes": 19348,
       "format": "png",
@@ -1242,7 +1242,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-01/documents/reviews.svg",
+      "path": "public/assets/cases/case-03/documents/reviews.svg",
       "category": "cases",
       "bytes": 1985,
       "format": "svg",
@@ -1252,7 +1252,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-01/documents/trial.png",
+      "path": "public/assets/cases/case-03/documents/trial.png",
       "category": "cases",
       "bytes": 21797,
       "format": "png",
@@ -1267,7 +1267,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-01/documents/trial.svg",
+      "path": "public/assets/cases/case-03/documents/trial.svg",
       "category": "cases",
       "bytes": 2239,
       "format": "svg",
@@ -1277,7 +1277,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-02/cover.png",
+      "path": "public/assets/cases/case-04/cover.png",
       "category": "cases",
       "bytes": 2734084,
       "format": "png",
@@ -1292,17 +1292,17 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-02/cover.svg",
+      "path": "public/assets/cases/case-04/cover.svg",
       "category": "cases",
       "bytes": 925,
       "format": "svg",
       "exists": true,
-      "sha256": "b30c60c65acd23670129ca3d946f5f8afc6ab6328e2376e89f7bdabea720242c",
+      "sha256": "5095861e01491ea64c62cfd960dd7184aae7d9fcf7fd225c9c8a8e44c2141c92",
       "source": "locally-created-for-urameku",
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-02/documents/competitor.png",
+      "path": "public/assets/cases/case-04/documents/competitor.png",
       "category": "cases",
       "bytes": 20745,
       "format": "png",
@@ -1317,7 +1317,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-02/documents/competitor.svg",
+      "path": "public/assets/cases/case-04/documents/competitor.svg",
       "category": "cases",
       "bytes": 1991,
       "format": "svg",
@@ -1327,7 +1327,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-02/documents/history.png",
+      "path": "public/assets/cases/case-04/documents/history.png",
       "category": "cases",
       "bytes": 22132,
       "format": "png",
@@ -1342,7 +1342,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-02/documents/history.svg",
+      "path": "public/assets/cases/case-04/documents/history.svg",
       "category": "cases",
       "bytes": 2001,
       "format": "svg",
@@ -1352,7 +1352,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-02/documents/interview.png",
+      "path": "public/assets/cases/case-04/documents/interview.png",
       "category": "cases",
       "bytes": 19239,
       "format": "png",
@@ -1367,7 +1367,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-02/documents/interview.svg",
+      "path": "public/assets/cases/case-04/documents/interview.svg",
       "category": "cases",
       "bytes": 2233,
       "format": "svg",
@@ -1377,7 +1377,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-02/documents/launch.png",
+      "path": "public/assets/cases/case-04/documents/launch.png",
       "category": "cases",
       "bytes": 18556,
       "format": "png",
@@ -1392,7 +1392,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-02/documents/launch.svg",
+      "path": "public/assets/cases/case-04/documents/launch.svg",
       "category": "cases",
       "bytes": 2227,
       "format": "svg",
@@ -1402,7 +1402,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-02/documents/poster.png",
+      "path": "public/assets/cases/case-04/documents/poster.png",
       "category": "cases",
       "bytes": 17218,
       "format": "png",
@@ -1417,7 +1417,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-02/documents/poster.svg",
+      "path": "public/assets/cases/case-04/documents/poster.svg",
       "category": "cases",
       "bytes": 2050,
       "format": "svg",
@@ -1427,7 +1427,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-02/documents/stock.png",
+      "path": "public/assets/cases/case-04/documents/stock.png",
       "category": "cases",
       "bytes": 17627,
       "format": "png",
@@ -1442,7 +1442,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-02/documents/stock.svg",
+      "path": "public/assets/cases/case-04/documents/stock.svg",
       "category": "cases",
       "bytes": 2050,
       "format": "svg",
@@ -1452,7 +1452,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-03/cover.png",
+      "path": "public/assets/cases/case-05/cover.png",
       "category": "cases",
       "bytes": 2760299,
       "format": "png",
@@ -1467,17 +1467,17 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-03/cover.svg",
+      "path": "public/assets/cases/case-05/cover.svg",
       "category": "cases",
       "bytes": 921,
       "format": "svg",
       "exists": true,
-      "sha256": "ca33d88d229cef48d5efdea00bc619a7b4940aaf872bc92a681ecb99bd90bbcb",
+      "sha256": "c66058883dc59a154423b46413a54a0001a6fce14b709528ac269d8b5bf94d68",
       "source": "locally-created-for-urameku",
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-03/documents/comments.png",
+      "path": "public/assets/cases/case-05/documents/comments.png",
       "category": "cases",
       "bytes": 19894,
       "format": "png",
@@ -1492,7 +1492,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-03/documents/comments.svg",
+      "path": "public/assets/cases/case-05/documents/comments.svg",
       "category": "cases",
       "bytes": 1979,
       "format": "svg",
@@ -1502,7 +1502,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-03/documents/count.png",
+      "path": "public/assets/cases/case-05/documents/count.png",
       "category": "cases",
       "bytes": 19624,
       "format": "png",
@@ -1517,7 +1517,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-03/documents/count.svg",
+      "path": "public/assets/cases/case-05/documents/count.svg",
       "category": "cases",
       "bytes": 2245,
       "format": "svg",
@@ -1527,7 +1527,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-03/documents/headline.png",
+      "path": "public/assets/cases/case-05/documents/headline.png",
       "category": "cases",
       "bytes": 15364,
       "format": "png",
@@ -1542,7 +1542,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-03/documents/headline.svg",
+      "path": "public/assets/cases/case-05/documents/headline.svg",
       "category": "cases",
       "bytes": 2032,
       "format": "svg",
@@ -1552,7 +1552,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-03/documents/invite.png",
+      "path": "public/assets/cases/case-05/documents/invite.png",
       "category": "cases",
       "bytes": 22648,
       "format": "png",
@@ -1567,7 +1567,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-03/documents/invite.svg",
+      "path": "public/assets/cases/case-05/documents/invite.svg",
       "category": "cases",
       "bytes": 2015,
       "format": "svg",
@@ -1577,7 +1577,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-03/documents/other.png",
+      "path": "public/assets/cases/case-05/documents/other.png",
       "category": "cases",
       "bytes": 19165,
       "format": "png",
@@ -1592,7 +1592,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-03/documents/other.svg",
+      "path": "public/assets/cases/case-05/documents/other.svg",
       "category": "cases",
       "bytes": 2233,
       "format": "svg",
@@ -1602,7 +1602,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-03/documents/population.png",
+      "path": "public/assets/cases/case-05/documents/population.png",
       "category": "cases",
       "bytes": 18916,
       "format": "png",
@@ -1617,7 +1617,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-03/documents/population.svg",
+      "path": "public/assets/cases/case-05/documents/population.svg",
       "category": "cases",
       "bytes": 2056,
       "format": "svg",
@@ -1627,7 +1627,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-04/cover.png",
+      "path": "public/assets/cases/case-06/cover.png",
       "category": "cases",
       "bytes": 2599136,
       "format": "png",
@@ -1642,17 +1642,17 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-04/cover.svg",
+      "path": "public/assets/cases/case-06/cover.svg",
       "category": "cases",
       "bytes": 931,
       "format": "svg",
       "exists": true,
-      "sha256": "8987285dbd396a0839f77fa5d25ea630d3ea1f557bcf78c8310b67b3db44640c",
+      "sha256": "58fee49c35d604753cd915545151cd1dc003be07e162a34aa81d8528a2ccc290",
       "source": "locally-created-for-urameku",
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-04/documents/finish.png",
+      "path": "public/assets/cases/case-06/documents/finish.png",
       "category": "cases",
       "bytes": 22829,
       "format": "png",
@@ -1667,7 +1667,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-04/documents/finish.svg",
+      "path": "public/assets/cases/case-06/documents/finish.svg",
       "category": "cases",
       "bytes": 1997,
       "format": "svg",
@@ -1677,7 +1677,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-04/documents/minutes.png",
+      "path": "public/assets/cases/case-06/documents/minutes.png",
       "category": "cases",
       "bytes": 16603,
       "format": "png",
@@ -1692,7 +1692,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-04/documents/minutes.svg",
+      "path": "public/assets/cases/case-06/documents/minutes.svg",
       "category": "cases",
       "bytes": 2038,
       "format": "svg",
@@ -1702,7 +1702,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-04/documents/risk.png",
+      "path": "public/assets/cases/case-06/documents/risk.png",
       "category": "cases",
       "bytes": 16248,
       "format": "png",
@@ -1717,7 +1717,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-04/documents/risk.svg",
+      "path": "public/assets/cases/case-06/documents/risk.svg",
       "category": "cases",
       "bytes": 2215,
       "format": "svg",
@@ -1727,7 +1727,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-04/documents/spent.png",
+      "path": "public/assets/cases/case-06/documents/spent.png",
       "category": "cases",
       "bytes": 16375,
       "format": "png",
@@ -1742,7 +1742,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-04/documents/spent.svg",
+      "path": "public/assets/cases/case-06/documents/spent.svg",
       "category": "cases",
       "bytes": 2209,
       "format": "svg",
@@ -1752,7 +1752,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-04/documents/switch.png",
+      "path": "public/assets/cases/case-06/documents/switch.png",
       "category": "cases",
       "bytes": 18459,
       "format": "png",
@@ -1767,7 +1767,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-04/documents/switch.svg",
+      "path": "public/assets/cases/case-06/documents/switch.svg",
       "category": "cases",
       "bytes": 2050,
       "format": "svg",
@@ -1777,7 +1777,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-04/documents/team.png",
+      "path": "public/assets/cases/case-06/documents/team.png",
       "category": "cases",
       "bytes": 19919,
       "format": "png",
@@ -1792,7 +1792,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-04/documents/team.svg",
+      "path": "public/assets/cases/case-06/documents/team.svg",
       "category": "cases",
       "bytes": 1991,
       "format": "svg",
@@ -1802,7 +1802,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-05/cover.png",
+      "path": "public/assets/cases/case-07/cover.png",
       "category": "cases",
       "bytes": 2590700,
       "format": "png",
@@ -1817,17 +1817,17 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-05/cover.svg",
+      "path": "public/assets/cases/case-07/cover.svg",
       "category": "cases",
       "bytes": 925,
       "format": "svg",
       "exists": true,
-      "sha256": "2d858938a9578fd5d8df8e745b336b05688526d19d6a74a7b607875707c0060d",
+      "sha256": "9552191e745324ae6a6cae841dc333419ac40fe2df5a72294855b8100037344a",
       "source": "locally-created-for-urameku",
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-05/documents/axis.png",
+      "path": "public/assets/cases/case-07/documents/axis.png",
       "category": "cases",
       "bytes": 21505,
       "format": "png",
@@ -1842,7 +1842,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-05/documents/axis.svg",
+      "path": "public/assets/cases/case-07/documents/axis.svg",
       "category": "cases",
       "bytes": 2003,
       "format": "svg",
@@ -1852,7 +1852,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-05/documents/graphic.png",
+      "path": "public/assets/cases/case-07/documents/graphic.png",
       "category": "cases",
       "bytes": 19280,
       "format": "png",
@@ -1867,7 +1867,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-05/documents/graphic.svg",
+      "path": "public/assets/cases/case-07/documents/graphic.svg",
       "category": "cases",
       "bytes": 2062,
       "format": "svg",
@@ -1877,7 +1877,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-05/documents/press.png",
+      "path": "public/assets/cases/case-07/documents/press.png",
       "category": "cases",
       "bytes": 17983,
       "format": "png",
@@ -1892,7 +1892,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-05/documents/press.svg",
+      "path": "public/assets/cases/case-07/documents/press.svg",
       "category": "cases",
       "bytes": 2227,
       "format": "svg",
@@ -1902,7 +1902,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-05/documents/questions.png",
+      "path": "public/assets/cases/case-07/documents/questions.png",
       "category": "cases",
       "bytes": 19594,
       "format": "png",
@@ -1917,7 +1917,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-05/documents/questions.svg",
+      "path": "public/assets/cases/case-07/documents/questions.svg",
       "category": "cases",
       "bytes": 2062,
       "format": "svg",
@@ -1927,7 +1927,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-05/documents/raw.png",
+      "path": "public/assets/cases/case-07/documents/raw.png",
       "category": "cases",
       "bytes": 14560,
       "format": "png",
@@ -1942,7 +1942,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-05/documents/raw.svg",
+      "path": "public/assets/cases/case-07/documents/raw.svg",
       "category": "cases",
       "bytes": 2203,
       "format": "svg",
@@ -1952,7 +1952,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-05/documents/rumor.png",
+      "path": "public/assets/cases/case-07/documents/rumor.png",
       "category": "cases",
       "bytes": 20734,
       "format": "png",
@@ -1967,7 +1967,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-05/documents/rumor.svg",
+      "path": "public/assets/cases/case-07/documents/rumor.svg",
       "category": "cases",
       "bytes": 1985,
       "format": "svg",
@@ -7032,7 +7032,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-01/cover.webp",
+      "path": "public/assets/cases/case-03/cover.webp",
       "category": "cases",
       "bytes": 50216,
       "format": "webp",
@@ -7047,7 +7047,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-02/cover.webp",
+      "path": "public/assets/cases/case-04/cover.webp",
       "category": "cases",
       "bytes": 60744,
       "format": "webp",
@@ -7062,7 +7062,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-03/cover.webp",
+      "path": "public/assets/cases/case-05/cover.webp",
       "category": "cases",
       "bytes": 60438,
       "format": "webp",
@@ -7077,7 +7077,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-04/cover.webp",
+      "path": "public/assets/cases/case-06/cover.webp",
       "category": "cases",
       "bytes": 55508,
       "format": "webp",
@@ -7092,7 +7092,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-05/cover.webp",
+      "path": "public/assets/cases/case-07/cover.webp",
       "category": "cases",
       "bytes": 45054,
       "format": "webp",
@@ -7122,7 +7122,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-01/debrief/framing-mechanism.png",
+      "path": "public/assets/cases/case-03/debrief/framing-mechanism.png",
       "category": "cases",
       "bytes": 2566433,
       "format": "png",
@@ -7137,7 +7137,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-02/debrief/anchoring-mechanism.png",
+      "path": "public/assets/cases/case-04/debrief/anchoring-mechanism.png",
       "category": "cases",
       "bytes": 2626720,
       "format": "png",
@@ -7152,7 +7152,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-03/debrief/social-proof-mechanism.png",
+      "path": "public/assets/cases/case-05/debrief/social-proof-mechanism.png",
       "category": "cases",
       "bytes": 2961555,
       "format": "png",
@@ -7167,7 +7167,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-04/debrief/sunk-cost-mechanism.png",
+      "path": "public/assets/cases/case-06/debrief/sunk-cost-mechanism.png",
       "category": "cases",
       "bytes": 2677618,
       "format": "png",
@@ -7182,7 +7182,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-05/debrief/axis-framing-mechanism.png",
+      "path": "public/assets/cases/case-07/debrief/axis-framing-mechanism.png",
       "category": "cases",
       "bytes": 2649087,
       "format": "png",
@@ -7227,7 +7227,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-06/cover.png",
+      "path": "public/assets/cases/case-01/cover.png",
       "category": "cases",
       "bytes": 2576017,
       "format": "png",
@@ -7242,7 +7242,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-06/cover.webp",
+      "path": "public/assets/cases/case-01/cover.webp",
       "category": "cases",
       "bytes": 41748,
       "format": "webp",
@@ -7257,7 +7257,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-06/debrief/mean-outlier-mechanism.png",
+      "path": "public/assets/cases/case-01/debrief/mean-outlier-mechanism.png",
       "category": "cases",
       "bytes": 2421966,
       "format": "png",
@@ -7272,7 +7272,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-06/documents/chat.png",
+      "path": "public/assets/cases/case-01/documents/chat.png",
       "category": "cases",
       "bytes": 18401,
       "format": "png",
@@ -7287,7 +7287,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-06/documents/chat.svg",
+      "path": "public/assets/cases/case-01/documents/chat.svg",
       "category": "cases",
       "bytes": 2044,
       "format": "svg",
@@ -7297,7 +7297,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-06/documents/notice.png",
+      "path": "public/assets/cases/case-01/documents/notice.png",
       "category": "cases",
       "bytes": 18474,
       "format": "png",
@@ -7312,7 +7312,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-06/documents/notice.svg",
+      "path": "public/assets/cases/case-01/documents/notice.svg",
       "category": "cases",
       "bytes": 2062,
       "format": "svg",
@@ -7322,7 +7322,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-06/documents/survey.png",
+      "path": "public/assets/cases/case-01/documents/survey.png",
       "category": "cases",
       "bytes": 18227,
       "format": "png",
@@ -7337,7 +7337,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-06/documents/survey.svg",
+      "path": "public/assets/cases/case-01/documents/survey.svg",
       "category": "cases",
       "bytes": 2068,
       "format": "svg",
@@ -7347,7 +7347,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-06/documents/tally.png",
+      "path": "public/assets/cases/case-01/documents/tally.png",
       "category": "cases",
       "bytes": 17523,
       "format": "png",
@@ -7362,7 +7362,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-06/documents/tally.svg",
+      "path": "public/assets/cases/case-01/documents/tally.svg",
       "category": "cases",
       "bytes": 2044,
       "format": "svg",
@@ -7372,7 +7372,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-06/documents/teacher.png",
+      "path": "public/assets/cases/case-01/documents/teacher.png",
       "category": "cases",
       "bytes": 17094,
       "format": "png",
@@ -7387,7 +7387,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-06/documents/teacher.svg",
+      "path": "public/assets/cases/case-01/documents/teacher.svg",
       "category": "cases",
       "bytes": 2050,
       "format": "svg",
@@ -7422,17 +7422,17 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-06/cover.svg",
+      "path": "public/assets/cases/case-01/cover.svg",
       "category": "cases",
       "bytes": 1084,
       "format": "svg",
       "exists": true,
-      "sha256": "2c505b5ce1d69e33f5978102ea1d45c1a24568a026bfba483cabc61396c50c66",
+      "sha256": "1980a14880068b14a20d36d0e4682a096a3accc59c4bd4f4e5e8799a2597eac2",
       "source": "locally-created-for-urameku",
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-07/cover.png",
+      "path": "public/assets/cases/case-02/cover.png",
       "category": "cases",
       "bytes": 2702622,
       "format": "png",
@@ -7447,17 +7447,17 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-07/cover.svg",
+      "path": "public/assets/cases/case-02/cover.svg",
       "category": "cases",
       "bytes": 1060,
       "format": "svg",
       "exists": true,
-      "sha256": "60adbb233ba597a8b6e0f8de7fe79f857722c58efdca6e45c7dc5386901f9c5d",
+      "sha256": "0f017d41835f82eb9d91d5d743916714883639f4dffaee9a6942db02f5d51762",
       "source": "locally-created-for-urameku",
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-07/cover.webp",
+      "path": "public/assets/cases/case-02/cover.webp",
       "category": "cases",
       "bytes": 54514,
       "format": "webp",
@@ -7472,7 +7472,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-07/debrief/missing-comparison-mechanism.png",
+      "path": "public/assets/cases/case-02/debrief/missing-comparison-mechanism.png",
       "category": "cases",
       "bytes": 3065502,
       "format": "png",
@@ -7487,7 +7487,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-07/documents/flyer.png",
+      "path": "public/assets/cases/case-02/documents/flyer.png",
       "category": "cases",
       "bytes": 16459,
       "format": "png",
@@ -7502,7 +7502,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-07/documents/flyer.svg",
+      "path": "public/assets/cases/case-02/documents/flyer.svg",
       "category": "cases",
       "bytes": 2038,
       "format": "svg",
@@ -7512,7 +7512,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-07/documents/grade.png",
+      "path": "public/assets/cases/case-02/documents/grade.png",
       "category": "cases",
       "bytes": 18829,
       "format": "png",
@@ -7527,7 +7527,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-07/documents/grade.svg",
+      "path": "public/assets/cases/case-02/documents/grade.svg",
       "category": "cases",
       "bytes": 2056,
       "format": "svg",
@@ -7537,7 +7537,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-07/documents/reviews.png",
+      "path": "public/assets/cases/case-02/documents/reviews.png",
       "category": "cases",
       "bytes": 15970,
       "format": "png",
@@ -7552,7 +7552,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-07/documents/reviews.svg",
+      "path": "public/assets/cases/case-02/documents/reviews.svg",
       "category": "cases",
       "bytes": 2038,
       "format": "svg",
@@ -7562,7 +7562,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-07/documents/scores.png",
+      "path": "public/assets/cases/case-02/documents/scores.png",
       "category": "cases",
       "bytes": 18864,
       "format": "png",
@@ -7577,7 +7577,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-07/documents/scores.svg",
+      "path": "public/assets/cases/case-02/documents/scores.svg",
       "category": "cases",
       "bytes": 2050,
       "format": "svg",
@@ -7587,7 +7587,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-07/documents/teacher.png",
+      "path": "public/assets/cases/case-02/documents/teacher.png",
       "category": "cases",
       "bytes": 16333,
       "format": "png",
@@ -7602,7 +7602,7 @@
       "art_review": "REQUIRED"
     },
     {
-      "path": "public/assets/cases/case-07/documents/teacher.svg",
+      "path": "public/assets/cases/case-02/documents/teacher.svg",
       "category": "cases",
       "bytes": 2038,
       "format": "svg",

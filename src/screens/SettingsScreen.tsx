@@ -21,7 +21,7 @@ export function SettingsScreen({ onResetAll, onResetCase, caseTitle }: SettingsS
         <span>記録の管理</span>
       </div>
       <div className="notice">
-        記録はこの端末（このブラウザ）の中だけに保存されます。サーバーには送信しません。
+        調査の記録と書いた文章は、この端末（このブラウザ）に保存します。操作の進み具合は、計測が有効な環境で許可した場合だけ送信します。
         別の端末やブラウザの記録には影響しません。
       </div>
       <ResetProgressPanel onResetAll={onResetAll} onResetCase={onResetCase} caseTitle={caseTitle} />

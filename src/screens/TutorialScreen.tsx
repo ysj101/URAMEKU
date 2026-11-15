@@ -1,3 +1,4 @@
+import { useOnboardingTelemetry } from '../telemetry/hooks';
 import { CASES } from '../data/cases';
 import { useEffect, useRef, useState } from 'react';
 import { assetUrl } from '../data/assets';
@@ -10,7 +11,7 @@ import '../app/screens/tutorial.css';
 import '../app/screens/case00.css';
 
 /** 練習のあとに開く事件。一覧の先頭（難易度の低い順）で、ID を固定しない */
-const FIRST_CASE_ID = CASES[0]?.id ?? 'case-01';
+const FIRST_CASE_ID = CASES[0]?.id ?? 'case-03';
 
 export interface TutorialScreenProps {
   nav: Navigation;
@@ -21,6 +22,7 @@ export interface TutorialScreenProps {
 /** CASE00 is a guided practice file, kept separate from the five investigation cases. */
 export function TutorialScreen({ nav, game, storage }: TutorialScreenProps) {
   const [step, setStep] = useState(-2);
+  useOnboardingTelemetry(step);
   const [initialChoice, setInitialChoice] = useState('');
   const [updatedChoice, setUpdatedChoice] = useState('');
   const [opened, setOpened] = useState<string[]>([]);
@@ -105,7 +107,6 @@ export function TutorialScreen({ nav, game, storage }: TutorialScreenProps) {
                   </label>
                 ))}
             </fieldset>
-            <p className="fine">{case00.experiment.notice}</p>
             <button
               type="button"
               className="btn primary"
@@ -154,7 +155,6 @@ export function TutorialScreen({ nav, game, storage }: TutorialScreenProps) {
             </div>
             <p role="status">
               資料確認 {opened.length} / {case00.documents.length}
-              {allRead ? '枚。答えに進めます。' : '枚。2枚とも開こう。'}
             </p>
             {allRead && (
               <button type="button" className="btn primary" onClick={() => setStep(1)}>
@@ -197,11 +197,6 @@ export function TutorialScreen({ nav, game, storage }: TutorialScreenProps) {
                 </label>
               ))}
             </fieldset>
-            <p role="status">
-              {answer && evidence
-                ? '答えと根拠を選びました。'
-                : '答えと根拠を選ぶと、先に進めます。'}
-            </p>
             <div className="tutorial-controls">
               <button type="button" className="btn ghost" onClick={() => setStep(0)}>
                 ← 資料を読み直す
@@ -279,7 +274,6 @@ export function TutorialScreen({ nav, game, storage }: TutorialScreenProps) {
                   : case00.experiment.changed}
               </p>
               <p>{case00.visualGuide.intro}</p>
-              <p className="fine">{case00.experiment.limit}</p>
               <details>
                 <summary>答え・根拠・詳しい解説</summary>
                 <dl className="case00-report">
@@ -299,7 +293,6 @@ export function TutorialScreen({ nav, game, storage }: TutorialScreenProps) {
                 </dl>
                 <p>{case00.explanation}</p>
                 <p>{case00.experiment.explanation}</p>
-                <p>{case00.limit}</p>
                 <p>{case00.takeaway}</p>
                 <button
                   type="button"
@@ -354,7 +347,6 @@ export function TutorialScreen({ nav, game, storage }: TutorialScreenProps) {
       <button type="button" className="btn ghost" onClick={() => nav.navigate({ screen: 'cases' })}>
         {step === 3 ? '事件一覧へ' : '練習をやめて事件一覧へ'}
       </button>
-      <p className="fine">架空の映画館です。途中の記録は画面を離れると消えます。</p>
     </section>
   );
 }

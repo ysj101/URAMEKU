@@ -68,6 +68,13 @@ describe('wipe: キーの判定と列挙', () => {
     expect(listAppKeys(s)).toEqual([LEGACY_KEY, STORAGE_KEY]);
   });
 
+  it('includes host/SDK consent and tab identifiers even in non-enumerable storage', () => {
+    const keys = ['urameku-journeygap-consent', 'journeygap.consent.v1', 'journeygap.session.v1'];
+    const storage = minimalStorage(Object.fromEntries(keys.map((key) => [key, 'value'])));
+    expect(wipeStorage(storage)).toEqual([...keys].sort());
+    expect(verifyWiped(storage)).toEqual([]);
+  });
+
   it('storage が無ければ空', () => {
     expect(listAppKeys(null)).toEqual([]);
     expect(verifyWiped(null)).toEqual([]);
@@ -139,27 +146,27 @@ describe('wipe: 削除と検証', () => {
 
 describe('resetCaseProgress', () => {
   const save: SaveData = {
-    ...createSaveData('case-02'),
-    active: 'case-02',
+    ...createSaveData('case-04'),
+    active: 'case-04',
     progress: {
-      'case-01': makeProgress({ opened: ['a'], published: true }),
-      'case-02': makeProgress({ opened: ['b'] }),
+      'case-03': makeProgress({ opened: ['a'], published: true }),
+      'case-04': makeProgress({ opened: ['b'] }),
     },
-    finished: { 'case-01': true, 'case-02': true },
+    finished: { 'case-03': true, 'case-04': true },
   };
 
   it('指定した事件の進行とクリア記録だけを消す', () => {
-    const next = resetCaseProgress(save, 'case-02');
-    expect(next.progress['case-02']).toBeUndefined();
-    expect(next.finished['case-02']).toBeUndefined();
-    expect(next.progress['case-01']).toEqual(save.progress['case-01']);
-    expect(next.finished['case-01']).toBe(true);
-    expect(next.active).toBe('case-02');
+    const next = resetCaseProgress(save, 'case-04');
+    expect(next.progress['case-04']).toBeUndefined();
+    expect(next.finished['case-04']).toBeUndefined();
+    expect(next.progress['case-03']).toEqual(save.progress['case-03']);
+    expect(next.finished['case-03']).toBe(true);
+    expect(next.active).toBe('case-04');
   });
 
   it('入力を変更しない（純粋関数）', () => {
     const snapshot = JSON.stringify(save);
-    resetCaseProgress(save, 'case-01');
+    resetCaseProgress(save, 'case-03');
     expect(JSON.stringify(save)).toBe(snapshot);
   });
 

@@ -51,12 +51,12 @@ describe('EncyclopediaScreen: 図鑑タブ', () => {
   });
 
   it('解決した事件の項目だけ本文と注記（disclaimer）が出る', () => {
-    const first = ENCYCLOPEDIA.find((e) => e.unlockCase === 'case-01')!;
-    render(<EncyclopediaScreen game={api({ finished: { 'case-01': true } })} nav={nav} />);
+    const first = ENCYCLOPEDIA.find((e) => e.unlockCase === 'case-03')!;
+    render(<EncyclopediaScreen game={api({ finished: { 'case-03': true } })} nav={nav} />);
     expect(screen.getByRole('heading', { level: 2, name: first.title })).toBeInTheDocument();
     expect(screen.getByText(first.summary)).toBeInTheDocument();
     expect(screen.getAllByText(first.disclaimer).length).toBeGreaterThanOrEqual(1);
-    const label = `CASE ${String(caseNumber('case-01')).padStart(2, '0')} を解決すると追加`;
+    const label = `CASE ${String(caseNumber('case-03')).padStart(2, '0')} を解決すると追加`;
     expect(screen.queryByText(label)).not.toBeInTheDocument();
     // 他は未解放のまま
     for (const e of ENCYCLOPEDIA.filter((x) => x.id !== first.id)) {
@@ -70,8 +70,8 @@ describe('EncyclopediaScreen: 図鑑タブ', () => {
     render(
       <EncyclopediaScreen
         game={api({
-          finished: { 'case-01': false },
-          progressByCase: { 'case-01': { ...createProgress(), published: true } },
+          finished: { 'case-03': false },
+          progressByCase: { 'case-03': { ...createProgress(), published: true } },
         })}
         nav={nav}
       />,
@@ -115,17 +115,17 @@ describe('EncyclopediaScreen: 事件手帳タブ', () => {
     render(
       <EncyclopediaScreen
         game={api({
-          finished: { 'case-01': true },
+          finished: { 'case-03': true },
           progressByCase: {
-            'case-01': { ...createProgress(), opened: ['ad', 'trial', 'paid'], published: true },
-            'case-02': { ...createProgress(), opened: [c1.documents[0]!.id] },
+            'case-03': { ...createProgress(), opened: ['ad', 'trial', 'paid'], published: true },
+            'case-04': { ...createProgress(), opened: [c1.documents[0]!.id] },
           },
         })}
         nav={nav}
       />,
     );
     await user.click(screen.getByRole('tab', { name: '事件手帳' }));
-    // case-01: ad(0) + trial(1) + paid(1) = 2 / 4
+    // case-03: ad(0) + trial(1) + paid(1) = 2 / 4
     // <dd> の aria-label は外した（MVP-039）。<dt>「調査予算」+ 値のテキストで確認する
     expect(screen.getByText('2 / 4')).toBeInTheDocument();
     expect(screen.getByText('解決')).toBeInTheDocument();
@@ -146,7 +146,7 @@ describe('EncyclopediaScreen: 実績タブ', () => {
       <EncyclopediaScreen
         game={api({
           cases: LEGACY_CASES,
-          progressByCase: { 'case-01': { ...createProgress(), opened: ['ad'] } },
+          progressByCase: { 'case-03': { ...createProgress(), opened: ['ad'] } },
         })}
         nav={nav}
       />,

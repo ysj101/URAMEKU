@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import json,sys,hashlib,wave
+import xml.etree.ElementTree as ET
 from pathlib import Path
 from PIL import Image
 ROOT=Path(__file__).resolve().parents[1]
@@ -21,6 +22,11 @@ for item in manifest['assets']:
 for fp in sorted((ROOT/'data/cases').glob('*.json')):
  try:
   case=json.loads(fp.read_text(encoding='utf-8'))
+  assert fp.stem == case['id'], 'JSON filename and case ID differ'
+  cover=ROOT/'public/assets/cases'/case['id']/'cover.svg'
+  labels=[node.text for node in ET.parse(cover).iter('{http://www.w3.org/2000/svg}text')]
+  assert case['title'] in labels, 'Cover title differs from case title'
+  assert 'CASE '+case['id'].split('-')[1] in labels, 'Cover number differs from case ID'
   assert len(case['documents'])>=5
   if case.get('schemaVersion') == 2:
    assert isinstance(case.get('v2'),dict) and case['v2'].get('modes')

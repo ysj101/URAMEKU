@@ -93,7 +93,7 @@ function sleep(ms) {
 }
 
 // ---------------------------------------------------------------------------
-// 進行状態（CASE 01 の正解は data/cases/case-01.json を参照。答えは変えない）
+// 進行状態（CASE 03 の正解は data/cases/case-03.json を参照。答えは変えない）
 // ---------------------------------------------------------------------------
 function progress(over = {}) {
   return {
@@ -110,6 +110,7 @@ function progress(over = {}) {
 function save(stage, caseProgress) {
   return {
     version: 3,
+    // 保存形式v3のID。v5で現行case-03へ移行する。
     active: 'case-01',
     progress: { 'case-01': caseProgress },
     finished: {},
@@ -157,13 +158,13 @@ const SCREENS = [
   },
   {
     id: 'play-investigate',
-    hash: '#/play/case-01',
+    hash: '#/play/case-03',
     save: save('investigate', progress({ opened: ['ad', 'trial'], pinned: ['trial'] })),
     ready: `!!document.querySelector('.desk-grid')`,
   },
   {
     id: 'play-board',
-    hash: '#/play/case-01',
+    hash: '#/play/case-03',
     save: save(
       'investigate',
       progress({ ...SOLVED, calculations: { all: '45' }, chosenLink: ['trial'] }),
@@ -172,7 +173,7 @@ const SCREENS = [
   },
   {
     id: 'play-dialog',
-    hash: '#/play/case-01',
+    hash: '#/play/case-03',
     save: save('investigate', progress({ opened: ['ad', 'trial'], pinned: ['trial'] })),
     ready: `!!document.querySelector('.desk-grid')`,
     // 既読タイル（再読は無料）を DOM から click してダイアログを開く
@@ -182,19 +183,19 @@ const SCREENS = [
   },
   {
     id: 'play-article',
-    hash: '#/play/case-01',
+    hash: '#/play/case-03',
     save: save('article', progress({ ...SOLVED, article: ['f0', 'f1'] })),
     ready: `!!document.querySelector('.article-slots')`,
   },
   {
     id: 'play-result-approved',
-    hash: '#/play/case-01',
+    hash: '#/play/case-03',
     save: save('article', progress({ ...SOLVED, article: ['f0', 'f1', 'f2'], published: true })),
     ready: `document.querySelector('.result')?.dataset.settled === 'true'`,
   },
   {
     id: 'play-result-rejected',
-    hash: '#/play/case-01',
+    hash: '#/play/case-03',
     save: save(
       'article',
       progress({

@@ -1,10 +1,10 @@
-const CASE_IDS = ['case-01', 'case-02', 'case-03', 'case-04', 'case-05'];
+const CASE_IDS = ['case-03', 'case-04', 'case-05', 'case-06', 'case-07'];
 const asset = name => `../public/assets/${name}`;
 const el = id => document.getElementById(id);
 const clean = str => String(str ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
 const storageKey = 'paper-backside-mvp-v1';
 let cases = [], current, state, modalDocId = null;
-let saved = { active:'case-01', progress:{}, finished:{} };
+let saved = { active:'case-03', progress:{}, finished:{} };
 try { const old = JSON.parse(localStorage.getItem(storageKey)); if(old && old.progress && old.finished) saved=old; } catch { /* private browsing */ }
 function persist(){ try {localStorage.setItem(storageKey,JSON.stringify(saved));} catch {/* ephemeral mode */} }
 function resetCase(){return { opened:[], pinned:[], chosenLink:[], calculations:{}, article:[], published:false, revealed:false };}
@@ -17,10 +17,10 @@ function useCase(id){
 const remaining=()=>current.budget-current.documents.filter(d=>state.opened.includes(d.id)).reduce((a,d)=>a+d.cost,0);
 const docBy=id=>current.documents.find(d=>d.id===id);
 function renderCaseList(){
- el('case-list').innerHTML=cases.map((c,i)=>`<button class="case-option ${c.id===current.id?'active':''}" data-action="case" data-id="${c.id}" type="button"><span class="num">CASE ${String(i+1).padStart(2,'0')} ${saved.finished[c.id]?'· CLEARED':''}</span><span class="case-name">${clean(c.title)}</span><span class="meta">${clean(c.difficulty)} / ${clean(c.estimated_time)}</span></button>`).join('');
+ el('case-list').innerHTML=cases.map(c=>`<button class="case-option ${c.id===current.id?'active':''}" data-action="case" data-id="${c.id}" type="button"><span class="num">${clean(c.id.toUpperCase().replace('-', ' '))} ${saved.finished[c.id]?'· CLEARED':''}</span><span class="case-name">${clean(c.title)}</span><span class="meta">${clean(c.difficulty)} / ${clean(c.estimated_time)}</span></button>`).join('');
 }
 function renderHeader(){
- el('case-header').innerHTML=`<div class="case-header"><div><span class="case-tag">${clean(current.id.toUpperCase())} / FICTION</span><h2>${clean(current.title)}</h2><p>${clean(current.intro)}</p></div><img class="case-mascot" src="${asset('characters/shinobu/poses/idle.png')}" alt="調査記者シノブ"></div>`;
+ el('case-header').innerHTML=`<div class="case-header"><div><span class="case-tag">${clean(current.id.toUpperCase().replace('-', ' '))} / FICTION</span><h2>${clean(current.title)}</h2><p>${clean(current.intro)}</p></div><img class="case-mascot" src="${asset('characters/shinobu/poses/idle.png')}" alt="調査記者シノブ"></div>`;
 }
 function docCard(d){
  const o=state.opened.includes(d.id), pinned=state.pinned.includes(d.id), noBudget=remaining()<d.cost;
@@ -105,10 +105,10 @@ el('pin-document').addEventListener('click',()=>{
  else state.pinned.push(modalDocId);
  persist();closeDialog();
 });
-el('reset-progress').addEventListener('click',()=>{if(!confirm('この端末に保存された全ケースの進捗を削除しますか？'))return;saved={active:'case-01',progress:{},finished:{}};persist();window.stage='investigate';useCase('case-01');});
+el('reset-progress').addEventListener('click',()=>{if(!confirm('この端末に保存された全ケースの進捗を削除しますか？'))return;saved={active:'case-03',progress:{},finished:{}};persist();window.stage='investigate';useCase('case-03');});
 (async()=>{
  try {
    const results=await Promise.all(CASE_IDS.map(id=>fetch(`../data/cases/${id}.json`).then(r=>{if(!r.ok)throw Error('HTTP '+r.status);return r.json();})));
-   cases=results;window.stage='investigate';useCase(cases.some(c=>c.id===saved.active)?saved.active:'case-01');
+   cases=results;window.stage='investigate';useCase(cases.some(c=>c.id===saved.active)?saved.active:'case-03');
  } catch(err){el('case-list').textContent='読み込みエラー';el('game').innerHTML='<div class="notice">ファイルを直接開かず、プロジェクトのルートでローカルWebサーバーを起動してください。READMEを参照してください。</div>';console.error(err);}
 })();

@@ -11,12 +11,13 @@ import type { CaseProgress } from '../domain/types';
  * - v2: `version: 2` と `savedAt`（ISO 8601）を付けた形式。
  * - v3: MVP-030。途中状態 `session`（画面段階と最後に開いた資料）と、
  *       複数タブの競合判定に使う単調増加の `revision` を追加。
- * - v4: ゲームV2。旧記録をlegacyへ分離し、事件改訂・V2履歴を保存する現行形式。
+ * - v4: ゲームV2。旧記録をlegacyへ分離し、事件改訂・V2履歴を保存。
+ * - v5: 画面の事件番号に内部IDを統一し、既存記録のキーを同時に移行する現行形式。
  *
  * 将来の形式変更は `migrations` 配列に `{ from, to, up }` を 1 つ追加し、
  * `CURRENT_SAVE_VERSION` を上げるだけでよい。
  */
-export const CURRENT_SAVE_VERSION = 4;
+export const CURRENT_SAVE_VERSION = 5;
 
 /** 画面の段階。`useGame` が公開する `Stage` と同じもの。 */
 export type Stage = 'investigate' | 'article';
@@ -51,14 +52,15 @@ export interface SaveData {
 }
 
 /** 実際に storage へ書き込まれる現行形式。 */
-export interface SaveDataV4 extends SaveData {
-  version: 4;
+export interface SaveDataV5 extends SaveData {
+  version: 5;
   savedAt: string;
 }
 
-/** 互換用の別名。書き込み形式は常に最新（SaveDataV4）。 */
-export type SaveDataV3 = SaveDataV4;
-export type SaveDataV2 = SaveDataV4;
+/** 互換用の別名。書き込み形式は常に最新（SaveDataV5）。 */
+export type SaveDataV4 = SaveDataV5;
+export type SaveDataV3 = SaveDataV5;
+export type SaveDataV2 = SaveDataV5;
 
 export function createSession(): SaveSession {
   return { stage: 'investigate', lastDocumentId: null };
@@ -164,6 +166,26 @@ export function normalizeSaveData(raw: Record<string, unknown>, fallbackCaseId: 
   };
 }
 
+/** 保存形式v4までの事件ID → 画面番号に合わせた事件ID。内容と回答は変えない。 */
+const PREVIOUS_CASE_IDS: Record<string, string> = {
+  'case-01': 'case-03',
+  'case-02': 'case-04',
+  'case-03': 'case-05',
+  'case-04': 'case-06',
+  'case-05': 'case-07',
+  'case-06': 'case-01',
+  'case-07': 'case-02',
+};
+function renumberCaseId(id: string): string {
+  const [base, ...suffix] = id.split('@');
+  const next = Object.hasOwn(PREVIOUS_CASE_IDS, base!) ? PREVIOUS_CASE_IDS[base!]! : base!;
+  return [next, ...suffix].join('@');
+}
+function renumberCaseMap(raw: unknown): unknown {
+  if (!isRecord(raw)) return raw;
+  return Object.fromEntries(Object.entries(raw).map(([id, value]) => [renumberCaseId(id), value]));
+}
+
 /** 移行ステップ。from の昇順に並べ、隙間を作らないこと。 */
 export const migrations: readonly MigrationStep[] = [
   {
@@ -211,6 +233,27 @@ export const migrations: readonly MigrationStep[] = [
       finished: {},
       session: createSession(),
       migrationNotice: '旧MVPの記録を履歴として保持しました。V2では事件を新しく開始します。',
+    }),
+  },
+  {
+    from: 4,
+    to: 5,
+    up: (raw) => ({
+      ...raw,
+      version: 5,
+      active: typeof raw.active === 'string' ? renumberCaseId(raw.active) : raw.active,
+      ...Object.fromEntries(
+        [
+          'progress',
+          'finished',
+          'caseRevisions',
+          'legacyProgress',
+          'legacyFinished',
+          'archivedProgress',
+        ]
+          .filter((key) => key in raw)
+          .map((key) => [key, renumberCaseMap(raw[key])]),
+      ),
     }),
   },
 ];
@@ -283,10 +326,10 @@ export function migrate(
 }
 
 /** 書き込み用に現行形式へ包む。 */
-export function toSaveDataV4(
+export function toSaveDataV5(
   data: SaveData,
   now: () => string = () => new Date().toISOString(),
-): SaveDataV4 {
+): SaveDataV5 {
   return {
     version: CURRENT_SAVE_VERSION,
     savedAt: now(),
@@ -304,6 +347,7 @@ export function toSaveDataV4(
   };
 }
 
-/** 互換用の別名。常に最新形式（v4）で包む。 */
-export const toSaveDataV3 = toSaveDataV4;
-export const toSaveDataV2 = toSaveDataV4;
+/** 互換用の別名。常に最新形式（v5）で包む。 */
+export const toSaveDataV4 = toSaveDataV5;
+export const toSaveDataV3 = toSaveDataV5;
+export const toSaveDataV2 = toSaveDataV5;
