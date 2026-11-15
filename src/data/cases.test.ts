@@ -5,22 +5,29 @@ import { LEGACY_CASES } from '../test/legacyCases';
 import { completeV2Case } from '../test/completeV2Case';
 
 describe('実データ（data/cases）', () => {
-  it('全件が読み込め、難易度の低い順・同じ難易度なら ID 順に並ぶ', () => {
+  it('全件が読み込め、ID 順に並ぶ', () => {
     expect(CASES.length).toBeGreaterThanOrEqual(5);
     expect(CASES.map((c) => c.id)).toEqual(sortCases(CASES).map((c) => c.id));
     expect(new Set(CASES.map((c) => c.id)).size).toBe(CASES.length);
   });
-  it('sortCases は標準 → 難関 → 最難関、同じ難易度なら ID 順にする', () => {
+  it('sortCases は難易度を変えても事件ID順を保つ', () => {
     const sorted = sortCases([
-      { id: 'case-02', difficulty: 'HARD' as const },
+      { id: 'case-04', difficulty: 'HARD' as const },
       { id: 'case-09', difficulty: 'NORMAL' as const },
-      { id: 'case-01', difficulty: 'EXPERT' as const },
-      { id: 'case-07', difficulty: 'NORMAL' as const },
+      { id: 'case-03', difficulty: 'EXPERT' as const },
+      { id: 'case-02', difficulty: 'NORMAL' as const },
     ]);
-    expect(sorted.map((c) => c.id)).toEqual(['case-07', 'case-09', 'case-02', 'case-01']);
+    expect(sorted.map((c) => c.id)).toEqual(['case-02', 'case-03', 'case-04', 'case-09']);
   });
-  it('表示番号は一覧の位置で決まる', () => {
+  it('表示番号と事件ID・タイトルが一致する', () => {
+    expect(CASES.map((c) => [c.id, c.title])).toEqual([
+      ['case-01', '平均おこづかい3000円'], ['case-02', '教材で平均20点アップ'],
+      ['case-03', '消えた55人の利用者'], ['case-04', '半額セールの値札'],
+      ['case-05', '8割が支持の正体'], ['case-06', '取り戻せない開発費'],
+      ['case-07', '急上昇するグラフ'],
+    ]);
     const ids = CASES.map((c) => c.id);
+    for (const id of ids) expect(caseNumber(id)).toBe(Number(id.slice(-2)));
     expect(caseNumber(ids[0] ?? '')).toBe(1);
     expect(caseNumber(ids.at(-1) ?? '')).toBe(ids.length);
     expect(caseNumber('case-99')).toBeNull();
@@ -68,6 +75,6 @@ describe('実データ（data/cases）', () => {
   it('次の事件へ循環する', () => {
     const ids = CASES.map((c) => c.id);
     expect(nextCaseId(ids.at(-1) ?? '')).toBe(ids[0]);
-    expect(findCase('case-03')?.title).toBeTruthy();
+    expect(findCase('case-05')?.title).toBeTruthy();
   });
 });

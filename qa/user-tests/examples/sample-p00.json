@@ -28,7 +28,7 @@
       "help_given": []
     },
     {
-      "case_id": "case-01",
+      "case_id": "case-03",
       "started_at": "13:00",
       "ended_at": "38:30",
       "minutes": 25.5,
@@ -45,7 +45,7 @@
       ]
     },
     {
-      "case_id": "case-02",
+      "case_id": "case-04",
       "started_at": "39:00",
       "ended_at": "48:00",
       "minutes": 9,
@@ -59,7 +59,7 @@
   "stuck_points": [
     {
       "time": "16:20",
-      "case_id": "case-01",
+      "case_id": "case-03",
       "screen": "board",
       "action": "link_select",
       "observation": "資料を2枚タップした後「照合」ボタンを探して画面を上下に3回スクロール。「どこで決定するの」と発言。",
@@ -69,7 +69,7 @@
     },
     {
       "time": "22:00",
-      "case_id": "case-01",
+      "case_id": "case-03",
       "screen": "desk",
       "action": "open_document",
       "observation": "予算0のまま未閲覧の資料をタップし続け、「開けない」と発言。リセットの操作に気付かず2分経過。",
@@ -79,7 +79,7 @@
     },
     {
       "time": "30:45",
-      "case_id": "case-01",
+      "case_id": "case-03",
       "screen": "calc",
       "action": "calc_input",
       "observation": "分母に無料登録者数を使うべきところを有料契約者数で計算。資料を読み直して自分で修正。",
@@ -89,7 +89,7 @@
     },
     {
       "time": "43:00",
-      "case_id": "case-02",
+      "case_id": "case-04",
       "screen": "document",
       "action": "read",
       "observation": "値札の切り抜きの小さい数字を2回拡大。「下の行が紙のしわで読みにくい」と発言。",
@@ -110,7 +110,7 @@
   },
   "readability": {
     "paper_decoration_issue": true,
-    "note": "case-02 の値札資料で、しわのテクスチャと重なった行の数字が読みにくいとの発言。"
+    "note": "case-04 の値札資料で、しわのテクスチャと重なった行の数字が読みにくいとの発言。"
   },
   "interview": {
     "q1": "「45%と90%は分母が違う。全員のうちの続けた人と、お金を払った人のうちの続けた人」",

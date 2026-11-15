@@ -1,570 +1,245 @@
 {
   "id": "case-02",
-  "title": "半額セールの値札",
-  "bias": "アンカリングと参照価格",
-  "difficulty": "HARD",
-  "estimated_time": "5〜10分",
-  "intro": "「8,000円から半額」の靴を買うか。最初の印象を記録し、価格履歴の開示後に判断を維持するか更新しよう。購入方針そのものに正解はない。",
+  "title": "教材で平均20点アップ",
+  "bias": "比べる相手のない前後比較",
+  "difficulty": "NORMAL",
+  "estimated_time": "3〜5分",
+  "intro": "塾のチラシに「この教材で平均20点アップ！」。本当に教材のおかげ？ 教材を使っていない人の点数も調べて、チラシに書き足すことを報告しよう。",
   "budget": 4,
   "documents": [
     {
-      "id": "poster",
-      "title": "店舗のポスター",
-      "content": "新作スニーカー 8,000円 → 4,000円。「今だけ50%OFF」とある。",
+      "id": "flyer",
+      "title": "塾のチラシ",
+      "content": "「この教材を使った生徒は、中間から期末で平均20点アップ！」と大きく書かれている。使っていない人の点数は載っていない。",
       "cost": 0,
       "visual": "advert"
     },
     {
-      "id": "launch",
-      "title": "発売時の価格台帳",
-      "content": "発売初日に8,000円で販売された記録はある。ただし発売直後に価格が変更された。",
+      "id": "scores",
+      "title": "受講者の点数表",
+      "content": "教材を使った20人の点数。中間テストの平均は52点、期末テストの平均は72点だった。たしかに20点上がっている。",
       "cost": 1,
       "visual": "ledger"
     },
     {
-      "id": "history",
-      "title": "30日間の価格履歴",
-      "content": "直近30日間の大半は4,200円で販売。セール当日4,000円。4,200円との差は200円（約4.8%）。",
+      "id": "grade",
+      "title": "学年全体の平均点",
+      "content": "学年160人の平均点。中間テストは50点、期末テストは68点で、18点上がっている。教材を使っていない人も入っている。",
       "cost": 1,
       "visual": "report"
     },
     {
-      "id": "stock",
-      "title": "在庫と販売記録",
-      "content": "直近30日間に4,200円で実際の販売があった。8,000円は発売時の短期間の価格。",
-      "cost": 1,
-      "visual": "receipt"
-    },
-    {
-      "id": "interview",
-      "title": "広告担当の取材記録",
-      "content": "「半額」は発売時の8,000円を基準にした表現だと説明。直前価格との比較ではない。",
+      "id": "teacher",
+      "title": "先生のメモ",
+      "content": "期末テストは基本問題が中心で、出る範囲もせまかった。学年全体の平均は中間より18点上がった。",
       "cost": 1,
       "visual": "clipping"
     },
     {
-      "id": "competitor",
-      "title": "競合店の価格",
-      "content": "競合店の類似シューズは3,900〜7,000円（同一商品ではない）。対象商品の正しい割引率の直接証拠にはならない。",
+      "id": "reviews",
+      "title": "塾の口コミ",
+      "content": "「点が上がった」「教材が分かりやすい」という声が多い。何点上がったかや、教材を使わなかった人との差は、この口コミだけでは分からない。",
       "cost": 1,
       "visual": "news"
     }
   ],
-  "required_evidence": [
-    "launch",
-    "history",
-    "stock"
-  ],
-  "required_link": [
-    "poster",
-    "history"
-  ],
-  "link_prompt": "表示に使った比較基準と、一定期間に実際に売られた価格。その意味の違いを根拠付きで整理します。",
-  "headline_fragments": [
-    {
-      "id": "f0",
-      "text": "半額表示の基準は発売時価格",
-      "kind": "correct",
-      "reason": "「半額」の基準価格8,000円は発売初日の価格だと、発売資料と担当者の説明が示している。",
-      "evidence": [
-        "launch",
-        "interview"
-      ]
-    },
-    {
-      "id": "f1",
-      "text": "直近の主な販売価格との差は約5%",
-      "kind": "correct",
-      "reason": "直近30日の主な販売価格4,200円との差は200円で約5%にすぎない。",
-      "evidence": [
-        "history"
-      ]
-    },
-    {
-      "id": "f2",
-      "text": "現在の販売価格は4,000円",
-      "kind": "correct",
-      "reason": "セール当日の販売価格は4,000円である。",
-      "evidence": [
-        "poster",
-        "history"
-      ]
-    },
-    {
-      "id": "f3",
-      "text": "常に8,000円で販売されていた",
-      "kind": "ignored-counter-evidence",
-      "reason": "8,000円は発売初日の短期間のみで、直近30日の大半は4,200円で実売があった。",
-      "evidence": [
-        "launch",
-        "history",
-        "stock"
-      ]
-    },
-    {
-      "id": "f4",
-      "text": "絶対に不当表示である",
-      "kind": "causal-claim",
-      "reason": "資料は価格履歴と担当者の説明を示すだけで、法的な評価に必要な事実の確認がなく、断定は資料の範囲を超える。",
-      "evidence": [
-        "interview"
-      ]
-    },
-    {
-      "id": "f5",
-      "text": "競合より必ず最安値",
-      "kind": "overgeneralization",
-      "reason": "競合の類似品には4,000円より安い例があり、同一商品でもないため「必ず最安値」とは言えない。",
-      "evidence": [
-        "competitor"
-      ]
-    },
-    {
-      "id": "f6",
-      "text": "直近30日の価格は不明",
-      "kind": "ignored-counter-evidence",
-      "reason": "30日間の価格履歴と販売記録が存在し、直近価格は4,200円と確認できる。",
-      "evidence": [
-        "history",
-        "stock"
-      ]
-    },
-    {
-      "id": "f7",
-      "text": "購入者は全員損をした",
-      "kind": "overgeneralization",
-      "reason": "4,000円は直近価格より200円安く、購入者が損をしたことを示す資料はない。",
-      "evidence": [
-        "stock",
-        "history"
-      ]
-    }
-  ],
-  "correct_fragments": [
-    "f0",
-    "f1",
-    "f2"
-  ],
+  "required_evidence": ["scores", "grade"],
+  "required_link": ["scores", "grade"],
+  "link_prompt": "チラシの数字のもとになった資料と、比べる相手になる資料。両方の関係を組みます。",
+  "headline_fragments": [],
+  "correct_fragments": [],
   "debrief": {
-    "explanation": "8,000円と比べた半額という表現と、実売の多かった4,200円から4,000円への変更は別の比較である。履歴と販売記録の照合が比較基準を明確にする。購入の妥当性は用途・予算にもよる。",
-    "takeaway": "最初に見た比較基準をいったん言葉にし、別の基準で見たとき何が変わるか確かめる。",
+    "explanation": "教材を使った20人は、中間52点から期末72点へ20点上がった。これは点数表のとおり。ただし、学年全体160人も50点から68点へ18点上がっていて、期末は基本問題が中心だった。前と後を比べるだけでは、教材のおかげで何点上がったかは決められない。",
+    "takeaway": "「上がった」を見たら、「使わなかった人はどうだった？」も確かめる。比べる相手がいないと、何のおかげかは分からない。",
     "visualGuide": {
-      "title": "最初に見た価格が、判断の出発点になる。",
-      "intro": "先に見た数字が、その後の判断に影響することがある。これを「アンカリング」という。今回は、発売時と最近の価格を比べよう。",
-      "imageAlt": "アンカリングの図解。発売時8,000円と今の4,000円なら半額。最近の大半の4,200円と比べると、差は200円、約4.8%。",
+      "title": "「20点アップ」の相手は、だれ？",
+      "intro": "前と後を比べるだけでは、何のおかげで変わったかは分からない。同じ時期に、使わなかった人がどう変わったかと並べて見よう。",
+      "image": "cases/case-02/debrief/missing-comparison-mechanism.png",
+      "imageAlt": "前後比較の図解。教材を使った20人は中間52点から期末72点で20点アップ。学年全体160人は中間50点から期末68点で18点アップ。期末は基本問題が中心でみんな上がった。",
       "panels": [
         {
-          "title": "先に見た価格が基準になる",
-          "body": "8,000円が先に目に入ると、4,000円をお得に感じることがある。",
-          "evidence": [
-            "poster"
-          ]
+          "title": "受講者は20点上がった",
+          "body": "教材を使った20人の平均は、中間52点から期末72点。チラシの数字そのものは点数表と合っている。",
+          "evidence": ["scores"]
         },
         {
-          "title": "最近の価格でも比べる",
-          "body": "最近の大半は4,200円。今の4,000円との差は200円で、約4.8%安い。実際の販売記録もある。",
-          "evidence": [
-            "history",
-            "stock"
-          ]
+          "title": "使っていない人も18点上がった",
+          "body": "学年全体160人の平均は、中間50点から期末68点。教材を使っていない人も含めて、ほぼ同じだけ上がっている。",
+          "evidence": ["grade"]
         },
         {
-          "title": "発売時との比較は別",
-          "body": "発売時に8,000円で売った記録はある。ただし、最近ずっとその価格だったわけではない。",
-          "evidence": [
-            "launch",
-            "history"
-          ]
+          "title": "テストが変わったことも理由になる",
+          "body": "期末は基本問題が中心で、範囲もせまかった。教材のおかげと言えるのは、差の2点までかもしれない。それも、この資料だけでは決めきれない。",
+          "evidence": ["grade", "teacher"]
         }
       ],
-      "conclusion": "半額は発売時との比較。最近の主な販売価格から半額になったわけではない。",
-      "limit": "自分に必要か、予算に合うかは価格の記録だけでは決まらない。一回の反応だけで、表示の影響も決められない。",
-      "takeaway": "「いくらから安くなった？」と「自分に必要？」を分けて考えよう。",
-      "image": "cases/case-02/debrief/anchoring-mechanism.png"
+      "conclusion": "チラシには「教材を使っていない人も含めた学年全体も18点上がった」と書き足す必要がある。",
+      "limit": "教材を使った20人がもともとどんな生徒だったかや、教材だけの効果が何点かは、この資料だけでは分からない。",
+      "takeaway": "上がった？ と一緒に、使わなかった人は？ も確かめよう。"
     }
   },
-  "disclaimer": "登場人物・企業・統計・広告はすべて架空です。",
+  "disclaimer": "登場人物・塾・学校・点数はすべて架空です。",
   "analysis_tasks": [],
+  "schemaVersion": 2,
   "v2": {
-    "revision": 2,
-    "modes": [
-      "experiment",
-      "decoding"
-    ],
+    "revision": 1,
+    "modes": ["decoding"],
     "decoding": [
       {
-        "id": "reference",
-        "prompt": "「半額」という言葉と、日常の買い物の比較基準をどう区別する？",
+        "id": "what_rose",
+        "prompt": "チラシの「20点アップ」は、どう読むのが資料に合う？",
         "options": [
           {
-            "id": "everyday_half",
-            "text": "直近30日間ずっと8,000円だったので、普段の購入価格から半額になった。",
+            "id": "material_only",
+            "text": "教材のおかげで、受講者だけが20点上がった。",
             "status": "contradicted",
             "accepted": false,
-            "reason": "直近の大半は4,200円。発売時と直近の基準を混ぜている。",
-            "evidence": [
-              "history",
-              "stock"
-            ]
+            "reason": "学年全体の平均も18点上がっている。受講者だけが上がったとは言えない。",
+            "evidence": ["grade"]
           },
           {
-            "id": "launch_comparison",
-            "text": "発売時の価格との比較では半額だが、最近の主な販売価格からの下げ幅とは同じではない。",
+            "id": "everyone_rose",
+            "text": "受講者は20点上がったが、学年全体も18点上がっている。",
             "status": "supported",
             "accepted": true,
-            "reason": "発売時8,000円という記録と、直近30日の4,200円という履歴を区別する。",
-            "evidence": [
-              "launch",
-              "history"
-            ]
+            "reason": "受講者の点数表と、学年全体の平均点を並べて読んだ説明。",
+            "evidence": ["scores", "grade"]
           },
           {
-            "id": "interview_comparison",
-            "text": "担当者の比較基準は発売時価格で、直近価格の履歴を併せると別の下げ幅が見える。",
+            "id": "test_changed",
+            "text": "期末は基本問題が中心で、学年全体の点が上がりやすかった。",
             "status": "supported",
             "accepted": true,
-            "reason": "担当者の説明と独立した価格履歴を突き合わせる経路。",
-            "evidence": [
-              "interview",
-              "history"
-            ]
+            "reason": "先生のメモのテストの変化と、学年全体の平均点を合わせた説明。",
+            "evidence": ["grade", "teacher"]
           }
         ]
       },
       {
-        "id": "actual_sales",
-        "prompt": "価格履歴の記載は、実際に取引があった価格なのか？",
+        "id": "what_to_add",
+        "prompt": "チラシを読む人の誤解を減らすために、書き足すことは？",
         "options": [
           {
-            "id": "no_sales",
-            "text": "4,200円は掲示されただけで、販売された記録はない。",
-            "status": "contradicted",
-            "accepted": false,
-            "reason": "販売記録が直近30日の4,200円での取引を示している。",
-            "evidence": [
-              "history",
-              "stock"
-            ]
-          },
-          {
-            "id": "observed_sales",
-            "text": "履歴にある4,200円は、販売記録でも実売が確認できる。",
+            "id": "add_grade",
+            "text": "教材を使っていない人も含めた学年全体が18点上がったと書き足す。",
             "status": "supported",
             "accepted": true,
-            "reason": "履歴と販売記録を照合することで、単なる表示価格ではないと裏付けられる。",
-            "evidence": [
-              "history",
-              "stock"
-            ]
+            "reason": "学年全体の平均点と受講者の点数表から、比べる相手の変化が分かる。",
+            "evidence": ["grade", "scores"]
           },
           {
-            "id": "all_transactions",
-            "text": "30日間のどの取引も同じ価格だったと確定した。",
-            "status": "uncertain",
+            "id": "no_effect",
+            "text": "教材には効果がないと書き直す。",
+            "status": "contradicted",
             "accepted": false,
-            "reason": "大半の価格と実売の存在は確認できるが、全取引が同じとは書かれていない。",
-            "evidence": [
-              "history",
-              "stock"
-            ]
-          }
-        ]
-      },
-      {
-        "id": "purchase_limit",
-        "prompt": "価格の取材だけでは決められないことは？",
-        "options": [
-          {
-            "id": "must_buy",
-            "text": "半額表示があるので、誰にとっても今買うことが最善だと分かる。",
-            "status": "uncertain",
-            "accepted": false,
-            "reason": "比較基準だけで用途・予算・商品の適合性は分からない。",
-            "evidence": [
-              "poster",
-              "history"
-            ]
+            "reason": "受講者は学年全体より2点多く上がっている。効果がないとも、この資料では言えない。",
+            "evidence": ["scores", "grade"]
           },
           {
-            "id": "must_avoid",
-            "text": "直近価格との差が小さいので、購入した人は全員損をした。",
-            "status": "uncertain",
-            "accepted": false,
-            "reason": "価格差の大小だけでは購入者の便益や目的を確定できない。",
-            "evidence": [
-              "poster",
-              "history"
-            ]
-          },
-          {
-            "id": "value_is_conditional",
-            "text": "現在価格は確認できても、自分の用途や予算に対して買う価値があるかは別の条件で判断する。",
+            "id": "effect_unknown",
+            "text": "教材だけの効果が何点かは、この資料では分からない。",
             "status": "uncertain",
             "accepted": true,
-            "reason": "値引きの比較と購入者の目的・予算を分ける。個人の必要性は資料にない。",
-            "evidence": [
-              "poster",
-              "history"
-            ]
+            "reason": "テストの変化と学年全体の上がり方が重なっていて、教材だけの分は資料から取り出せない。",
+            "evidence": ["grade", "teacher"]
           }
         ]
       }
     ],
     "graph": {
-      "prompt": "値札の比較基準と、最近の価格を裏付ける取引記録の関係を残してください。",
+      "prompt": "チラシの数字を支える資料と、比べる相手になって読み方に条件を付ける資料。両方の関係を残してください。",
       "paths": [
         [
-          {
-            "from": "poster",
-            "to": "history",
-            "relation": "qualifies"
-          },
-          {
-            "from": "history",
-            "to": "stock",
-            "relation": "supports"
-          }
+          { "from": "scores", "to": "flyer", "relation": "supports" },
+          { "from": "grade", "to": "flyer", "relation": "qualifies" }
         ],
         [
-          {
-            "from": "interview",
-            "to": "history",
-            "relation": "qualifies"
-          },
-          {
-            "from": "history",
-            "to": "stock",
-            "relation": "supports"
-          }
+          { "from": "scores", "to": "flyer", "relation": "supports" },
+          { "from": "teacher", "to": "flyer", "relation": "qualifies" }
         ]
       ]
     },
-    "experiment": {
-      "id": "price_frame",
-      "prompt": "深く考えず、直感で選んでください。あとで変えてもOKです。",
-      "conditions": [
-        {
-          "id": "sale_first",
-          "label": "提示A",
-          "prompt": "8,000円から4,000円へ。今だけ50%OFFと大きく書かれている。いまどうする？"
-        },
-        {
-          "id": "price_first",
-          "label": "提示B",
-          "prompt": "販売価格は4,000円。発売時の8,000円と比べた半額表示もある。いまどうする？"
-        }
-      ],
-      "choices": [
-        {
-          "id": "buy",
-          "text": "使い道と予算に合えば買う"
-        },
-        {
-          "id": "compare",
-          "text": "ほかの商品や買う時期と比べる"
-        },
-        {
-          "id": "pass",
-          "text": "今回は買わない"
-        },
-        {
-          "id": "hold",
-          "text": "情報が足りないので、いったん待つ"
-        }
-      ],
-      "revealDocuments": [
-        "history",
-        "stock"
-      ],
-      "comparisonPrompt": "どの価格をもとに、お得かどうかを考えましたか？ 資料を読んだ今の選択と、その理由を教えてください。",
-      "explanation": "先に目に入った価格が、比べるときの基準になることがあります。今回の1回だけでは、その影響があったかは分かりません。一人ひとりの特徴も決めつけません。選択は変えても、そのままでもOKです。",
-      "scenario": "前から欲しかったスニーカーが売られています。発売時は8,000円で、予算を超えていたので買いませんでした。今も欲しい気持ちは変わっていません。",
-      "ui": {
-        "initialLegend": "今ならどうする？ 1つ選ぼう",
-        "initialLabel": "最初に選んだもの：",
-        "waiting": "次は資料を読んでみよう。読み終わったら、もう一度選べます。",
-        "comparisonTitle": "2つの見せ方を比べよう",
-        "comparisonLegend": "今ならどうする？ 同じ選択でもOK",
-        "reasonLabel": "そう選んだ理由",
-        "comparisonSubmit": "この選択を記録する →",
-        "updatedLabel": "比べてから選んだもの：",
-        "complete": "2回の選択を記録しました。どれを選んでも、正解や不正解はありません。",
-        "privacy": "見せ方で感じ方が変わるか、試してみる体験です。1回の選択で、その人の特徴は決めつけません。記録はこの端末に保存します。"
-      },
-      "column": {
-        "title": "「お得」は何と比べている？",
-        "paragraphs": [
-          "8,000円が目に入ると、4,000円をお得に感じるかもしれません。",
-          "このとき比べる基準になる価格を「参照価格」と呼びます。",
-          "セイラーは1985年の論文で、買い物の満足を「商品そのものの価値」と「参照価格と比べたお得感」に分けて考えました。",
-          "ノーベル賞の公式解説でも、セールは参照価格を高く感じさせ、同じ値段でもお得に見せると説明されています。",
-          "セイラーは行動経済学への貢献で、2017年にノーベル経済学賞を受けました。参照価格の考え方そのものが受賞したわけではありません。",
-          "今回の1回だけで、価格の見せ方が選択を変えたとは言い切れません。"
-        ],
-        "sources": [
-          {
-            "label": "セイラーの1985年の論文（英語）",
-            "url": "https://doi.org/10.1287/mksc.4.3.199"
-          },
-          {
-            "label": "ノーベル賞の公式解説（2017年・英語）",
-            "url": "https://www.nobelprize.org/prizes/economic-sciences/2017/popular-information/"
-          },
-          {
-            "label": "ノーベル賞の公式発表（2017年・英語）",
-            "url": "https://www.nobelprize.org/prizes/economic-sciences/2017/press-release/"
-          }
-        ]
-      }
-    },
-    "reportPrompt": "発売時と直近の比較基準、実売の裏付け、価格だけでは決まらない購入条件を分けて報告してください。",
+    "reportPrompt": "受講者の点数の変化と、教材を使っていない人も含めた変化を分けて報告してください。数値の再計算は不要です。",
     "board": {
-      "title": "値札に比較の基準を添える",
-      "prompt": "発売時と最近の価格を分けて、値札の説明を整えましょう。",
+      "title": "チラシに比べる相手を添える",
+      "prompt": "受講者の変化と、教材を使っていない人も含めた変化を、資料で確かめましょう。",
       "tasks": [
         {
-          "id": "baseline",
-          "title": "半額の比較基準",
-          "prompt": "値札の半額表示がいつの価格と比べたものか確かめましょう。",
+          "id": "comparison",
+          "title": "比べる相手",
+          "prompt": "受講者と学年全体の点数の変化を、資料を突き合わせて確かめましょう。",
           "parts": [
-            {
-              "text": "4,000円は"
-            },
-            {
-              "field": "baseline"
-            },
-            {
-              "text": "の8,000円と比べて半額。"
-            }
+            { "text": "教材を使った20人は、中間から期末で" },
+            { "field": "rise" },
+            { "text": "。教材を使っていない人も含めた学年全体は" },
+            { "field": "others" },
+            { "text": "。" }
           ],
           "fields": [
             {
-              "id": "baseline",
-              "label": "いつの価格",
-              "original": "recent",
+              "id": "rise",
+              "label": "受講者の変化",
+              "original": "twenty",
               "options": [
-                {
-                  "id": "recent",
-                  "text": "セール直前"
-                },
-                {
-                  "id": "launch",
-                  "text": "発売時"
-                },
-                {
-                  "id": "competitor",
-                  "text": "競合店"
-                }
+                { "id": "twenty", "text": "20点上がった" },
+                { "id": "flat", "text": "変わらなかった" }
+              ]
+            },
+            {
+              "id": "others",
+              "label": "学年全体の変化",
+              "original": "unchanged",
+              "options": [
+                { "id": "unchanged", "text": "変わらなかった" },
+                { "id": "eighteen", "text": "18点上がった" },
+                { "id": "unknown", "text": "まだ分からない" }
               ]
             }
           ],
           "rules": [
             {
-              "values": {
-                "baseline": "launch"
-              },
+              "values": { "rise": "twenty", "others": "eighteen" },
               "disposition": "revise",
-              "evidence": [
-                "launch_fact",
-                "history_fact"
-              ],
-              "explanation": "8,000円は発売時の価格です。最近の主な価格は4,200円でした。"
+              "evidence": ["scores_fact", "grade_fact"],
+              "explanation": "受講者は52点から72点で20点上がりました。学年全体も50点から68点で18点上がっています。"
             },
             {
-              "values": {
-                "baseline": "launch"
-              },
+              "values": { "rise": "twenty", "others": "eighteen" },
               "disposition": "revise",
-              "evidence": [
-                "interview_fact",
-                "history_fact"
-              ],
-              "explanation": "担当者は発売時価格との比較と説明しています。最近の価格履歴も確かめられます。"
+              "evidence": ["scores_fact", "teacher_fact"],
+              "explanation": "受講者は20点上がりました。先生のメモでも、学年全体の平均は中間より18点上がっています。"
             }
           ],
-          "explanation": "半額の基準は発売時の8,000円です。最近の価格履歴と、発売時の記録か取材記録を組み合わせましょう。"
-        },
-        {
-          "id": "sales",
-          "title": "最近の販売の調査メモ",
-          "prompt": "価格履歴にある数字が実際に売れた価格なのかも確かめましょう。",
-          "parts": [
-            {
-              "text": "最近の主な価格は4,200円で、"
-            },
-            {
-              "field": "sales"
-            },
-            {
-              "text": "。"
-            }
-          ],
-          "fields": [
-            {
-              "id": "sales",
-              "label": "販売の裏付け",
-              "original": "confirmed",
-              "options": [
-                {
-                  "id": "confirmed",
-                  "text": "その価格で売れた記録もある"
-                },
-                {
-                  "id": "unconfirmed",
-                  "text": "値札だけで販売の記録はない"
-                }
-              ]
-            }
-          ],
-          "rules": [
-            {
-              "values": {
-                "sales": "confirmed"
-              },
-              "disposition": "keep",
-              "evidence": [
-                "history_fact",
-                "stock_fact"
-              ],
-              "explanation": "価格履歴の4,200円は、販売記録でも実際の取引が確認できます。"
-            }
-          ],
-          "explanation": "価格履歴と販売記録を組み合わせると、4,200円で実際に売れたことが確認できます。"
+          "explanation": "受講者の20点は点数表のとおりです。ただし、教材を使っていない人も含めた学年全体も18点上がっているので、教材だけの効果とは言えません。"
         }
       ],
       "excerpts": [
         {
-          "id": "poster_fact",
-          "documentId": "poster",
-          "quote": "新作スニーカー 8,000円 → 4,000円。「今だけ50%OFF」とある。"
+          "id": "flyer_fact",
+          "documentId": "flyer",
+          "quote": "「この教材を使った生徒は、中間から期末で平均20点アップ！」と大きく書かれている。使っていない人の点数は載っていない。"
         },
         {
-          "id": "launch_fact",
-          "documentId": "launch",
-          "quote": "発売初日に8,000円で販売された記録はある。ただし発売直後に価格が変更された。"
+          "id": "scores_fact",
+          "documentId": "scores",
+          "quote": "中間テストの平均は52点、期末テストの平均は72点だった。たしかに20点上がっている。"
         },
         {
-          "id": "history_fact",
-          "documentId": "history",
-          "quote": "直近30日間の大半は4,200円で販売。セール当日4,000円。4,200円との差は200円（約4.8%）。"
+          "id": "grade_fact",
+          "documentId": "grade",
+          "quote": "中間テストは50点、期末テストは68点で、18点上がっている。教材を使っていない人も入っている。"
         },
         {
-          "id": "stock_fact",
-          "documentId": "stock",
-          "quote": "直近30日間に4,200円で実際の販売があった。8,000円は発売時の短期間の価格。"
+          "id": "teacher_fact",
+          "documentId": "teacher",
+          "quote": "期末テストは基本問題が中心で、出る範囲もせまかった。学年全体の平均は中間より18点上がった。"
         },
         {
-          "id": "interview_fact",
-          "documentId": "interview",
-          "quote": "「半額」は発売時の8,000円を基準にした表現だと説明。直前価格との比較ではない。"
-        },
-        {
-          "id": "competitor_fact",
-          "documentId": "competitor",
-          "quote": "競合店の類似シューズは3,900〜7,000円（同一商品ではない）。対象商品の正しい割引率の直接証拠にはならない。"
+          "id": "reviews_fact",
+          "documentId": "reviews",
+          "quote": "何点上がったかや、教材を使わなかった人との差は、この口コミだけでは分からない。"
         }
       ]
     }
-  },
-  "schemaVersion": 2
+  }
 }

@@ -1,8 +1,9 @@
 import { expect, test } from '@playwright/test';
-import { GAME_CASES, gotoCase } from './helpers';
+import { FIRST_CASE, gotoCase } from './helpers';
 
 test('最初の事件で資料確認から問1の記録まで案内する', async ({ page }, testInfo) => {
-  const data = GAME_CASES[0]!;
+  const data = FIRST_CASE;
+  const opening = data.documents.find((doc) => doc.cost === 0)!;
   await gotoCase(page, data);
   const guide = page.getByRole('region', { name: '次にやること' });
   // 「残っていることの一覧」は置かない。残数はタブのバッジ、状態は問いの行で確かめる。
@@ -16,16 +17,16 @@ test('最初の事件で資料確認から問1の記録まで案内する', asyn
     path: `/tmp/urameku-guide-${testInfo.project.name}.png`,
     fullPage: true,
   });
-  await guide.getByRole('button', { name: 'キャンペーン広告を開く' }).click();
-  await expect(page.getByRole('dialog')).toContainText(data.documents[0]!.content);
+  await guide.getByRole('button', { name: `${opening.title}を開く`, exact: true }).click();
+  await expect(page.getByRole('dialog')).toContainText(opening.content);
   await page.getByRole('dialog').getByRole('button', { name: '資料を閉じる' }).click();
   await guide.getByRole('button', { name: '問1を開く' }).click();
   const task = data.v2!.decoding[0]!;
   const group = page.getByRole('group', { name: task.prompt, exact: true });
   await expect(group).toContainText('問 1 ・ 未回答');
-  const option = task.options.find((entry) => entry.id === 'paid_cohort')!;
+  const option = task.options.find((entry) => entry.accepted && entry.status === 'supported')!;
   await page.getByRole('radio', { name: option.text, exact: true }).check();
-  const unread = option.evidence.filter((id) => id !== data.documents[0]!.id);
+  const unread = option.evidence.filter((id) => id !== opening.id);
   // 答えだけ選んだ問いは根拠待ち。行に未読の件数が出て、バッジはまだ進まない。
   await expect(group).toContainText('問 1 ・ 根拠待ち');
   await expect(decodingTab).toHaveText(`解読メモ0 / ${total}`);

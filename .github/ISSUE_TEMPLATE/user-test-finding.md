@@ -17,7 +17,7 @@ assignees: ''
 
 - 画面: `<home / cases / tutorial / intro / desk / document / board / calc / article / result / encyclopedia / settings>`
 - 操作: `<open_document / pin / link_select / calc_input / fragment_order / publish / reset_case / ...>`
-- ケース: `<tutorial / case-01 / case-02 / ...>`
+- ケース: `<tutorial / case-03 / case-04 / ...>`
 - 何が起きたか:
 - 参加者の発言（引用）:
 

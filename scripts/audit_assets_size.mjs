@@ -18,7 +18,7 @@
  *  - `${...}` を含む動的参照は、ディレクトリ内の同拡張子ファイルを「候補」として
  *    最大 1 ファイル（最も大きいもの）だけ初回分に数える（例: 事件一覧の状態バッジは
  *    初回は全件 `new` なので 1 ファイルしか転送されない）。
- *  - CASE 01 の資料サムネイルは `data/cases/case-01.json` の documents から展開する。
+ *  - CASE 01 の資料サムネイルは `data/cases/case-03.json` の documents から展開する。
  *
  * 使い方:
  *   npm run audit:assets               # 人が読むレポート（Markdown 風）
@@ -100,8 +100,8 @@ const FIRST_VIEW_SOURCES = [
   { file: 'src/app/layout.css', screen: 'shell' },
   { file: 'src/screens/HomeScreen.tsx', screen: 'home' },
   { file: 'src/screens/CaseSelectScreen.tsx', screen: 'cases' },
-  { file: 'src/components/CaseHeader.tsx', screen: 'case-01' },
-  { file: 'src/screens/InvestigationScreen.tsx', screen: 'case-01' },
+  { file: 'src/components/CaseHeader.tsx', screen: 'case-03' },
+  { file: 'src/screens/InvestigationScreen.tsx', screen: 'case-03' },
 ];
 
 /** `assetUrl('x')` などから相対パスを取り出す（check_asset_refs.mjs と同じ規則） */
@@ -139,7 +139,7 @@ function expandDynamic(pattern, byRel) {
 }
 
 function case01DocumentThumbnails(byRel) {
-  const caseFile = resolve(ROOT, 'data/cases/case-01.json');
+  const caseFile = resolve(ROOT, 'data/cases/case-03.json');
   if (!existsSync(caseFile)) return [];
   const data = JSON.parse(readFileSync(caseFile, 'utf8'));
   return data.documents
@@ -170,7 +170,7 @@ export function collectFirstView(byRel) {
     }
     if (file.endsWith('InvestigationScreen.tsx')) {
       for (const a of case01DocumentThumbnails(byRel))
-        add(a, screen, 'DocumentGrid（case-01 の documents）');
+        add(a, screen, 'DocumentGrid（case-03 の documents）');
     }
   }
   return { items: [...items.values()], missing };

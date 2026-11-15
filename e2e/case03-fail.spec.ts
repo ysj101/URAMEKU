@@ -1,8 +1,8 @@
 import { expect, test } from '@playwright/test';
-import { fillReport, goToArticle, gotoCase01, submitArticle } from './helpers';
+import { fillReport, goToArticle, gotoCase03, submitArticle } from './helpers';
 
 test('報告だけでは完了せず、根拠の解説は明示操作まで隠れる', async ({ page }) => {
-  await gotoCase01(page);
+  await gotoCase03(page);
   await goToArticle(page);
   await fillReport(page);
   await submitArticle(page);

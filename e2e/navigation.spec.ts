@@ -2,11 +2,11 @@ import { expect, test } from '@playwright/test';
 import { expectStage } from './helpers';
 
 /** ハッシュ直接指定で各画面が開く（URL 共有・リロード耐性） */
-test('#/play/case-05 で CASE 05 の調査画面が開く', async ({ page }) => {
-  await page.goto('/#/play/case-05');
+test('#/play/case-07 で CASE 07 の調査画面が開く', async ({ page }) => {
+  await page.goto('/#/play/case-07');
   await expect(page.getByText(/^CASE-\d{2} \/ FICTION$/)).toBeVisible();
   await expectStage(page, '資料を調べる');
-  await expect(page).toHaveURL(/#\/play\/case-05$/);
+  await expect(page).toHaveURL(/#\/play\/case-07$/);
 });
 
 test('#/encyclopedia で図鑑が開く', async ({ page }) => {

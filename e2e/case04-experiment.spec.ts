@@ -3,7 +3,7 @@ import { mkdir } from 'node:fs/promises';
 import { isAbsolute, relative, resolve, sep } from 'node:path';
 import { GAME_CASES, gotoCase, openDoc, showDesk } from './helpers';
 
-const data = GAME_CASES[1]!;
+const data = GAME_CASES.find((c) => c.id === 'case-04')!;
 const experiment = data.v2!.experiment!;
 const storageKey = 'urameku-mvp-v1';
 
@@ -53,12 +53,12 @@ for (const viewport of [
   { width: 1280, height: 800 },
   { width: 390, height: 844 },
 ]) {
-  // 本番の割り当ては事件IDから決まり、CASE02は常に提示B（src/domain/v2Progress.ts）。
+  // 本番の割り当ては事件IDから決まり、CASE04は常に提示B（src/domain/v2Progress.ts）。
   // 保存の conditionId も読み込み時に上書きされるため、提示Aはテスト側で配信JSの
   // 条件の並びを入れ替えて割り当てる（本番コードは変えない）。
   for (const letter of ['B', 'A'] as const) {
     const condition = experiment.conditions.find((item) => item.label === `提示${letter}`)!;
-    test(`CASE02 ${letter} ${viewport.width}x${viewport.height}: 選択からコラムまで`, async ({
+    test(`CASE04 ${letter} ${viewport.width}x${viewport.height}: 選択からコラムまで`, async ({
       page,
     }, testInfo) => {
       await page.setViewportSize(viewport);
@@ -170,7 +170,7 @@ for (const viewport of [
       await expect
         .poll(() =>
           page.evaluate(
-            (key) => JSON.parse(localStorage.getItem(key)!).progress['case-02'].v2.experiment.stage,
+            (key) => JSON.parse(localStorage.getItem(key)!).progress['case-04'].v2.experiment.stage,
             storageKey,
           ),
         )

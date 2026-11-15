@@ -6,7 +6,7 @@ const entry: EncyclopediaEntry = {
   id: 'framing',
   title: '題名X',
   summary: '要約Y',
-  unlockCase: 'case-01',
+  unlockCase: 'case-03',
   art: 'assets/encyclopedia/framing.png',
   disclaimer: '注記Z',
 };

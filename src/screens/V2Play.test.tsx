@@ -145,9 +145,9 @@ describe('V2プレイの統合', () => {
   });
 });
 
-describe('操作案内（case-01）', () => {
+describe('操作案内（case-03）', () => {
   it('資料を読み、問1を記録すると案内とタブのバッジ、問いの行の状態が進む', () => {
-    const data = findCase('case-01')!;
+    const data = findCase('case-03')!;
     render(<Harness data={data} />);
     const guide = screen.getByRole('region', { name: '次にやること' });
     const decodingTab = screen.getByRole('tab', { name: /解読メモ/ });

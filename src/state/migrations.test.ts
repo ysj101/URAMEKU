@@ -55,14 +55,14 @@ describe('detectVersion', () => {
 });
 
 describe('migrate', () => {
-  it('v0 → v4（旧キー形式、calculations は文字列）', () => {
+  it('v0 → v5（旧キー形式、calculations は文字列）', () => {
     const r = migrate(v0, 'case-01', { assumeVersion: 0, now });
     expect(r.reset).toBe(false);
     expect(r.migratedFrom).toBe(0);
-    expect(r.data.active).toBe('case-02');
-    expect(r.data.legacyProgress?.['case-01']?.calculations).toEqual({ t1: '12.5', t2: '' });
-    expect(r.data.legacyProgress?.['case-01']?.published).toBe(true);
-    expect(r.data.legacyProgress?.['case-02']).toEqual({
+    expect(r.data.active).toBe('case-04');
+    expect(r.data.legacyProgress?.['case-03']?.calculations).toEqual({ t1: '12.5', t2: '' });
+    expect(r.data.legacyProgress?.['case-03']?.published).toBe(true);
+    expect(r.data.legacyProgress?.['case-04']).toEqual({
       opened: ['d1'],
       chosenLink: [],
       calculations: {},
@@ -70,24 +70,24 @@ describe('migrate', () => {
       published: false,
       revealed: false,
     });
-    expect(r.data.legacyFinished).toEqual({ 'case-01': true });
+    expect(r.data.legacyFinished).toEqual({ 'case-03': true });
     expect(r.data.finished).toEqual({});
     expect(r.data.progress).toEqual({});
     expect(r.data.session).toEqual({ stage: 'investigate', lastDocumentId: null });
     expect(r.data.revision).toBe(0);
   });
-  it('v1 → v4（現行キー、version 無し）', () => {
+  it('v1 → v5（現行キー、version 無し）', () => {
     const r = migrate(v1, 'case-01', { now });
     expect(r.reset).toBe(false);
     expect(r.migratedFrom).toBe(1);
-    expect(r.data.active).toBe('case-02');
-    expect(r.data.legacyProgress?.['case-01']?.opened).toEqual(['d1', 'd2']);
+    expect(r.data.active).toBe('case-04');
+    expect(r.data.legacyProgress?.['case-03']?.opened).toEqual(['d1', 'd2']);
   });
-  it('v2 → v4（session は調査画面、revision 0）', () => {
+  it('v2 → v5（session は調査画面、revision 0）', () => {
     const r = migrate({ ...v1, version: 2, savedAt: NOW }, 'case-01', { now });
     expect(r.reset).toBe(false);
     expect(r.migratedFrom).toBe(2);
-    expect(r.data.active).toBe('case-02');
+    expect(r.data.active).toBe('case-04');
     expect(r.data.session).toEqual({ stage: 'investigate', lastDocumentId: null });
     expect(r.data.revision).toBe(0);
   });

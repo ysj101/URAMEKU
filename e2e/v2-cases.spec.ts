@@ -28,8 +28,8 @@ for (const c of GAME_CASES) {
   });
 }
 
-for (const index of [0, 2]) {
-  const c = GAME_CASES[index]!;
+for (const id of ['case-03', 'case-05']) {
+  const c = GAME_CASES.find((c) => c.id === id)!;
   test(`${c.id}: 異なる妥当な解釈と根拠経路も完了する`, async ({ page }) => {
     await prepareV2Case(page, c, { alternative: true, experimentChoice: 'hold' });
     await submitArticle(page);
@@ -37,14 +37,14 @@ for (const index of [0, 2]) {
   });
 }
 
-for (const [caseIndex, policy] of [
-  [3, 'switch'],
-  [3, 'stop'],
-  [3, 'hold'],
-  [4, 'investigate'],
-  [4, 'hold'],
+for (const [caseId, policy] of [
+  ['case-06', 'switch'],
+  ['case-06', 'stop'],
+  ['case-06', 'hold'],
+  ['case-07', 'investigate'],
+  ['case-07', 'hold'],
 ] as const) {
-  const c = GAME_CASES[caseIndex]!;
+  const c = GAME_CASES.find((c) => c.id === caseId)!;
   test(`${c.id}: 方針 ${policy} を唯一の正解へ矯正せず完了する`, async ({ page }) => {
     await prepareV2Case(page, c, { decisionChoice: policy });
     await submitArticle(page);
@@ -72,7 +72,7 @@ for (const [caseIndex, policy] of [
 }
 
 test('実験は初回表示を固定し、保留から判断を変えても途中再開できる', async ({ page }) => {
-  const c = GAME_CASES[1]!;
+  const c = GAME_CASES.find((c) => c.id === 'case-04')!;
   const definition = c.v2!.experiment!;
   await gotoCase(page, c);
   const desk = page.getByRole('region', { name: '見え方のミニ実験', exact: true });
@@ -122,7 +122,7 @@ test('実験は初回表示を固定し、保留から判断を変えても途�
 });
 
 test('意思決定の理由・初回と更新の履歴を報告途中から復元できる', async ({ page }) => {
-  const c = GAME_CASES[3]!;
+  const c = GAME_CASES.find((c) => c.id === 'case-06')!;
   await prepareV2Case(page, c, { decisionChoice: 'hold' });
   const claim = await page
     .getByRole('textbox', { name: '確認できたこと・採る方針', exact: true })
@@ -147,7 +147,7 @@ test('意思決定の理由・初回と更新の履歴を報告途中から復�
 });
 
 test('意思決定の初回判断前は追加資料を開けず、費用も消費しない', async ({ page }) => {
-  const c = GAME_CASES[3]!;
+  const c = GAME_CASES.find((c) => c.id === 'case-06')!;
   const hidden = c.documents.find(
     (document) => document.id === c.v2!.decision!.revealDocuments[0],
   )!;
@@ -163,7 +163,7 @@ test('意思決定の初回判断前は追加資料を開けず、費用も消�
 });
 
 test('資料上の事実誤認と方針・保留を区別し、明示操作後に根拠を示す', async ({ page }) => {
-  const c = GAME_CASES[0]!;
+  const c = GAME_CASES.find((c) => c.id === 'case-03')!;
   const task = c.v2!.decoding.find((item) => item.options.some((option) => !option.accepted))!;
   const wrong = task.options.find((option) => !option.accepted)!;
   await prepareV2Case(page, c);
@@ -186,9 +186,17 @@ test('資料上の事実誤認と方針・保留を区別し、明示操作後�
 for (const width of [320, 375, 390, 430]) {
   test(`幅${width}px・文字200%で解読と報告を完了できる`, async ({ page }, testInfo) => {
     await page.setViewportSize({ width, height: 844 });
-    await gotoCase(page, GAME_CASES[0]!);
+    await gotoCase(
+      page,
+      GAME_CASES.find((c) => c.id === 'case-03')!,
+    );
     await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
-    await expect(page.getByRole('heading', { level: 1, name: GAME_CASES[0]!.title })).toBeVisible();
+    await expect(
+      page.getByRole('heading', {
+        level: 1,
+        name: GAME_CASES.find((c) => c.id === 'case-03')!.title,
+      }),
+    ).toBeVisible();
     expect(
       await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1),
     ).toBe(true);
@@ -198,7 +206,11 @@ for (const width of [320, 375, 390, 430]) {
         document.documentElement.style.fontSize = '200%';
       });
     });
-    await prepareV2Case(page, GAME_CASES[0]!, { alternative: true });
+    await prepareV2Case(
+      page,
+      GAME_CASES.find((c) => c.id === 'case-03')!,
+      { alternative: true },
+    );
     expect(await page.evaluate(() => getComputedStyle(document.documentElement).fontSize)).toBe(
       '32px',
     );
@@ -240,9 +252,9 @@ async function keyboardShowDesk(page: Page, label: string) {
   await expect(tab).toBeFocused();
 }
 
-test('マウスとドラッグを使わずTab・矢印・Space・EnterでCASE01を完了する', async ({ page }) => {
+test('マウスとドラッグを使わずTab・矢印・Space・EnterでCASE03を完了する', async ({ page }) => {
   test.setTimeout(120_000);
-  const c = GAME_CASES[0]!;
+  const c = GAME_CASES.find((c) => c.id === 'case-03')!;
   const v2 = c.v2!;
   const selections = v2.decoding.map((task) => ({
     task,

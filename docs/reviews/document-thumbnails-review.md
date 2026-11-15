@@ -26,38 +26,38 @@
 
 | 事件 | # | 資料ID | visual | コスト | 輝度 | 下部モチーフ | 期待 | 判定 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| case-01 | 1 | ad | advert | 0 | 215.4 | red-bar | red-bar |  |
-| case-01 | 2 | trial | ledger | 1 | 216.3 | blue-bars | blue-bars |  |
-| case-01 | 3 | paid | receipt | 1 | 219.3 | red-ring | red-ring |  |
-| case-01 | 4 | retained | report | 1 | 214.4 | red-bar | none | 不一致 |
-| case-01 | 5 | memo | clipping | 1 | 215.7 | blue-bars | none | 不一致 |
-| case-01 | 6 | reviews | news | 1 | 219.9 | red-ring | red-ring |  |
-| case-02 | 1 | poster | advert | 0 | 214.6 | red-bar | red-bar |  |
-| case-02 | 2 | launch | ledger | 1 | 216.9 | blue-bars | blue-bars |  |
-| case-02 | 3 | history | report | 1 | 218.7 | red-ring | none | 不一致 |
-| case-02 | 4 | stock | receipt | 1 | 214.2 | red-bar | red-ring | 不一致 |
-| case-02 | 5 | interview | clipping | 1 | 216.6 | blue-bars | none | 不一致 |
-| case-02 | 6 | competitor | news | 1 | 219.4 | red-ring | red-ring |  |
-| case-03 | 1 | headline | news | 0 | 215.2 | red-bar | red-ring | 不一致 |
-| case-03 | 2 | count | report | 1 | 216.2 | blue-bars | none | 不一致 |
-| case-03 | 3 | invite | clipping | 1 | 219.0 | red-ring | none | 不一致 |
-| case-03 | 4 | population | ledger | 1 | 214.0 | red-bar | blue-bars | 不一致 |
-| case-03 | 5 | other | report | 1 | 215.9 | blue-bars | none | 不一致 |
-| case-03 | 6 | comments | news | 1 | 219.9 | red-ring | red-ring |  |
-| case-04 | 1 | minutes | news | 0 | 214.6 | red-bar | red-ring | 不一致 |
-| case-04 | 2 | spent | receipt | 1 | 217.3 | blue-bars | red-ring | 不一致 |
-| case-04 | 3 | finish | report | 1 | 219.1 | red-ring | none | 不一致 |
-| case-04 | 4 | switch | report | 1 | 214.4 | red-bar | none | 不一致 |
-| case-04 | 5 | risk | clipping | 1 | 217.8 | blue-bars | none | 不一致 |
-| case-04 | 6 | team | news | 1 | 220.3 | red-ring | red-ring |  |
-| case-05 | 1 | graphic | advert | 0 | 214.3 | red-bar | red-bar |  |
-| case-05 | 2 | raw | ledger | 1 | 217.7 | blue-bars | blue-bars |  |
-| case-05 | 3 | axis | report | 1 | 219.3 | red-ring | none | 不一致 |
-| case-05 | 4 | questions | clipping | 1 | 213.7 | red-bar | none | 不一致 |
-| case-05 | 5 | press | news | 1 | 218.4 | blue-bars | red-ring | 不一致 |
-| case-05 | 6 | rumor | news | 1 | 219.8 | red-ring | red-ring |  |
+| case-03 | 1 | ad | advert | 0 | 215.4 | red-bar | red-bar |  |
+| case-03 | 2 | trial | ledger | 1 | 216.3 | blue-bars | blue-bars |  |
+| case-03 | 3 | paid | receipt | 1 | 219.3 | red-ring | red-ring |  |
+| case-03 | 4 | retained | report | 1 | 214.4 | red-bar | none | 不一致 |
+| case-03 | 5 | memo | clipping | 1 | 215.7 | blue-bars | none | 不一致 |
+| case-03 | 6 | reviews | news | 1 | 219.9 | red-ring | red-ring |  |
+| case-04 | 1 | poster | advert | 0 | 214.6 | red-bar | red-bar |  |
+| case-04 | 2 | launch | ledger | 1 | 216.9 | blue-bars | blue-bars |  |
+| case-04 | 3 | history | report | 1 | 218.7 | red-ring | none | 不一致 |
+| case-04 | 4 | stock | receipt | 1 | 214.2 | red-bar | red-ring | 不一致 |
+| case-04 | 5 | interview | clipping | 1 | 216.6 | blue-bars | none | 不一致 |
+| case-04 | 6 | competitor | news | 1 | 219.4 | red-ring | red-ring |  |
+| case-05 | 1 | headline | news | 0 | 215.2 | red-bar | red-ring | 不一致 |
+| case-05 | 2 | count | report | 1 | 216.2 | blue-bars | none | 不一致 |
+| case-05 | 3 | invite | clipping | 1 | 219.0 | red-ring | none | 不一致 |
+| case-05 | 4 | population | ledger | 1 | 214.0 | red-bar | blue-bars | 不一致 |
+| case-05 | 5 | other | report | 1 | 215.9 | blue-bars | none | 不一致 |
+| case-05 | 6 | comments | news | 1 | 219.9 | red-ring | red-ring |  |
+| case-06 | 1 | minutes | news | 0 | 214.6 | red-bar | red-ring | 不一致 |
+| case-06 | 2 | spent | receipt | 1 | 217.3 | blue-bars | red-ring | 不一致 |
+| case-06 | 3 | finish | report | 1 | 219.1 | red-ring | none | 不一致 |
+| case-06 | 4 | switch | report | 1 | 214.4 | red-bar | none | 不一致 |
+| case-06 | 5 | risk | clipping | 1 | 217.8 | blue-bars | none | 不一致 |
+| case-06 | 6 | team | news | 1 | 220.3 | red-ring | red-ring |  |
+| case-07 | 1 | graphic | advert | 0 | 214.3 | red-bar | red-bar |  |
+| case-07 | 2 | raw | ledger | 1 | 217.7 | blue-bars | blue-bars |  |
+| case-07 | 3 | axis | report | 1 | 219.3 | red-ring | none | 不一致 |
+| case-07 | 4 | questions | clipping | 1 | 213.7 | red-bar | none | 不一致 |
+| case-07 | 5 | press | news | 1 | 218.4 | blue-bars | red-ring | 不一致 |
+| case-07 | 6 | rumor | news | 1 | 219.8 | red-ring | red-ring |  |
 
-「期待」は `visual` ごとにサムネイルに期待するモチーフ（広告=帯、台帳=棒グラフ/表、決済・記事=印、報告書・切り抜き=文章のみ）。一致している 12 枚は、CASE 01 の並び（advert, ledger, receipt, …）にテンプレートが合わせて作られ、他事件も同じ順番でモチーフが割り当てられた結果の偶然の一致で、種別を描き分けた結果ではない。
+「期待」は `visual` ごとにサムネイルに期待するモチーフ（広告=帯、台帳=棒グラフ/表、決済・記事=印、報告書・切り抜き=文章のみ）。一致している 12 枚は、CASE 03 の並び（advert, ledger, receipt, …）にテンプレートが合わせて作られ、他事件も同じ順番でモチーフが割り当てられた結果の偶然の一致で、種別を描き分けた結果ではない。
 
 ## 2. 見分けにくいペア
 
@@ -67,36 +67,36 @@
 
 | 資料A | 資料B | grayMad | hist交差 | 共通点 |
 | --- | --- | --- | --- | --- |
-| case-02/poster | case-02/stock | 1.15 | 0.995 | 赤帯。広告と在庫記録が同じ見た目 |
-| case-04/minutes | case-04/switch | 1.30 | 0.998 | 赤帯。議事録と見積りが同じ見た目 |
-| case-05/graphic | case-05/questions | 1.32 | 0.994 | 赤帯。グラフ広告と設問記録が同じ見た目 |
-| case-01/paid | case-01/reviews | 1.34 | 0.992 | 赤印。決済集計と利用者の声が同じ見た目 |
-| case-05/axis | case-05/rumor | 1.62 | 0.996 | 赤印 |
-| case-02/history | case-02/competitor | 1.66 | 0.992 | 赤印 |
-| case-03/headline | case-03/population | 1.70 | 0.992 | 赤帯 |
-| case-01/ad | case-01/retained | 1.77 | 0.993 | 赤帯。広告と継続状況（核心資料）が同じ見た目 |
-| case-04/finish | case-04/team | 1.80 | 0.990 | 赤印。**finish / switch は比較対象の 2 見積りなのに、switch は minutes と、finish は team と同じ見た目** |
-| case-03/invite | case-03/comments | 2.75 | 0.993 | 赤印 |
-| case-04/spent | case-04/risk | 3.23 | 0.995 | 青棒 |
+| case-04/poster | case-04/stock | 1.15 | 0.995 | 赤帯。広告と在庫記録が同じ見た目 |
+| case-06/minutes | case-06/switch | 1.30 | 0.998 | 赤帯。議事録と見積りが同じ見た目 |
+| case-07/graphic | case-07/questions | 1.32 | 0.994 | 赤帯。グラフ広告と設問記録が同じ見た目 |
+| case-03/paid | case-03/reviews | 1.34 | 0.992 | 赤印。決済集計と利用者の声が同じ見た目 |
+| case-07/axis | case-07/rumor | 1.62 | 0.996 | 赤印 |
+| case-04/history | case-04/competitor | 1.66 | 0.992 | 赤印 |
+| case-05/headline | case-05/population | 1.70 | 0.992 | 赤帯 |
+| case-03/ad | case-03/retained | 1.77 | 0.993 | 赤帯。広告と継続状況（核心資料）が同じ見た目 |
+| case-06/finish | case-06/team | 1.80 | 0.990 | 赤印。**finish / switch は比較対象の 2 見積りなのに、switch は minutes と、finish は team と同じ見た目** |
+| case-05/invite | case-05/comments | 2.75 | 0.993 | 赤印 |
+| case-06/spent | case-06/risk | 3.23 | 0.995 | 青棒 |
 
-事件内の同モチーフペアは 15 組（各事件 3 組）。推理上の対比資料（CASE 04 の `finish`/`switch`、CASE 02 の `launch`/`history`）が見た目で区別できないのが最も影響が大きい。
+事件内の同モチーフペアは 15 組（各事件 3 組）。推理上の対比資料（CASE 06 の `finish`/`switch`、CASE 04 の `launch`/`history`）が見た目で区別できないのが最も影響が大きい。
 
 ### 2.2 事件間（grayMad 1.3 未満、上位）
 
 | 資料A | 資料B | grayMad | hist交差 |
 | --- | --- | --- | --- |
-| case-01/paid | case-04/finish | 0.78 | 0.998 |
-| case-03/comments | case-05/rumor | 0.81 | 0.998 |
-| case-01/reviews | case-05/rumor | 0.91 | 0.996 |
-| case-01/reviews | case-03/comments | 1.04 | 0.996 |
-| case-01/retained | case-02/stock | 1.05 | 0.997 |
-| case-02/poster | case-03/headline | 1.05 | 0.996 |
-| case-02/competitor | case-04/finish | 1.08 | 0.997 |
-| case-02/poster | case-04/minutes | 1.10 | 0.997 |
-| case-02/stock | case-04/switch | 1.11 | 0.996 |
-| case-01/retained | case-03/population | 1.12 | 0.999 |
-| case-01/retained | case-05/graphic | 1.12 | 0.996 |
-| case-01/retained | case-04/switch | 1.13 | 0.998 |
+| case-03/paid | case-06/finish | 0.78 | 0.998 |
+| case-05/comments | case-07/rumor | 0.81 | 0.998 |
+| case-03/reviews | case-07/rumor | 0.91 | 0.996 |
+| case-03/reviews | case-05/comments | 1.04 | 0.996 |
+| case-03/retained | case-04/stock | 1.05 | 0.997 |
+| case-04/poster | case-05/headline | 1.05 | 0.996 |
+| case-04/competitor | case-06/finish | 1.08 | 0.997 |
+| case-04/poster | case-06/minutes | 1.10 | 0.997 |
+| case-04/stock | case-06/switch | 1.11 | 0.996 |
+| case-03/retained | case-05/population | 1.12 | 0.999 |
+| case-03/retained | case-07/graphic | 1.12 | 0.996 |
+| case-03/retained | case-06/switch | 1.13 | 0.998 |
 
 事件間で同じ並び順の資料は、タイトル文字列以外が同一。事件をまたいで資料を見比べる場面（図鑑、結果画面の証拠一覧、将来の横断検索）では、画像だけで事件を特定する手がかりが無い。
 
@@ -123,10 +123,10 @@
 `DocumentLabel`（`src/components/DocumentLabel.tsx` + `src/components/documentVisuals.ts`（対応表）+ `src/app/screens/document-label.css`）は次を HTML テキストで表示する。
 
 ```
-[種別アイコン] CASE 01 / 資料 02（trial） / 台帳 / コスト 1
+[種別アイコン] CASE 03 / 資料 02（trial） / 台帳 / コスト 1
 ```
 
-- 事件 ID: `formatCaseId('case-01')` → `CASE 01`
+- 事件 ID: `formatCaseId('case-03')` → `CASE 03`
 - 資料番号: 事件内の並び順（画像内の「DOCUMENT 02」と同じ番号）＋ `id` を括弧で併記
 - 種別: `VISUAL_LABEL[visual]`、コスト 0 は「無料」
 - 色・余白は `tokens.css` のトークンのみ。文字倍率 200% でも折り返して読める（固定幅なし）

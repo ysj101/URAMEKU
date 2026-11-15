@@ -134,7 +134,7 @@ describe('useGame のデバウンス', () => {
     act(() => vi.advanceTimersByTime(SAVE_DEBOUNCE_MS));
     expect(s.writes).toBe(1);
     const data = stored(s)!;
-    expect(data.version).toBe(4);
+    expect(data.version).toBe(5);
     expect(data.revision).toBe(3);
     expect(
       FIRST.v2

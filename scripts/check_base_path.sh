@@ -84,7 +84,7 @@ check "${BASE_PATH}assets/brand/maskable-icon-512.png" "image/png"
 check "${BASE_PATH}assets/backgrounds/newsprint.svg" "image/svg+xml"
 check "${BASE_PATH}assets/backgrounds/desk.svg" "image/svg+xml"
 check "${BASE_PATH}assets/characters/shinobu/poses/idle.png" "image/png"
-check "${BASE_PATH}assets/cases/case-01/documents/ad.png" "image/png"
+check "${BASE_PATH}assets/cases/case-03/documents/ad.png" "image/png"
 
 if [ "$FAIL" -ne 0 ]; then
   echo "== NG: 404 またはベースパス無しの参照があります"

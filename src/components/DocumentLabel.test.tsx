@@ -12,27 +12,27 @@ const ROOT = resolve(__dirname, '../..');
 describe('DocumentLabel', () => {
   it('事件 ID・資料番号・資料 ID・種別・コストを HTML テキストで表示する', () => {
     const { container } = render(
-      <DocumentLabel caseId="case-01" index={2} documentId="trial" visual="ledger" cost={1} />,
+      <DocumentLabel caseId="case-03" index={2} documentId="trial" visual="ledger" cost={1} />,
     );
     const label = container.querySelector('.document-label');
-    expect(label).toHaveTextContent(formatCaseId('case-01'));
+    expect(label).toHaveTextContent(formatCaseId('case-03'));
     expect(label).toHaveTextContent('資料 02');
     expect(label).toHaveTextContent('（trial）');
     expect(label).toHaveTextContent('台帳');
     expect(label).toHaveTextContent('コスト 1');
-    expect(label).toHaveAttribute('data-case', 'case-01');
+    expect(label).toHaveAttribute('data-case', 'case-03');
     expect(label).toHaveAttribute('data-document', 'trial');
     expect(label).toHaveAttribute('data-visual', 'ledger');
   });
 
   it('コスト 0 は「無料」と表示する', () => {
-    render(<DocumentLabel caseId="case-01" index={1} documentId="ad" visual="advert" cost={0} />);
+    render(<DocumentLabel caseId="case-03" index={1} documentId="ad" visual="advert" cost={0} />);
     expect(screen.getByText('無料')).toBeInTheDocument();
   });
 
   it('種別アイコンは実在する props の SVG を参照し、読み上げ対象にしない', () => {
     const { container } = render(
-      <DocumentLabel caseId="case-03" index={6} documentId="comments" visual="news" cost={1} />,
+      <DocumentLabel caseId="case-05" index={6} documentId="comments" visual="news" cost={1} />,
     );
     const img = container.querySelector('img');
     expect(img).toHaveAttribute('src', '/assets/props/news.svg');
@@ -44,7 +44,7 @@ describe('DocumentLabel', () => {
   it('hideIcon のときはテキストのみ', () => {
     const { container } = render(
       <DocumentLabel
-        caseId="case-03"
+        caseId="case-05"
         index={6}
         documentId="comments"
         visual="news"
@@ -53,7 +53,7 @@ describe('DocumentLabel', () => {
       />,
     );
     expect(container.querySelector('img')).toBeNull();
-    expect(container).toHaveTextContent(formatCaseId('case-03'));
+    expect(container).toHaveTextContent(formatCaseId('case-05'));
   });
 
   it('想定外の事件 ID 形式でも落ちずに表示する', () => {

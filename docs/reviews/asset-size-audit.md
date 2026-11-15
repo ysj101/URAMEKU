@@ -13,13 +13,13 @@
 | うちキャラクター（`characters/`）                         | 15,189 KB（83.6%）             | **ここだけが問題**     |
 | 初回操作に必要な画像（ホーム＋共通）                      | 1,080 KB / 3G 22.1 秒          | **目標 500 KB 超過**   |
 | 　うち装飾（ホームのマスコット `point.png` 1 枚）を除く   | 13 KB / 3G 0.3 秒              | 問題なし               |
-| CASE 01 調査画面まで（3 画面合計）                        | 2,253 KB / 3G 46.1 秒          | 超過（原因は同じ 2 枚） |
+| CASE 03 調査画面まで（3 画面合計）                        | 2,253 KB / 3G 46.1 秒          | 超過（原因は同じ 2 枚） |
 | JS（1 チャンク）                                          | 204 KB（gzip 66 KB）/ 3G 1.3 秒 | 分割不要               |
 | CSS                                                       | 17.6 KB（gzip 4.5 KB）         | 問題なし               |
 
 - 初回表示で重いのは **シノブの原画 2 枚だけ**（ホーム `poses/point.png` 1,066 KB、CASE ヘッダー `poses/idle.png` 1,059 KB。いずれも 1086×1448 px）。表示サイズは最大 140 px 幅・91×98 px なので、画素数が表示の 8〜12 倍ある。
 - それ以外の初回画像（favicon、背景 SVG、資料サムネイル 6 枚、状態バッジ）は合計 130 KB 程度で、3G でも 3 秒以内。
-- **現状でも操作自体は止まらない**（`<img>` は非同期で、ボタンは画像待ちなしで描画される）。マスコットは `position: absolute`（ホーム）または CSS で固定寸法（CASE ヘッダー 91×98 px、資料タイル 65×78 px）なので、到着時のレイアウト移動も起きない。問題は **帯域の取り合い**で、3G では 1 MB の装飾画像が JS/JSON（70 KB）や資料サムネイル（114 KB）と同じ回線を 20 秒以上占有し、CASE 01 では資料タイルの絵が揃うのが遅れる。
+- **現状でも操作自体は止まらない**（`<img>` は非同期で、ボタンは画像待ちなしで描画される）。マスコットは `position: absolute`（ホーム）または CSS で固定寸法（CASE ヘッダー 91×98 px、資料タイル 65×78 px）なので、到着時のレイアウト移動も起きない。問題は **帯域の取り合い**で、3G では 1 MB の装飾画像が JS/JSON（70 KB）や資料サムネイル（114 KB）と同じ回線を 20 秒以上占有し、CASE 03 では資料タイルの絵が揃うのが遅れる。
 - 対策の優先順は (a) 原画の縮小 WebP 化（効果 98%）→ (b) `LazyImage` でレイアウト確保＋遅延読み込み → (c) それ以外は現状維持。
 
 ### 目標値（提案）
@@ -50,7 +50,7 @@ CI で守るなら `npm run audit:assets -- --budget 500` が目標超過で終�
 
 形式別: PNG 17,725 KB（320 件）、SVG 280 KB（198 件）、WAV 165 KB（12 件）。**SVG 版が並存するカテゴリ（背景・UI 部品・小物・図鑑・チュートリアル）は SVG を使えば実質ゼロ**。
 
-ディレクトリ別上位: `characters/shinobu` 8,258 KB、`characters/mega` 3,076 KB、`characters/harada` 2,627 KB、`characters/kuro` 1,229 KB。5 位の `cases/case-01` は 144 KB で桁が 2 つ違う。
+ディレクトリ別上位: `characters/shinobu` 8,258 KB、`characters/mega` 3,076 KB、`characters/harada` 2,627 KB、`characters/kuro` 1,229 KB。5 位の `cases/case-03` は 144 KB で桁が 2 つ違う。
 
 ### 2.2 容量上位 20
 
@@ -68,9 +68,9 @@ CI で守るなら `npm run audit:assets -- --budget 500` が目標超過で終�
 | 12–16 | characters/mega/reactions/\*.png（5 種）  | 各 319–324 KB | 1024×1024 |
 | 17–20 | characters/harada/reactions/\*.png、kuro/poses/idle.png | 各 270–274 KB | 1024×1024 / 1536×2048 |
 
-### 2.3 初回表示（ホーム → 事件一覧 → CASE 01 調査画面）
+### 2.3 初回表示（ホーム → 事件一覧 → CASE 03 調査画面）
 
-参照元: `index.html`、`src/app/global.css`（背景 `url()`）、`src/app/layout.css`、`src/screens/HomeScreen.tsx`、`src/screens/CaseSelectScreen.tsx`、`src/components/CaseHeader.tsx`、`src/screens/InvestigationScreen.tsx`（`DocumentGrid` 経由で `data/cases/case-01.json` の documents を展開）。
+参照元: `index.html`、`src/app/global.css`（背景 `url()`）、`src/app/layout.css`、`src/screens/HomeScreen.tsx`、`src/screens/CaseSelectScreen.tsx`、`src/components/CaseHeader.tsx`、`src/screens/InvestigationScreen.tsx`（`DocumentGrid` 経由で `data/cases/case-03.json` の documents を展開）。
 
 | 画面    | パス                                   | サイズ     | 分類          |
 | ------- | -------------------------------------- | ---------: | ------------- |
@@ -80,14 +80,14 @@ CI で守るなら `npm run audit:assets -- --budget 500` が目標超過で終�
 | 共通    | backgrounds/desk.svg                   |     0.6 KB | 必要          |
 | ホーム  | characters/shinobu/poses/point.png     | 1,066.4 KB | 必要（装飾）  |
 | 事件一覧 | ui/states/\*.png（初回は `new` の 1 枚） | 最大 3.7 KB | 後回し可      |
-| CASE 01 | characters/shinobu/poses/idle.png      | 1,058.8 KB | 後回し可      |
-| CASE 01 | cases/case-01/documents/\*.png（6 枚） |   114.3 KB | 後回し可      |
+| CASE 03 | characters/shinobu/poses/idle.png      | 1,058.8 KB | 後回し可      |
+| CASE 03 | cases/case-03/documents/\*.png（6 枚） |   114.3 KB | 後回し可      |
 
 | 区分                               |     合計   | 3G 相当（400kbps） | 4G 相当（4Mbps） |
 | ---------------------------------- | ---------: | -----------------: | ---------------: |
 | 初回操作に必要（ホーム＋共通）     | 1,079.7 KB |          22.1 秒   |        2.21 秒   |
 | 　うち装飾を除く                   |    13.3 KB |           0.3 秒   |        0.03 秒   |
-| 後回し可（事件一覧・CASE 01）      | 1,176.8 KB |          24.1 秒   |        2.41 秒   |
+| 後回し可（事件一覧・CASE 03）      | 1,176.8 KB |          24.1 秒   |        2.41 秒   |
 | 初回表示 3 画面の合計              | 2,256.5 KB |          46.2 秒   |        4.62 秒   |
 
 秒数は転送時間のみ（RTT・TLS・HTTP ヘッダは含まない）。実機ではこれに 1〜3 秒を足して考える。
@@ -185,9 +185,9 @@ JS の内訳は react + react-dom（本番ビルド約 130 KB）、事件 JSON 5
 1. `npm run build && npm run preview`
 2. Chrome DevTools → Network → Throttling「Slow 3G」（約 400kbps）、キャッシュ無効。
 3. `http://localhost:4173/` を開き、「はじめる」が押せるまでの時間と、マスコット到着時にボタンが動かないことを確認する。
-   - 現状: ボタンは約 2 秒で押せ、レイアウトも動かない（マスコットは `position: absolute`）。ただしマスコットは約 22 秒後に到着し、その間に「事件一覧 → CASE 01」へ進むと資料サムネイルの取得がマスコット 2 枚（計 2.1 MB）の後ろに並ぶ。
+   - 現状: ボタンは約 2 秒で押せ、レイアウトも動かない（マスコットは `position: absolute`）。ただしマスコットは約 22 秒後に到着し、その間に「事件一覧 → CASE 03」へ進むと資料サムネイルの取得がマスコット 2 枚（計 2.1 MB）の後ろに並ぶ。
    - `LazyImage` 適用後: `width/height` でレイアウトが固定され、視界外の資料タイルは取得が遅延する。帯域の取り合い自体は変わらない。
-   - 縮小 WebP 適用後: マスコットも約 0.5 秒で到着し、CASE 01 の全画像が 3G でも 3 秒以内に揃う。
+   - 縮小 WebP 適用後: マスコットも約 0.5 秒で到着し、CASE 03 の全画像が 3G でも 3 秒以内に揃う。
 4. `npm run audit:assets -- --budget 500` が終了コード 0 になることを、原画差し替え PR の完了条件にする。
 
 ## 5. 未対応・人手が必要な事項

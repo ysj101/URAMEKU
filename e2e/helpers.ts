@@ -2,7 +2,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { expect, type Locator, type Page } from '@playwright/test';
 import type { CaseData } from '../src/domain/types';
 
-/** data/cases/*.json を ID 順に読む（既存の test は GAME_CASES[0] = case-01 を前提にしている） */
+/** data/cases/*.json を ID 順に読む */
 export const GAME_CASES: CaseData[] = readdirSync(new URL('../data/cases/', import.meta.url))
   .filter((f) => /^case-\d{2}\.json$/.test(f))
   .sort()
@@ -10,19 +10,15 @@ export const GAME_CASES: CaseData[] = readdirSync(new URL('../data/cases/', impo
     (f) =>
       JSON.parse(readFileSync(new URL(`../data/cases/${f}`, import.meta.url), 'utf8')) as CaseData,
   );
-const DIFFICULTY_ORDER = { NORMAL: 1, HARD: 2, EXPERT: 3 } as const;
-/** アプリの一覧と同じ並び（難易度の低い順 → ID 順）。先頭が画面の CASE 01 */
-export const ORDERED_CASES: CaseData[] = [...GAME_CASES].sort(
-  (a, b) =>
-    DIFFICULTY_ORDER[a.difficulty] - DIFFICULTY_ORDER[b.difficulty] || a.id.localeCompare(b.id),
-);
+/** アプリの一覧と同じ事件ID順。 */
+export const ORDERED_CASES: CaseData[] = [...GAME_CASES];
 export const FIRST_CASE = ORDERED_CASES[0]!;
-const case01 = GAME_CASES.find((c) => c.id === 'case-01')!;
-const case02 = GAME_CASES.find((c) => c.id === 'case-02')!;
-export const CASE01 = {
-  id: case01.id,
-  title: case01.title,
-  budget: case01.budget,
+const case03 = GAME_CASES.find((c) => c.id === 'case-03')!;
+const case04 = GAME_CASES.find((c) => c.id === 'case-04')!;
+export const CASE03 = {
+  id: case03.id,
+  title: case03.title,
+  budget: case03.budget,
   docs: {
     ad: 'キャンペーン広告',
     trial: '無料体験者の登録台帳',
@@ -32,14 +28,14 @@ export const CASE01 = {
     reviews: '利用者の声',
   },
 };
-export const CASE02_TITLE = case02.title;
+export const CASE04_TITLE = case04.title;
 export function docTile(page: Page, title: string): Locator {
   return page.getByRole('button').filter({ hasText: title }).and(page.locator('.doc-tile'));
 }
 export function budgetMeter(page: Page): Locator {
   return page.getByRole('meter', { name: /調査予算：残り \d+ \/ \d+/ });
 }
-export async function expectBudget(page: Page, remaining: number, total = CASE01.budget) {
+export async function expectBudget(page: Page, remaining: number, total = CASE03.budget) {
   await expect(budgetMeter(page)).toHaveAccessibleName(`調査予算：残り ${remaining} / ${total}`);
   await expect(budgetMeter(page)).toHaveText(`${remaining} / ${total}`);
 }
@@ -51,8 +47,8 @@ export async function gotoCase(page: Page, data: CaseData) {
   await page.goto(`/#/play/${data.id}`);
   await expect(page.getByRole('heading', { level: 1, name: data.title })).toBeVisible();
 }
-export async function gotoCase01(page: Page) {
-  await gotoCase(page, GAME_CASES[0]!);
+export async function gotoCase03(page: Page) {
+  await gotoCase(page, case03);
 }
 export async function openDoc(page: Page, title: string): Promise<Locator> {
   await docTile(page, title).click();
@@ -219,8 +215,8 @@ export async function prepareV2Case(
   await goToArticle(page);
   await fillReport(page, selections.map(({ option }) => option.text).join(' '));
 }
-export async function clearCase01(page: Page) {
-  await prepareV2Case(page, GAME_CASES[0]!);
+export async function clearCase03(page: Page) {
+  await prepareV2Case(page, case03);
   await submitArticle(page);
 }
 

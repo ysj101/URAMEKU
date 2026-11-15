@@ -68,8 +68,8 @@ describe('assetUrl', () => {
 
   it('末尾スラッシュ無しの base でも二重スラッシュにならない', () => {
     vi.stubEnv('BASE_URL', '/URAMEKU');
-    expect(assetUrl('cases/case-01/documents/ad.png')).toBe(
-      '/URAMEKU/assets/cases/case-01/documents/ad.png',
+    expect(assetUrl('cases/case-03/documents/ad.png')).toBe(
+      '/URAMEKU/assets/cases/case-03/documents/ad.png',
     );
   });
 
@@ -91,8 +91,8 @@ describe('documentThumbnail', () => {
 
   it('cases/<caseId>/documents/<documentId>.png を base 付きで返す', () => {
     vi.stubEnv('BASE_URL', '/URAMEKU/');
-    expect(documentThumbnail('case-01', 'ad')).toBe(
-      '/URAMEKU/assets/cases/case-01/documents/ad.png',
+    expect(documentThumbnail('case-03', 'ad')).toBe(
+      '/URAMEKU/assets/cases/case-03/documents/ad.png',
     );
   });
 });
