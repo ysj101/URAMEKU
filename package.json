@@ -31,10 +31,12 @@
     "walkthrough": "node scripts/generate_walkthrough.mjs",
     "smoke:dist": "node scripts/smoke_dist.mjs",
     "summarize:user-tests": "node scripts/summarize_user_tests.mjs",
-    "audit:assets": "node scripts/audit_assets_size.mjs"
+    "audit:assets": "node scripts/audit_assets_size.mjs",
+    "test:telemetry": "playwright test --config playwright.telemetry.config.ts"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",
+    "@journeygap/relay": "file:vendor/journeygap/journeygap-relay-0.1.0.tgz",
     "@playwright/test": "^1.64.1",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
@@ -57,6 +59,8 @@
     "vitest": "^5.0.5"
   },
   "dependencies": {
+    "@journeygap/core": "file:vendor/journeygap/journeygap-core-0.1.0.tgz",
+    "@journeygap/web": "file:vendor/journeygap/journeygap-web-0.1.0.tgz",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   }

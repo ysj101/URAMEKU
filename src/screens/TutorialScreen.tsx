@@ -1,3 +1,4 @@
+import { useOnboardingTelemetry } from '../telemetry/hooks';
 import { CASES } from '../data/cases';
 import { useEffect, useRef, useState } from 'react';
 import { assetUrl } from '../data/assets';
@@ -21,6 +22,7 @@ export interface TutorialScreenProps {
 /** CASE00 is a guided practice file, kept separate from the five investigation cases. */
 export function TutorialScreen({ nav, game, storage }: TutorialScreenProps) {
   const [step, setStep] = useState(-2);
+  useOnboardingTelemetry(step);
   const [initialChoice, setInitialChoice] = useState('');
   const [updatedChoice, setUpdatedChoice] = useState('');
   const [opened, setOpened] = useState<string[]>([]);

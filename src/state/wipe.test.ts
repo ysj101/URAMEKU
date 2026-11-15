@@ -68,6 +68,13 @@ describe('wipe: キーの判定と列挙', () => {
     expect(listAppKeys(s)).toEqual([LEGACY_KEY, STORAGE_KEY]);
   });
 
+  it('includes host/SDK consent and tab identifiers even in non-enumerable storage', () => {
+    const keys = ['urameku-journeygap-consent', 'journeygap.consent.v1', 'journeygap.session.v1'];
+    const storage = minimalStorage(Object.fromEntries(keys.map((key) => [key, 'value'])));
+    expect(wipeStorage(storage)).toEqual([...keys].sort());
+    expect(verifyWiped(storage)).toEqual([]);
+  });
+
   it('storage が無ければ空', () => {
     expect(listAppKeys(null)).toEqual([]);
     expect(verifyWiped(null)).toEqual([]);

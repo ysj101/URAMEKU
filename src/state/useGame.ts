@@ -1,4 +1,4 @@
-import { resetCaseProgress } from './wipe';
+import { resetCaseProgress, wipeAllLocalData } from './wipe';
 import { restoreProgress } from './restoreProgress';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { CASES, findCase, nextCaseId } from '../data/cases';
@@ -7,7 +7,6 @@ import { evaluateCase } from '../domain/scoring';
 import type { CaseData, CaseProgress } from '../domain/types';
 import { createSession, type Stage } from './migrations';
 import {
-  clearSaveData,
   createSaveData,
   defaultStorage,
   loadSaveDataDetailed,
@@ -304,7 +303,7 @@ export function useGame(options: UseGameOptions = {}): GameApi {
 
   const resetAll = useCallback(() => {
     cancelTimer();
-    clearSaveData(storage);
+    wipeAllLocalData({ local: storage });
     persistedRef.current = { revision: 0, savedAt: null };
     setSave(createSaveData(FIRST_CASE));
     setSaveStatus(storage ? 'saved' : 'unavailable');

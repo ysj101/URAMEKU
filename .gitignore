@@ -24,6 +24,9 @@ Thumbs.db
 *.log
 npm-debug.log*
 
+# Local Japanese wording review records
+.yomiyasu/
+
 # MVP-040: 画面幅検査のスクリーンショット（scripts/check_viewports.mjs の出力）
 qa/screenshots/
 

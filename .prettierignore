@@ -10,6 +10,7 @@ prototype
 docs
 data
 *.md
+.yomiyasu
 public/manifest.webmanifest
 
 # Preserve byte-for-byte V1 content snapshots.
