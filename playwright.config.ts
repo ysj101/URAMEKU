@@ -24,6 +24,16 @@ export default defineConfig({
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     locale: 'ja-JP',
+    // 初回のオープニング動画は全画面で操作を塞ぐので、見終えた状態から始める
+    storageState: {
+      cookies: [],
+      origins: [
+        {
+          origin: `http://localhost:${PORT}`,
+          localStorage: [{ name: 'urameku-intro-seen', value: '1' }],
+        },
+      ],
+    },
   },
   webServer: {
     command: `npm run build && npm run preview -- --port ${PORT} --strictPort`,

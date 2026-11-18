@@ -1,3 +1,4 @@
+import { OpeningFilm } from '../components/OpeningFilm';
 import { assetUrl, characterPose, propUrl } from '../data/assets';
 import { loadTutorialState } from '../state/tutorialState';
 import { UI } from '../data/ui';
@@ -17,6 +18,7 @@ export function HomeScreen({ game, nav }: { game: GameApi; nav: Navigation }) {
 
   return (
     <section className="home" aria-labelledby="home-title">
+      <OpeningFilm />
       <div className="home-hero">
         <div className="home-masthead">
           <p className="edition">ウラメク調査編集局</p>
