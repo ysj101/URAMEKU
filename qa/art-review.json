@@ -2914,11 +2914,21 @@
       "reason": "Generated 2026-11-07 via Codex image_gen for case-02; human art and rights approval pending.",
       "visual_flag": "needs_check",
       "visual_note": "AI visual check against the brief only (text-free cover; infographic numbers match case JSON). Not release approval."
+    },
+    {
+      "path": "public/assets/media/urameku-intro.mp4",
+      "kind": "intro-film",
+      "status": "pending",
+      "reviewer": null,
+      "reviewed_at": null,
+      "reason": "User-supplied 12-second intro film (silent, burned-in captions); human art and rights approval pending.",
+      "visual_flag": "needs_check",
+      "visual_note": "Shown once on first visit. AI frame check is not release approval."
     }
   ],
   "summary": {
-    "total": 128,
-    "pending": 128,
+    "total": 129,
+    "pending": 129,
     "approved": 0,
     "rejected": 0,
     "auto_check": 12

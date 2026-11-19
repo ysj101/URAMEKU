@@ -7,7 +7,7 @@
     "documents": 40,
     "analysis_tasks": 10
   },
-  "asset_count": 583,
+  "asset_count": 584,
   "assets": [
     {
       "path": "public/assets/achievements/first-evidence.png",
@@ -7634,6 +7634,21 @@
       "exists": true,
       "sha256": "34f7e10bd2e54d0fd53c316dcd8e97881e1e4df39fab97881224bf97b8943047",
       "source": "locally-created-for-urameku",
+      "art_review": "REQUIRED"
+    },
+    {
+      "path": "public/assets/media/urameku-intro.mp4",
+      "category": "media",
+      "bytes": 3008348,
+      "format": "mp4",
+      "exists": true,
+      "sha256": "fd63428f6c82c685aa6edfb85d5135d5800d1850ba3cb4eb7f123e7395e0a22d",
+      "size": [
+        1200,
+        720
+      ],
+      "alpha": false,
+      "source": "user-supplied-intro-film-2026-11-19",
       "art_review": "REQUIRED"
     }
   ]
