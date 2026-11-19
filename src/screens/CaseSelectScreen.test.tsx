@@ -27,9 +27,13 @@ const nav: Navigation = { route: { screen: 'cases' }, navigate: vi.fn(), back: v
 describe('CaseSelectScreen', () => {
   it('案内文の件数は収録している事件の数に合わせる', () => {
     render(<CaseSelectScreen game={api()} nav={nav} />);
-    expect(screen.getByText(`編集局に届いた、${CASES.length}つの調査ファイル。`, { exact: false })).toBeInTheDocument();
+    expect(
+      screen.getByText(`編集局に届いた、${CASES.length}つの調査ファイル。`, { exact: false }),
+    ).toBeInTheDocument();
     render(<CaseSelectScreen game={api({ cases: CASES.slice(0, 3) })} nav={nav} />);
-    expect(screen.getByText('編集局に届いた、3つの調査ファイル。', { exact: false })).toBeInTheDocument();
+    expect(
+      screen.getByText('編集局に届いた、3つの調査ファイル。', { exact: false }),
+    ).toBeInTheDocument();
   });
 
   it('全件を難易度と状態つきで、標準を先頭にして表示する', () => {
