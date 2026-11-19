@@ -1,10 +1,10 @@
 # V2切替と互換実装
 
-現行の正本は `data/cases/` の5事件（schemaVersion 2）。V2-012で、一時配置した `data/cases-v2/` を正本へ移し、画面と同時に有効化した。UIは事件IDではなく `v2.modes` と方式設定に従う。
+現行の正本は `data/cases/` の全事件（schemaVersion 2）。V2-012で、一時配置した `data/cases-v2/` を正本へ移し、画面と同時に有効化した。UIは事件IDではなく `v2.modes` と方式設定に従う。
 
 ## 旧実装を残す理由
 
-- `CalculationDesk` / `NumericField` / `calc.css` と `domain/calculation.ts` は旧形式の互換画面・回帰テストだけが利用する。現行5事件の画面には数値入力欄も計算の必須条件もない。
+- `CalculationDesk` / `NumericField` / `calc.css` と `domain/calculation.ts` は旧形式の互換画面・回帰テストだけが利用する。現行事件の画面には数値入力欄も計算の必須条件もない。
 - `ArticleEditor` と旧 `publish/scoring` 分岐は、版を区別して読み込む旧形式の回帰確認に利用する。V2は報告・根拠・留保を記録し、固定3断片・順序一致・100点配点を利用しない。
 - `src/test/fixtures/v1/` は移行前5事件の不変snapshot。旧答えや分母の改変をせずに、旧機能の回帰と移行境界を確認する。
 - `prototype/` と `docs/archive/game-v1/` は履歴資料であり、現行プレイの操作説明ではない。

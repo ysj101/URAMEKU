@@ -58,7 +58,7 @@ scripts/check_base_path.sh            # /URAMEKU/ で検証
 VITE_BASE_PATH=/URAMEKU/ npm run build && VITE_BASE_PATH=/URAMEKU/ npm run smoke:dist
 ```
 
-ブラウザでの手動確認は `docs/qa/mvp-acceptance.md` のチェックリストに従う（5 件すべてが開ける、資料画像が表示される、リロード後に進捗が復元される、全件削除できる）。
+ブラウザでの手動確認は `docs/qa/mvp-acceptance.md` のチェックリストに従う（すべての事件が開ける、資料画像が表示される、リロード後に進捗が復元される、全件削除できる）。
 
 よくある失敗:
 
