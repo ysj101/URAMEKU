@@ -23,7 +23,7 @@ export function CaseSelectScreen({ game, nav }: { game: GameApi; nav: Navigation
         <h1 id="cases-title">{UI.home.cases}</h1>
       </div>
       <p className="case-select-intro">
-        編集局に届いた、5つの調査ファイル。気になる事件から、資料をめくろう。
+        編集局に届いた、{game.cases.length}つの調査ファイル。気になる事件から、資料をめくろう。
       </p>
       <aside className="notice" aria-label="はじめての方へ">
         <strong>CASE 00 / はじめての調査</strong>
