@@ -32,7 +32,7 @@ V2は既存React/TypeScript・静的JSON・純粋ドメイン・端末内保存�
 - `screens/`: Home, Cases, Desk, Document, EvidenceBoard, Calculator, Article, Result, Encyclopedia, Settings。
 - `components/`: CharImage, PaperCard, Stamp, DocumentTile, Pin, Badge, AudioControl。
 - 画像は通常`<img>`のパスを参照、読みやすい証拠本文はHTMLで描画。
-- 5事件の攻略シナリオをE2Eテスト。公式配信前にPWA manifest/start_urlを配信パスと一致させる。
+- 全事件の攻略シナリオをE2Eテスト。公式配信前にPWA manifest/start_urlを配信パスと一致させる。
 
 ## セキュリティ
 
