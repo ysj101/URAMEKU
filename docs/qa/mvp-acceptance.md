@@ -6,7 +6,7 @@
 
 | ID | 受け入れ対象 | 自動確認 | 人手・実機確認 |
 | --- | --- | --- | --- |
-| V2-A01 | 5事件のJSON読込、3方式、不正参照拒否 | validate:cases / v2Validation | 未確認 |
+| V2-A01 | 全事件のJSON読込、3方式、不正参照拒否 | validate:cases / v2Validation | 未確認 |
 | V2-A02 | 計算正答不要、根拠と複数経路が必要 | domain / E2E | 未確認 |
 | V2-A03 | 実験の初回前情報遮断・条件固定・判断維持/更新 | v2Progress / experiment / E2E | 未確認 |
 | V2-A04 | 目的・制約・反証・別方針・保留、結果と判断の分離 | decision / evaluation / E2E | 未確認 |

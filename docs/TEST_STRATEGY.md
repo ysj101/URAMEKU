@@ -12,7 +12,7 @@
 | 解読・根拠 | 主張の範囲、反証、別の妥当な経路、不足 | decoding/link/evaluationの単体テスト |
 | 意思決定 | 複数目的・方針・保留・前提・支持/反証・更新 | decision/evaluationのテスト。結果の幸不幸を正誤にしない |
 | 保存 | v0〜v3退避、v4再開、改訂不整合、未来形式の原文保護 | `src/state/v2Persistence.test.tsx`、既存保存/競合/削除テスト |
-| 5事件 | 主経路、別方針、保留、事実誤認、根拠不足、やり直し | `npm run test:e2e`、Playwright report |
+| 全事件 | 主経路、別方針、保留、事実誤認、根拠不足、やり直し | `npm run test:e2e`、Playwright report |
 | 予算と攻略 | 解読・グラフの代替経路、追加開示資料、生成整合 | `npm run analyze:dead-ends -- --check`、`npm run walkthrough -- --check` |
 | 表現・素材 | 非診断、架空表記、ファイル/ハッシュ/画像 | `npm run lint:content`、`python3 scripts/validate_assets.py`、`qa/coverage.json` |
 | 配布用成果物 | 型を含むproduction build | `npm run build`。デプロイ実施とは区別 |
@@ -21,7 +21,7 @@
 
 ## ブラウザ・アクセシビリティ
 
-自動ブラウザで5事件の完了・事実誤認・別方針・保留、保存再読込・戻る・資料開閉・再挑戦を検証する。320/375/390/430px、文字200%、44px相当の主要操作、タップとキーボード、焦点移動、色以外の状態、Reduced Motionを確認する。エミュレーションの結果を実機iOS Safari/Android Chromeやスクリーンリーダーの実施結果として転記しない。
+自動ブラウザで全事件の完了・事実誤認・別方針・保留、保存再読込・戻る・資料開閉・再挑戦を検証する。320/375/390/430px、文字200%、44px相当の主要操作、タップとキーボード、焦点移動、色以外の状態、Reduced Motionを確認する。エミュレーションの結果を実機iOS Safari/Android Chromeやスクリーンリーダーの実施結果として転記しない。
 
 ## 人手検証（未実施を維持）
 
